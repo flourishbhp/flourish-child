@@ -114,6 +114,12 @@ venv.bak/
 .spyderproject
 .spyproject
 
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+.settings/
+
 # Rope project settings
 .ropeproject
 
