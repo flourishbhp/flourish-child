@@ -12,15 +12,15 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md')) as readme:
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='flourish-infant',
+    name='flourish-child',
     version='0.0',
     author=u'Software Engineering & Data Management',
     author_email='se-dmc@bhp.org.bw',
     packages=find_packages(),
     include_package_data=True,
-    url='https://github.com/flourishbhp/flourish-infant',
+    url='https://github.com/flourishbhp/flourish-child',
     license='GPL license, see LICENSE',
-    description='flourish infant.',
+    description='flourish child.',
     long_description=README,
     zip_safe=False,
     keywords='django flourish',

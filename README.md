@@ -1,2 +1,2 @@
-# flourish-infant
-Flourish Infant
+# flourish-child
+Flourish Child

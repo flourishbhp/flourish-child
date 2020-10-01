@@ -1,5 +1,5 @@
 """
-WSGI config for flourish_infant project.
+WSGI config for flourish_child project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'flourish_infant.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'flourish_child.settings')
 
 application = get_wsgi_application()

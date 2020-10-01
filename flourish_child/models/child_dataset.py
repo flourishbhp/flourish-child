@@ -4,7 +4,7 @@ from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
 
 
-class InfantDataset(
+class ChildDataset(
         UniqueSubjectIdentifierFieldMixin, SiteModelMixin, BaseUuidModel):
 
     infant_enrolldate = models.DateField(
@@ -221,6 +221,6 @@ class InfantDataset(
         max_length=200)
 
     class Meta:
-        app_label='flourish_infant'
+        app_label='flourish_child'
         verbose_name='Infant Dataset'
     
