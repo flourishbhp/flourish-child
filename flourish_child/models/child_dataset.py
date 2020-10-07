@@ -1,17 +1,23 @@
 from django.db import models
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites.site_model_mixin import SiteModelMixin
-from edc_identifier.model_mixins import UniqueSubjectIdentifierFieldMixin
+from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 
 
 class ChildDataset(
-        UniqueSubjectIdentifierFieldMixin, SiteModelMixin, BaseUuidModel):
+        NonUniqueSubjectIdentifierFieldMixin, SiteModelMixin, BaseUuidModel):
+
+    study_child_identifier = models.CharField(
+        max_length=150,
+        unique=True,
+        verbose_name='Study Child Subject Identifier')
 
     infant_enrolldate = models.DateField(
         verbose_name='Infant enrollment date')
 
     infant_randdt = models.DateField(
-        verbose_name='Date of infant randomization')
+        verbose_name='Date of infant randomization',
+        blank=True, null=True)
 
     infant_sex = models.CharField(
         verbose_name='Infant gender',
@@ -22,13 +28,16 @@ class ChildDataset(
         max_length=3)
 
     infant_azt_days = models.IntegerField(
-        verbose_name='Duration of infant AZT (days)')
+        verbose_name='Duration of infant AZT (days)',
+        blank=True, null=True)
 
     infant_azt_startdate = models.DateField(
-        verbose_name='AZT start date')
+        verbose_name='AZT start date',
+        blank=True, null=True)
 
     infant_azt_stopdate = models.DateField(
-        verbose_name='AZT stop date')
+        verbose_name='AZT stop date',
+        blank=True, null=True)
 
     infant_sdnvp_birth = models.CharField(
         verbose_name='Infant received sdNVP',
@@ -157,22 +166,28 @@ class ChildDataset(
         blank=True, null=True)
 
     idth = models.IntegerField(
-        verbose_name='Infant death indicator (0= censored)')
+        verbose_name='Infant death indicator (0= censored)',
+        blank=True, null=True)
 
     idth_days = models.IntegerField(
-        verbose_name='Days from infant birth to death (censored)')
+        verbose_name='Days from infant birth to death (censored)',
+        blank = True, null = True)
 
     ihiv = models.IntegerField(
-        verbose_name='Indicator of HIV endpoint (0=censored)')
+        verbose_name='Indicator of HIV endpoint (0=censored)',
+        blank=True, null=True)
 
     ihiv_days = models.IntegerField(
-        verbose_name='Time to HIV endpoint (days from birth)')
+        verbose_name='Time to HIV endpoint (days from birth)',
+        blank=True, null=True)
 
     ihosp = models.IntegerField(
-        verbose_name='Infant hospitalization indicator (0= censored)')
+        verbose_name='Infant hospitalization indicator (0= censored)',
+        blank=True, null=True)
 
     ihosp_days = models.IntegerField(
-        verbose_name='Days from infant birth to first hospitalization (censored)')
+        verbose_name='Days from infant birth to first hospitalization (censored)',
+        blank=True, null=True)
 
     infantvacc_bcg = models.CharField(
         verbose_name='BCG vaccine received?',
@@ -210,11 +225,14 @@ class ChildDataset(
         verbose_name='Rotavirus vaccine received?',
         max_length=150, blank=True, null=True)
 
-    infant_offstudydate = models.DateField()
+    infant_offstudydate = models.DateField(
+        blank=True, null=True)
 
-    infant_lastcontactdt = models.DateField()
+    infant_lastcontactdt = models.DateField(
+        blank=True, null=True)
 
-    infant_onstudy_days = models.IntegerField()
+    infant_onstudy_days = models.IntegerField(
+        blank=True, null=True)
 
     infant_offstudy_reason = models.CharField(
         verbose_name='Days infant on-study',
@@ -223,4 +241,3 @@ class ChildDataset(
     class Meta:
         app_label='flourish_child'
         verbose_name='Infant Dataset'
-    
