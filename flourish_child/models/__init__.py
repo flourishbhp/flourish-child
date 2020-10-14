@@ -1,3 +1,4 @@
+from .child_clinical_measurements import ChildClinicalMeasurements
 from .child_dataset import ChildDataset
 from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesReceived
