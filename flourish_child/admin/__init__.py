@@ -1,2 +1,3 @@
+from .child_birth_weight_length_screening_admin import ChildBirthWeightLengthScreeningAdmin
 from .child_dataset_admin import ChildDatasetAdmin
 from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
