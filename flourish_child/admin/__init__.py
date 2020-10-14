@@ -1,1 +1,2 @@
 from .child_dataset_admin import ChildDatasetAdmin
+from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
