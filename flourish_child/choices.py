@@ -4,6 +4,8 @@ from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
+from edc_constants.constants import NEG, POS, IND
+
 ALIVE_DEAD_UNKNOWN = (
     (ALIVE, 'Alive'),
     (DEAD, 'Dead'),
@@ -97,4 +99,10 @@ VISIT_STUDY_STATUS = (
     (OFF_STUDY,
      'Off study-no further follow-up (including death); use only '
      'for last study contact'),
+)
+
+POS_NEG_IND = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (IND, 'Indeterminate')
 )

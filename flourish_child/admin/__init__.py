@@ -2,3 +2,4 @@ from .child_birth_weight_length_screening_admin import ChildBirthWeightLengthScr
 from .child_clinical_measurements_admin import ChildClinicalMeasurementsAdmin
 from .child_dataset_admin import ChildDatasetAdmin
 from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
+from .huu_pre_enrollment_admin import HuuPreEnrollmentAdmin
