@@ -14,8 +14,7 @@ class ChildBirthWeightLengthScreening(ChildCrfModelMixin):
         decimal_places=2, max_digits=10)
 
     gestational_age = models.IntegerField(
-        verbose_name='Gestational Age at birth',
-        max_length=5)
+        verbose_name='Gestational Age at birth')
 
     arv_exposure = models.CharField(
         verbose_name='I have blamed myself unnecessarily when '
