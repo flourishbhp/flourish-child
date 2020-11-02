@@ -18,6 +18,12 @@ YES_NO_UNKNOWN = (
     ('Unknown', 'Unknown'),
 )
 
+YES_NO_UNCERTAIN = (
+    ('0', YES),
+    ('1', NO),
+    ('2', 'Uncertain'),
+)
+
 IMMUNIZATIONS = (
     ('Vitamin_A', 'Vitamin A'),
     ('BCG', 'BCG'),
