@@ -1,5 +1,7 @@
-from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, ON_STUDY, OFF_STUDY
-from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT
+from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
+    ON_STUDY, OFF_STUDY
+from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT,\
+    NOT_APPLICABLE
 
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
@@ -10,6 +12,13 @@ ALIVE_DEAD_UNKNOWN = (
     (ALIVE, 'Alive'),
     (DEAD, 'Dead'),
     (UNKNOWN, 'Unknown'),
+)
+
+COWS_MILK = (
+    ('boiled', '1. Boiled from cow'),
+    ('unboiled', '2. Unboiled from cow'),
+    ('store', '3. From store'),
+    (NOT_APPLICABLE, 'Not Applicable'),
 )
 
 YES_NO_UNKNOWN = (
@@ -79,6 +88,18 @@ REASONS_VACCINES_MISSED = (
     (OTHER, 'Other, specify'),
 )
 
+TIMES_BREASTFED = (
+    ('<1 per week', '1. Less than once per week'),
+    ('<1 per day, but at least once per week',
+     '2. Less than once per day, but at least once per week'),
+    ('about 1 per day on most days', '3. About once per day on most days'),
+    ('>1 per day, but not for all feedings',
+     '4. More than once per day, but not for all feedings'),
+    ('For all feedings',
+     '5. For all feedings (i.e no formula or other foods or liquids)'),
+    (NOT_APPLICABLE, 'Not Applicable'),
+)
+
 VISIT_INFO_SOURCE = [
     (PARTICIPANT, 'Clinic visit with participant'),
     ('other_contact',
@@ -111,4 +132,15 @@ POS_NEG_IND = (
     (POS, 'Positive'),
     (NEG, 'Negative'),
     (IND, 'Indeterminate')
+)
+
+WATER_USED = (
+    ('Water direct from source', 'Water direct from source'),
+    ('Water boiled immediately before use',
+     'Water boiled immediately before use'),
+    ('Water boiled earlier and then stored',
+     'Water boiled earlier and then stored'),
+    ('Specifically treated water', 'Specifically treated water'),
+    (OTHER, 'Other (specify)'),
+    (NOT_APPLICABLE, 'Not Applicable'),
 )

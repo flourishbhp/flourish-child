@@ -12,7 +12,7 @@ class BirthDataAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = BirthDataForm
 
     fieldsets = (
-        (None, {                                 
+        (None, {
             'fields': (
                 'report_datetime',
                 'weight_kg',

@@ -7,3 +7,4 @@ from .child_immunization_history import VaccinesReceived
 from .child_immunization_history import VaccinesMissed
 from .child_visit import ChildVisit
 from .huu_pre_enrollment import HuuPreEnrollment
+from .infant_feeding import InfantFeeding
