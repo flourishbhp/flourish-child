@@ -18,7 +18,79 @@ COWS_MILK = (
     ('boiled', '1. Boiled from cow'),
     ('unboiled', '2. Unboiled from cow'),
     ('store', '3. From store'),
-    (NOT_APPLICABLE, 'Not Applicable'),
+    (NOT_APPLICABLE, 'Not Applicable'),)
+
+COOKING_METHOD = (
+    ('Gas or electric stove', 'Gas or electric stove'),
+    ('Paraffin stove', 'Paraffin stove'),
+    ('Wood-burning stove or open fire', 'Wood-burning stove or open fire'),
+    ('No regular means of heating', 'No regular means of heating')
+)
+
+ETHNICITY = (
+    ('Black African', 'Black African'),
+    ('Caucasian', 'Caucasian'),
+    ('Asian', 'Asian'),
+    (OTHER, 'Other, specify')
+)
+
+HOUSE_TYPE = (
+    ('Formal:Tin-roofed, concrete walls',
+     'Formal: Tin-roofed, concrete walls'),
+    ('Informal: Mud-walled or thatched', 'Informal: Mud-walled or thatched'),
+    ('Mixed formal/informal', 'Mixed formal/informal'),
+    ('Shack/Mokhukhu', 'Shack/Mokhukhu')
+)
+
+HIGHEST_EDUCATION = (
+    ('None', 'None'),
+    ('Primary', 'Primary'),
+    ('Junior Secondary', 'Junior Secondary'),
+    ('Senior Secondary', 'Senior Secondary'),
+    ('Tertiary', 'Tertiary')
+)
+
+MONEY_EARNED = (
+    ('None', 'None'),
+    ('<P200 per month / <P47 per week', '<P200 per month / <P47 per week'),
+    ('P200-500 per month / P47-116 per week',
+     'P200-500 per month / P47-116 per week'),
+    ('P501-1000 per month / P117 - 231 per week',
+     'P501-1000 per month / P117 - 231 per week'),
+    ('P1001-5000 per month / P212 - 1157 per week',
+     'P1001-5000 per month / P212 - 1157 per week'),
+    ('>P5000 per month / >P1157 per week',
+     '>P5000 per month / >P1157 per week'),
+    ('Unsure', 'Unsure'),
+    (OTHER, 'Other, specify')
+)
+
+MONEY_PROVIDER = (
+    ('You', 'You'),
+    ('Partner/husband', 'Partner/husband'),
+    ('Mother', 'Mother'),
+    ('Father', 'Father'),
+    ('Sister', 'Sister'),
+    ('Brother', 'Brother'),
+    ('Aunt', 'Aunt'),
+    ('Uncle', 'Uncle'),
+    ('Grandmother', 'Grandmother'),
+    ('Grandfather', 'Grandfather'),
+    ('Mother-in-law or Father-in-law', 'Mother-in-law or Father-in-law'),
+    ('Friend', 'Friend'),
+    ('Work collegues', 'Work collegues'),
+    ('Unsure', 'Unsure'),
+    (OTHER, 'Other, specify')
+)
+
+TOILET_FACILITY = (
+    ('Indoor toilet', 'Indoor toilet'),
+    ('Private latrine for your house/compound',
+     'Private latrine for your house/compound'),
+    ('Shared latrine with other compounds',
+     'Shared latrine with other compounds'),
+    ('No latrine facilities', 'No latrine facilities'),
+    (OTHER, 'Other, specify')
 )
 
 YES_NO_UNKNOWN = (
@@ -126,6 +198,13 @@ VISIT_STUDY_STATUS = (
     (OFF_STUDY,
      'Off study-no further follow-up (including death); use only '
      'for last study contact'),
+)
+
+WATER_SOURCE = (
+    ('Piped directly into the house', 'Piped directly into the house'),
+    ('Tap in the yard', 'Tap in the yard'),
+    ('Communal standpipe', 'Communal standpipe'),
+    (OTHER, 'Other water source (stream, borehole, rainwater, etc)')
 )
 
 POS_NEG_IND = (
