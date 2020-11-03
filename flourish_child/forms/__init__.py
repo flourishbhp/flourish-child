@@ -2,6 +2,7 @@ from .birth_data_form import BirthDataForm
 from .child_birth_weight_length_screening_form import ChildBirthWeightLengthScreeningForm
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
 from .child_dataset_form import ChildDatasetForm
+from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
