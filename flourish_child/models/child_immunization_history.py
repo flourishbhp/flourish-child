@@ -5,7 +5,7 @@ from edc_base.model_validators import date_not_future
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import YES_NO_UNKNOWN, IMMUNIZATIONS, INFANT_AGE_VACCINE_GIVEN
+from ..choices import YES_NO_UNKNOWN, IMMUNIZATIONS, CHILD_AGE_VACCINE_GIVEN
 from ..choices import REASONS_VACCINES_MISSED
 
 
@@ -48,7 +48,7 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
 
     child_age = models.CharField(
         verbose_name="Infant/Child/Adolescent age when vaccine given",
-        choices=INFANT_AGE_VACCINE_GIVEN,
+        choices=CHILD_AGE_VACCINE_GIVEN,
         null=True,
         blank=True,
         max_length=35)

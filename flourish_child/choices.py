@@ -121,7 +121,7 @@ IMMUNIZATIONS = (
     ('diptheria_tetanus', 'Diptheria and Tetanus')
 )
 
-INFANT_AGE_VACCINE_GIVEN = (
+CHILD_AGE_VACCINE_GIVEN = (
     ('At Birth', 'At Birth'),
     ('After Birth', 'After Birth'),
     ('2', '2 months'),
