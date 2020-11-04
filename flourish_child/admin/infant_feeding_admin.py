@@ -13,6 +13,7 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': [
+                "child_visit",
                 "report_datetime",
                 "last_att_sche_visit",
                 "other_feeding",

@@ -14,6 +14,7 @@ class BirthDataAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
+                'child_visit',
                 'report_datetime',
                 'weight_kg',
                 'infant_length',
