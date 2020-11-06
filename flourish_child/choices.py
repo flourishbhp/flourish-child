@@ -129,6 +129,12 @@ MONEY_PROVIDER = (
     (OTHER, 'Other, specify')
 )
 
+POS_NEG_IND = (
+  (POS, 'Positive'),
+  (NEG, 'Negative'),
+  (IND, 'Indeterminate')
+)
+
 REASONS_VACCINES_MISSED = (
     ('missed scheduled vaccination', 'Mother or Caregiver has not yet taken infant '
         'to clinic for this scheduled vaccination'),
