@@ -14,6 +14,27 @@ ALIVE_DEAD_UNKNOWN = (
     (UNKNOWN, 'Unknown'),
 )
 
+CHILD_AGE_VACCINE_GIVEN = (
+    ('At Birth', 'At Birth'),
+    ('After Birth', 'After Birth'),
+    ('2', '2 months'),
+    ('3', '3 months'),
+    ('4', '4 months'),
+    ('4-6', '4-6 months'),
+    ('6-11', '6-11 months'),
+    ('9', '9 months'),
+    ('9-12', '9-12 months'),
+    ('12-17', '12-17 months'),
+    ('18', '18 months'),
+    ('18-29', '18-29 months'),
+    ('24-29', '24-29 months'),
+    ('30-35', '30-35 months'),
+    ('36-41', '36-41 months'),
+    ('42-47', '42-47 months'),
+    ('48-53', '48-53 months'),
+    ('54-59', '54-59 months')
+)
+
 COWS_MILK = (
     ('boiled', '1. Boiled from cow'),
     ('unboiled', '2. Unboiled from cow'),
@@ -34,6 +55,14 @@ ETHNICITY = (
     (OTHER, 'Other, specify')
 )
 
+HIGHEST_EDUCATION = (
+    ('None', 'None'),
+    ('Primary', 'Primary'),
+    ('Junior Secondary', 'Junior Secondary'),
+    ('Senior Secondary', 'Senior Secondary'),
+    ('Tertiary', 'Tertiary')
+)
+
 HOUSE_TYPE = (
     ('Formal:Tin-roofed, concrete walls',
      'Formal: Tin-roofed, concrete walls'),
@@ -42,12 +71,29 @@ HOUSE_TYPE = (
     ('Shack/Mokhukhu', 'Shack/Mokhukhu')
 )
 
-HIGHEST_EDUCATION = (
-    ('None', 'None'),
-    ('Primary', 'Primary'),
-    ('Junior Secondary', 'Junior Secondary'),
-    ('Senior Secondary', 'Senior Secondary'),
-    ('Tertiary', 'Tertiary')
+IMMUNIZATIONS = (
+    ('Vitamin_A', 'Vitamin A'),
+    ('BCG', 'BCG'),
+    ('Hepatitis_B', 'Hepatitis B'),
+    ('DPT', 'DPT (Diphtheria, Pertussis and Tetanus)'),
+    ('Haemophilus_influenza', 'Haemophilus Influenza B Vaccine'),
+    ('PCV_Vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
+    ('Polio', 'Polio'),
+    ('Rotavirus', 'Rotavirus'),
+    ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
+    ('Measles', 'Measles'),
+    ('Pentavalent',
+     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
+    ('diptheria_tetanus', 'Diptheria and Tetanus')
+)
+
+INFO_PROVIDER = (
+    ('MOTHER', 'Mother'),
+    ('GRANDMOTHER', 'Grandmother'),
+    ('FATHER', 'Father'),
+    ('GRANDFATHER', 'Grandfather'),
+    ('SIBLING', 'Sibling'),
+    (OTHER, 'Other'),
 )
 
 MONEY_EARNED = (
@@ -83,6 +129,15 @@ MONEY_PROVIDER = (
     (OTHER, 'Other, specify')
 )
 
+REASONS_VACCINES_MISSED = (
+    ('missed scheduled vaccination', 'Mother or Caregiver has not yet taken infant '
+        'to clinic for this scheduled vaccination'),
+    ('caregiver declines vaccination',
+     'Mother or Caregiver declines this vaccicnation'),
+    ('no stock', 'Stock out at clinic'),
+    (OTHER, 'Other, specify'),
+)
+
 TOILET_FACILITY = (
     ('Indoor toilet', 'Indoor toilet'),
     ('Private latrine for your house/compound',
@@ -91,73 +146,6 @@ TOILET_FACILITY = (
      'Shared latrine with other compounds'),
     ('No latrine facilities', 'No latrine facilities'),
     (OTHER, 'Other, specify')
-)
-
-YES_NO_UNKNOWN = (
-    (YES, YES),
-    (NO, NO),
-    ('Unknown', 'Unknown'),
-)
-
-YES_NO_UNCERTAIN = (
-    ('0', NO),
-    ('1', YES),
-    ('2', 'Uncertain'),
-)
-
-IMMUNIZATIONS = (
-    ('Vitamin_A', 'Vitamin A'),
-    ('BCG', 'BCG'),
-    ('Hepatitis_B', 'Hepatitis B'),
-    ('DPT', 'DPT (Diphtheria, Pertussis and Tetanus)'),
-    ('Haemophilus_influenza', 'Haemophilus Influenza B Vaccine'),
-    ('PCV_Vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
-    ('Polio', 'Polio'),
-    ('Rotavirus', 'Rotavirus'),
-    ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
-    ('Measles', 'Measles'),
-    ('Pentavalent',
-     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
-    ('diptheria_tetanus', 'Diptheria and Tetanus')
-)
-
-CHILD_AGE_VACCINE_GIVEN = (
-    ('At Birth', 'At Birth'),
-    ('After Birth', 'After Birth'),
-    ('2', '2 months'),
-    ('3', '3 months'),
-    ('4', '4 months'),
-    ('4-6', '4-6 months'),
-    ('6-11', '6-11 months'),
-    ('9', '9 months'),
-    ('9-12', '9-12 months'),
-    ('12-17', '12-17 months'),
-    ('18', '18 months'),
-    ('18-29', '18-29 months'),
-    ('24-29', '24-29 months'),
-    ('30-35', '30-35 months'),
-    ('36-41', '36-41 months'),
-    ('42-47', '42-47 months'),
-    ('48-53', '48-53 months'),
-    ('54-59', '54-59 months')
-)
-
-INFO_PROVIDER = (
-    ('MOTHER', 'Mother'),
-    ('GRANDMOTHER', 'Grandmother'),
-    ('FATHER', 'Father'),
-    ('GRANDFATHER', 'Grandfather'),
-    ('SIBLING', 'Sibling'),
-    (OTHER, 'Other'),
-)
-
-REASONS_VACCINES_MISSED = (
-    ('missed scheduled vaccination', 'Mother or Caregiver has not yet taken infant '
-        'to clinic for this scheduled vaccination'),
-    ('caregiver declines vaccination',
-     'Mother or Caregiver declines this vaccicnation'),
-    ('no stock', 'Stock out at clinic'),
-    (OTHER, 'Other, specify'),
 )
 
 TIMES_BREASTFED = (
@@ -207,12 +195,6 @@ WATER_SOURCE = (
     (OTHER, 'Other water source (stream, borehole, rainwater, etc)')
 )
 
-POS_NEG_IND = (
-    (POS, 'Positive'),
-    (NEG, 'Negative'),
-    (IND, 'Indeterminate')
-)
-
 WATER_USED = (
     ('Water direct from source', 'Water direct from source'),
     ('Water boiled immediately before use',
@@ -222,4 +204,16 @@ WATER_USED = (
     ('Specifically treated water', 'Specifically treated water'),
     (OTHER, 'Other (specify)'),
     (NOT_APPLICABLE, 'Not Applicable'),
+)
+
+YES_NO_UNKNOWN = (
+    (YES, YES),
+    (NO, NO),
+    ('Unknown', 'Unknown'),
+)
+
+YES_NO_UNCERTAIN = (
+    ('0', NO),
+    ('1', YES),
+    ('2', 'Uncertain'),
 )
