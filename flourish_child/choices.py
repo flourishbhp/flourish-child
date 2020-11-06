@@ -100,8 +100,8 @@ YES_NO_UNKNOWN = (
 )
 
 YES_NO_UNCERTAIN = (
-    ('0', YES),
-    ('1', NO),
+    ('0', NO),
+    ('1', YES),
     ('2', 'Uncertain'),
 )
 
