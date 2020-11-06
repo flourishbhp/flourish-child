@@ -3,7 +3,7 @@ from django.db import models
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
-class ChildBirthWeightLengthScreening(ChildCrfModelMixin):
+class ChildBirthScreening(ChildCrfModelMixin):
 
     weight = models.DecimalField(
         verbose_name='Birth weight (kg)',

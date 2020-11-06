@@ -3,14 +3,14 @@ from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
-from ..forms import ChildBirthWeightLengthScreeningForm
-from ..models import ChildBirthWeightLengthScreening
+from ..forms import ChildBirthScreeningForm
+from ..models import ChildBirthScreening
 
 
-@admin.register(ChildBirthWeightLengthScreening, site=flourish_child_admin)
-class ChildBirthWeightLengthScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+@admin.register(ChildBirthScreening, site=flourish_child_admin)
+class ChildBirthScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
-    form = ChildBirthWeightLengthScreeningForm
+    form = ChildBirthScreeningForm
 
     fieldsets = (
         (None, {
