@@ -18,16 +18,26 @@ class HuuPreEnrollmentAdmin(ModelAdminMixin, admin.ModelAdmin):
             'fields': [
                 'report_datetime',
                 'child_dob',
-                'gestational_age',
-                'gestational_age_est',
-                'premature_at_birth',
                 'child_hiv_docs',
                 'child_hiv_result',
+                'weight',
+                'height',
+                'sex',
+                'knows_gest_age',
+                'gestational_age',
+                'uncertain_gest_age',
+                'premature_at_birth',
+                'breastfed',
+                'months_breastfeed',
             ]}
          ), audit_fieldset_tuple)
 
     radio_fields = {'child_hiv_docs': admin.VERTICAL,
+                    'child_hiv_result': admin.VERTICAL,
+                    'sex': admin.VERTICAL,
+                    'knows_gest_age': admin.VERTICAL,
+                    'uncertain_gest_age': admin.VERTICAL,
                     'premature_at_birth': admin.VERTICAL,
-                    'child_hiv_result': admin.VERTICAL}
+                    'breastfed': admin.VERTICAL}
 
     search_fields = ['screening_identifier']

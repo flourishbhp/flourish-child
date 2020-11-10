@@ -166,6 +166,13 @@ TIMES_BREASTFED = (
     (NOT_APPLICABLE, 'Not Applicable'),
 )
 
+UNCERTAIN_GEST_AGE = (
+    ('born_on_time', 'This child was born on time'),
+    ('born_early', 'This child was born early'),
+    ('born_late', 'This child was born late'),
+    ('unknown', 'This child’s gestational age is unknown')
+)
+
 VISIT_INFO_SOURCE = [
     (PARTICIPANT, 'Clinic visit with participant'),
     ('other_contact',
