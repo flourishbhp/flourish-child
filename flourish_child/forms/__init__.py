@@ -7,6 +7,7 @@ from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
+from .child_referral_form import ChildReferralForm
 from .huu_pre_enrollment_form import HuuPreEnrollmentForm
 from .infant_congenital_anomalies_form import InfantCardioDisorderForm
 from .infant_congenital_anomalies_form import InfantCleftDisorderForm

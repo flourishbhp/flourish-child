@@ -311,6 +311,15 @@ REASONS_VACCINES_MISSED = (
     (OTHER, 'Other, specify'),
 )
 
+REFERRED_TO = (
+    ('community_social_worker', 'Community Social Worker'),
+    ('hospital_based_social_worker', 'Hospital-based Social Worker'),
+    ('a&e', 'A&E'),
+    ('psychologist', 'Psychologist'),
+    ('psychiatrist', 'Psychiatrist'),
+    (OTHER, 'Other'),
+)
+
 RENAL_ANOMALY = (
     ('None', 'None'),
     ('Bilateral renal agenesis', 'Bilateral renal agenesis'),

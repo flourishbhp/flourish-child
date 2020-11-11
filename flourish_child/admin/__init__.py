@@ -4,6 +4,7 @@ from .child_birth_weight_length_screening_admin import ChildBirthScreeningAdmin
 from .child_clinical_measurements_admin import ChildClinicalMeasurementsAdmin
 from .child_dataset_admin import ChildDatasetAdmin
 from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
+from .child_referral_admin import ChildReferralAdmin
 from .child_socio_demographic_admin import ChildSocioDemographicAdmin
 from .huu_pre_enrollment_admin import HuuPreEnrollmentAdmin
 from .infant_congenital_anomalies_admin import InfantCongenitalAnomaliesAdmin
