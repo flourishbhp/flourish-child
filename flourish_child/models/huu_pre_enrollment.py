@@ -57,7 +57,6 @@ class HuuPreEnrollment(SiteModelMixin, BaseUuidModel):
         verbose_name='What is the Gestational Age of the child/adolescent?',
         null=True,
         blank=True,
-        max_length=2,
         validators=[MaxValueValidator(42), MinValueValidator(24)])
 
     uncertain_gest_age = models.CharField(
