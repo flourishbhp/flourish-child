@@ -1,3 +1,4 @@
+from .academic_performance_admin import AcademicPerformanceAdmin
 from .birth_data_admin import BirthDataAdmin
 from .child_birth_weight_length_screening_admin import ChildBirthScreeningAdmin
 from .child_clinical_measurements_admin import ChildClinicalMeasurementsAdmin

@@ -130,6 +130,11 @@ FEM_GENITAL_ANOMALY = (
      'Other ovarian, fallopian, uterine, cervical, vaginal, or vulvar abnormality'),
 )
 
+GRADE_LEVEL = (
+    ('standard_1', 'Standard 1'),
+    ('standard_2', 'Standard 2'),
+)
+
 HIGHEST_EDUCATION = (
     ('None', 'None'),
     ('Primary', 'Primary'),
@@ -196,6 +201,16 @@ MALE_GENITAL_ANOMALY = (
     ('Ambiguous genitalia, male', 'Ambiguous genitalia, male'),
     ('Undescended testis', 'Undescended testis'),
     (OTHER, 'Other male genital abnormality, specify'),
+)
+
+MARKS = (
+    ('a', 'A'),
+    ('b', 'B'),
+    ('c', 'C'),
+    ('d', 'D'),
+    ('e', 'E'),
+    ('f', 'F'),
+    ('not_taking_subject', 'Not taking subject')
 )
 
 MONEY_EARNED = (

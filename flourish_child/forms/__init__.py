@@ -1,3 +1,4 @@
+from .academic_performance_form import AcademicPerformanceForm
 from .birth_data_form import BirthDataForm
 from .child_birth_weight_length_screening_form import ChildBirthScreeningForm
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
