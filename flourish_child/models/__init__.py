@@ -9,7 +9,6 @@ from .child_immunization_history import VaccinesReceived
 from .child_immunization_history import VaccinesMissed
 from .child_referral import ChildReferral
 from .child_visit import ChildVisit
-from .huu_pre_enrollment import HuuPreEnrollment
 from .infant_congenital_anomalies import InfantCardioDisorder, InfantFacialDefect
 from .infant_congenital_anomalies import InfantCleftDisorder, InfantMouthUpGi, InfantCns
 from .infant_congenital_anomalies import InfantCongenitalAnomalies, BaseCnsItem
