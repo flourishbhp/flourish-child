@@ -6,5 +6,6 @@ from .child_dataset_admin import ChildDatasetAdmin
 from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
 from .child_referral_admin import ChildReferralAdmin
 from .child_socio_demographic_admin import ChildSocioDemographicAdmin
+from .child_medical_history_admin import ChildMedicalHistoryAdmin
 from .infant_congenital_anomalies_admin import InfantCongenitalAnomaliesAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
