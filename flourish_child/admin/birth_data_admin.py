@@ -16,8 +16,11 @@ class BirthDataAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'fields': (
                 'child_visit',
                 'report_datetime',
+                'weight_avail',
                 'weight_kg',
+                'length_avail',
                 'infant_length',
+                'head_circ_avail',
                 'head_circumference',
                 'apgar_score',
                 'apgar_score_min_1',
@@ -29,4 +32,7 @@ class BirthDataAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     radio_fields = {
         'apgar_score': admin.VERTICAL,
-        'congenital_anomalities': admin.VERTICAL}
+        'congenital_anomalities': admin.VERTICAL,
+        'weight_avail': admin.VERTICAL,
+        'length_avail': admin.VERTICAL,
+        'head_circ_avail': admin.VERTICAL}

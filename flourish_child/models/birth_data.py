@@ -1,6 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from edc_constants.choices import YES_NO, GENDER
+from edc_constants.constants import YES
+
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 
@@ -14,25 +16,49 @@ class BirthData(ChildCrfModelMixin):
         verbose_name="What is the gender of the infant?",
         help_text="")
 
+    weight_avail = models.CharField(
+        max_length=3,
+        choices=YES_NO,
+        verbose_name='Is the infant\'s birth weight available?',
+        default=YES)
+
     weight_kg = models.DecimalField(
         max_digits=3,
         decimal_places=2,
         verbose_name="What was the infant's birth weight? ",
-        help_text="Measured in Kilograms (kg)")
+        help_text="Measured in Kilograms (kg)",
+        blank=True,
+        null=True)
+
+    length_avail = models.CharField(
+        max_length=3,
+        choices=YES_NO,
+        verbose_name='Is the infant\'s length at birth available?',
+        default=YES)
 
     infant_length = models.DecimalField(
         max_digits=4,
         decimal_places=2,
         validators=[MinValueValidator(11), MaxValueValidator(125)],
         verbose_name="What was the infant's length at birth? ",
-        help_text="Measured in centimeters, (cm)")
+        help_text="Measured in centimeters, (cm)",
+        blank=True,
+        null=True)
+
+    head_circ_avail = models.CharField(
+        max_length=3,
+        choices=YES_NO,
+        verbose_name='Is the infant\'s head circumference at birth available?',
+        default=YES)
 
     head_circumference = models.DecimalField(
         max_digits=4,
         decimal_places=2,
         validators=[MinValueValidator(11), MaxValueValidator(54)],
         verbose_name="What was the head circumference in centimeters? ",
-        help_text="Measured in centimeters, (cm)")
+        help_text="Measured in centimeters, (cm)",
+        blank=True,
+        null=True)
 
     apgar_score = models.CharField(
         max_length=3,

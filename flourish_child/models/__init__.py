@@ -1,5 +1,6 @@
 from .academic_performance import AcademicPerformance
 from .birth_data import BirthData
+from .birth_exam import BirthExam
 from .child_birth_weight_length_screening import ChildBirthScreening
 from .child_clinical_measurements import ChildClinicalMeasurements
 from .child_dataset import ChildDataset
