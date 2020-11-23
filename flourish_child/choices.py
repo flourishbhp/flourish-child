@@ -216,6 +216,28 @@ INFO_PROVIDER = (
     (OTHER, 'Other'),
 )
 
+IS_DATE_ESTIMATED = (
+    (NO, 'No'),
+    ('Yes, estimated the Day', 'Yes, estimated the Day'),
+    ('Yes, estimated Month and Day', 'Yes, estimated Month and Day'),
+    ('Yes, estimated Year, Month and Day',
+     'Yes, estimated Year, Month and Day'),
+)
+
+KNOW_HIV_STATUS = (
+    ('Nobody', 'Nobody'),
+    ('1 person', '1 person'),
+    ('2-5 people', '2-5 people'),
+    ('6-10 people', '6-10 people'),
+    ('More than 10 people', 'More than 10 people'),
+    ('dont know', 'I do not know'),)
+
+LOWEST_CD4_KNOWN = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    (NOT_APPLICABLE, 'Not applicable')
+)
+
 LOWER_GASTROINTESTINAL_ABNORMALITY = (
     ('None', 'None'),
     ('Duodenal atresia, stenosis, or absence',

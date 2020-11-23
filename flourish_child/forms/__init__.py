@@ -12,6 +12,7 @@ from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
 from .child_phq_depression_screening_form import ChildPhqDepressionScreeningForm
+from .child_medical_history_form import ChildMedicalHistoryForm
 from .child_referral_form import ChildReferralForm
 from .infant_arv_exposure_form import InfantArvExposureForm
 from .infant_congenital_anomalies_form import InfantCardioDisorderForm

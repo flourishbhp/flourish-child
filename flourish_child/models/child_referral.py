@@ -23,5 +23,5 @@ class ChildReferral(ChildCrfModelMixin):
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = 'Caregiver Referral'
-        verbose_name_plural = 'Caregiver Referral'
+        verbose_name = 'Child Referral'
+        verbose_name_plural = 'Child Referral'
