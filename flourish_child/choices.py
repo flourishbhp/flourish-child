@@ -7,6 +7,7 @@ from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 from edc_constants.constants import NEG, POS, IND
+from .constants import BREASTFEED_ONLY
 
 ALIVE_DEAD_UNKNOWN = (
     (ALIVE, 'Alive'),
@@ -98,6 +99,20 @@ COOKING_METHOD = (
     ('No regular means of heating', 'No regular means of heating')
 )
 
+DEPRESSION_SCALE = (
+    ('0', 'Not at all'),
+    ('1', 'Several days'),
+    ('2', 'More than half the days'),
+    ('3', 'Nearly every day'),
+)
+
+DIFFICULTY_LEVEL = (
+    ('not_difficult', 'Not difficult'),
+    ('somewhat_difficult', 'Somewhat difficult'),
+    ('very_difficult', 'Very difficult'),
+    ('extremely_difficult', 'Extremely difficult'),
+)
+
 ETHNICITY = (
     ('Black African', 'Black African'),
     ('Caucasian', 'Caucasian'),
@@ -118,6 +133,15 @@ FACIAL_DEFECT = (
     ('OTHER ear anomaly', 'Other ear anomaly, specify'),
     ('Brachial cleft cyst, sinus or pit', 'Brachial cleft cyst, sinus or pit'),
     ('OTHER facial malformation', 'Other facial malformation, specify'),
+)
+
+FEEDING_CHOICES = (
+    (BREASTFEED_ONLY, 'Breastfeed only'),
+    ('Formula feeding only', 'Formula feeding only'),
+    ('Both breastfeeding and formula feeding',
+     'Both breastfeeding and formula feeding'),
+    ('Medical complications: Infant did not feed',
+     'Medical complications: Infant did not feed'),
 )
 
 FEM_GENITAL_ANOMALY = (
@@ -165,6 +189,22 @@ IMMUNIZATIONS = (
     ('Pentavalent',
      'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
     ('diptheria_tetanus', 'Diptheria and Tetanus')
+)
+
+INFANT_VACCINATIONS = (
+    ('Vitamin_A', 'Vitamin A'),
+    ('BCG', 'BCG'),
+    ('Hepatitis_B', 'Hepatitis B'),
+    ('DPT', 'DPT (Diphtheria, Pertussis and Tetanus)'),
+    ('Haemophilus_influenza', 'Haemophilus Influenza B Vaccine'),
+    ('PCV_Vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
+    ('Polio', 'Polio'),
+    ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
+    ('Rotavirus', 'Rotavirus'),
+    ('Measles', 'Measles'),
+    ('Pentavalent',
+     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
+    ('diphtheria_tetanus', 'Diphtheria and Tetanus')
 )
 
 INFO_PROVIDER = (
@@ -474,6 +514,13 @@ YES_NO_UNKNOWN = (
     (YES, YES),
     (NO, NO),
     ('Unknown', 'Unknown'),
+)
+
+YES_NO_UNKNOWN_NA = (
+    (YES, YES),
+    (NO, NO),
+    ('Unknown', 'Unknown'),
+    (NOT_APPLICABLE, 'Not applicable'),
 )
 
 YES_NO_UNCERTAIN = (
