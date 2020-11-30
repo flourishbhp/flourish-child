@@ -12,15 +12,16 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 
 class ChildMedicalHistory(ChildCrfModelMixin):
 
-    """ A model completed by the user on Medical History for all mothers. """
+    """ A model completed by the user on Medical History for all
+    child/adolescent. """
 
     chronic_since = models.CharField(
         max_length=25,
         choices=YES_NO,
         verbose_name=(
-            'Does the mother have any significant chronic condition(s) that'
-            ' were diagnosed prior to the current pregnancy and that '
-            'remain ongoing?')
+            'Does the child/adolescent have any significant chronic '
+            'condition(s) that were diagnosed prior to the current pregnancy '
+            'and that remain ongoing?')
     )
 
     who_diagnosis = models.CharField(
@@ -29,7 +30,7 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         verbose_name='Prior to the current pregnancy, was the participant ever'
         ' diagnosed with a WHO Stage III or IV illness?',
         help_text='Please use the WHO Staging Guidelines. ONLY for HIV '
-        'infected mothers'
+        'infected child/adolescent'
     )
 
     who = models.ManyToManyField(
@@ -38,14 +39,14 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         'not reported'
     )
 
-    mother_chronic = models.ManyToManyField(
+    child_chronic = models.ManyToManyField(
         ChronicConditions,
         related_name='mother',
-        verbose_name='Does the mother have any of the above. Tick all '
-        'that apply',
+        verbose_name='Does the child/adolescent have any of the above. Tick '
+                     'all that apply',
     )
 
-    mother_chronic_other = OtherCharField(
+    child_chronic_other = OtherCharField(
         max_length=35,
         verbose_name='if other, specify.',
         blank=True,
@@ -54,8 +55,9 @@ class ChildMedicalHistory(ChildCrfModelMixin):
     father_chronic = models.ManyToManyField(
         ChronicConditions,
         related_name='father',
-        verbose_name='Does the father of the infant or the mother\'s '
-        'other children have any of the above. Tick all that apply',
+        verbose_name='Does the father of the child/adolescent or the mother\'s'
+                     ' other children have any of the above. Tick all that '
+                     'apply',
     )
 
     father_chronic_other = OtherCharField(
@@ -64,14 +66,14 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         blank=True,
         null=True)
 
-    mother_medications = models.ManyToManyField(
+    child_medications = models.ManyToManyField(
         MaternalMedications,
-        verbose_name='Does the mother currently take any of the above '
-        'medications. Tick all that apply',
+        verbose_name='Does the child/adolescent currently take any of the '
+                     'above medications. Tick all that apply',
         blank=True
     )
 
-    mother_medications_other = OtherCharField(
+    child_medications_other = OtherCharField(
         max_length=35,
         verbose_name='if other, specify.',
         blank=True,
@@ -79,7 +81,7 @@ class ChildMedicalHistory(ChildCrfModelMixin):
 
     sero_posetive = models.CharField(
         max_length=25,
-        verbose_name='Is the mother HIV sero-positive?',
+        verbose_name='Is the child/adolescent HIV sero-positive?',
         choices=YES_NO,)
 
     date_hiv_diagnosis = models.DateField(
@@ -92,7 +94,7 @@ class ChildMedicalHistory(ChildCrfModelMixin):
 
     perinataly_infected = models.CharField(
         max_length=25,
-        verbose_name='Was the mother peri-nataly infected with HIV?',
+        verbose_name='Was the child/adolescent peri-nataly infected with HIV?',
         choices=YES_NO_NA,)
 
     know_hiv_status = models.CharField(
@@ -103,11 +105,11 @@ class ChildMedicalHistory(ChildCrfModelMixin):
     lowest_cd4_known = models.CharField(
         max_length=4,
         choices=LOWEST_CD4_KNOWN,
-        verbose_name='Is the mother\'s lowest CD4 known?')
+        verbose_name='Is the child/adolescent\'s lowest CD4 known?')
 
     cd4_count = models.IntegerField(
-        verbose_name=('What was the mother\'s lowest known (nadir) CD4 '
-                      'cell count(cells/mm3) at any time in the past?'),
+        verbose_name=('What was the child/adolescent\'s lowest known (nadir) '
+                      'CD4 cell count(cells/mm3) at any time in the past?'),
         validators=[MinValueValidator(1)],
         null=True,
         blank=True,

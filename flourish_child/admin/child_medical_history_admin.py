@@ -27,12 +27,12 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'chronic_since',
                 'who_diagnosis',
                 'who',
-                'mother_chronic',
-                'mother_chronic_other',
+                'child_chronic',
+                'child_chronic_other',
                 'father_chronic',
                 'father_chronic_other',
-                'mother_medications',
-                'mother_medications_other',
+                'child_medications',
+                'child_medications_other',
                 'sero_posetive',
                 'date_hiv_diagnosis',
                 'perinataly_infected',
@@ -52,4 +52,4 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'lowest_cd4_known': admin.VERTICAL,
                     'is_date_estimated': admin.VERTICAL}
     filter_horizontal = (
-        'who', 'mother_chronic', 'father_chronic', 'mother_medications')
+        'who', 'child_chronic', 'father_chronic', 'child_medications')
