@@ -5,6 +5,7 @@ from .birth_exam import BirthExam
 from .child_birth_weight_length_screening import ChildBirthScreening
 from .child_clinical_measurements import ChildClinicalMeasurements
 from .child_dataset import ChildDataset
+from .child_dummy_consent import ChildDummySubjectConsent
 from .child_socio_demographic import ChildSocioDemographic
 from .child_gad_anxiety_screening import ChildGadAnxietyScreening
 from .child_immunization_history import ChildImmunizationHistory
@@ -23,3 +24,5 @@ from .infant_congenital_anomalies import InfantMusculoskeletal, InfantSkin
 from .infant_congenital_anomalies import InfantOtherAbnormalityItems, InfantMaleGenital
 from .infant_congenital_anomalies import InfantRespiratoryDefect, InfantLowerGi
 from .infant_feeding import InfantFeeding
+from .onschedule import OnScheduleChildCohortA, OnScheduleChildCohortB, OnScheduleChildCohortC
+from .signals import child_consent_on_post_save

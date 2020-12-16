@@ -9,13 +9,17 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SITE_ID = 1
+
+ETC_DIR = '/etc'
+
+APP_NAME = 'flourish_child'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -39,6 +43,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    'django_crypto_fields.apps.AppConfig',
+    'edc_consent.apps.AppConfig',
+    'edc_device.apps.AppConfig',
+    'edc_registration.apps.AppConfig',
+    'edc_visit_schedule.apps.AppConfig',
+    'flourish_child.apps.EdcAppointmentAppConfig',
+    'flourish_child.apps.EdcProtocolAppConfig',
+    'flourish_child.apps.EdcTimepointAppConfig',
+    'flourish_child.apps.EdcVisitTrackingAppConfig',
+    'flourish_child.apps.EdcFacilityAppConfig',
+    'flourish_visit_schedule.apps.AppConfig',
     'flourish_child.apps.AppConfig'
 ]
 
@@ -103,6 +118,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+COUNTRY = 'botswana'
+HOLIDAY_FILE = os.path.join(BASE_DIR, 'holidays.csv')
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -122,3 +139,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+DASHBOARD_URL_NAMES = {}
+
