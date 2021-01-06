@@ -12,12 +12,8 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = ChildMedicalHistoryForm
 
     list_display = (
-        'child_visit', 'chronic_since', 'sero_posetive',
-        'date_hiv_diagnosis', 'perinataly_infected',
-        'lowest_cd4_known', 'cd4_count', 'cd4_date')
-    list_filter = (
-        'chronic_since', 'sero_posetive',
-        'date_hiv_diagnosis', 'perinataly_infected')
+        'child_visit', 'chronic_since')
+    list_filter = ('chronic_since',)
 
     fieldsets = (
         (None, {
@@ -28,29 +24,11 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'who_diagnosis',
                 'who',
                 'child_chronic',
-                'child_chronic_other',
-                'father_chronic',
-                'father_chronic_other',
-                'child_medications',
-                'child_medications_other',
-                'sero_posetive',
-                'date_hiv_diagnosis',
-                'perinataly_infected',
-                'know_hiv_status',
-                'lowest_cd4_known',
-                'cd4_count',
-                'cd4_date',
-                'is_date_estimated',
-                'comment']}
+                'child_chronic_other']}
          ), audit_fieldset_tuple)
 
     radio_fields = {'chronic_since': admin.VERTICAL,
-                    'who_diagnosis': admin.VERTICAL,
-                    'sero_posetive': admin.VERTICAL,
-                    'perinataly_infected': admin.VERTICAL,
-                    'know_hiv_status': admin.VERTICAL,
-                    'lowest_cd4_known': admin.VERTICAL,
-                    'is_date_estimated': admin.VERTICAL}
+                    'who_diagnosis': admin.VERTICAL}
 
     filter_horizontal = (
-        'who', 'child_chronic', 'father_chronic', 'child_medications')
+        'who', 'child_chronic')
