@@ -51,5 +51,6 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'know_hiv_status': admin.VERTICAL,
                     'lowest_cd4_known': admin.VERTICAL,
                     'is_date_estimated': admin.VERTICAL}
+
     filter_horizontal = (
         'who', 'child_chronic', 'father_chronic', 'child_medications')

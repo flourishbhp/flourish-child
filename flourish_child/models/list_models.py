@@ -6,7 +6,7 @@ class ChronicConditions(ListModelMixin, BaseUuidModel):
     pass
 
 
-class MaternalMedications(ListModelMixin, BaseUuidModel):
+class ChildMedications(ListModelMixin, BaseUuidModel):
 
     pass
 

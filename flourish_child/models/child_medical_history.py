@@ -6,7 +6,7 @@ from edc_constants.choices import YES_NO, YES_NO_NA
 
 from ..choices import (
     KNOW_HIV_STATUS, LOWEST_CD4_KNOWN, IS_DATE_ESTIMATED)
-from .list_models import ChronicConditions, MaternalMedications, WcsDxAdult
+from .list_models import ChronicConditions, ChildMedications, WcsDxAdult
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
@@ -67,7 +67,7 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         null=True)
 
     child_medications = models.ManyToManyField(
-        MaternalMedications,
+        ChildMedications,
         verbose_name='Does the child/adolescent currently take any of the '
                      'above medications. Tick all that apply',
         blank=True
