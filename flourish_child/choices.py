@@ -1,5 +1,5 @@
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
-    ON_STUDY, OFF_STUDY
+    ON_STUDY, OFF_STUDY, DONT_KNOW
 from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT,\
     NOT_APPLICABLE
 
@@ -358,6 +358,11 @@ OTHER_DEFECT = (
     (OTHER, 'Other defect/syndrome not already reported, specify'),
 )
 
+PHYS_ACTIVITY_TIME = (
+    ('specify_hrs_mins', 'Hours and minutes per day (specify)'),
+    (DONT_KNOW, 'Don\'t know/Not sure')
+)
+
 POS_NEG_IND = (
   (POS, 'Positive'),
   (NEG, 'Negative'),
@@ -462,6 +467,21 @@ UNCERTAIN_GEST_AGE = (
     ('born_early', 'This child was born early'),
     ('born_late', 'This child was born late'),
     ('unknown', 'This child’s gestational age is unknown')
+)
+
+VIGOROUS_ACTIVITY_DAYS = (
+    ('days_per_week', 'Days per week (specify)'),
+    ('no_vig_activity', 'No vigorous physical activities')
+)
+
+MODERATE_ACTIVITY_DAYS = (
+    ('days_per_week', 'Days per week (specify)'),
+    ('no_mod_activity', 'No moderate physical activities')
+)
+
+WALKING_DAYS = (
+    ('days_per_week', 'Days per week (specify)'),
+    ('no_walking', 'No walking')
 )
 
 VISIT_INFO_SOURCE = [

@@ -12,6 +12,7 @@ from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesReceived
 from .child_immunization_history import VaccinesMissed
 from .child_phq_depression_screening import ChildPhqDepressionScreening
+from .child_physical_activity import ChildPhysicalActivity
 from .child_medical_history import ChildMedicalHistory
 from .child_referral import ChildReferral
 from .child_visit import ChildVisit
