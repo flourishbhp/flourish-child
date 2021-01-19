@@ -18,6 +18,7 @@ class InfantCongenitalAnomalies(ChildCrfModelMixin):
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = "Infant Congenital Anomalies"
+        verbose_name_plural = "Infant Congenital Anomalies"
 
 
 class BaseCnsItem(BaseUuidModel):

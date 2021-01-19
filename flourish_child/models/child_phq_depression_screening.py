@@ -91,5 +91,5 @@ class ChildPhqDepressionScreening(ChildCrfModelMixin):
 
 class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = 'Depression Screening - PHQ-9'
-        verbose_name_plural = 'Depression Screening - PHQ-9'
+        verbose_name = 'Child Depression Screening - PHQ-9'
+        verbose_name_plural = 'Child Depression Screening - PHQ-9'
