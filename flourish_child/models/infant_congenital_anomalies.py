@@ -87,8 +87,8 @@ class InfantFacialDefect(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:Facial"
-        verbose_name_plural = "Congenital Anomalies:Facial"
+        verbose_name = "Congenital Anomalies: Facial"
+        verbose_name_plural = "Congenital Anomalies: Facial"
         unique_together = ('facial_defect', 'congenital_anomalies')
 
 
@@ -118,8 +118,8 @@ class InfantCleftDisorder(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:Cleft"
-        verbose_name_plural = "Congenital Anomalies:Cleft"
+        verbose_name = "Congenital Anomalies: Cleft"
+        verbose_name_plural = "Congenital Anomalies: Cleft"
         unique_together = ('cleft_disorder', 'congenital_anomalies')
 
 
@@ -180,8 +180,8 @@ class InfantCardioDisorder(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:Cardio"
-        verbose_name_plural = "Congenital Anomalies:Cardio"
+        verbose_name = "Congenital Anomalies: Cardio"
+        verbose_name_plural = "Congenital Anomalies: Cardio"
         unique_together = ('cardio_disorder', 'congenital_anomalies')
 
 
@@ -211,8 +211,8 @@ class InfantRespiratoryDefect(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:Respiratory"
-        verbose_name_plural = "Congenital Anomalies:Respiratory"
+        verbose_name = "Congenital Anomalies: Respiratory"
+        verbose_name_plural = "Congenital Anomalies: Respiratory"
         unique_together = ('respiratory_defect', 'congenital_anomalies')
 
 
@@ -242,8 +242,8 @@ class InfantLowerGi(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:Lower GI"
-        verbose_name_plural = "Congenital Anomalies:Lower GI"
+        verbose_name = "Congenital Anomalies: Lower GI"
+        verbose_name_plural = "Congenital Anomalies: Lower GI"
         unique_together = ('lower_gi', 'congenital_anomalies')
 
 
