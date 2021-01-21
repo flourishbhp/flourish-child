@@ -56,8 +56,8 @@ class InfantCns(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:Cns"
-        verbose_name_plural = "Congenital Anomalies:Cns"
+        verbose_name = "Congenital Anomalies: CNS"
+        verbose_name_plural = "Congenital Anomalies: CNS"
         unique_together = ('cns', 'congenital_anomalies')
 
 
@@ -149,8 +149,8 @@ class InfantMouthUpGi(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:MouthUp"
-        verbose_name_plural = "Congenital Anomalies:MouthUp"
+        verbose_name = "Congenital Anomalies: Upper GI"
+        verbose_name_plural = "Congenital Anomalies: Upper GI"
         unique_together = ('mouth_up_gi', 'congenital_anomalies')
 
 
@@ -273,8 +273,8 @@ class InfantFemaleGenital(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:Female Gen"
-        verbose_name_plural = "Congenital Anomalies:Female Gen"
+        verbose_name = "Congenital Anomalies: Female Genital"
+        verbose_name_plural = "Congenital Anomalies: Female Genital"
         unique_together = ('female_genital', 'congenital_anomalies')
 
 
@@ -304,8 +304,8 @@ class InfantMaleGenital(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies:Male Gen"
-        verbose_name_plural = "Congenital Anomalies:Male Gen"
+        verbose_name = "Congenital Anomalies: Male Genital"
+        verbose_name_plural = "Congenital Anomalies: Male Genital"
         unique_together = ('male_genital', 'congenital_anomalies')
 
 
@@ -366,7 +366,8 @@ class InfantMusculoskeletal(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies: Musculo-sk"
+        verbose_name = "Congenital Anomalies: Musculoskeletal"
+        verbose_name_plural = "Congenital Anomalies: Musculoskeletal"
         unique_together = ('musculo_skeletal', 'congenital_anomalies')
 
 
@@ -399,6 +400,7 @@ class InfantSkin(BaseCnsItem):
     class Meta:
         app_label = 'flourish_child'
         verbose_name = "Congenital Anomalies: Skin"
+        verbose_name_plural = "Congenital Anomalies: Skin"
         unique_together = ('skin', 'congenital_anomalies')
 
 
@@ -428,8 +430,8 @@ class InfantTrisomies(BaseCnsItem):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = "Congenital Anomalies: Trisomes"
-        verbose_name_plural = "Congenital Anomalies: Trisomes"
+        verbose_name = "Congenital Anomalies: Trisomy"
+        verbose_name_plural = "Congenital Anomalies: Trisomy"
         unique_together = ('trisomies', 'congenital_anomalies')
 
 
