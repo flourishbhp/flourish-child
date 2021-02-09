@@ -3,6 +3,7 @@ from .birth_data_form import BirthDataForm
 from .birth_exam_form import BirthExamForm
 from .birth_feeding_and_vaccine_form import BirthFeedingVaccineForm
 from .birth_feeding_and_vaccine_form import BirthVaccinesForm
+from .child_assent_form import ChildAssentForm
 from .child_birth_weight_length_screening_form import ChildBirthScreeningForm
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
 from .child_dataset_form import ChildDatasetForm
