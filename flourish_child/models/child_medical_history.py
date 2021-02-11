@@ -20,7 +20,8 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         related_name='caregiver',
         verbose_name=('Does the Child/Adolescent have any of the above. '
                       'Tick all that apply'),
-    )
+        blank=True,
+        null=True)
 
     child_chronic_other = OtherCharField(
         max_length=35,
