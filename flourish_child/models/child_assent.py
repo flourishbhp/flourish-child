@@ -33,6 +33,13 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         verbose_name='Screening identifier',
         max_length=50)
 
+    citizen = models.CharField(
+        verbose_name='Is the participant a Botswana citizen? ',
+        max_length=3,
+        validators=[eligible_if_yes, ],
+        choices=YES_NO,
+        help_text='If ‘No’ ineligible for study participation')
+
     identity_type = models.CharField(
         verbose_name='What type of identity number is this?',
         max_length=25,
