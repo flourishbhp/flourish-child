@@ -27,4 +27,5 @@ from .infant_congenital_anomalies import InfantOtherAbnormalityItems, InfantMale
 from .infant_congenital_anomalies import InfantRespiratoryDefect, InfantLowerGi
 from .infant_feeding import InfantFeeding
 from .onschedule import OnScheduleChildCohortA, OnScheduleChildCohortB, OnScheduleChildCohortC
+from .onschedule import OnScheduleChildPool
 from .signals import child_consent_on_post_save

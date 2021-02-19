@@ -86,6 +86,12 @@ CNS_ABNORMALITIES = (
     ('Other CNS defect, specify', 'Other CNS defect, specify'),
 )
 
+COHORTS = (
+    ('cohort_a', 'Cohort A'),
+    ('cohort_b', 'Cohort B'),
+    ('cohort_c', 'Cohort C'),
+    ('cohort_pool', 'Cohort Pool'),)
+
 COWS_MILK = (
     ('boiled', '1. Boiled from cow'),
     ('unboiled', '2. Unboiled from cow'),

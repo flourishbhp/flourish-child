@@ -2,14 +2,18 @@ from django.db import models
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites.site_model_mixin import SiteModelMixin
+from edc_base.utils import get_utcnow
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
-
 from edc_consent.field_mixins import PersonalFieldsMixin
 from edc_consent.model_mixins import ConsentModelMixin
+from edc_registration.model_mixins import (
+    UpdatesOrCreatesRegistrationModelMixin)
+from ..choices import COHORTS
 
 
 class ChildDummySubjectConsent(
-        ConsentModelMixin, SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
+        ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin,
+        SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         PersonalFieldsMixin, BaseUuidModel):
 
     """ A dummy child model auto completed by the s. """
@@ -19,7 +23,8 @@ class ChildDummySubjectConsent(
 
     report_datetime = models.DateTimeField(
         null=True,
-        editable=False)
+        editable=False,
+        default=get_utcnow)
 
     version = models.CharField(
         verbose_name='Consent version',
@@ -27,24 +32,19 @@ class ChildDummySubjectConsent(
         help_text='See \'Consent Type\' for consent versions by period.',
         editable=False)
 
+    cohort = models.CharField(
+        max_length=12,
+        choices=COHORTS,
+        blank=True,
+        null=True)
+
     history = HistoricalRecords()
-    
-    _cohort_schedule = None
 
     def __str__(self):
         return f'{self.subject_identifier} V{self.version}'
 
     def natural_key(self):
         return (self.subject_identifier, self.version)
-    
-    @property
-    def cohort(self):
-        #TO-DO: add variable name, e.g 'cohort_a'
-        return self._cohort_schedule
-
-    @cohort.setter
-    def cohort(self, val):
-        self._cohort_schedule = val
 
     class Meta(ConsentModelMixin.Meta):
         app_label = 'flourish_child'
