@@ -1,6 +1,6 @@
 from django import forms
 
-# from flourish_form_validations.form_validators import ChildMedicalHistoryFormValidator
+from flourish_child_validations.form_validators import ChildMedicalHistoryFormValidator
 
 from ..models import ChildMedicalHistory
 from .child_form_mixin import ChildModelFormMixin

@@ -17,10 +17,9 @@ class ChildMedicalHistory(ChildCrfModelMixin):
 
     child_chronic = models.ManyToManyField(
         ChronicConditions,
-        related_name='caregiver',
+        related_name='child',
         verbose_name=('Does the Child/Adolescent have any of the above. '
-                      'Tick all that apply'),
-    )
+                      'Tick all that apply'),)
 
     child_chronic_other = OtherCharField(
         max_length=35,
