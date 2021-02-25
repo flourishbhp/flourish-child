@@ -61,6 +61,7 @@ class BirthVaccines(BaseUuidModel):
         verbose_name='Date Vaccine was given')
 
     class Meta:
+        app_label = 'flourish_child'
         verbose_name = "Birth Vaccines"
         verbose_name_plural = "Birth Vaccines"
         unique_together = ('birth_feed_vaccine', 'vaccination', 'vaccine_date')
