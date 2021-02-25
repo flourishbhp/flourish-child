@@ -79,6 +79,9 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         validators=[
             datetime_not_before_study_start,
             datetime_not_future])
+    
+    version = models.CharField(
+        max_length=1)
 
     objects = ChildAssentManager()
 

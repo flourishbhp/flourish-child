@@ -1,6 +1,6 @@
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
     ON_STUDY, OFF_STUDY, DONT_KNOW
-from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT,\
+from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
     NOT_APPLICABLE
 
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
