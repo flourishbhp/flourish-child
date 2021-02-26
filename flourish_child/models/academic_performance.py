@@ -2,15 +2,22 @@ from django.db import models
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 
-from ..choices import GRADE_LEVEL, MARKS
+from ..choices import HIGHEST_EDUCATION, MARKS, NUMBER_OF_DAYS
+from edc_base.model_fields import OtherCharField
 
 
 class AcademicPerformance(ChildCrfModelMixin):
 
-    grade_level = models.CharField(
-        verbose_name='What grade level are you in?',
-        max_length=10,
-        choices=GRADE_LEVEL)
+    education_level = models.CharField(
+        verbose_name='Highest level of school completed',
+        max_length=20,
+        choices=HIGHEST_EDUCATION)
+
+    education_level_other = OtherCharField(
+        verbose_name='Specify other',
+        blank=True,
+        null=True,
+        max_length=30)
 
     mathematics_marks = models.CharField(
         verbose_name='What are your marks in Mathematics?',
@@ -21,6 +28,15 @@ class AcademicPerformance(ChildCrfModelMixin):
         verbose_name='What are your marks in Reading?',
         max_length=20,
         choices=MARKS)
+
+    history_marks = models.CharField(
+        verbose_name='What are your marks in History?',
+        max_length=20,
+        choices=MARKS)
+    num_days = models.CharField(
+        verbose_name='How many days a week do you attend in-peron classes?',
+        max_length=10,
+        choices=NUMBER_OF_DAYS)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'

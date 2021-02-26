@@ -185,11 +185,22 @@ GRADE_LEVEL = (
 )
 
 HIGHEST_EDUCATION = (
-    ('None', 'None'),
-    ('Primary', 'Primary'),
-    ('Junior Secondary', 'Junior Secondary'),
-    ('Senior Secondary', 'Senior Secondary'),
-    ('Tertiary', 'Tertiary')
+    ('Pre-school', 'Pre-school'),
+    ('Standard_1', 'Standard 1'),
+    ('Standard_2', 'Standard 2'),
+    ('Standard_3', 'Standard 3'),
+    ('Standard_4', 'Standard 4'),
+    ('Standard_5', 'Standard 5'),
+    ('Standard_6', 'Standard 6'),
+    ('Standard_7', 'Standard 7'),
+    ('Form_1', 'Form 1'),
+    ('Form_2', 'Form 2'),
+    ('Form_3', 'Form 3'),
+    ('Form_4', 'Form 4'),
+    ('Form_5', 'Form 5'),
+    ('University', 'University'),
+    (OTHER, 'Other'),
+    ('No_schooling ', 'No Schooling ')
 )
 HOSPITAL = (
     ('princess_marina',
@@ -389,6 +400,15 @@ MUSCULOSKELETAL_ABNORMALITY = (
     ('Omphalocele', 'Omphalocele'),
     ('Gastroschisis', 'Gastroschisis'),
     (OTHER, 'Other muscular or skeletal abnormality or syndrome, specify'),
+)
+
+NUMBER_OF_DAYS = (
+    ('one', '1'),
+    ('two', '2'),
+    ('three', '3'),
+    ('four', '4'),
+    ('five', '5'),
+    ('none', 'None'),
 )
 
 OTHER_DEFECT = (
