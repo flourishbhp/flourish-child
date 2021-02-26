@@ -16,6 +16,7 @@ from .child_phq_depression_screening_form import ChildPhqDepressionScreeningForm
 from .child_physical_activity_form import ChildPhysicalActivityForm
 from .child_medical_history_form import ChildMedicalHistoryForm
 from .child_referral_form import ChildReferralForm
+from .child_previous_hospitalisations_form import ChildPreviousHospitalizationForm
 from .infant_arv_exposure_form import InfantArvExposureForm
 from .infant_congenital_anomalies_form import InfantCardioDisorderForm
 from .infant_congenital_anomalies_form import InfantCleftDisorderForm

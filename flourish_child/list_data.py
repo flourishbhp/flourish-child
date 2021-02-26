@@ -3,6 +3,23 @@ from edc_constants.constants import NOT_APPLICABLE, OTHER, NONE
 from edc_list_data import PreloadData
 
 list_data = {
+    'flourish_child.childdiseases': [
+        ('pneumonia', 'Pneumonia'),
+        ('tuberculosis', 'tuberculosis'),
+        ('Bronchiolitis', 'Bronchiolitis'),
+        ('Laryngotracheobronchitis', 'Laryngotracheobronchitis / Croup'),
+        ('□ Acute_diarrheal_disease ', 'Acute diarrheal disease '),
+        ('Persistent_diarrheal_disease  ', 'Persistent diarrheal disease'),
+        ('Meningitis', 'Meningitis'),
+        ('Malaria', 'Malaria'),
+        ('Measles', 'Measles'),
+        ('Trauma', 'Trauma'),
+        ('Febrile seizure ', 'Febrile seizure '),
+        ('Malnutrition', 'Malnutrition'),
+        ('Anemia', 'Anemia'),
+        ('Surgical_reason', 'Surgical reason'),
+        (OTHER, 'Other'),
+    ],
     'flourish_child.chronicconditions': [
         ('Asthma', 'Asthma'),
         ('Hypertension', 'Hypertension'),
