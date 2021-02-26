@@ -16,7 +16,7 @@ from .child_phq_depression_screening import ChildPhqDepressionScreening
 from .child_physical_activity import ChildPhysicalActivity
 from .child_medical_history import ChildMedicalHistory
 from .child_referral import ChildReferral
-from .child_previous_hospitalizations import ChildPreviousHospitalization
+from .child_previous_hospitalization import ChildPreviousHospitalization
 from .child_visit import ChildVisit
 from .infant_arv_exposure import InfantArvExposure
 from .infant_congenital_anomalies import InfantCardioDisorder, InfantFacialDefect
