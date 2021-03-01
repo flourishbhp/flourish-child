@@ -47,7 +47,7 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'fields': (
                 'child_visit',
                 'report_datetime',
-                'vaccines_missed')
+                'vaccines_missed',)
         }),
     )
 
