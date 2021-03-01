@@ -19,7 +19,8 @@ class ChildPreviousHospitalization(ChildCrfModelMixin):
     hospitalized_count = models.PositiveIntegerField(
         verbose_name='How many times?',
         validators=[MinValueValidator(1)],
-        blank=True)
+        blank=True,
+        null=True)
 
     aprox_date = models.DateField(
         verbose_name='What is the approximate Date of hospitalization?',

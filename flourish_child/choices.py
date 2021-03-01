@@ -119,25 +119,6 @@ DIFFICULTY_LEVEL = (
     ('extremely_difficult', 'Extremely difficult'),
 )
 
-DISEASE = (
-    ('pneumonia', 'Pneumonia'),
-    ('tuberculosis', 'tuberculosis'),
-    ('Bronchiolitis', 'Bronchiolitis'),
-    ('Laryngotracheobronchitis', 'Laryngotracheobronchitis / Croup'),
-    ('□ Acute_diarrheal_disease ', '□ Acute diarrheal disease '),
-    ('Persistent_diarrheal_disease  ', 'Persistent diarrheal disease'),
-    ('Meningitis', 'Meningitis'),
-    ('Malaria', 'Malaria'),
-    ('Measles', 'Measles'),
-    ('Trauma', 'Trauma'),
-    ('Febrile seizure ', 'Febrile seizure '),
-    ('Malnutrition', 'Malnutrition'),
-    ('Anemia', 'Anemia'),
-    ('Surgical_reason', 'Surgical reason'),
-    (OTHER, 'Other'),
-
-)
-
 ETHNICITY = (
     ('Black African', 'Black African'),
     ('Caucasian', 'Caucasian'),

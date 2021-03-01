@@ -33,6 +33,7 @@ class AcademicPerformance(ChildCrfModelMixin):
         verbose_name='What are your marks in History?',
         max_length=20,
         choices=MARKS)
+
     num_days = models.CharField(
         verbose_name='How many days a week do you attend in-peron classes?',
         max_length=10,
