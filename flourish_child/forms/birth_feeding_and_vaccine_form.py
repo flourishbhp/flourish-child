@@ -17,7 +17,7 @@ class BirthVaccinesForm(forms.ModelForm):
 
     def clean(self):
         self.subject_identifier = self.cleaned_data.get(
-            'birth_feed_vaccine').infant_visit.appointment.subject_identifier
+            'birth_feed_vaccine').child_visit.appointment.subject_identifier
         super().clean()
 
     class Meta:
