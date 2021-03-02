@@ -7,6 +7,7 @@ from .child_assent_form import ChildAssentForm
 from .child_birth_weight_length_screening_form import ChildBirthScreeningForm
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
 from .child_dataset_form import ChildDatasetForm
+from .child_hiv_rapid_test_counseling_form import ChildHIVRapidTestCounselingForm
 from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_gad_anxiety_screening_form import ChildGadAnxietyScreeningForm
 from .child_immunization_history_form import ChildImmunizationHistoryForm
