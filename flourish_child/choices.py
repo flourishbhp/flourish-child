@@ -546,13 +546,13 @@ WATER_USED = (
 YES_NO_UNKNOWN = (
     (YES, YES),
     (NO, NO),
-    ('Unknown', 'Unknown'),
+    (UNKNOWN, 'Unknown'),
 )
 
 YES_NO_UNKNOWN_NA = (
     (YES, YES),
     (NO, NO),
-    ('Unknown', 'Unknown'),
+    (UNKNOWN, 'Unknown'),
     (NOT_APPLICABLE, 'Not applicable'),
 )
 
