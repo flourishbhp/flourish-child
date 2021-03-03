@@ -13,12 +13,8 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = ChildSocioDemographicForm
 
     list_display = ('child_visit',
-                    'ethnicity',
-                    'highest_education',
-                    'own_phone')
-    list_filter = ('ethnicity',
-                   'highest_education',
-                   'own_phone')
+                    'ethnicity')
+    list_filter = ('ethnicity', )
 
     fieldsets = (
         (None, {
@@ -27,12 +23,7 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'ethnicity',
                 'ethnicity_other',
-                'highest_education',
-                'provides_money',
-                'provides_money_other',
-                'money_earned',
-                'money_earned_other',
-                'own_phone',
+                'stay_with_caregiver',
                 'water_source',
                 'house_electrified',
                 'house_fridge',
@@ -40,14 +31,12 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'toilet_facility',
                 'toilet_facility_other',
                 'house_people_number',
-                'house_type']}
+                'house_type',
+                'older_than18']}
          ), audit_fieldset_tuple)
 
     radio_fields = {'ethnicity': admin.VERTICAL,
-                    'highest_education': admin.VERTICAL,
-                    'provides_money': admin.VERTICAL,
-                    'money_earned': admin.VERTICAL,
-                    'own_phone': admin.VERTICAL,
+                    'stay_with_caregiver': admin.VERTICAL,
                     'water_source': admin.VERTICAL,
                     'house_electrified': admin.VERTICAL,
                     'house_fridge': admin.VERTICAL,
