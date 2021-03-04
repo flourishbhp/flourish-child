@@ -8,18 +8,22 @@ from .model_admin_mixins import ChildCrfModelAdminMixin
 
 @admin.register(AcademicPerformance, site=flourish_child_admin)
 class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = AcademicPerformanceForm
 
     fieldsets = (
         (None, {
             'fields': (
-                'grade_level',
+                'education_level',
+                'education_level_other',
                 'mathematics_marks',
-                'reading_marks')}
+                'reading_marks',
+                'history_marks',
+                'num_days')}
          ), audit_fieldset_tuple)
 
     radio_fields = {
-        'grade_level': admin.VERTICAL,
+        'education_level': admin.VERTICAL,
         'mathematics_marks': admin.VERTICAL,
-        'reading_marks': admin.VERTICAL}
+        'reading_marks': admin.VERTICAL,
+        'history_marks': admin.VERTICAL,
+        'num_days': admin.VERTICAL, }
