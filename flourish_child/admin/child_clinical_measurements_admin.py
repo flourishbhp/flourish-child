@@ -14,19 +14,22 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     list_display = ('child_visit', 'child_weight_kg', 'child_height',
                     'child_systolic_bp', 'child_diastolic_bp', 'child_waist_circ',
-                    'child_hip_circ', 'child_skin_folds')
+                    'child_hip_circ')
 
     fieldsets = (
         (None, {
             'fields': [
                 'child_visit',
                 'report_datetime',
-                'child_height',
                 'child_weight_kg',
                 'child_systolic_bp',
                 'child_diastolic_bp',
+                'child_height',
                 'child_waist_circ',
                 'child_hip_circ',
-                'child_skin_folds'
+                'skin_folds_triceps',
+                'skin_folds_subscapular',
+                'skin_folds_suprailiac',
+                'child_muac'
             ]}
          ), audit_fieldset_tuple)

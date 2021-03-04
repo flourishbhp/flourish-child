@@ -238,6 +238,32 @@ class ChildDataset(
         verbose_name='Days infant on-study',
         max_length=200)
 
+    curr_age = models.DecimalField(
+        verbose_name='Current Age',
+        decimal_places=2, max_digits=10,
+        blank=True, null=True)
+
+    age_gt17_5 = models.IntegerField(
+        verbose_name='Age greater than 17.5')
+
+    infant_offstudy_complete = models.IntegerField(
+        verbose_name='Infant Offstudy Complete')
+
+    # today = models.DateField(
+    #     blank=True, null=True)
+
+    offstrs = models.CharField(
+        verbose_name='Offstrs',
+        max_length=150,
+        blank=True,
+        null=True)
+
+    offstcd = models.CharField(
+        verbose_name='Offstcd',
+        max_length=50,
+        blank=True,
+        null=True)
+
     class Meta:
-        app_label='flourish_child'
-        verbose_name='Infant Dataset'
+        app_label = 'flourish_child'
+        verbose_name = 'Infant Dataset'
