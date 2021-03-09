@@ -1,3 +1,5 @@
+from django.apps import apps as django_apps
+from django.core.exceptions import ValidationError
 from django.db import models
 
 from edc_base.model_managers import HistoricalRecords
@@ -14,6 +16,7 @@ from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
 
 from ..choices import IDENTITY_TYPE
+from .eligibility import AssentEligibility
 from .model_mixins import SearchSlugModelMixin
 
 
@@ -28,6 +31,11 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                   IdentityFieldsMixin, PersonalFieldsMixin, ReviewFieldsMixin,
                   VulnerabilityFieldsMixin, CitizenFieldsMixin, SearchSlugModelMixin,
                   BaseUuidModel):
+
+    subject_identifier = models.CharField(
+        verbose_name="Subject Identifier",
+        max_length=50,
+        null=True)
 
     screening_identifier = models.CharField(
         verbose_name='Screening identifier',
@@ -47,24 +55,21 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
 
     remain_in_study = models.CharField(
         max_length=3,
-        verbose_name=('Are you willing to continue the study when you reach 18 '
-                      'years of age?'),
+        verbose_name=('Are you willing to continue the study when you reach 18'
+                      ' years of age?'),
         choices=YES_NO,
-        validators=[eligible_if_yes, ],
         help_text='If no, participant is not eligible.')
 
     hiv_testing = models.CharField(
         max_length=3,
         verbose_name=('Are you willing to be tested for HIV ?'),
         choices=YES_NO,
-        validators=[eligible_if_yes, ],
         help_text='If no, participant is not eligible.')
 
     preg_testing = models.CharField(
         max_length=3,
         verbose_name='Are you willing to undergo pregnancy testing? ',
         choices=YES_NO,
-        validators=[eligible_if_yes, ],
         blank=True,
         null=True,
         help_text='If ‘No’ ineligible for study participation')
@@ -83,6 +88,16 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     version = models.CharField(
         max_length=1)
 
+    ineligibility = models.TextField(
+        verbose_name="Reason not eligible",
+        max_length=150,
+        null=True,
+        editable=False)
+
+    is_eligible = models.BooleanField(
+        default=False,
+        editable=False)
+
     objects = ChildAssentManager()
 
     history = HistoricalRecords()
@@ -96,6 +111,29 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
 
     def natural_key(self):
         return self.subject_identifier
+
+    def save(self, *args, **kwargs):
+        eligibility_criteria = AssentEligibility(
+            self.remain_in_study, self.hiv_testing, self.preg_testing)
+        self.is_eligible = eligibility_criteria.is_eligible
+        self.ineligibility = eligibility_criteria.error_message
+        if self.is_eligible:
+            self.version = '1'
+            self.subject_identifier = self.update_subject_identifier
+        super().save(*args, **kwargs)
+
+    @property
+    def update_subject_identifier(self):
+        subject_consent_cls = django_apps.get_model(
+            'flourish_caregiver.subjectconsent')
+        try:
+            consent = subject_consent_cls.objects.get(
+                screening_identifier=self.screening_identifier)
+        except subject_consent_cls.DoesNotExist:
+            raise ValidationError(
+                'Please complete the adult participation consent first.')
+        else:
+            return consent.subject_identifier + '-10'
 
     class Meta:
         app_label = 'flourish_child'

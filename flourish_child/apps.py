@@ -35,9 +35,9 @@ if settings.APP_NAME == 'flourish_child':
 
     
     class EdcProtocolAppConfig(BaseEdcProtocolAppConfigs):
-        protocol = 'BHP0135'
+        protocol = 'BHP142'
         protocol_name = 'Flourish Follow'
-        protocol_number = '035'
+        protocol_number = '142'
         protocol_title = ''
         study_open_datetime = datetime(
             2020, 11, 1, 0, 0, 0, tzinfo=gettz('UTC'))
