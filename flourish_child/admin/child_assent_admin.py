@@ -64,7 +64,8 @@ class ChildAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
         'preg_testing': admin.VERTICAL,
         'specimen_consent': admin.VERTICAL, }
 
-    list_display = ('subject_identifier',
+    list_display = ('screening_identifier',
+                    'subject_identifier',
                     'first_name',
                     'initials',
                     'gender',

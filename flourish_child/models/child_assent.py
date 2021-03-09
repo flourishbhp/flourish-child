@@ -117,8 +117,8 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             self.remain_in_study, self.hiv_testing, self.preg_testing)
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
+        self.version = '1'
         if self.is_eligible:
-            self.version = '1'
             self.subject_identifier = self.update_subject_identifier
         super().save(*args, **kwargs)
 
