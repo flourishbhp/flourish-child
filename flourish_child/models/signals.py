@@ -48,11 +48,11 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
         raise CaregiverConsentError('Associated caregiver consent not found.')
     else:
         if caregiver_consent_obj.cohort:
-            instance.registration_update_or_create()
             put_on_schedule(instance.cohort, instance=instance)
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None):
     if instance:
+        instance.registration_update_or_create()
         subject_identifier = subject_identifier or instance.subject_identifier
 
         cohort_label_lower = ''.join(cohort.split('_'))
