@@ -27,7 +27,7 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
             raise CaregiverConsentError('Associated caregiver consent for this participant '
                                         'not found')
         else:
-            ChildDummySubjectConsent.objects.create(
+            ChildDummySubjectConsent.objects.update_or_create(
                         subject_identifier=instance.subject_identifier,
                         consent_datetime=instance.consent_datetime,
                         version=instance.version,
@@ -51,7 +51,6 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
             instance.registration_update_or_create()
             put_on_schedule(instance.cohort, instance=instance)
 
-
 def put_on_schedule(cohort, instance=None, subject_identifier=None):
     if instance:
         subject_identifier = subject_identifier or instance.subject_identifier
@@ -65,7 +64,6 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
         onschedule_model_cls = django_apps.get_model(onschedule_model)
 
         schedule_name = cohort + '_schedule_1'
-
         try:
             onschedule_model_cls.objects.get(
                 subject_identifier=instance.subject_identifier,

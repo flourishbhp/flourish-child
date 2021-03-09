@@ -79,7 +79,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         validators=[
             datetime_not_before_study_start,
             datetime_not_future])
-    
+
     version = models.CharField(
         max_length=1)
 
@@ -89,6 +89,10 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
 
     def __str__(self):
         return f'{self.subject_identifier}'
+
+    def save(self, *args, **kwargs):
+        self.version = '1'
+        super().save(*args, **kwargs)
 
     def natural_key(self):
         return self.subject_identifier
