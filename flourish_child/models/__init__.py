@@ -1,6 +1,7 @@
 from .academic_performance import AcademicPerformance
 from .birth_data import BirthData
 from .birth_feeding_and_vaccine import BirthFeedingVaccine, BirthVaccines
+from .child_dummy_consent import ChildDummySubjectConsent
 from .birth_exam import BirthExam
 from .child_assent import ChildAssent
 from .child_birth_weight_length_screening import ChildBirthScreening
