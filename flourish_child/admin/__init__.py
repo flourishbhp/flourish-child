@@ -6,6 +6,7 @@ from .child_assent_admin import ChildAssentAdmin
 from .child_birth_weight_length_screening_admin import ChildBirthScreeningAdmin
 from .child_clinical_measurements_admin import ChildClinicalMeasurementsAdmin
 from .child_dataset_admin import ChildDatasetAdmin
+from .child_dummy_consent_admin import ChildDummySubjectConsentAdmin
 from .child_gad_anxiety_screening_admin import ChildGadAnxietyScreeningAdmin
 from .child_hiv_rapid_test_counseling_admin import ChildHIVRapidTestCounselingAdmin
 from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
