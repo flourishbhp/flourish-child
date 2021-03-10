@@ -14,6 +14,7 @@ class ChildDatasetAdmin(ModelAdminSiteMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': [
+                'study_child_identifier',
                 'subject_identifier',
                 'infant_enrolldate',
                 'infant_randdt',
@@ -79,4 +80,16 @@ class ChildDatasetAdmin(ModelAdminSiteMixin, admin.ModelAdmin):
             ]}
          ), audit_fieldset_tuple)
 
-    search_fields = ['subject_identifier']
+    list_display = ('study_child_identifier',
+                    'subject_identifier',
+                    'infant_enrolldate',
+                    'infant_sex',
+                    'infant_hiv_exposed',
+                    'infant_hiv_status',
+                    'infant_offstudydate',
+                    'infant_offstudy_reason')
+
+    search_fields = ['subject_identifier', 'study_child_identifier']
+
+    def has_delete_permission(self, request, obj=None):
+        return False

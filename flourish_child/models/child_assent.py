@@ -10,7 +10,7 @@ from edc_consent.field_mixins import (
     CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin)
 from edc_consent.field_mixins import IdentityFieldsMixin, PersonalFieldsMixin
 from edc_consent.validators import eligible_if_yes
-from edc_constants.choices import YES_NO
+from edc_constants.choices import YES_NO, GENDER
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
@@ -47,6 +47,11 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         validators=[eligible_if_yes, ],
         choices=YES_NO,
         help_text='If ‘No’ ineligible for study participation')
+
+    gender = models.CharField(
+        verbose_name='Gender',
+        choices=GENDER,
+        max_length=1,)
 
     identity_type = models.CharField(
         verbose_name='What type of identity number is this?',

@@ -30,6 +30,7 @@ class ChildAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
                 'dob',
                 'is_dob_estimated',
                 'citizen',
+                'gender',
                 'identity',
                 'identity_type',
                 'confirm_identity',
@@ -49,6 +50,7 @@ class ChildAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
         audit_fieldset_tuple)
 
     radio_fields = {
+        'gender': admin.VERTICAL,
         'assessment_score': admin.VERTICAL,
         'citizen': admin.VERTICAL,
         'consent_copy': admin.VERTICAL,
