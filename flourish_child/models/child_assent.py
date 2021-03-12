@@ -124,7 +124,10 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         self.ineligibility = eligibility_criteria.error_message
         self.version = '1'
         if self.is_eligible:
-            self.subject_identifier = self.update_subject_identifier
+            if not self.created:
+                self.subject_identifier = self.update_subject_identifier
+            elif self.created and not self.subject_identifier:
+                self.subject_identifier = self.update_subject_identifier
         super().save(*args, **kwargs)
 
     @property
@@ -144,5 +147,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         app_label = 'flourish_child'
         verbose_name = 'Child Assent for Participation'
         verbose_name_plural = 'Child Assent for Participation'
-        unique_together = (('subject_identifier', 'screening_identifier'),
+        unique_together = (('subject_identifier', 'version'),
+                           ('screening_identifier', 'version'),
+                           ('subject_identifier', 'screening_identifier'),
                            ('first_name', 'dob', 'initials'))
