@@ -171,7 +171,7 @@ class ChildDataset(
 
     idth_days = models.IntegerField(
         verbose_name='Days from infant birth to death (censored)',
-        blank = True, null = True)
+        blank=True, null=True)
 
     ihiv = models.IntegerField(
         verbose_name='Indicator of HIV endpoint (0=censored)',

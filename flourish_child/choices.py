@@ -200,6 +200,7 @@ HOUSE_TYPE = (
 
 IDENTITY_TYPE = (
     ('country_id', 'Country ID number'),
+    ('birth_cert', 'Birth Certificate number'),
     ('country_id_rcpt', 'Country ID receipt'),
     ('passport', 'Passport'),
     (OTHER, 'Other'),
