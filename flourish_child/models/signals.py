@@ -23,15 +23,16 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
             caregiver_consent_cls = django_apps.get_model('flourish_caregiver.subjectconsent')
             try:
                 caregiver_consent_obj = caregiver_consent_cls.objects.get(
-                                                  subject_identifier=instance.subject_identifier[:-3],
-                                                  version=instance.version)
+                    subject_identifier=instance.subject_identifier[:-3],
+                    version=instance.version)
             except caregiver_consent_cls.DoesNotExist:
-                raise CaregiverConsentError('Associated caregiver consent for this participant '
-                                            'not found')
+                raise CaregiverConsentError('Associated caregiver consent for this participant'
+                                            ' not found')
             else:
                 ChildDummySubjectConsent.objects.update_or_create(
                             subject_identifier=instance.subject_identifier,
                             consent_datetime=instance.consent_datetime,
+                            identity=instance.identity,
                             version=instance.version,
                             dob=instance.dob)
                 caregiver_consent_obj.save(update_fields=['modified', 'user_modified'])
@@ -52,6 +53,7 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     else:
         if caregiver_consent_obj.cohort:
             put_on_schedule(instance.cohort, instance=instance)
+
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None):
     if instance:

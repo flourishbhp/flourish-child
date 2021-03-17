@@ -17,27 +17,15 @@ class ChildDummySubjectConsentAdmin(ModelAdminMixin, admin.ModelAdmin):
             'fields': [
                 'subject_identifier',
                 'consent_datetime',
-                'first_name',
-                'last_name',
-                'initials',
+                'identity',
                 'dob',
-                'is_dob_estimated',
                 'gender',
                 'guardian_name',
                 'subject_type',
                 'cohort']}
          ), audit_fieldset_tuple)
 
-    list_display = (
-        'consent_datetime',
-        'first_name',
-        'last_name',
-        'initials',
-        'dob',
-        'gender',
-    )
-
-    radio_fields = {'is_dob_estimated': admin.VERTICAL,
+    radio_fields = {
                     'gender': admin.VERTICAL,
                     'cohort': admin.VERTICAL}
 
