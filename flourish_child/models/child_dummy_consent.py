@@ -1,10 +1,10 @@
 from django.db import models
+from django_crypto_fields.fields import IdentityField
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_base.utils import get_utcnow
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
-from edc_consent.field_mixins import PersonalFieldsMixin
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_registration.model_mixins import (
     UpdatesOrCreatesRegistrationModelMixin)
@@ -13,8 +13,7 @@ from ..choices import COHORTS
 
 class ChildDummySubjectConsent(
         ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin,
-        SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
-        PersonalFieldsMixin, BaseUuidModel):
+        SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin, BaseUuidModel):
 
     """ A dummy child model auto completed by the s. """
 
@@ -25,6 +24,9 @@ class ChildDummySubjectConsent(
         null=True,
         editable=False,
         default=get_utcnow)
+
+    identity = IdentityField(
+        verbose_name='Identity number')
 
     version = models.CharField(
         verbose_name='Consent version',
