@@ -110,10 +110,6 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     def __str__(self):
         return f'{self.subject_identifier}'
 
-    def save(self, *args, **kwargs):
-        self.version = '1'
-        super().save(*args, **kwargs)
-
     def natural_key(self):
         return self.subject_identifier
 
@@ -123,10 +119,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
         self.version = '1'
-        if self.is_eligible:
-            if not self.created:
-                self.subject_identifier = self.update_subject_identifier
-            elif self.created and not self.subject_identifier:
+        if self.is_eligible and not self.subject_identifier:
                 self.subject_identifier = self.update_subject_identifier
         super().save(*args, **kwargs)
 
@@ -141,7 +134,13 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             raise ValidationError(
                 'Please complete the adult participation consent first.')
         else:
-            return consent.subject_identifier + '-10'
+            child_dummy_consent_cls = django_apps.get_model(
+                'flourish_child.childdummysubjectconsent')
+
+            children_count = 1 + child_dummy_consent_cls.objects.filter(
+                identity=self.identity).count()
+            child_identifier_postfix = '-' + str(children_count * 10)
+            return consent.subject_identifier + child_identifier_postfix
 
     class Meta:
         app_label = 'flourish_child'
