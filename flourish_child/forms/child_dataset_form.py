@@ -14,6 +14,16 @@ class ChildDatasetForm(SiteModelFormMixin, forms.ModelForm):
         label='Study Child Subject Identifier',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
+    study_maternal_identifier = forms.CharField(
+        label='Study Maternal Subject Identifier',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
     infant_enrolldate = forms.CharField(
         label='Infant enrollment date',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
