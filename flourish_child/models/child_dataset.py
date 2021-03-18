@@ -1,4 +1,5 @@
 from django.db import models
+from django_crypto_fields.fields import FirstnameField, LastnameField
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
@@ -11,6 +12,14 @@ class ChildDataset(
         max_length=150,
         unique=True,
         verbose_name='Study Child Subject Identifier')
+
+    study_maternal_identifier = models.CharField(
+        verbose_name="Study maternal Subject Identifier",
+        max_length=50)
+
+    first_name = FirstnameField(null=True, blank=False)
+
+    last_name = LastnameField(null=True, blank=False)
 
     infant_enrolldate = models.DateField(
         verbose_name='Infant enrollment date')

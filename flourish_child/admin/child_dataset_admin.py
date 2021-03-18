@@ -15,7 +15,10 @@ class ChildDatasetAdmin(ModelAdminSiteMixin, admin.ModelAdmin):
         (None, {
             'fields': [
                 'study_child_identifier',
+                'study_maternal_identifier',
                 'subject_identifier',
+                'first_name',
+                'last_name',
                 'infant_enrolldate',
                 'infant_randdt',
                 'infant_sex',
