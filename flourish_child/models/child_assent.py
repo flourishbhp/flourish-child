@@ -147,6 +147,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         app_label = 'flourish_child'
         verbose_name = 'Child Assent for Participation'
         verbose_name_plural = 'Child Assent for Participation'
-        unique_together = (('screening_identifier', 'version'),
+        unique_together = (('screening_identifier', 'subject_identifier'),
                            ('subject_identifier', 'screening_identifier', 'version'),
+                           ('first_name', 'last_name', 'identity'),
                            ('first_name', 'dob', 'initials'))
