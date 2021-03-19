@@ -30,16 +30,17 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                 raise CaregiverConsentError('Associated caregiver consent on behalf of child '
                                             'for this participant not found')
             else:
-                ChildDummySubjectConsent.objects.update_or_create(
-                            subject_identifier=instance.subject_identifier,
-                            consent_datetime=instance.consent_datetime,
-                            identity=instance.identity,
-                            cohort=caregiver_child_consent_obj.cohort,
-                            version=instance.version)
+                if caregiver_child_consent_obj.is_eligible:
+                    ChildDummySubjectConsent.objects.update_or_create(
+                                subject_identifier=instance.subject_identifier,
+                                consent_datetime=instance.consent_datetime,
+                                identity=instance.identity,
+                                cohort=caregiver_child_consent_obj.cohort,
+                                version=instance.version)
 
-                caregiver_child_consent_obj.subject_identifier = instance.subject_identifier
-                caregiver_child_consent_obj.save(update_fields=['subject_identifier',
-                                                                'modified', 'user_modified'])
+                    caregiver_child_consent_obj.subject_identifier = instance.subject_identifier
+                    caregiver_child_consent_obj.save(update_fields=['subject_identifier',
+                                                                    'modified', 'user_modified'])
 
 
 @receiver(post_save, weak=False, sender=ChildDummySubjectConsent,
@@ -47,18 +48,8 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
 def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     """Put subject on cohort a schedule after consenting.
     """
-    caregiver_child_consent_cls = django_apps.get_model(
-        'flourish_caregiver.caregiverchildconsent')
-    try:
-        caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
-            identity=instance.identity,
-            subject_consent__version=instance.version)
-    except caregiver_child_consent_cls.DoesNotExist:
-        raise CaregiverConsentError('Associated caregiver consent on behalf of child '
-                                    'for this participant not found')
-    else:
-        if caregiver_child_consent_obj.is_eligible and instance.cohort:
-            put_on_schedule(instance.cohort, instance=instance)
+    if instance.cohort:
+        put_on_schedule(instance.cohort, instance=instance)
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None):
@@ -74,7 +65,7 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
 
         onschedule_model_cls = django_apps.get_model(onschedule_model)
 
-        schedule_name = 'child_' + cohort + '_schedule_1'
+        schedule_name = 'child_' + cohort + '_schedule1'
         try:
             onschedule_model_cls.objects.get(
                 subject_identifier=instance.subject_identifier,

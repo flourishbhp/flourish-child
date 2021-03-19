@@ -9,7 +9,7 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 
 class ChildHIVRapidTestCounseling(ChildCrfModelMixin):
 
-    """ A model completed by the user on the caregiver's hiv rapid testing and 
+    """ A model completed by the user on the caregiver's hiv rapid testing and
         counseling.
     """
 
