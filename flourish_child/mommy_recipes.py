@@ -24,6 +24,9 @@ childassent = Recipe(
     identity_type='OMANG',
     first_name=fake.first_name,
     last_name=fake.last_name,
+    gender='M',
+    hiv_testing=YES,
+    remain_in_study=YES,
 )
 
 childdataset = Recipe(
@@ -32,7 +35,6 @@ childdataset = Recipe(
 registeredsubject = Recipe(
     RegisteredSubject,
     subject_identifier=None)
-
 
 screeningpriorbhpparticipants = Recipe(
     ScreeningPriorBhpParticipants,

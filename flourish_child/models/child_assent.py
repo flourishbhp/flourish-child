@@ -138,7 +138,8 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                 'flourish_child.childdummysubjectconsent')
 
             children_count = 1 + child_dummy_consent_cls.objects.filter(
-                identity=self.identity).count()
+                subject_identifier__icontains=consent.subject_identifier).exclude(
+                    identity=self.identity).count()
             child_identifier_postfix = '-' + str(children_count * 10)
             return consent.subject_identifier + child_identifier_postfix
 
@@ -146,6 +147,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         app_label = 'flourish_child'
         verbose_name = 'Child Assent for Participation'
         verbose_name_plural = 'Child Assent for Participation'
-        unique_together = (('screening_identifier', 'version'),
+        unique_together = (('screening_identifier', 'subject_identifier'),
                            ('subject_identifier', 'screening_identifier', 'version'),
+                           ('first_name', 'last_name', 'identity'),
                            ('first_name', 'dob', 'initials'))
