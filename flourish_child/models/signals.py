@@ -31,12 +31,16 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                                             'for this participant not found')
             else:
                 if caregiver_child_consent_obj.is_eligible:
-                    ChildDummySubjectConsent.objects.update_or_create(
-                                subject_identifier=instance.subject_identifier,
-                                consent_datetime=instance.consent_datetime,
-                                identity=instance.identity,
-                                cohort=caregiver_child_consent_obj.cohort,
-                                version=instance.version)
+                    try:
+                        dummy_consent_obj = ChildDummySubjectConsent.objects.get(
+                            subject_identifier=instance.subject_identifier)
+                    except ChildDummySubjectConsent.DoesNotExist:
+                        ChildDummySubjectConsent.objects.create(
+                                    subject_identifier=instance.subject_identifier,
+                                    consent_datetime=instance.consent_datetime,
+                                    identity=instance.identity,
+                                    cohort=caregiver_child_consent_obj.cohort,
+                                    version=instance.version)
 
                     caregiver_child_consent_obj.subject_identifier = instance.subject_identifier
                     caregiver_child_consent_obj.save(update_fields=['subject_identifier',
