@@ -19,7 +19,6 @@ class TestVisitScheduleSetup(TestCase):
 
         self.options = {
             'consent_datetime': get_utcnow(),
-            'subject_identifier': self.maternal_subject_identifier,
             'version': '1'}
 
         self.maternal_dataset_options = {
@@ -43,19 +42,23 @@ class TestVisitScheduleSetup(TestCase):
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
             screening_identifier=screening_preg.screening_identifier,
+            subject_identifier=self.maternal_subject_identifier,
             **self.options)
 
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             subject_identifier=subject_consent.subject_identifier,)
 
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=subject_consent.subject_identifier,)
+
         self.assertEqual(OnScheduleChildCohortA.objects.filter(
             subject_identifier=subject_consent.subject_identifier,
-            schedule_name='cohort_a1_schedule1').count(), 0)
+            schedule_name='cohort_a_schedule1').count(), 0)
 
     def test_cohort_a_onschedule_consent_valid(self):
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '1'
-        self.options['subject_identifier'] = self.maternal_subject_identifier
 
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
@@ -74,6 +77,7 @@ class TestVisitScheduleSetup(TestCase):
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
             screening_identifier=maternal_dataset_obj.screening_identifier,
+            subject_identifier=self.maternal_subject_identifier,
             ** self.options)
 
         caregiver_child_consent = mommy.make_recipe(
@@ -172,7 +176,7 @@ class TestVisitScheduleSetup(TestCase):
 
         child_assent = mommy.make_recipe(
             'flourish_child.childassent',
-            subject_identifier=self.maternal_subject_identifier + '-10',
+            subject_identifier=caregiver_child_consent_obj.subject_identifier,
             dob=get_utcnow() - relativedelta(years=7, months=2),
             identity=caregiver_child_consent_obj.identity,
             confirm_identity=caregiver_child_consent_obj.identity,
@@ -187,3 +191,70 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
+
+    def test_cohort_c_onschedule_valid(self):
+        self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '3'
+
+        self.maternal_dataset_options['protocol'] = 'Mashi'
+        self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=10,
+                                                                                months=2)
+        self.child_dataset_options['infant_hiv_exposed'] = 'Unexposed'
+        self.options['subject_identifier'] = self.maternal_subject_identifier
+
+        mommy.make_recipe(
+            'flourish_child.childdataset',
+            subject_identifier=self.maternal_subject_identifier + '10',
+            **self.child_dataset_options)
+
+        maternal_dataset_obj = mommy.make_recipe(
+            'flourish_caregiver.maternaldataset',
+            subject_identifier=self.maternal_subject_identifier,
+            **self.maternal_dataset_options)
+
+        mommy.make_recipe(
+            'flourish_caregiver.screeningpriorbhpparticipants',
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
+
+        subject_consent = mommy.make_recipe(
+            'flourish_caregiver.subjectconsent',
+            screening_identifier=maternal_dataset_obj.screening_identifier,
+            **self.options)
+
+        caregiver_child_consent_obj = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            identity='126513789',
+            confirm_identity='126513789',
+            child_dob=(get_utcnow() - relativedelta(years=10, months=2)).date(),)
+
+        child_assent = mommy.make_recipe(
+            'flourish_child.childassent',
+            subject_identifier=caregiver_child_consent_obj.subject_identifier,
+            dob=get_utcnow() - relativedelta(years=10, months=2),
+            identity=caregiver_child_consent_obj.identity,
+            confirm_identity=caregiver_child_consent_obj.identity,
+            version=subject_consent.version)
+
+        dummy_consent = ChildDummySubjectConsent.objects.get(
+            identity=child_assent.identity)
+
+#         PreFlourishConsent.objects.using('pre_flourish').create(
+#                                                         identity=subject_consent.identity,
+#                                                         confirm_identity=subject_consent.identity,
+#                                                         dob=get_utcnow() - relativedelta(years=25),
+#                                                         first_name=subject_consent.first_name,
+#                                                         last_name=subject_consent.last_name,
+#                                                         initials=subject_consent.initials,
+#                                                         gender='F',
+#                                                         identity_type='OMANG',
+#                                                         is_dob_estimated='-',
+#                                                         version='1',
+#                                                         consent_datetime=get_utcnow(),
+#                                                         created=get_utcnow())
+
+        self.assertEqual(OnScheduleChildCohortC.objects.filter(
+            subject_identifier=dummy_consent.subject_identifier,
+            schedule_name='child_cohort_c_schedule1').count(), 1)
+
+        self.assertNotEqual(Appointment.objects.filter(
+            subject_identifier=subject_consent.subject_identifier).count(), 0)
