@@ -13,6 +13,6 @@ class ChildPregTesting(ChildCrfModelMixin):
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = 'Enrollment Pregnancy Testing for Female Adolescents'
-        verbose_name_plural = 'Enrollment Pregnancy Testing for Female ' \
+        verbose_name = 'Pregnancy Testing for Female Adolescents'
+        verbose_name_plural = 'Pregnancy Testing for Female ' \
                               'Adolescents'
