@@ -184,11 +184,14 @@ HIGHEST_EDUCATION = (
     ('No_schooling ', 'No Schooling ')
 )
 HOSPITAL = (
-    ('princess_marina',
-     'Princess Marina'),
-    ('scottish_livingstone_hospital ', 'Scottish Livingstone Hospital '),
+    ('princess_marina', 'Princess Marina'),
+    ('slh', 'SLH'),
+    ('drmh', 'DRMH'),
+    ('tph', 'Thamaga Primary Hospital'),
+    ('sda', 'SDA'),
+    ('blh', 'BLH'),
+    ('athlone ', 'Athlone '),
     (OTHER, 'Other'),
-
 )
 HOUSE_TYPE = (
     ('Formal:Tin-roofed, concrete walls',
