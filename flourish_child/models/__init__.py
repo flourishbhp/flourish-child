@@ -8,6 +8,7 @@ from .child_clinical_measurements import ChildClinicalMeasurements
 from .child_dataset import ChildDataset
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
+from .child_preg_testing import ChildPregTesting
 from .child_socio_demographic import ChildSocioDemographic
 from .child_gad_anxiety_screening import ChildGadAnxietyScreening
 from .child_immunization_history import ChildImmunizationHistory
@@ -17,7 +18,7 @@ from .child_phq_depression_screening import ChildPhqDepressionScreening
 from .child_physical_activity import ChildPhysicalActivity
 from .child_medical_history import ChildMedicalHistory
 from .child_referral import ChildReferral
-from .child_previous_hospitalization import ChildPreviousHospitalization
+from .child_previous_hospitalization import ChildPreviousHospitalization, ChildPreHospitalizationInline
 from .child_visit import ChildVisit
 from .infant_arv_exposure import InfantArvExposure
 from .infant_congenital_anomalies import InfantCardioDisorder, InfantFacialDefect

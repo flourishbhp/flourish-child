@@ -5,7 +5,7 @@ from edc_list_data import PreloadData
 list_data = {
     'flourish_child.childdiseases': [
         ('pneumonia', 'Pneumonia'),
-        ('tuberculosis', 'tuberculosis'),
+        ('tuberculosis', 'Tuberculosis'),
         ('bronchiolitis', 'Bronchiolitis'),
         ('laryngotracheobronchitis', 'Laryngotracheobronchitis / Croup'),
         ('acute_diarrheal_disease ', 'Acute diarrheal disease '),
