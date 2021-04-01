@@ -69,7 +69,11 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
 
         onschedule_model_cls = django_apps.get_model(onschedule_model)
 
-        schedule_name = 'child_' + cohort + '_schedule1'
+        if 'pool' not in cohort:
+            schedule_name = 'child_' + cohort[-1:] + '_schedule1'
+        else:
+            schedule_name = 'child_pool_schedule1'
+
         try:
             onschedule_model_cls.objects.get(
                 subject_identifier=instance.subject_identifier,
