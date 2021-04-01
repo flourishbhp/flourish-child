@@ -1,4 +1,3 @@
-from django.apps import apps as django_apps
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
 from edc_appointment.models import Appointment
@@ -254,7 +253,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortC.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_cohort_c_schedule1').count(), 1)
+            schedule_name='child_c_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=subject_consent.subject_identifier).count(), 0)
