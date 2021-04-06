@@ -16,6 +16,7 @@ from .child_preg_testing_admin import ChildPregTestingAdmin
 from .child_referral_admin import ChildReferralAdmin
 from .child_socio_demographic_admin import ChildSocioDemographicAdmin
 from .child_previous_hospitalization_admin import ChildPreviousHospitalizationAdmin
+from .child_visit_admin import ChildVisitAdmin
 from .infant_arv_exposure_admin import InfantArvExposureAdmin
 from .child_medical_history_admin import ChildMedicalHistoryAdmin
 from .infant_congenital_anomalies_admin import InfantCongenitalAnomaliesAdmin
