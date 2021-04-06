@@ -33,6 +33,7 @@ class TestVisitScheduleSetup(TestCase):
             'study_maternal_identifier': '12345',
             'study_child_identifier': '1234'}
 
+    @tag('cvs1')
     def test_cohort_a_onschedule_antenatal_valid(self):
 
         screening_preg = mommy.make_recipe(
@@ -56,6 +57,7 @@ class TestVisitScheduleSetup(TestCase):
             subject_identifier=subject_consent.subject_identifier,
             schedule_name='cohort_a_schedule1').count(), 0)
 
+    @tag('cvs2')
     def test_cohort_a_onschedule_consent_valid(self):
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '1'
 
@@ -92,11 +94,12 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortA.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_cohort_a_schedule1').count(), 1)
+            schedule_name='child_a_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
+    @tag('cvs3')
     def test_cohort_b_onschedule_valid(self):
 
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '2'
@@ -135,11 +138,12 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortB.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_cohort_b_schedule1').count(), 1)
+            schedule_name='child_b_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
+    @tag('cvs4')
     def test_cohort_b_assent_onschedule_valid(self):
 
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '3'
@@ -186,11 +190,12 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortB.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_cohort_b_schedule1').count(), 1)
+            schedule_name='child_b_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
+    @tag('cvs5')
     def test_cohort_c_onschedule_valid(self):
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '3'
 
