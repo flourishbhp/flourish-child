@@ -59,6 +59,8 @@ class ChildVisitAdmin(
                 'report_datetime',
                 'reason',
                 'reason_missed',
+                'reason_unscheduled',
+                'information_provider',
                 'study_status',
                 'info_source',
                 'info_source_other',
@@ -75,5 +77,6 @@ class ChildVisitAdmin(
         'reason': admin.VERTICAL,
         'study_status': admin.VERTICAL,
         'info_source': admin.VERTICAL,
+        'information_provider': admin.VERTICAL,
         'is_present': admin.VERTICAL,
         'survival_status': admin.VERTICAL}

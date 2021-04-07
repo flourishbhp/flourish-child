@@ -6,7 +6,7 @@ class AppConfig(DjangoAppConfig):
     name = 'flourish_child'
     verbose_name = 'Flourish Child'
     admin_site_name = 'flourish_child_admin'
-    
+
     def ready(self):
         from .models import child_consent_on_post_save
 
@@ -24,16 +24,14 @@ if settings.APP_NAME == 'flourish_child':
     from edc_timepoint.timepoint import Timepoint
     from edc_timepoint.timepoint_collection import TimepointCollection
     from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
-    
 
     class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):
         configurations = [
             AppointmentConfig(
-                model='edc_appointment.appointment',
+                model='flourish_child.appointment',
                 related_visit_model='flourish_child.childvisit',
                 appt_type='clinic')]
 
-    
     class EdcProtocolAppConfig(BaseEdcProtocolAppConfigs):
         protocol = 'BHP142'
         protocol_name = 'Flourish Follow'
@@ -44,17 +42,16 @@ if settings.APP_NAME == 'flourish_child':
         study_close_datetime = datetime(
             2022, 12, 1, 0, 0, 0, tzinfo=gettz('UTC'))
 
-
     class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
         timepoints = TimepointCollection(
             timepoints=[
                 Timepoint(
-                    model='edc_appointment.appointment',
+                    model='flourish_child.appointment',
                     datetime_field='appt_datetime',
                     status_field='appt_status',
                     closed_status=COMPLETE_APPT),
                 Timepoint(
-                    model='edc_appointment.historicalappointment',
+                    model='flourish_child.historicalappointment',
                     datetime_field='appt_datetime',
                     status_field='appt_status',
                     closed_status=COMPLETE_APPT),
