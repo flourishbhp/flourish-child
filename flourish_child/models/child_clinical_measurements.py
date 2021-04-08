@@ -13,6 +13,8 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         decimal_places=2,
         verbose_name="Infant/child/adolescent's height? ",
         validators=[MinValueValidator(114), MaxValueValidator(195), ],
+        blank=True,
+        null=True,
         help_text="Measured in Centimeters (cm)")
 
     child_weight_kg = models.DecimalField(
@@ -20,6 +22,8 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         decimal_places=2,
         verbose_name="Infant/child/adolescent's weight? ",
         validators=[MinValueValidator(30), MaxValueValidator(136), ],
+        blank=True,
+        null=True,
         help_text="Measured in Kilograms (kg)")
 
     child_systolic_bp = models.IntegerField(
@@ -42,6 +46,8 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         decimal_places=2,
         verbose_name='Infant/child/adolescent\'s waist circumference',
         validators=[MinValueValidator(15), MaxValueValidator(200), ],
+        blank=True,
+        null=True,
         help_text='in cm e.g 20, should be between 15 and 200')
 
     child_hip_circ = models.DecimalField(
@@ -49,6 +55,8 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         decimal_places=2,
         verbose_name='Infant/child/adolescent\'s hip circumference',
         validators=[MinValueValidator(15), MaxValueValidator(420), ],
+        blank=True,
+        null=True,
         help_text='in cm e.g 20, should be between 15 and 420')
 
     skin_folds_triceps = models.DecimalField(
