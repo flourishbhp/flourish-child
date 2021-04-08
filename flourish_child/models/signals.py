@@ -1,11 +1,16 @@
 from django.apps import apps as django_apps
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
+from edc_constants.constants import OPEN, NEW, POS
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-
+from flourish_prn.action_items import CHILDOFF_STUDY_ACTION
+from flourish_prn.models import ChildOffStudy
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_assent import ChildAssent
+from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 
 
 class CaregiverConsentError(Exception):
@@ -60,6 +65,18 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
         put_on_schedule(instance.cohort, instance=instance)
 
 
+@receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
+          dispatch_uid='child_rapid_test_on_post_save')
+def child_rapid_test_on_post_save(sender, instance, raw, created, **kwargs):
+    """Take the participant offstudy if HIV result is positive.
+    """
+    if instance.result and instance.result == POS:
+        trigger_action_item(instance, 'result', POS,
+                            ChildOffStudy, CHILDOFF_STUDY_ACTION,
+                            instance.child_visit.appointment.subject_identifier,
+                            repeat=True)
+
+
 def put_on_schedule(cohort, instance=None, subject_identifier=None):
     if instance:
         instance.registration_update_or_create()
@@ -90,3 +107,41 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
         else:
             schedule.refresh_schedule(
                 subject_identifier=instance.subject_identifier)
+
+
+def trigger_action_item(obj, field, response, model_cls,
+                        action_name, subject_identifier,
+                        repeat=False):
+
+    action_cls = site_action_items.get(
+        model_cls.action_name)
+    action_item_model_cls = action_cls.action_item_model_cls()
+
+    if getattr(obj, field) == response:
+        try:
+            model_cls.objects.get(subject_identifier=subject_identifier)
+        except model_cls.DoesNotExist:
+            trigger = True
+        else:
+            trigger = repeat
+        if trigger:
+            try:
+                action_item_obj = action_item_model_cls.objects.get(
+                    subject_identifier=subject_identifier,
+                    action_type__name=action_name)
+            except action_item_model_cls.DoesNotExist:
+                action_cls = site_action_items.get(action_name)
+                action_cls(subject_identifier=subject_identifier)
+            else:
+                action_item_obj.status = OPEN
+                action_item_obj.save()
+    else:
+        try:
+            action_item = action_item_model_cls.objects.get(
+                Q(status=NEW) | Q(status=OPEN),
+                subject_identifier=subject_identifier,
+                action_type__name=action_name)
+        except action_item_model_cls.DoesNotExist:
+            pass
+        else:
+            action_item.delete()
