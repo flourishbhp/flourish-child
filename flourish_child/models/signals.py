@@ -70,11 +70,10 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 def child_rapid_test_on_post_save(sender, instance, raw, created, **kwargs):
     """Take the participant offstudy if HIV result is positive.
     """
-    if instance.result and instance.result == POS:
-        trigger_action_item(instance, 'result', POS,
-                            ChildOffStudy, CHILDOFF_STUDY_ACTION,
-                            instance.child_visit.appointment.subject_identifier,
-                            repeat=True)
+    trigger_action_item(instance, 'result', POS,
+                        ChildOffStudy, CHILDOFF_STUDY_ACTION,
+                        instance.child_visit.appointment.subject_identifier,
+                        repeat=True)
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None):
