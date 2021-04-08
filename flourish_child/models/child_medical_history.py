@@ -13,7 +13,7 @@ class ChildMedicalHistory(ChildCrfModelMixin):
     chronic_since = models.CharField(
         max_length=25,
         choices=YES_NO,
-        verbose_name='Does the Child/Adolescent have any chronic conditions?', )
+        verbose_name='Does the Child/Adolescent have any chronic conditions?',)
 
     child_chronic = models.ManyToManyField(
         ChronicConditions,
@@ -29,6 +29,7 @@ class ChildMedicalHistory(ChildCrfModelMixin):
 
     who = models.ManyToManyField(
         WcsDxAdult,
+        blank=True,
         verbose_name='List any new WHO Stage III/IV diagnoses that are '
         'not reported'
     )

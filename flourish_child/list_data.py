@@ -21,14 +21,25 @@ list_data = {
         (OTHER, 'Other'),
     ],
     'flourish_child.chronicconditions': [
-        ('Asthma', 'Asthma'),
-        ('Hypertension', 'Hypertension'),
-        ('Hypercholesterolemia', 'Hypercholesterolemia'),
-        ('Heart disease', 'Heart disease'),
-        ('Hepatitis B surface Ag positive', 'Hepatitis B surface Ag positive'),
-        ('Chronic Hepatitis B carrier', 'Chronic Hepatitis B carrier'),
-        ('Hepatitis C', 'Hepatitis C'),
-        ('Diabetes', 'Diabetes'),
+        ('asthma', 'Asthma'),
+        ('headache', 'Headache (includes migraines, tension headaches)'),
+        ('anemia', 'Anemia'),
+        ('cardiac_murmur', 'Cardiac murmur'),
+        ('seizure_other_epilepsy', 'Seizure disorder or other epilepsy'),
+        ('diabetes', 'Diabetes'),
+        ('high_blood_pressure', 'High Blood Pressure'),
+        ('high_cholesterol', 'High Cholesterol'),
+        ('depression', 'Depression'),
+        ('systemic_lupus', 'Systemic Lupus'),
+        ('juvenile_rheumatoid_arthritis ', 'Juvenile rheumatoid arthritis'),
+        ('nephrotic_syndrome ', 'Nephrotic syndrome'),
+        ('renal_insufficiency', 'Renal insufficiency'),
+        ('nephrolithiasis', 'Nephrolithiasis (kidney stones)'),
+        ('cancer_solid_tumor', 'Cancer (Solid tumor)'),
+        ('cancer_leukemia_lymphoma_related', 'Cancer (Leukemia, lymphoma related) '),
+        ('cardiac_arrhythmia ', 'Cardiac arrhythmia'),
+        ('thyroid_disorder ', 'Thyroid disorder'),
+        ('inflammatory_bowel_disease', 'Inflammatory bowel disease (Crohn’s, ulcerative colitis)'),
         (OTHER, 'Other, Specify'),
         (NOT_APPLICABLE, 'Not Applicable')
     ],
@@ -92,7 +103,7 @@ list_data = {
          'Atypical disseminated leishmaniasis'),
         ('Sympt nephropathy/cardiomyopathy',
          'Sympt nephropathy/cardiomyopathy'),
-        (NOT_APPLICABLE, 'Not Applicable')
+        (NONE, 'None')
     ],
 }
 

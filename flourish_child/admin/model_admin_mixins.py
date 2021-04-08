@@ -43,7 +43,7 @@ class ChildCrfModelAdminMixin(
     show_cancel = True
 
     post_url_on_delete_name = settings.DASHBOARD_URL_NAMES.get(
-        'child_subject_dashboard_url')
+        'child_dashboard_url')
 
     def post_url_on_delete_kwargs(self, request, obj):
         return dict(
@@ -52,7 +52,7 @@ class ChildCrfModelAdminMixin(
 
     def view_on_site(self, obj):
         dashboard_url_name = settings.DASHBOARD_URL_NAMES.get(
-            'child_subject_dashboard_url')
+            'child_dashboard_url')
         try:
             url = reverse(
                 dashboard_url_name, kwargs=dict(
