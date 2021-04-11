@@ -9,7 +9,7 @@ from edc_base.model_fields import OtherCharField
 class AcademicPerformance(ChildCrfModelMixin):
 
     education_level = models.CharField(
-        verbose_name='Highest level of school completed',
+        verbose_name='What level/class of school is the child currently in?',
         max_length=20,
         choices=HIGHEST_EDUCATION)
 

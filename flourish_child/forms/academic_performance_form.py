@@ -1,12 +1,12 @@
 from flourish_child_validations.form_validators import \
-    ChildPerformanceFormValidator
+    AcademicPerformanceFormValidator
 from ..models import AcademicPerformance
 from .child_form_mixin import ChildModelFormMixin
 
 
 class AcademicPerformanceForm(ChildModelFormMixin):
 
-    form_validator_cls = ChildPerformanceFormValidator
+    form_validator_cls = AcademicPerformanceFormValidator
 
     class Meta:
         model = AcademicPerformance
