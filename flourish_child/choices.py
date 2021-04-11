@@ -15,6 +15,11 @@ ALIVE_DEAD_UNKNOWN = (
     (UNKNOWN, 'Unknown'),
 )
 
+ANSWERER = (
+    ('caregiver', 'Caregiver'),
+    ('child_adolescent', 'Child/Adolescent'),
+)
+
 CARDIOVASCULAR_DISORDER = (
     ('None', 'None'),
     ('Truncus arteriosus', 'Truncus arteriosus'),
@@ -112,6 +117,13 @@ DEPRESSION_SCALE = (
     ('3', 'Nearly every day'),
 )
 
+FOOD = (
+    ('often_true ', 'Often True'),
+    ('sometimes_true ', 'Sometimes True '),
+    ('never_true', 'Never True'),
+    ('dont_know', 'I don’t know or Refused to answer'),
+)
+
 DIFFICULTY_LEVEL = (
     ('not_difficult', 'Not difficult'),
     ('somewhat_difficult', 'Somewhat difficult'),
@@ -199,6 +211,13 @@ HOUSE_TYPE = (
     ('Informal: Mud-walled or thatched', 'Informal: Mud-walled or thatched'),
     ('Mixed formal/informal', 'Mixed formal/informal'),
     ('Shack/Mokhukhu', 'Shack/Mokhukhu')
+)
+
+HOW_OFTEN = (
+    ('almost_every_month', 'Almost every month'),
+    ('some_months', 'Some months but not every month'),
+    ('one_or_two', 'Only 1 or 2 months'),
+    ('i_dont_know', 'I don’t know'),
 )
 
 IDENTITY_TYPE = (
@@ -580,6 +599,12 @@ WATER_USED = (
     ('Specifically treated water', 'Specifically treated water'),
     (OTHER, 'Other (specify)'),
     (NOT_APPLICABLE, 'Not Applicable'),
+)
+
+YES_NO_DONT_KNOW = (
+    (YES, YES),
+    (NO, NO),
+    ('i_dont_know', 'I don’t know')
 )
 
 YES_NO_UNKNOWN = (
