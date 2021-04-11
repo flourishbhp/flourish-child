@@ -13,6 +13,8 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
+                'child_visit',
+                'report_datetime',
                 'education_level',
                 'education_level_other',
                 'mathematics_marks',
