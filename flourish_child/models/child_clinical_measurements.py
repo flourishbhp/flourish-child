@@ -8,15 +8,6 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
     """ A model completed by the user on Height, Weight details
     for all infant/child/adolescent. """
 
-    child_height = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        verbose_name="Infant/child/adolescent's height? ",
-        validators=[MinValueValidator(114), MaxValueValidator(195), ],
-        blank=True,
-        null=True,
-        help_text="Measured in Centimeters (cm)")
-
     child_weight_kg = models.DecimalField(
         max_digits=5,
         decimal_places=2,
@@ -40,6 +31,15 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         blank=True,
         null=True,
         help_text="in hg e.g. 80, should be between 40 and 120.")
+
+    child_height = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        verbose_name="Infant/child/adolescent's height? ",
+        validators=[MinValueValidator(114), MaxValueValidator(195), ],
+        blank=True,
+        null=True,
+        help_text="Measured in Centimeters (cm)")
 
     child_waist_circ = models.DecimalField(
         max_digits=5,
