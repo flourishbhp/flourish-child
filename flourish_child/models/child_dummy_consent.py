@@ -42,6 +42,10 @@ class ChildDummySubjectConsent(
 
     history = HistoricalRecords()
 
+    def save(self, *args, **kwargs):
+        self.relative_identifier = self.subject_identifier[:-3]
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f'{self.subject_identifier} V{self.version}'
 

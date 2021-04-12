@@ -229,19 +229,20 @@ IDENTITY_TYPE = (
 )
 
 IMMUNIZATIONS = (
-    ('Vitamin_A', 'Vitamin A'),
-    ('BCG', 'BCG'),
-    ('Hepatitis_B', 'Hepatitis B'),
-    ('DPT', 'DPT (Diphtheria, Pertussis and Tetanus)'),
-    ('Haemophilus_influenza', 'Haemophilus Influenza B Vaccine'),
-    ('PCV_Vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
-    ('Polio', 'Polio'),
-    ('Rotavirus', 'Rotavirus'),
+    ('vitamin_a', 'Vitamin A'),
+    ('bcg', 'BCG'),
+    ('hepatitis_b', 'Hepatitis B'),
+    ('dpt', 'DPT (Diphtheria, Pertussis and Tetanus)'),
+    ('haemophilus_influenza', 'Haemophilus Influenza B Vaccine'),
+    ('pcv_vaccine', 'PCV Vaccine (Pneumonia Conjugated Vaccine)'),
+    ('polio', 'Polio'),
+    ('rotavirus', 'Rotavirus'),
     ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
-    ('Measles', 'Measles'),
-    ('Pentavalent',
+    ('measles', 'Measles'),
+    ('pentavalent',
      'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
-    ('diptheria_tetanus', 'Diptheria and Tetanus')
+    ('diptheria_tetanus', 'Diptheria and Tetanus'),
+    ('hpv_vaccine', 'HPV Vaccine')
 )
 
 INFANT_VACCINATIONS = (
@@ -441,11 +442,11 @@ POS_NEG_IND = (
 )
 
 REASONS_VACCINES_MISSED = (
-    ('missed scheduled vaccination', 'Mother or Caregiver has not yet taken infant '
+    ('missed_sched_vaccine', 'Mother or Caregiver has not yet taken infant '
         'to clinic for this scheduled vaccination'),
-    ('caregiver declines vaccination',
+    ('caregiver_declines_vaccination',
      'Mother or Caregiver declines this vaccicnation'),
-    ('no stock', 'Stock out at clinic'),
+    ('no_stock', 'Stock out at clinic'),
     (OTHER, 'Other, specify'),
 )
 
