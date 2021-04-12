@@ -15,6 +15,11 @@ ALIVE_DEAD_UNKNOWN = (
     (UNKNOWN, 'Unknown'),
 )
 
+ANSWERER = (
+    ('caregiver', 'Caregiver'),
+    ('child_adolescent', 'Child/Adolescent'),
+)
+
 CARDIOVASCULAR_DISORDER = (
     ('None', 'None'),
     ('Truncus arteriosus', 'Truncus arteriosus'),
@@ -112,6 +117,13 @@ DEPRESSION_SCALE = (
     ('3', 'Nearly every day'),
 )
 
+FOOD = (
+    ('often_true ', 'Often True'),
+    ('sometimes_true ', 'Sometimes True '),
+    ('never_true', 'Never True'),
+    ('dont_know', 'I don’t know or Refused to answer'),
+)
+
 DIFFICULTY_LEVEL = (
     ('not_difficult', 'Not difficult'),
     ('somewhat_difficult', 'Somewhat difficult'),
@@ -166,22 +178,22 @@ GRADE_LEVEL = (
 )
 
 HIGHEST_EDUCATION = (
-    ('Pre-school', 'Pre-school'),
-    ('Standard_1', 'Standard 1'),
-    ('Standard_2', 'Standard 2'),
-    ('Standard_3', 'Standard 3'),
-    ('Standard_4', 'Standard 4'),
-    ('Standard_5', 'Standard 5'),
-    ('Standard_6', 'Standard 6'),
-    ('Standard_7', 'Standard 7'),
-    ('Form_1', 'Form 1'),
-    ('Form_2', 'Form 2'),
-    ('Form_3', 'Form 3'),
-    ('Form_4', 'Form 4'),
-    ('Form_5', 'Form 5'),
-    ('University', 'University'),
+    ('pre_school', 'Pre-school'),
+    ('standard_1', 'Standard 1'),
+    ('standard_2', 'Standard 2'),
+    ('standard_3', 'Standard 3'),
+    ('standard_4', 'Standard 4'),
+    ('standard_5', 'Standard 5'),
+    ('standard_6', 'Standard 6'),
+    ('standard_7', 'Standard 7'),
+    ('form_1', 'Form 1'),
+    ('form_2', 'Form 2'),
+    ('form_3', 'Form 3'),
+    ('form_4', 'Form 4'),
+    ('form_5', 'Form 5'),
+    ('university', 'Tertiary/University'),
     (OTHER, 'Other'),
-    ('No_schooling ', 'No Schooling ')
+    ('no_schooling', 'No Schooling ')
 )
 HOSPITAL = (
     ('princess_marina', 'Princess Marina'),
@@ -199,6 +211,13 @@ HOUSE_TYPE = (
     ('Informal: Mud-walled or thatched', 'Informal: Mud-walled or thatched'),
     ('Mixed formal/informal', 'Mixed formal/informal'),
     ('Shack/Mokhukhu', 'Shack/Mokhukhu')
+)
+
+HOW_OFTEN = (
+    ('almost_every_month', 'Almost every month'),
+    ('some_months', 'Some months but not every month'),
+    ('one_or_two', 'Only 1 or 2 months'),
+    ('i_dont_know', 'I don’t know'),
 )
 
 IDENTITY_TYPE = (
@@ -305,7 +324,7 @@ MARKS = (
     ('c', 'C'),
     ('d', 'D'),
     ('e', 'E'),
-    ('f', 'F'),
+    ('u', 'U'),
     ('not_taking_subject', 'Not taking subject')
 )
 
@@ -393,12 +412,21 @@ NUMBER_OF_DAYS = (
     ('three', '3'),
     ('four', '4'),
     ('five', '5'),
-    ('none', 'None'),
 )
 
 OTHER_DEFECT = (
     ('None', 'None'),
     (OTHER, 'Other defect/syndrome not already reported, specify'),
+)
+
+OVERALL_MARKS = (
+    ('a', 'A'),
+    ('b', 'B'),
+    ('c', 'C'),
+    ('d', 'D'),
+    ('e', 'E'),
+    ('u', 'U'),
+    ('not_applicable', 'Not Applicable')
 )
 
 PHYS_ACTIVITY_TIME = (
@@ -571,6 +599,12 @@ WATER_USED = (
     ('Specifically treated water', 'Specifically treated water'),
     (OTHER, 'Other (specify)'),
     (NOT_APPLICABLE, 'Not Applicable'),
+)
+
+YES_NO_DONT_KNOW = (
+    (YES, YES),
+    (NO, NO),
+    ('i_dont_know', 'I don’t know')
 )
 
 YES_NO_UNKNOWN = (

@@ -33,14 +33,16 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name='Specify hours per day',
         validators=[MinValueValidator(1), MaxValueValidator(24), ],
         help_text='hours',
+        default='0',
         blank=True,
         null=True)
 
     specify_vig_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(1), MaxValueValidator(1440), ],
+        validators=[MinValueValidator(0), MaxValueValidator(1440), ],
         help_text='minutes',
         blank=True,
+        default='0',
         null=True)
 
     mod_activity_days = models.CharField(
@@ -69,14 +71,16 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name='Specify hours per day',
         validators=[MinValueValidator(1), MaxValueValidator(24), ],
         help_text='hours',
+        default='0',
         blank=True,
         null=True)
 
     specify_mod_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(1), MaxValueValidator(1440), ],
+        validators=[MinValueValidator(0), MaxValueValidator(1440), ],
         help_text='minutes',
         blank=True,
+        default='0',
         null=True)
 
     walking_days = models.CharField(
@@ -103,14 +107,16 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name='Specify hours per day',
         validators=[MinValueValidator(1), MaxValueValidator(24), ],
         help_text='hours',
+        default='0',
         blank=True,
         null=True)
 
     specify_walk_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(1), MaxValueValidator(1440), ],
+        validators=[MinValueValidator(0), MaxValueValidator(1440), ],
         help_text='minutes',
         blank=True,
+        default='0',
         null=True)
 
     sitting_time = models.CharField(
@@ -123,14 +129,16 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name='Specify hours per day',
         validators=[MinValueValidator(1), MaxValueValidator(24), ],
         help_text='hours',
+        default='0',
         blank=True,
         null=True)
 
     specify_sit_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(1), MaxValueValidator(1440), ],
+        validators=[MinValueValidator(0), MaxValueValidator(1440), ],
         help_text='minutes',
         blank=True,
+        default='0',
         null=True)
 
     class Meta(ChildCrfModelMixin.Meta):

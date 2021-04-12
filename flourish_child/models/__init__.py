@@ -8,6 +8,7 @@ from .child_birth_weight_length_screening import ChildBirthScreening
 from .child_clinical_measurements import ChildClinicalMeasurements
 from .child_dataset import ChildDataset
 from .child_dummy_consent import ChildDummySubjectConsent
+from .child_food_security_questionnaire import ChildFoodSecurityQuestionnaire
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_socio_demographic import ChildSocioDemographic

@@ -3,6 +3,7 @@ from django.db.models.deletion import PROTECT
 from edc_base.model_mixins import BaseUuidModel, FormAsJSONModelMixin
 from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_metadata.model_mixins.updates import UpdatesCrfMetadataModelMixin
+from edc_model_admin import ModelAdminFormInstructionsMixin
 from edc_reference.model_mixins import ReferenceModelMixin
 from edc_visit_tracking.model_mixins import CrfModelMixin as BaseCrfModelMixin
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
@@ -17,7 +18,8 @@ class ChildCrfModelMixin(
         BaseCrfModelMixin, SubjectScheduleCrfModelMixin,
         RequiresConsentFieldsModelMixin, PreviousVisitModelMixin,
         UpdatesCrfMetadataModelMixin, SiteModelMixin,
-        FormAsJSONModelMixin, ReferenceModelMixin, BaseUuidModel):
+        ModelAdminFormInstructionsMixin, FormAsJSONModelMixin,
+        ReferenceModelMixin, BaseUuidModel):
 
     """ Base model for all scheduled models
     """
