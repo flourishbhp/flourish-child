@@ -13,7 +13,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
                       'vigorous physical activities like heavy lifting, '
                       'digging, aerobics, or fast bicycling?'),
         choices=VIGOROUS_ACTIVITY_DAYS,
-        max_length=100)
+        max_length=15)
 
     specify_vig_days = models.PositiveIntegerField(
         verbose_name='Specify days per week',
@@ -25,7 +25,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name=('How much time did you usually spend doing vigorous '
                       'physical activities on one of those days?'),
         choices=PHYS_ACTIVITY_TIME,
-        max_length=100,
+        max_length=20,
         blank=True,
         null=True)
 
@@ -49,9 +49,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
                       'bicycling at a regular pace, or doubles tennis? Do not '
                       'include walking.'),
         choices=MODERATE_ACTIVITY_DAYS,
-        max_length=100,
-        blank=True,
-        null=True)
+        max_length=15)
 
     specify_mod_days = models.PositiveIntegerField(
         verbose_name='Specify days per week',
@@ -63,7 +61,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name=('How much time did you usually spend doing moderate '
                       'physical activities on one of those days?'),
         choices=PHYS_ACTIVITY_TIME,
-        max_length=100,
+        max_length=16,
         blank=True,
         null=True)
 
@@ -85,9 +83,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name=('During the last 7 days, on how many days did you walk '
                       'for at least 10 minutes at a time?'),
         choices=WALKING_DAYS,
-        max_length=100,
-        blank=True,
-        null=True)
+        max_length=15,)
 
     specify_walk_days = models.PositiveIntegerField(
         verbose_name='Specify days per week',
@@ -99,7 +95,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name=('How much time did you usually spend walking on one of '
                       'those days?'),
         choices=PHYS_ACTIVITY_TIME,
-        max_length=100,
+        max_length=16,
         blank=True,
         null=True)
 
@@ -121,9 +117,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
         verbose_name=('During the last 7days, how much time did you spend '
                       'sitting on a weekday?'),
         choices=PHYS_ACTIVITY_TIME,
-        max_length=100,
-        blank=True,
-        null=True)
+        max_length=16,)
 
     specify_sit_time_hrs = models.PositiveIntegerField(
         verbose_name='Specify hours per day',

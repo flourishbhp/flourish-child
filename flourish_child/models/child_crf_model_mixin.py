@@ -31,7 +31,7 @@ class ChildCrfModelMixin(
     natural_key.dependencies = [
         'flourish_child.childvisit',
         'sites.Site',
-        'edc_appointment.appointment']
+        'flourish_child.appointment']
 
     class Meta:
         abstract = True

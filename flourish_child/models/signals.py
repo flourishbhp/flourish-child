@@ -20,7 +20,7 @@ class CaregiverConsentError(Exception):
 @receiver(post_save, weak=False, sender=ChildAssent,
           dispatch_uid='child_assent_on_post_save')
 def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
-    """Put subject on cohort a schedule after consenting.
+    """Put subject on schedule after consenting.
     """
     age_in_years = age(instance.dob, get_utcnow()).years
     if not raw and instance.is_eligible:
@@ -52,8 +52,8 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                             dummy_consent_obj.save()
 
                     caregiver_child_consent_obj.subject_identifier = instance.subject_identifier
-                    caregiver_child_consent_obj.save(update_fields=['subject_identifier',
-                                                                    'modified', 'user_modified'])
+                    caregiver_child_consent_obj.save(
+                        update_fields=['subject_identifier', 'modified', 'user_modified'])
 
 
 @receiver(post_save, weak=False, sender=ChildDummySubjectConsent,
@@ -62,7 +62,18 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     """Put subject on cohort a schedule after consenting.
     """
     if instance.cohort:
-        put_on_schedule(instance.cohort, instance=instance)
+        maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
+        try:
+            maternal_delivery_cls.objects.get(
+                delivery_datetime=instance.consent_datetime,
+                subject_identifier=instance.subject_identifier[:-3])
+        except maternal_delivery_cls.DoesNotExist:
+            pass
+        else:
+            put_on_schedule((instance.cohort + '_birth'), instance=instance)
+
+        put_on_schedule((instance.cohort + '_enrollment'), instance=instance)
+        put_on_schedule((instance.cohort + '_quarterly'), instance=instance)
 
 
 @receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
@@ -90,10 +101,9 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
         onschedule_model_cls = django_apps.get_model(onschedule_model)
 
         if 'pool' not in cohort:
-            schedule_name = 'child_' + cohort[-1:] + '_schedule1'
+            schedule_name = cohort.replace('cohort', 'child') + '_schedule1'
         else:
             schedule_name = 'child_pool_schedule1'
-
         try:
             onschedule_model_cls.objects.get(
                 subject_identifier=instance.subject_identifier,

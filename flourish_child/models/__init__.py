@@ -30,6 +30,10 @@ from .infant_congenital_anomalies import InfantMusculoskeletal, InfantSkin
 from .infant_congenital_anomalies import InfantOtherAbnormalityItems, InfantMaleGenital
 from .infant_congenital_anomalies import InfantRespiratoryDefect, InfantLowerGi
 from .infant_feeding import InfantFeeding
-from .onschedule import OnScheduleChildCohortA, OnScheduleChildCohortB, OnScheduleChildCohortC
-from .onschedule import OnScheduleChildPool
+from .onschedule import OnScheduleChildCohortAEnrollment, OnScheduleChildCohortABirth
+from .onschedule import OnScheduleChildCohortAQuarterly, OnScheduleChildCohortBEnrollment
+from .onschedule import OnScheduleChildCohortBQuarterly, OnScheduleChildCohortCEnrollment
+from .onschedule import OnScheduleChildCohortCQuarterly, OnScheduleChildCohortCPool
+from .onschedule import OnScheduleChildDYADA, OnScheduleChildDYADB, OnScheduleChildDYADC
 from .signals import child_consent_on_post_save
+from .offschedule import ChildOffSchedule

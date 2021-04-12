@@ -33,7 +33,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,6 +57,7 @@ INSTALLED_APPS = [
     'flourish_child.apps.EdcVisitTrackingAppConfig',
     'flourish_child.apps.EdcFacilityAppConfig',
     'flourish_visit_schedule.apps.AppConfig',
+    'flourish_prn.apps.AppConfig',
     'flourish_child.apps.AppConfig'
 ]
 
@@ -94,7 +94,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'flourish_child.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -104,7 +103,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -140,7 +138,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -161,5 +158,4 @@ if 'test' in sys.argv:
     MIGRATION_MODULES = DisableMigrations()
     PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
     DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'
-
 
