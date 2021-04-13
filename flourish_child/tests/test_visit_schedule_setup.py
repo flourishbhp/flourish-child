@@ -62,7 +62,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortAEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_a_enrollment_schedule1').count(), 1)
+            schedule_name='child_a_enrol_schedule1').count(), 1)
 
         self.assertEqual(OnScheduleChildCohortABirth.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -110,7 +110,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortAEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_a_enrollment_schedule1').count(), 1)
+            schedule_name='child_a_enrol_schedule1').count(), 1)
 
         self.assertEqual(OnScheduleChildCohortAQuarterly.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -158,7 +158,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortBEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_b_enrollment_schedule1').count(), 1)
+            schedule_name='child_b_enrol_schedule1').count(), 1)
 
         self.assertEqual(OnScheduleChildCohortBQuarterly.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -214,7 +214,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortBEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_b_enrollment_schedule1').count(), 1)
+            schedule_name='child_b_enrol_schedule1').count(), 1)
 
         self.assertEqual(OnScheduleChildCohortBQuarterly.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -270,23 +270,9 @@ class TestVisitScheduleSetup(TestCase):
         dummy_consent = ChildDummySubjectConsent.objects.get(
             identity=child_assent.identity)
 
-#         PreFlourishConsent.objects.using('pre_flourish').create(
-#                                                         identity=subject_consent.identity,
-#                                                         confirm_identity=subject_consent.identity,
-#                                                         dob=get_utcnow() - relativedelta(years=25),
-#                                                         first_name=subject_consent.first_name,
-#                                                         last_name=subject_consent.last_name,
-#                                                         initials=subject_consent.initials,
-#                                                         gender='F',
-#                                                         identity_type='OMANG',
-#                                                         is_dob_estimated='-',
-#                                                         version='1',
-#                                                         consent_datetime=get_utcnow(),
-#                                                         created=get_utcnow())
-
         self.assertEqual(OnScheduleChildCohortCEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_c_enrollment_schedule1').count(), 1)
+            schedule_name='child_c_enrol_schedule1').count(), 1)
 
         self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,

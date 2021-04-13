@@ -72,7 +72,7 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
         else:
             put_on_schedule((instance.cohort + '_birth'), instance=instance)
 
-        put_on_schedule((instance.cohort + '_enrollment'), instance=instance)
+        put_on_schedule((instance.cohort + '_enrol'), instance=instance)
         put_on_schedule((instance.cohort + '_quarterly'), instance=instance)
 
 
@@ -93,6 +93,10 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
         subject_identifier = subject_identifier or instance.subject_identifier
 
         cohort_label_lower = ''.join(cohort.split('_'))
+
+        if 'enrol' in cohort:
+            cohort_label_lower = cohort_label_lower.replace('enrol', 'enrollment')
+
         onschedule_model = 'flourish_child.onschedulechild' + cohort_label_lower
 
         _, schedule = site_visit_schedules.get_by_onschedule_model(
