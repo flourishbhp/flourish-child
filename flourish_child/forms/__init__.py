@@ -12,6 +12,7 @@ from .child_dummy_consent_form import ChildDummySubjectConsentForm
 from .child_hiv_rapid_test_counseling_form import ChildHIVRapidTestCounselingForm
 from .child_preg_testing_form import ChildPregTestingForm
 from .child_socio_demographic_form import ChildSocioDemographicForm
+from .child_tanner_staging_form import ChildTannerStagingForm
 from .child_food_security_questionnaire_form import ChildFoodSecurityQuestionnaireForm
 from .child_gad_anxiety_screening_form import ChildGadAnxietyScreeningForm
 from .child_immunization_history_form import ChildImmunizationHistoryForm
@@ -23,6 +24,7 @@ from .child_medical_history_form import ChildMedicalHistoryForm
 from .child_referral_form import ChildReferralForm
 from .child_previous_hospitalisation_form import ChildPreviousHospitalizationForm, ChildPreHospitalizationInlineForm
 from .child_visit_form import ChildVisitForm
+from .child_working_status_form import ChildWorkingStatusForm
 from .infant_arv_exposure_form import InfantArvExposureForm
 from .infant_congenital_anomalies_form import InfantCardioDisorderForm
 from .infant_congenital_anomalies_form import InfantCleftDisorderForm

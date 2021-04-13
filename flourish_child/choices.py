@@ -1,5 +1,6 @@
+from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
-    ON_STUDY, OFF_STUDY, DONT_KNOW
+    ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
 from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
     NOT_APPLICABLE
 
@@ -172,6 +173,12 @@ FEM_GENITAL_ANOMALY = (
      'Other ovarian, fallopian, uterine, cervical, vaginal, or vulvar abnormality'),
 )
 
+GENDER_NA = (
+    (MALE, _('Male')),
+    (FEMALE, _('Female')),
+    (NOT_APPLICABLE, 'Not Applicable'),
+)
+
 GRADE_LEVEL = (
     ('standard_1', 'Standard 1'),
     ('standard_2', 'Standard 2'),
@@ -327,6 +334,13 @@ MARKS = (
     ('e', 'E'),
     ('u', 'U'),
     ('not_taking_subject', 'Not taking subject')
+)
+
+MENARCHE_AVAIL = (
+    (YES, YES),
+    (NO, NO),
+    ('not_reached', 'Not reached menarche'),
+    (NOT_APPLICABLE, 'Not Applicable')
 )
 
 MONEY_EARNED = (
@@ -502,6 +516,15 @@ SKIN_ABNORMALITY = (
     (OTHER, 'Other skin abnormality, specify'),
 )
 
+TANNER_STAGES = (
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+    (NOT_APPLICABLE, 'Not Applicable'),
+)
+
 TIMES_BREASTFED = (
     ('<1 per week', '1. Less than once per week'),
     ('<1 per day, but at least once per week',
@@ -554,6 +577,16 @@ MODERATE_ACTIVITY_DAYS = (
 WALKING_DAYS = (
     ('days_per_week', 'Days per week (specify)'),
     ('no_walking', 'No walking')
+)
+
+WORK_TYPE = (
+    ('construction', 'Construction'),
+    ('retail', 'Retail'),
+    ('domestic', 'Domestic'),
+    ('security', 'Security'),
+    ('hospitality', 'Hospitality'),
+    ('tirelo_sechaba', 'Tirelo Sechaba (volunteers)'),
+    (OTHER, 'Other, specify')
 )
 
 VISIT_INFO_SOURCE = [
