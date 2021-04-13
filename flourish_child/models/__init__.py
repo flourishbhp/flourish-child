@@ -23,6 +23,7 @@ from .child_medical_history import ChildMedicalHistory
 from .child_referral import ChildReferral
 from .child_previous_hospitalization import ChildPreviousHospitalization, ChildPreHospitalizationInline
 from .child_visit import ChildVisit
+from .child_working_status import ChildWorkingStatus
 from .infant_arv_exposure import InfantArvExposure
 from .infant_congenital_anomalies import InfantCardioDisorder, InfantFacialDefect
 from .infant_congenital_anomalies import InfantCleftDisorder, InfantMouthUpGi, InfantCns

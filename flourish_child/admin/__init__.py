@@ -20,6 +20,7 @@ from .child_socio_demographic_admin import ChildSocioDemographicAdmin
 from .child_tanner_staging_admin import ChildTannerStagingAdmin
 from .child_previous_hospitalization_admin import ChildPreviousHospitalizationAdmin
 from .child_visit_admin import ChildVisitAdmin
+from .child_working_status_admin import ChildWorkingStatusAdmin
 from .infant_arv_exposure_admin import InfantArvExposureAdmin
 from .child_medical_history_admin import ChildMedicalHistoryAdmin
 from .infant_congenital_anomalies_admin import InfantCongenitalAnomaliesAdmin

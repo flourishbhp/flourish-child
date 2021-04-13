@@ -579,6 +579,16 @@ WALKING_DAYS = (
     ('no_walking', 'No walking')
 )
 
+WORK_TYPE = (
+    ('construction', 'Construction'),
+    ('retail', 'Retail'),
+    ('domestic', 'Domestic'),
+    ('security', 'Security'),
+    ('hospitality', 'Hospitality'),
+    ('tirelo_sechaba', 'Tirelo Sechaba (volunteers)'),
+    (OTHER, 'Other, specify')
+)
+
 VISIT_INFO_SOURCE = [
     (PARTICIPANT, 'Clinic visit with participant'),
     ('other_contact',
