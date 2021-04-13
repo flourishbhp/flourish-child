@@ -1,6 +1,7 @@
 from django import forms
 
 from edc_constants.constants import OTHER, YES
+from flourish_child_validations.form_validators import VaccinesReceivedFormValidator
 
 from .child_form_mixin import ChildModelFormMixin
 from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived
@@ -13,6 +14,13 @@ class ChildImmunizationHistoryForm(ChildModelFormMixin, forms.ModelForm):
             'child_visit').appointment.subject_identifier
 
         super().clean()
+
+        received_vaccine_name = self.data.get(
+            'vaccinesreceived_set-0-received_vaccine_name')
+
+        if not received_vaccine_name:
+            msg = 'Please complete the table for vaccines received.'
+            raise forms.ValidationError(msg)
 
         missed_vaccine_name = self.data.get(
             'vaccinesmissed_set-0-missed_vaccine_name')
@@ -48,6 +56,8 @@ class ChildImmunizationHistoryForm(ChildModelFormMixin, forms.ModelForm):
 
 
 class VaccinesReceivedForm(ChildModelFormMixin, forms.ModelForm):
+
+    form_validator_cls = VaccinesReceivedFormValidator
 
     class Meta:
         model = VaccinesReceived
