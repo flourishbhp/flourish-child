@@ -32,7 +32,11 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'toilet_facility_other',
                 'house_people_number',
                 'house_type',
-                'older_than18']}
+                'older_than18',
+                'attend_school',
+                'education_level',
+                'education_level_other',
+                'working']}
          ), audit_fieldset_tuple)
 
     radio_fields = {'ethnicity': admin.VERTICAL,
@@ -42,4 +46,7 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'house_fridge': admin.VERTICAL,
                     'cooking_method': admin.VERTICAL,
                     'toilet_facility': admin.VERTICAL,
-                    'house_type': admin.VERTICAL}
+                    'house_type': admin.VERTICAL,
+                    'attend_school': admin.VERTICAL,
+                    'education_level': admin.VERTICAL,
+                    'working': admin.VERTICAL}
