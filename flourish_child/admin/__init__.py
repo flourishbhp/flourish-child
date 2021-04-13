@@ -17,6 +17,7 @@ from .child_physical_activity_admin import ChildPhysicalActivityAdmin
 from .child_preg_testing_admin import ChildPregTestingAdmin
 from .child_referral_admin import ChildReferralAdmin
 from .child_socio_demographic_admin import ChildSocioDemographicAdmin
+from .child_tanner_staging_admin import ChildTannerStagingAdmin
 from .child_previous_hospitalization_admin import ChildPreviousHospitalizationAdmin
 from .child_visit_admin import ChildVisitAdmin
 from .infant_arv_exposure_admin import InfantArvExposureAdmin

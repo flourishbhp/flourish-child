@@ -12,6 +12,7 @@ from .child_food_security_questionnaire import ChildFoodSecurityQuestionnaire
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_socio_demographic import ChildSocioDemographic
+from .child_tanner_staging import ChildTannerStaging
 from .child_gad_anxiety_screening import ChildGadAnxietyScreening
 from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesReceived
