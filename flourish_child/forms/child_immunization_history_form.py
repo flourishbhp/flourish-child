@@ -1,6 +1,6 @@
 from django import forms
 
-from edc_constants.constants import OTHER, YES
+from edc_constants.constants import OTHER, YES, NOT_APPLICABLE
 from flourish_child_validations.form_validators import VaccinesReceivedFormValidator
 
 from .child_form_mixin import ChildModelFormMixin
@@ -15,12 +15,15 @@ class ChildImmunizationHistoryForm(ChildModelFormMixin, forms.ModelForm):
 
         super().clean()
 
+        rec_add_immunization = self.cleaned_data.get('rec_add_immunization')
         received_vaccine_name = self.data.get(
             'vaccinesreceived_set-0-received_vaccine_name')
-
-        if not received_vaccine_name:
-            msg = 'Please complete the table for vaccines received.'
-            raise forms.ValidationError(msg)
+        if rec_add_immunization:
+            self.validate_add_immunization(rec_add_immunization, received_vaccine_name)
+        else:
+            if not received_vaccine_name:
+                msg = 'Please complete the table for vaccines received.'
+                raise forms.ValidationError(msg)
 
         missed_vaccine_name = self.data.get(
             'vaccinesmissed_set-0-missed_vaccine_name')
@@ -49,6 +52,23 @@ class ChildImmunizationHistoryForm(ChildModelFormMixin, forms.ModelForm):
                     ' in the table below'
                 }
                 raise forms.ValidationError(message)
+
+    def validate_add_immunization(self, add_immunization, vaccine_name):
+        if add_immunization == NOT_APPLICABLE:
+            msg = {'rec_add_immunization': 'This field is applicable.'}
+            raise forms.ValidationError(msg)
+        if add_immunization == YES:
+            if not vaccine_name:
+                msg = {'rec_add_immunization':
+                       'You stated that the child has additional immunizations '
+                       'received. Please complete the table for vaccines received.'}
+                raise forms.ValidationError(msg)
+        else:
+            if vaccine_name:
+                msg = {'rec_add_immunization':
+                       'No additional immunizations received. Do not fill table '
+                       'for vaccines received'}
+                raise forms.ValidationError(msg)
 
     class Meta:
         model = ChildImmunizationHistory
