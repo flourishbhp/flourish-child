@@ -275,6 +275,10 @@ class ChildDataset(
         blank=True,
         null=True)
 
+    twin_triplet = models.BooleanField(
+        default=False,
+        editable=False)
+
     class Meta:
         app_label = 'flourish_child'
         verbose_name = 'Infant Dataset'
