@@ -1,5 +1,6 @@
 from django.contrib import admin
-from edc_fieldsets.fieldlist import Insert, Remove
+from edc_fieldsets.fieldlist import Insert
+from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -7,9 +8,6 @@ from ..admin_site import flourish_child_admin
 from ..forms import (
     ChildImmunizationHistoryForm, VaccinesReceivedForm, VaccinesMissedForm)
 from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived
-from ..models import Appointment
-from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
