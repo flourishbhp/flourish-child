@@ -26,6 +26,10 @@ class ChildDatasetForm(SiteModelFormMixin, forms.ModelForm):
         label='Last name',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
+    dob = forms.CharField(
+        label='Date of birth',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
     infant_enrolldate = forms.CharField(
         label='Infant enrollment date',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))

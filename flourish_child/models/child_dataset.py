@@ -23,6 +23,8 @@ class ChildDataset(
 
     last_name = LastnameField(null=True, blank=False)
 
+    dob = models.DateField(null=True, blank=True)
+
     infant_enrolldate = models.DateField(
         verbose_name='Infant enrollment date')
 
