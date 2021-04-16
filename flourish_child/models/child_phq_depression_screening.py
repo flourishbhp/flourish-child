@@ -97,9 +97,7 @@ class ChildPhqDepressionScreening(ChildCrfModelMixin):
         for f in self._meta.get_fields():
             if f.name in ['activity_interest', 'depressed', 'sleep_disorders',
                           'fatigued', 'eating_disorders', 'self_doubt',
-                          'easily_distracted', 'restlessness', 'self_harm',
-                          'felt_depressed', 'problems_effect', 'self_harm_thoughts',
-                          'suidice_attempt']:
+                          'easily_distracted', 'restlessness', 'self_harm', ]:
                 score += int(getattr(self, f.name))
         return score
 
