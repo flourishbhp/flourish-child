@@ -18,12 +18,16 @@ if settings.APP_NAME == 'flourish_child':
     from edc_appointment.appointment_config import AppointmentConfig
     from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
     from edc_appointment.constants import COMPLETE_APPT
+    from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
     from edc_protocol.apps import AppConfig as BaseEdcProtocolAppConfigs
     from edc_facility.apps import AppConfig as BaseEdcFacilityAppConfig
     from edc_timepoint.apps import AppConfig as BaseEdcTimepointAppConfig
     from edc_timepoint.timepoint import Timepoint
     from edc_timepoint.timepoint_collection import TimepointCollection
     from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
+    from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
+    from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
+    from edc_constants.constants import FAILED_ELIGIBILITY
 
     class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):
         configurations = [
@@ -35,6 +39,12 @@ if settings.APP_NAME == 'flourish_child':
                 model='flourish_child.appointment',
                 related_visit_model='flourish_child.childvisit',
                 appt_type='clinic')]
+
+    class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
+
+        reason_field = {'flourish_child.childvisit': 'reason'}
+        create_on_reasons = [SCHEDULED, UNSCHEDULED, COMPLETED_PROTOCOL_VISIT]
+        delete_on_reasons = [LOST_VISIT, MISSED_VISIT, FAILED_ELIGIBILITY]
 
     class EdcProtocolAppConfig(BaseEdcProtocolAppConfigs):
         protocol = 'BHP142'
@@ -76,7 +86,9 @@ if settings.APP_NAME == 'flourish_child':
             'flourish_caregiver': (
                 'maternal_visit', 'flourish_caregiver.maternalvisit'),
             'flourish_child': (
-                'child_visit', 'flourish_child.childvisit'), }
+                'child_visit', 'flourish_child.childvisit'),
+            'pre_flourish': (
+                'maternal_visit', 'pre_flourish.preflourishcaregivervisit')}
 
     class EdcFacilityAppConfig(BaseEdcFacilityAppConfig):
         country = 'botswana'

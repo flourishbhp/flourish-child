@@ -36,7 +36,6 @@ class TestVisitScheduleSetup(TestCase):
             'study_maternal_identifier': '12345',
             'study_child_identifier': '1234'}
 
-    @tag('cvs1')
     def test_cohort_a_onschedule_antenatal_valid(self):
 
         screening_preg = mommy.make_recipe(
@@ -72,7 +71,6 @@ class TestVisitScheduleSetup(TestCase):
             subject_identifier=dummy_consent.subject_identifier,
             schedule_name='child_a_quart_schedule1').count(), 1)
 
-    @tag('cvs2')
     def test_cohort_a_onschedule_consent_valid(self):
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '1'
 
@@ -119,7 +117,6 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('cvs3')
     def test_cohort_b_onschedule_valid(self):
 
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '2'
@@ -168,7 +165,6 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('cvs4')
     def test_cohort_b_assent_onschedule_valid(self):
 
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '3'
@@ -225,7 +221,6 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('cvs5')
     def test_cohort_c_onschedule_valid(self):
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '3'
 
@@ -284,3 +279,92 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
+
+    @tag('cvs1')
+    def test_cohort_c_twins_onschedule_valid(self):
+        self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '4'
+
+        self.maternal_dataset_options['protocol'] = 'Mashi'
+        self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=10,
+                                                                                months=2)
+        self.maternal_dataset_options['preg_pi'] = 1
+        self.child_dataset_options['infant_hiv_exposed'] = 'Unexposed'
+        self.options['subject_identifier'] = self.maternal_subject_identifier
+
+        mommy.make_recipe(
+            'flourish_child.childdataset',
+            subject_identifier=self.maternal_subject_identifier + '10',
+            **self.child_dataset_options)
+
+        maternal_dataset_obj = mommy.make_recipe(
+            'flourish_caregiver.maternaldataset',
+            subject_identifier=self.maternal_subject_identifier,
+            **self.maternal_dataset_options)
+
+        mommy.make_recipe(
+            'flourish_caregiver.screeningpriorbhpparticipants',
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
+
+        subject_consent = mommy.make_recipe(
+            'flourish_caregiver.subjectconsent',
+            screening_identifier=maternal_dataset_obj.screening_identifier,
+            breastfeed_intent=NOT_APPLICABLE,
+            **self.options)
+
+        caregiver_child_consent_obj1 = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            identity='126513789',
+            confirm_identity='126513789',
+            child_dob=(get_utcnow() - relativedelta(years=10, months=2)).date(),)
+
+        caregiver_child_consent_obj2 = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            identity='126516789',
+            confirm_identity='126516789',
+            child_dob=(get_utcnow() - relativedelta(years=10, months=2)).date(),)
+
+        child_assent1 = mommy.make_recipe(
+            'flourish_child.childassent',
+            subject_identifier=caregiver_child_consent_obj1.subject_identifier,
+            dob=get_utcnow() - relativedelta(years=10, months=2),
+            identity=caregiver_child_consent_obj1.identity,
+            confirm_identity=caregiver_child_consent_obj1.identity,
+            version=subject_consent.version)
+
+        child_assent2 = mommy.make_recipe(
+            'flourish_child.childassent',
+            subject_identifier=caregiver_child_consent_obj2.subject_identifier,
+            dob=get_utcnow() - relativedelta(years=10, months=2),
+            identity=caregiver_child_consent_obj2.identity,
+            confirm_identity=caregiver_child_consent_obj2.identity,
+            version=subject_consent.version)
+
+        dummy_consent1 = ChildDummySubjectConsent.objects.get(
+            identity=child_assent1.identity)
+
+        dummy_consent2 = ChildDummySubjectConsent.objects.get(
+            identity=child_assent2.identity)
+
+        self.assertEqual(OnScheduleChildCohortCEnrollment.objects.filter(
+            subject_identifier=dummy_consent1.subject_identifier,
+            schedule_name='child_c_enrol_schedule1').count(), 1)
+
+        self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
+            subject_identifier=dummy_consent1.subject_identifier,
+            schedule_name='child_c_quart_schedule1').count(), 1)
+
+        self.assertNotEqual(Appointment.objects.filter(
+            subject_identifier=dummy_consent1.subject_identifier).count(), 0)
+
+        self.assertEqual(OnScheduleChildCohortCEnrollment.objects.filter(
+            subject_identifier=dummy_consent2.subject_identifier,
+            schedule_name='child_c_enrol_schedule1').count(), 1)
+
+        self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
+            subject_identifier=dummy_consent2.subject_identifier,
+            schedule_name='child_c_quart_schedule1').count(), 1)
+
+        self.assertNotEqual(Appointment.objects.filter(
+            subject_identifier=dummy_consent2.subject_identifier).count(), 0)

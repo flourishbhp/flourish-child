@@ -37,6 +37,6 @@ from .onschedule import OnScheduleChildCohortAEnrollment, OnScheduleChildCohortA
 from .onschedule import OnScheduleChildCohortAQuarterly, OnScheduleChildCohortBEnrollment
 from .onschedule import OnScheduleChildCohortBQuarterly, OnScheduleChildCohortCEnrollment
 from .onschedule import OnScheduleChildCohortCQuarterly, OnScheduleChildCohortCPool
-from .onschedule import OnScheduleChildDYADA, OnScheduleChildDYADB, OnScheduleChildDYADC
+from .onschedule import OnScheduleChildSecA, OnScheduleChildSecB, OnScheduleChildSecC
 from .signals import child_consent_on_post_save
 from .offschedule import ChildOffSchedule

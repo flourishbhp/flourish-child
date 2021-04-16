@@ -1,12 +1,13 @@
 from dateutil.relativedelta import relativedelta
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES
+from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT
 from edc_registration.models import RegisteredSubject
+from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 from flourish_caregiver.models import ScreeningPriorBhpParticipants, SubjectConsent
 from model_mommy.recipe import Recipe, seq
 
-from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent
+from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, ChildVisit
 
 fake = Faker()
 
@@ -57,3 +58,12 @@ subjectconsent = Recipe(
     is_dob_estimated='-',
     version='1'
 )
+
+childvisit = Recipe(
+    ChildVisit,
+    report_datetime=get_utcnow(),
+    reason=SCHEDULED,
+    information_provider='MOTHER',
+    study_status=ON_STUDY,
+    survival_status=ALIVE,
+    info_source=PARTICIPANT)
