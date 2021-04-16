@@ -12,12 +12,14 @@ class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAd
 
     form = ChildFoodSecurityQuestionnaireForm
 
-    instructions = ('Please state for participant “I’m going to read you '
-                    'several statements that people have made about their food'
-                    ' situation. For these statements, please tell me whether'
-                    ' the statement was often true, sometimes true, or never '
-                    'true for (you/your household) in the last 12 months—that '
-                    'is, since last (name of current month).”')
+    additional_instructions = ('Please state for participant “I’m going to '
+                               'read you several statements that people have '
+                               'made about their food situation. For these '
+                               'statements, please tell me whether the '
+                               'statement was often true, sometimes true, '
+                               'or never true for (you/your household) in the'
+                               ' last 12 months—that is, since last (name of '
+                               'current month).”')
 
     fieldsets = (
         (None, {

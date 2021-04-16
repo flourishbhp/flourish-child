@@ -91,6 +91,8 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         max_digits=5,
         decimal_places=2,
         validators=[MinValueValidator(5), MaxValueValidator(50), ],
+        blank=True,
+        null=True,
         help_text='in cm e.g 2, should be between 5 and 50')
 
     class Meta(ChildCrfModelMixin.Meta):

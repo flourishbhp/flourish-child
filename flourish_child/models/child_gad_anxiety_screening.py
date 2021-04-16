@@ -40,6 +40,25 @@ class ChildGadAnxietyScreening(ChildCrfModelMixin):
         choices=DEPRESSION_SCALE,
         max_length=2)
 
+    anxiety_score = models.IntegerField(
+        verbose_name='Anxiety score',
+        null=True,
+        blank=True)
+
+    def save(self, *args, **kwargs):
+        self.anxiety_score = self.calculate_depression_score
+        super().save(*args, **kwargs)
+
+    @property
+    def calculate_depression_score(self):
+        score = 0
+        for f in self._meta.get_fields():
+            if f.name in ['feeling_anxious', 'control_worrying', 'worrying',
+                          'trouble_relaxing', 'restlessness', 'easily_annoyed',
+                          'fearful', ]:
+                score += int(getattr(self, f.name))
+        return score
+
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'Anxiety Screening - GAD-7'

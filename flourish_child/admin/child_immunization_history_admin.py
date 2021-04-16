@@ -1,4 +1,6 @@
 from django.contrib import admin
+from edc_fieldsets.fieldlist import Insert
+from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -40,6 +42,7 @@ class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
 
 @admin.register(ChildImmunizationHistory, site=flourish_child_admin)
 class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+
     form = ChildImmunizationHistoryForm
 
     fieldsets = (
@@ -52,4 +55,17 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     )
 
     inlines = [VaccinesReceivedInlineAdmin, VaccinesMissedInlineAdmin, ]
-    radio_fields = {'vaccines_missed': admin.VERTICAL}
+    radio_fields = {'vaccines_missed': admin.VERTICAL,
+                    'rec_add_immunization': admin.VERTICAL}
+
+    custom_form_labels = [
+        FormLabel(
+            field='rec_add_immunization',
+            label=('Since the last scheduled visit in {previous}, have you '
+                   'received any additional immunizations?'),
+            previous_appointment=True)
+        ]
+
+    conditional_fieldlists = {
+        'child_b_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_c_quart_schedule1': Insert('rec_add_immunization', after='report_datetime')}

@@ -88,6 +88,19 @@ class ChildPhqDepressionScreening(ChildCrfModelMixin):
         null=True,
         blank=True)
 
+    def save(self, *args, **kwargs):
+        self.depression_score = self.calculate_depression_score()
+        super().save(*args, **kwargs)
+
+    def calculate_depression_score(self):
+        score = 0
+        for f in self._meta.get_fields():
+            if f.name in ['activity_interest', 'depressed', 'sleep_disorders',
+                          'fatigued', 'eating_disorders', 'self_doubt',
+                          'easily_distracted', 'restlessness', 'self_harm', ]:
+                score += int(getattr(self, f.name))
+        return score
+
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'Child PHQ Depression Screening'
