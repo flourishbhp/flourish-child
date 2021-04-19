@@ -49,8 +49,8 @@ class ChildVisit(
 
     reason_unscheduled = models.CharField(
         verbose_name=(
-            'If \'missed\' above, reason scheduled '
-            'scheduled visit was missed'),
+            'If \'Unscheduled\' above, provide reason for '
+            'the unscheduled visit'),
         blank=True,
         null=True,
         max_length=25)

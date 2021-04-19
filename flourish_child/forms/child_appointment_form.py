@@ -1,4 +1,5 @@
 from django import forms
+from edc_appointment.form_validators import AppointmentFormValidator
 from edc_base.sites.forms import SiteModelFormMixin
 from edc_form_validators import FormValidatorMixin
 
@@ -11,6 +12,8 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
     """
 
     appointment_model = 'flourish_child.appointment'
+
+    form_validator_cls = AppointmentFormValidator
 
     class Meta:
         model = Appointment
