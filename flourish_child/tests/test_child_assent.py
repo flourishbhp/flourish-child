@@ -1,7 +1,7 @@
 import re
 
 from dateutil.relativedelta import relativedelta
-from django.test import TestCase
+from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 from edc_facility.import_holidays import import_holidays
 from edc_registration.models import RegisteredSubject
@@ -10,28 +10,43 @@ from model_mommy import mommy
 from ..models import ChildAssent
 from edc_constants.constants import NO, YES
 
-
 child_identifier = '142\-[0-9\-]+\-10'
 
 
+@tag('ca')
 class TestChildAssent(TestCase):
 
     def setUp(self):
         import_holidays()
+
+        self.maternal_dataset_options = {
+            'delivdt': get_utcnow() - relativedelta(years=8),
+            'mom_enrolldate': get_utcnow(),
+            'mom_hivstatus': 'HIV uninfected',
+            'study_maternal_identifier': '12345',
+            'protocol': 'Mpepu'}
+
+        self.child_dataset_options = {
+            'infant_hiv_exposed': 'Exposed',
+            'infant_enrolldate': get_utcnow(),
+            'study_maternal_identifier': '12345',
+            'study_child_identifier': '1234'}
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldataset',
+            **self.maternal_dataset_options)
+
+        mommy.make_recipe(
+            'flourish_child.childdataset',
+            dob=get_utcnow() - relativedelta(years=8),
+            **self.child_dataset_options)
+
         self.subject_screening = mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants')
 
         consent_options = {
             'screening_identifier': self.subject_screening.screening_identifier,
-            'consent_datetime': get_utcnow,
-            'remain_in_study': YES,
-            'hiv_testing': YES,
-            'breastfeed_intent': YES,
-            'consent_reviewed': YES,
-            'study_questions': YES,
-            'assessment_score': YES,
-            'consent_signature': YES,
-            'consent_copy': YES}
+            'version': '1'}
 
         mommy.make_recipe('flourish_caregiver.subjectconsent', **consent_options)
 

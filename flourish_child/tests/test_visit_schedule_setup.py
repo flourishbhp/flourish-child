@@ -178,7 +178,6 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_child.childdataset',
-            subject_identifier=self.maternal_subject_identifier + '10',
             dob=get_utcnow() - relativedelta(years=7, months=2),
             **self.child_dataset_options)
 
