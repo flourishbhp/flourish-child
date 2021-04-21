@@ -61,5 +61,5 @@ class ChildGadAnxietyScreening(ChildCrfModelMixin):
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = 'Anxiety Screening - GAD-7'
-        verbose_name_plural = 'Anxiety Screening - GAD-7'
+        verbose_name = 'Child GAD-7 Anxiety Screening'
+        verbose_name_plural = 'Child GAD-7 Anxiety Screening'

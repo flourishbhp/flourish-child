@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from edc_base.utils import get_utcnow
-from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT
+from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT, NO
 from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
@@ -8,6 +8,7 @@ from flourish_caregiver.models import ScreeningPriorBhpParticipants, SubjectCons
 from model_mommy.recipe import Recipe, seq
 
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, ChildVisit
+from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening
 
 fake = Faker()
 
@@ -67,3 +68,29 @@ childvisit = Recipe(
     study_status=ON_STUDY,
     survival_status=ALIVE,
     info_source=PARTICIPANT)
+
+childgadanxietyscreening = Recipe(
+    ChildGadAnxietyScreening,
+    feeling_anxious='1',
+    control_worrying='3',
+    worrying='1',
+    trouble_relaxing='0',
+    restlessness='1',
+    easily_annoyed='2',
+    fearful='3',)
+
+childphqdeprscreening = Recipe(
+    ChildPhqDepressionScreening,
+    activity_interest='1',
+    depressed='2',
+    sleep_disorders='1',
+    fatigued='1',
+    eating_disorders='0',
+    self_doubt='0',
+    easily_distracted='1',
+    restlessness='1',
+    self_harm='4',
+    self_harm_thoughts=NO,
+    suidice_attempt=NO)
+
+

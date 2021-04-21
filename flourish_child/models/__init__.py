@@ -14,13 +14,14 @@ from .child_preg_testing import ChildPregTesting
 from .child_socio_demographic import ChildSocioDemographic
 from .child_tanner_staging import ChildTannerStaging
 from .child_gad_anxiety_screening import ChildGadAnxietyScreening
+from .child_gad_referral import ChildGadReferral
 from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesReceived
 from .child_immunization_history import VaccinesMissed
 from .child_phq_depression_screening import ChildPhqDepressionScreening
+from .child_phq_referral import ChildPhqReferral
 from .child_physical_activity import ChildPhysicalActivity
 from .child_medical_history import ChildMedicalHistory
-from .child_referral import ChildReferral
 from .child_previous_hospitalization import ChildPreviousHospitalization, ChildPreHospitalizationInline
 from .child_visit import ChildVisit
 from .child_working_status import ChildWorkingStatus
