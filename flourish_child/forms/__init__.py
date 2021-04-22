@@ -7,6 +7,7 @@ from .child_appointment_form import AppointmentForm
 from .child_assent_form import ChildAssentForm
 from .child_birth_weight_length_screening_form import ChildBirthScreeningForm
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
+from .child_continued_consent_form import ChildContinuedConsentForm
 from .child_dataset_form import ChildDatasetForm
 from .child_dummy_consent_form import ChildDummySubjectConsentForm
 from .child_hiv_rapid_test_counseling_form import ChildHIVRapidTestCounselingForm
