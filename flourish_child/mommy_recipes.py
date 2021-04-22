@@ -8,7 +8,7 @@ from flourish_caregiver.models import ScreeningPriorBhpParticipants, SubjectCons
 from model_mommy.recipe import Recipe, seq
 
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, ChildVisit
-from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening
+from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, ChildSocioDemographic
 
 fake = Faker()
 
@@ -69,6 +69,10 @@ childvisit = Recipe(
     survival_status=ALIVE,
     info_source=PARTICIPANT)
 
+childsociodemographic = Recipe(
+    ChildSocioDemographic,
+    attend_school=YES)
+
 childgadanxietyscreening = Recipe(
     ChildGadAnxietyScreening,
     feeling_anxious='1',
@@ -92,5 +96,4 @@ childphqdeprscreening = Recipe(
     self_harm='4',
     self_harm_thoughts=NO,
     suidice_attempt=NO)
-
 
