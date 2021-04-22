@@ -52,24 +52,26 @@ CARDIOVASCULAR_DISORDER = (
 )
 
 CHILD_AGE_VACCINE_GIVEN = (
-    ('At Birth', 'At Birth'),
-    ('After Birth', 'After Birth'),
+    ('at_birth', 'At Birth'),
+    ('after_birth', 'After Birth'),
     ('2', '2 months'),
     ('3', '3 months'),
     ('4', '4 months'),
-    ('4-6', '4-6 months'),
-    ('6-11', '6-11 months'),
+    ('4to6', '4-6 months'),
+    ('6to11', '6-11 months'),
     ('9', '9 months'),
-    ('9-12', '9-12 months'),
-    ('12-17', '12-17 months'),
+    ('9to12', '9-12 months'),
+    ('12to17', '12-17 months'),
     ('18', '18 months'),
-    ('18-29', '18-29 months'),
-    ('24-29', '24-29 months'),
-    ('30-35', '30-35 months'),
-    ('36-41', '36-41 months'),
-    ('42-47', '42-47 months'),
-    ('48-53', '48-53 months'),
-    ('54-59', '54-59 months')
+    ('18to29', '18-29 months'),
+    ('24to29', '24-29 months'),
+    ('30to35', '30-35 months'),
+    ('36to41', '36-41 months'),
+    ('42to47', '42-47 months'),
+    ('48to53', '48-53 months'),
+    ('54to59', '54-59 months'),
+    ('adolescent', 'Adolescent Stage'),
+    ('catch_up_vaccine', 'Catch-up vaccine')
 )
 
 CLEFT_DISORDER = (
