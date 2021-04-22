@@ -84,7 +84,6 @@ class ChildPhqDepressionScreening(ChildCrfModelMixin):
 
     depression_score = models.IntegerField(
         verbose_name='Depression score',
-        default="",
         null=True,
         blank=True)
 
@@ -103,5 +102,5 @@ class ChildPhqDepressionScreening(ChildCrfModelMixin):
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = 'Child PHQ Depression Screening'
-        verbose_name_plural = 'Child PHQ Depression Screening'
+        verbose_name = 'Child PHQ-9 Depression Screening'
+        verbose_name_plural = 'Child PHQ-9 Depression Screening'

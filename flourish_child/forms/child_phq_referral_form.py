@@ -1,13 +1,13 @@
-from ..models import ChildReferral
-from .child_form_mixin import ChildModelFormMixin
-
 from flourish_child_validations.form_validators import ChildReferralFormValidator
 
+from .child_form_mixin import ChildModelFormMixin
+from ..models import ChildPhqReferral
 
-class ChildReferralForm(ChildModelFormMixin):
+
+class ChildPhqReferralForm(ChildModelFormMixin):
 
     form_validator_cls = ChildReferralFormValidator
 
     class Meta:
-        model = ChildReferral
+        model = ChildPhqReferral
         fields = '__all__'

@@ -30,6 +30,7 @@ class ChildPhqDepressionScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin
                 'problems_effect',
                 'self_harm_thoughts',
                 'suidice_attempt',
+                'depression_score'
             ]}
          ), audit_fieldset_tuple)
 
@@ -46,3 +47,7 @@ class ChildPhqDepressionScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin
                     'problems_effect': admin.VERTICAL,
                     'self_harm_thoughts': admin.VERTICAL,
                     'suidice_attempt': admin.VERTICAL, }
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = super().get_readonly_fields(request, obj)
+        return ('depression_score', ) + fields

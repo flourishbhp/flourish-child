@@ -1,17 +1,16 @@
 from django.contrib import admin
 from edc_model_admin import audit_fieldset_tuple
-
-from .model_admin_mixins import ModelAdminMixin
+from .model_admin_mixins import ChildCrfModelAdminMixin
 
 from ..admin_site import flourish_child_admin
-from ..forms import ChildReferralForm
-from ..models import ChildReferral
+from ..forms import ChildGadReferralForm
+from ..models import ChildGadReferral
 
 
-@admin.register(ChildReferral, site=flourish_child_admin)
-class ChildReferralAdmin(ModelAdminMixin, admin.ModelAdmin):
+@admin.register(ChildGadReferral, site=flourish_child_admin)
+class ChildGadReferralAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
-    form = ChildReferralForm
+    form = ChildGadReferralForm
 
     fieldsets = (
         (None, {
