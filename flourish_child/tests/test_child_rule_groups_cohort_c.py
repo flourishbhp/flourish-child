@@ -1,7 +1,7 @@
 from dateutil.relativedelta import relativedelta
-from django.test import TestCase
+from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, NOT_APPLICABLE
+from edc_constants.constants import YES, NO, NOT_APPLICABLE
 from edc_facility.import_holidays import import_holidays
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
 from edc_metadata.models import CrfMetadata
@@ -11,6 +11,7 @@ from model_mommy import mommy
 from ..models import ChildVisit, Appointment
 
 
+@tag('cmtd')
 class TestRuleGroups(TestCase):
 
     def setUp(self):
@@ -75,6 +76,29 @@ class TestRuleGroups(TestCase):
             appointment=Appointment.objects.get(visit_code='1000'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
+
+    @tag('cap')
+    def test_academic_performance_required(self):
+        visit = ChildVisit.objects.get(visit_code='1000')
+        mommy.make_recipe('flourish_child.childsociodemographic',
+                          child_visit=visit)
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.academicperformance',
+                subject_identifier=self.subject_identifier,
+                visit_code='1000').entry_status, REQUIRED)
+
+    @tag('cap')
+    def test_academic_performance_not_required(self):
+        visit = ChildVisit.objects.get(visit_code='1000')
+        mommy.make_recipe('flourish_child.childsociodemographic',
+                          child_visit=visit,
+                          attend_school=NO)
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.academicperformance',
+                subject_identifier=self.subject_identifier,
+                visit_code='1000').entry_status, NOT_REQUIRED)
 
     def test_gad_score_gte10_referral_required(self):
         visit = ChildVisit.objects.get(visit_code='1000')
