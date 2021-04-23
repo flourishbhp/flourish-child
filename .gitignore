@@ -1,3 +1,8 @@
+migrations/
+.pydevproject
+.project
+.settings/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -113,6 +118,12 @@ venv.bak/
 # Spyder project settings
 .spyderproject
 .spyproject
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+.settings/
 
 # Rope project settings
 .ropeproject
