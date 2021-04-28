@@ -41,7 +41,6 @@ registeredsubject = Recipe(
 screeningpriorbhpparticipants = Recipe(
     ScreeningPriorBhpParticipants,
     child_alive=YES,
-    flourish_interest=YES,
     flourish_participation='interested')
 
 subjectconsent = Recipe(

@@ -6,11 +6,12 @@ from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_base.model_validators import datetime_not_future
+from edc_constants.constants import NOT_APPLICABLE
 from edc_consent.field_mixins import (
     CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin)
 from edc_consent.field_mixins import IdentityFieldsMixin, PersonalFieldsMixin
 from edc_consent.validators import eligible_if_yes
-from edc_constants.choices import YES_NO, GENDER
+from edc_constants.choices import YES_NO, GENDER, YES_NO_NA
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
@@ -74,9 +75,8 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     preg_testing = models.CharField(
         max_length=3,
         verbose_name='Are you willing to undergo pregnancy testing? ',
-        choices=YES_NO,
-        blank=True,
-        null=True,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE,
         help_text='If ‘No’ ineligible for study participation')
 
     specimen_consent = models.CharField(
