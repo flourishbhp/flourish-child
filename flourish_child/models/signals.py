@@ -92,7 +92,7 @@ def put_cohort_onschedule(cohort, instance):
         put_on_schedule(cohort, instance=instance)
     else:
         put_on_schedule(cohort + '_enrol', instance=instance)
-        put_on_schedule(cohort + '_quarterly', instance=instance)
+        put_on_schedule(cohort + '_quart', instance=instance)
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None):
