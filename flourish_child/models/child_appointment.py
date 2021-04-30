@@ -26,6 +26,7 @@ class Appointment(AppointmentModelMixin, SiteModelMixin, BaseUuidModel):
                 self.schedule_name,
                 self.visit_code,
                 self.visit_code_sequence)
+
     natural_key.dependencies = ['sites.Site']
 
     class Meta(AppointmentModelMixin.Meta):

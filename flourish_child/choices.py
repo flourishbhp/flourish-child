@@ -98,7 +98,10 @@ COHORTS = (
     ('cohort_a', 'Cohort A'),
     ('cohort_b', 'Cohort B'),
     ('cohort_c', 'Cohort C'),
-    ('cohort_pool', 'Cohort Pool'),)
+    ('cohort_a_sec', 'Cohort A Secondary Aims'),
+    ('cohort_b_sec', 'Cohort B Secondary Aims'),
+    ('cohort_c_sec', 'Cohort C Secondary Aims'),
+    ('cohort_pool', 'Cohort Pool Secondary Aims'),)
 
 COWS_MILK = (
     ('boiled', '1. Boiled from cow'),

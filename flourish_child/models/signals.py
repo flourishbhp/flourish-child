@@ -73,9 +73,11 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
             put_on_schedule((instance.cohort + '_birth'), instance=instance)
 
         if 'pool' not in instance.cohort:
-
-            put_on_schedule((instance.cohort + '_enrol'), instance=instance)
-            put_on_schedule((instance.cohort + '_quart'), instance=instance)
+            if instance.cohort is not None and 'sec' in instance.cohort:
+                put_on_schedule(instance.cohort, instance=instance)
+            else:
+                put_on_schedule((instance.cohort + '_enrol'), instance=instance)
+                put_on_schedule((instance.cohort + '_quart'), instance=instance)
         else:
             put_on_schedule(instance.cohort, instance=instance)
 
