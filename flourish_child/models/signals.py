@@ -72,14 +72,7 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
         else:
             put_on_schedule((instance.cohort + '_birth'), instance=instance)
 
-        if 'pool' not in instance.cohort:
-            if instance.cohort is not None and 'sec' in instance.cohort:
-                put_on_schedule(instance.cohort, instance=instance)
-            else:
-                put_on_schedule((instance.cohort + '_enrol'), instance=instance)
-                put_on_schedule((instance.cohort + '_quart'), instance=instance)
-        else:
-            put_on_schedule(instance.cohort, instance=instance)
+        put_cohort_onschedule(instance.cohort, instance=instance)
 
 
 @receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
@@ -91,6 +84,15 @@ def child_rapid_test_on_post_save(sender, instance, raw, created, **kwargs):
                         ChildOffStudy, CHILDOFF_STUDY_ACTION,
                         instance.child_visit.appointment.subject_identifier,
                         repeat=True)
+
+
+def put_cohort_onschedule(cohort, instance):
+
+    if cohort is not None and 'sec' in cohort or 'pool' in cohort:
+        put_on_schedule(cohort, instance=instance)
+    else:
+        put_on_schedule(cohort + '_enrol', instance=instance)
+        put_on_schedule(cohort + '_quarterly', instance=instance)
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None):

@@ -284,7 +284,7 @@ class TestVisitScheduleSetup(TestCase):
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
     @tag('cvs1')
-    def test_cohort_c__sec_onschedule_valid(self):
+    def test_cohort_c_sec_onschedule_valid(self):
         self.maternal_subject_identifier = self.maternal_subject_identifier[:-1] + '3'
 
         self.maternal_dataset_options['protocol'] = 'Mashi'
@@ -332,7 +332,7 @@ class TestVisitScheduleSetup(TestCase):
         dummy_consent = ChildDummySubjectConsent.objects.get(
             identity=child_assent.identity)
 
-        self.assertEqual(OnScheduleChildCohortCEnrollment.objects.filter(
+        self.assertEqual(OnScheduleChildCohortCSec.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
             schedule_name='child_c_sec_schedule1').count(), 1)
 
