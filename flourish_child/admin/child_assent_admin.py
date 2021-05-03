@@ -66,8 +66,10 @@ class ChildAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
         'preg_testing': admin.VERTICAL,
         'specimen_consent': admin.VERTICAL, }
 
-    list_display = ('screening_identifier',
-                    'subject_identifier',
+    list_display = ('subject_identifier',
+                    'verified_by',
+                    'is_verified',
+                    'is_verified_datetime',
                     'first_name',
                     'initials',
                     'gender',
@@ -77,8 +79,12 @@ class ChildAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
                     'modified',
                     'user_created',
                     'user_modified')
-    list_filter = ('language',
-                   'is_literate',
+
+    list_filter = ('is_verified',
+                   'remain_in_study',
+                   'hiv_testing',
+                   'preg_testing',
+                   'gender',
                    'identity_type')
     search_fields = ('subject_identifier', 'dob',)
 
@@ -111,4 +117,4 @@ class ChildAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         return (super().get_readonly_fields(request, obj=obj)
-                + audit_fields)
+                +audit_fields)

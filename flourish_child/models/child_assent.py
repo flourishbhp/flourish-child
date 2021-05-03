@@ -8,7 +8,9 @@ from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_base.model_validators import datetime_not_future
 from edc_constants.constants import NOT_APPLICABLE
 from edc_consent.field_mixins import (
-    CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin)
+    CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin,
+    VerificationFieldsMixin)
+
 from edc_consent.field_mixins import IdentityFieldsMixin, PersonalFieldsMixin
 from edc_consent.validators import eligible_if_yes
 from edc_constants.choices import YES_NO, GENDER, YES_NO_NA
@@ -31,7 +33,7 @@ class ChildAssentManager(SearchSlugManager, models.Manager):
 class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                   IdentityFieldsMixin, PersonalFieldsMixin, ReviewFieldsMixin,
                   VulnerabilityFieldsMixin, CitizenFieldsMixin, SearchSlugModelMixin,
-                  BaseUuidModel):
+                  VerificationFieldsMixin, BaseUuidModel):
 
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
