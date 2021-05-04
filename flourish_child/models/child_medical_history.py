@@ -28,13 +28,6 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         blank=True,
         null=True)
 
-    who = models.ManyToManyField(
-        WcsDxAdult,
-        blank=True,
-        verbose_name='List any new WHO Stage III/IV diagnoses that are '
-        'not reported'
-    )
-
     """Quartely phone calls stem question"""
     med_history_changed = models.CharField(
         verbose_name='Has any of your following medical history changed?',

@@ -25,14 +25,13 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'chronic_since',
                 'child_chronic',
-                'child_chronic_other',
-                'who']}
+                'child_chronic_other']}
          ), audit_fieldset_tuple)
 
     radio_fields = {'chronic_since': admin.VERTICAL,
                     'med_history_changed': admin.VERTICAL}
 
-    filter_horizontal = ('child_chronic', 'who',)
+    filter_horizontal = ('child_chronic',)
 
     custom_form_labels = [
         FormLabel(
