@@ -3,7 +3,7 @@ from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 
-from .list_models import ChronicConditions, WcsDxAdult
+from .list_models import ChronicConditions
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
