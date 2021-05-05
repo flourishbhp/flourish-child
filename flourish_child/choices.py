@@ -279,6 +279,7 @@ INFO_PROVIDER = (
     ('FATHER', 'Father'),
     ('GRANDFATHER', 'Grandfather'),
     ('SIBLING', 'Sibling'),
+    ('self', 'Self'),
     (OTHER, 'Other'),
 )
 
