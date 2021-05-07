@@ -21,9 +21,19 @@ class ChildImmunizationHistoryForm(ChildModelFormMixin, forms.ModelForm):
         if rec_add_immunization:
             self.validate_add_immunization(rec_add_immunization, received_vaccine_name)
         else:
-            if not received_vaccine_name:
-                msg = 'Please complete the table for vaccines received.'
-                raise forms.ValidationError(msg)
+            vaccines_received = self.data.get(
+                'vaccinesreceived_set-0-received_vaccine_name')
+            if self.data.get('vaccines_received') == YES:
+                if not vaccines_received:
+                    msg = {'vaccines_received':
+                           'You mentioned that vaccines were received. Please '
+                           'indicate which ones on the Received Vaccines table.'}
+                    raise forms.ValidationError(msg)
+            else:
+                if vaccines_received:
+                    raise forms.ValidationError(
+                        'No vaccines received. Do not fill Received Vaccines '
+                        'table')
 
         missed_vaccine_name = self.data.get(
             'vaccinesmissed_set-0-missed_vaccine_name')

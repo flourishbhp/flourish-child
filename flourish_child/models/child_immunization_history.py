@@ -15,11 +15,15 @@ class ChildImmunizationHistory(ChildCrfModelMixin):
     """ A model completed by the user on the Infant/Child/Adolescent's
         immunization history. """
 
+    vaccines_received = models.CharField(
+        max_length=25,
+        choices=YES_NO_UNKNOWN,
+        verbose_name='Did this infant receive any vaccinations?')
+
     vaccines_missed = models.CharField(
         max_length=25,
         choices=YES_NO_UNKNOWN,
-        verbose_name='Is the infant/child/adolescent missing any vaccinations?',
-        help_text='')
+        verbose_name='Is the infant/child/adolescent missing any vaccinations?')
 
     """Quartely Phone call stem question"""
     rec_add_immunization = models.CharField(
