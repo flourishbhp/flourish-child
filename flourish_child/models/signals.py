@@ -11,6 +11,7 @@ from flourish_prn.models import ChildOffStudy
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_assent import ChildAssent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
+from .child_preg_testing import ChildPregTesting
 
 
 class CaregiverConsentError(Exception):
@@ -81,6 +82,17 @@ def child_rapid_test_on_post_save(sender, instance, raw, created, **kwargs):
     """Take the participant offstudy if HIV result is positive.
     """
     trigger_action_item(instance, 'result', POS,
+                        ChildOffStudy, CHILDOFF_STUDY_ACTION,
+                        instance.child_visit.appointment.subject_identifier,
+                        repeat=True)
+
+
+@receiver(post_save, weak=False, sender=ChildPregTesting,
+          dispatch_uid='child_preg_testing_on_post_save')
+def child_preg_testing_on_post_save(sender, instance, raw, created, **kwargs):
+    """Take the participant offstudy if pregnancy test result is positive.
+    """
+    trigger_action_item(instance, 'preg_test_result', POS,
                         ChildOffStudy, CHILDOFF_STUDY_ACTION,
                         instance.child_visit.appointment.subject_identifier,
                         repeat=True)
