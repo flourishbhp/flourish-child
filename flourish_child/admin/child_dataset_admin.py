@@ -20,6 +20,8 @@ class ChildDatasetAdmin(ModelAdminSiteMixin, admin.ModelAdmin):
                 'first_name',
                 'last_name',
                 'dob',
+                'age_today',
+                'age_calculation_date',
                 'infant_enrolldate',
                 'infant_randdt',
                 'infant_sex',
