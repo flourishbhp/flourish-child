@@ -31,7 +31,8 @@ class ChildDataset(
         blank=True, null=True)
 
     age_calculation_date = models.DateField(
-        verbose_name='Age calculation date')
+        verbose_name='Age calculation date',
+        blank=True, null=True)
 
     infant_enrolldate = models.DateField(
         verbose_name='Infant enrollment date')
