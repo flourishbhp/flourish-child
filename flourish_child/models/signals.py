@@ -12,6 +12,7 @@ from .child_dummy_consent import ChildDummySubjectConsent
 from .child_assent import ChildAssent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
+from .child_continued_consent import ChildContinuedConsent
 
 
 class CaregiverConsentError(Exception):
@@ -95,6 +96,17 @@ def child_preg_testing_on_post_save(sender, instance, raw, created, **kwargs):
     trigger_action_item(instance, 'preg_test_result', POS,
                         ChildOffStudy, CHILDOFF_STUDY_ACTION,
                         instance.child_visit.appointment.subject_identifier,
+                        repeat=True)
+
+
+@receiver(post_save, weak=False, sender=ChildContinuedConsent,
+          dispatch_uid='child_continued_consent_on_post_save')
+def child_continued_consent_on_post_save(sender, instance, raw, created, **kwargs):
+    """Take the participant offstudy if child ineligible on continued consent.
+    """
+    trigger_action_item(instance, 'is_eligible', False,
+                        ChildOffStudy, CHILDOFF_STUDY_ACTION,
+                        instance.subject_identifier,
                         repeat=True)
 
 
