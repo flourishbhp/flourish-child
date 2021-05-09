@@ -338,6 +338,8 @@ MARKS = (
     ('c', 'C'),
     ('d', 'D'),
     ('e', 'E'),
+    ('f', 'F'),
+    ('g', 'G'),
     ('u', 'U'),
     ('not_taking_subject', 'Not taking subject')
 )
