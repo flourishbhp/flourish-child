@@ -69,7 +69,17 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ]
 
     conditional_fieldlists = {
+        'child_a_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_a_sec_schedule1': Remove('vaccines_received'),
+        'child_a_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_a_quart_schedule1': Remove('vaccines_received'),
         'child_b_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
         'child_b_quart_schedule1': Remove('vaccines_received'),
+        'child_b_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_b_sec_schedule1': Remove('vaccines_received'),
+        'child_c_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_c_sec_schedule1': Remove('vaccines_received'),
         'child_c_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_c_quart_schedule1': Remove('vaccines_received'),}
+        'child_c_quart_schedule1': Remove('vaccines_received'),
+        'child_pool_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_pool_schedule1': Remove('vaccines_received'), }
