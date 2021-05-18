@@ -54,6 +54,8 @@ class ChildTannerStaging(ChildCrfModelMixin):
     menarche_dt_est = models.CharField(
         verbose_name='Is this date estimated',
         max_length=15,
+        blank=True,
+        null=True,
         choices=YES_NO_NA,
         default=NOT_APPLICABLE)
 

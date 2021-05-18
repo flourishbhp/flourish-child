@@ -49,3 +49,8 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'child_c_sec_schedule1': Insert('med_history_changed', after='report_datetime'),
         'child_c_quart_schedule1': Insert('med_history_changed', after='report_datetime'),
         'child_pool_schedule1': Insert('med_history_changed', after='report_datetime'), }
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        form = super().get_form(request, *args, **kwargs)
+        form.previous_instance = self.get_previous_instance(request)
+        return form
