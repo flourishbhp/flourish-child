@@ -61,6 +61,7 @@ class ChildVisitAdmin(
                 'reason_missed',
                 'reason_unscheduled',
                 'information_provider',
+                'information_provider_other',
                 'study_status',
                 'info_source',
                 'info_source_other',

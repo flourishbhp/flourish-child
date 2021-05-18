@@ -99,8 +99,13 @@ class AcademicPerformance(ChildCrfModelMixin):
         max_length=20,
         choices=OVERALL_MARKS)
 
+    grade_points = models.PositiveIntegerField(
+        verbose_name='Overall grade points',
+        blank=True,
+        null=True)
+
     num_days = models.CharField(
-        verbose_name='How many days a week do you attend in-peron classes?',
+        verbose_name='How many days a week do you attend in-person classes?',
         max_length=10,
         choices=NUMBER_OF_DAYS)
 

@@ -17,8 +17,12 @@ class ChildPregTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'fields': [
                 'child_visit',
                 'report_datetime',
+                'test_done',
+                'test_date',
                 'preg_test_result',
+                'comments'
             ]}
          ), audit_fieldset_tuple)
 
-    radio_fields = {'preg_test_result': admin.VERTICAL}
+    radio_fields = {'test_done': admin.VERTICAL,
+                    'preg_test_result': admin.VERTICAL}

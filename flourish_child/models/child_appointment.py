@@ -6,9 +6,15 @@ from edc_appointment.model_mixins import AppointmentModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import CurrentSiteManager, SiteModelMixin
+from edc_protocol.validators import datetime_not_before_study_start
 
 
 class Appointment(AppointmentModelMixin, SiteModelMixin, BaseUuidModel):
+
+    appt_datetime = models.DateTimeField(
+        verbose_name=('Appointment date and time'),
+        validators=[datetime_not_before_study_start],
+        db_index=True)
 
     site = models.ForeignKey(
         Site, on_delete=models.PROTECT, null=True, editable=False,

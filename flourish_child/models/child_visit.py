@@ -3,6 +3,7 @@ from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import CurrentSiteManager as BaseCurrentSiteManager
 from edc_base.sites.site_model_mixin import SiteModelMixin
+from edc_base.model_fields.custom_fields import OtherCharField
 from edc_consent.model_mixins import RequiresConsentFieldsModelMixin
 from edc_constants.constants import ALIVE
 from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
@@ -10,6 +11,7 @@ from edc_reference.model_mixins import ReferenceModelMixin
 from edc_visit_tracking.constants import MISSED_VISIT
 from edc_visit_tracking.managers import VisitModelManager
 from edc_visit_tracking.model_mixins import VisitModelMixin, CaretakerFieldsMixin
+
 from .child_appointment import Appointment
 from ..choices import ALIVE_DEAD_UNKNOWN, VISIT_INFO_SOURCE
 from ..choices import VISIT_STUDY_STATUS, VISIT_REASON, INFO_PROVIDER
@@ -46,6 +48,12 @@ class ChildVisit(
             'Please indicate who provided most of the information for this child\'s visit'),
         max_length=20,
         choices=INFO_PROVIDER)
+
+    information_provider_other = OtherCharField(
+        verbose_name='If Other, specify',
+        max_length=25,
+        blank=True,
+        null=True)
 
     reason_unscheduled = models.CharField(
         verbose_name=(

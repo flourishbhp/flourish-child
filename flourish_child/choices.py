@@ -338,6 +338,8 @@ MARKS = (
     ('c', 'C'),
     ('d', 'D'),
     ('e', 'E'),
+    ('f', 'F'),
+    ('g', 'G'),
     ('u', 'U'),
     ('not_taking_subject', 'Not taking subject')
 )
@@ -446,7 +448,10 @@ OVERALL_MARKS = (
     ('c', 'C'),
     ('d', 'D'),
     ('e', 'E'),
-    ('u', 'U')
+    ('f', 'F'),
+    ('g', 'G'),
+    ('u', 'U'),
+    ('points', 'Points')
 )
 
 PHYS_ACTIVITY_TIME = (
