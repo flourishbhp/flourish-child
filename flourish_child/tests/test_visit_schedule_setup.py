@@ -106,7 +106,7 @@ class TestVisitScheduleSetup(TestCase):
             identity=caregiver_child_consent.identity).count(), 1)
 
         dummy_consent = ChildDummySubjectConsent.objects.get(
-            identity=caregiver_child_consent.identity)
+            subject_identifier=caregiver_child_consent.subject_identifier)
 
         self.assertEqual(OnScheduleChildCohortAEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -155,7 +155,7 @@ class TestVisitScheduleSetup(TestCase):
             child_dob=(get_utcnow() - relativedelta(years=5, months=2)).date(),)
 
         dummy_consent = ChildDummySubjectConsent.objects.get(
-            identity=caregiver_child_consent.identity)
+            subject_identifier=caregiver_child_consent.subject_identifier)
 
         self.assertEqual(OnScheduleChildCohortBEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -211,7 +211,7 @@ class TestVisitScheduleSetup(TestCase):
             version=subject_consent.version)
 
         dummy_consent = ChildDummySubjectConsent.objects.get(
-            identity=child_assent.identity)
+            subject_identifier=child_assent.subject_identifier)
 
         self.assertEqual(OnScheduleChildCohortBEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -270,7 +270,7 @@ class TestVisitScheduleSetup(TestCase):
             version=subject_consent.version)
 
         dummy_consent = ChildDummySubjectConsent.objects.get(
-            identity=child_assent.identity)
+            subject_identifier=child_assent.subject_identifier)
 
         self.assertEqual(OnScheduleChildCohortCEnrollment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -330,7 +330,7 @@ class TestVisitScheduleSetup(TestCase):
             version=subject_consent.version)
 
         dummy_consent = ChildDummySubjectConsent.objects.get(
-            identity=child_assent.identity)
+            subject_identifier=child_assent.subject_identifier)
 
         self.assertEqual(OnScheduleChildCohortCSec.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
@@ -408,10 +408,10 @@ class TestVisitScheduleSetup(TestCase):
             version=subject_consent.version)
 
         dummy_consent1 = ChildDummySubjectConsent.objects.get(
-            identity=child_assent1.identity)
+            subject_identifier=child_assent1.subject_identifier)
 
         dummy_consent2 = ChildDummySubjectConsent.objects.get(
-            identity=child_assent2.identity)
+            subject_identifier=child_assent2.subject_identifier)
 
         self.assertEqual(OnScheduleChildCohortCEnrollment.objects.filter(
             subject_identifier=dummy_consent1.subject_identifier,

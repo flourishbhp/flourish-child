@@ -1,6 +1,6 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
-from edc_constants.choices import YES_NO_NA
+from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 
 from .list_models import ChronicConditions
@@ -13,7 +13,7 @@ class ChildMedicalHistory(ChildCrfModelMixin):
 
     chronic_since = models.CharField(
         max_length=25,
-        choices=YES_NO_NA,
+        choices=YES_NO,
         verbose_name='Does the Child/Adolescent have any chronic conditions?',)
 
     child_chronic = models.ManyToManyField(

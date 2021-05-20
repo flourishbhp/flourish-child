@@ -1,6 +1,7 @@
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.db import models
+from django_crypto_fields.fields import IdentityField
 
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
@@ -56,10 +57,22 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         choices=GENDER,
         max_length=1,)
 
+    identity = IdentityField(
+        verbose_name='Identity number',
+        null=True,
+        blank=True)
+
     identity_type = models.CharField(
         verbose_name='What type of identity number is this?',
         max_length=25,
-        choices=IDENTITY_TYPE)
+        choices=IDENTITY_TYPE,
+        null=True,
+        blank=True)
+
+    confirm_identity = IdentityField(
+        help_text='Retype the identity number',
+        null=True,
+        blank=True)
 
     remain_in_study = models.CharField(
         max_length=3,
