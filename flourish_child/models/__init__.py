@@ -35,11 +35,12 @@ from .infant_congenital_anomalies import InfantMusculoskeletal, InfantSkin
 from .infant_congenital_anomalies import InfantOtherAbnormalityItems, InfantMaleGenital
 from .infant_congenital_anomalies import InfantRespiratoryDefect, InfantLowerGi
 from .infant_feeding import InfantFeeding
-from .onschedule import OnScheduleChildCohortAInPerson, OnScheduleChildCohortABirth
-from .onschedule import OnScheduleChildCohortAQuarterly, OnScheduleChildCohortBInPerson
-from .onschedule import OnScheduleChildCohortBQuarterly, OnScheduleChildCohortCInPerson
+from .onschedule import OnScheduleChildCohortAEnrollment, OnScheduleChildCohortABirth
+from .onschedule import OnScheduleChildCohortAQuarterly, OnScheduleChildCohortBEnrollment
+from .onschedule import OnScheduleChildCohortBQuarterly, OnScheduleChildCohortCEnrollment
 from .onschedule import OnScheduleChildCohortCQuarterly, OnScheduleChildCohortCPool
 from .onschedule import OnScheduleChildCohortASec, OnScheduleChildCohortBSec
-from .onschedule import OnScheduleChildCohortCSec
+from .onschedule import OnScheduleChildCohortCSec, OnScheduleChildCohortAFU
+from .onschedule import OnScheduleChildCohortBFU, OnScheduleChildCohortCFU
 from .signals import child_consent_on_post_save
 from .offschedule import ChildOffSchedule

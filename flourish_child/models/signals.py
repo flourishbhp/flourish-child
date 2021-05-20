@@ -128,9 +128,7 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
         cohort_label_lower = ''.join(cohort.split('_'))
 
         if 'enrol' in cohort:
-            cohort_label_lower = cohort_label_lower.replace('enrol', 'inperson')
-        elif 'fu' in cohort:
-            cohort_label_lower = cohort_label_lower.replace('fu', 'inperson')
+            cohort_label_lower = cohort_label_lower.replace('enrol', 'enrollment')
         elif 'quart' in cohort:
             cohort_label_lower = cohort_label_lower.replace('quart', 'quarterly')
 
