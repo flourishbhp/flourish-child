@@ -20,6 +20,7 @@ from .child_gad_referral_form import ChildGadReferralForm
 from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
+from .offschedule_form import ChildOffScheduleForm
 from .child_phq_depression_screening_form import ChildPhqDepressionScreeningForm
 from .child_phq_referral_form import ChildPhqReferralForm
 from .child_physical_activity_form import ChildPhysicalActivityForm
