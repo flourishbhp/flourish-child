@@ -117,10 +117,13 @@ def put_cohort_onschedule(cohort, instance):
     else:
         put_on_schedule(cohort + '_enrol', instance=instance)
         put_on_schedule(cohort + '_quart', instance=instance)
-        put_on_schedule(cohort + '_fu', instance=instance)
+        put_on_schedule(cohort + '_fu', instance=instance,
+                        base_appt_datetime=django_apps.get_app_config(
+                            'edc_protocol').study_open_datetime)
 
 
-def put_on_schedule(cohort, instance=None, subject_identifier=None):
+def put_on_schedule(cohort, instance=None, subject_identifier=None,
+                    base_appt_datetime=None):
     if instance:
         instance.registration_update_or_create()
         subject_identifier = subject_identifier or instance.subject_identifier
@@ -152,7 +155,8 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
             schedule.put_on_schedule(
                 subject_identifier=instance.subject_identifier,
                 onschedule_datetime=instance.created,
-                schedule_name=schedule_name)
+                schedule_name=schedule_name,
+                base_appt_datetime=base_appt_datetime)
         else:
             schedule.refresh_schedule(
                 subject_identifier=instance.subject_identifier)
