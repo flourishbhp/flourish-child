@@ -116,10 +116,10 @@ def put_cohort_onschedule(cohort, instance):
         put_on_schedule(cohort, instance=instance)
     else:
         put_on_schedule(cohort + '_enrol', instance=instance)
-        put_on_schedule(cohort + '_quart', instance=instance)
-        put_on_schedule(cohort + '_fu', instance=instance,
-                        base_appt_datetime=django_apps.get_app_config(
-                            'edc_protocol').study_open_datetime)
+        # put_on_schedule(cohort + '_quart', instance=instance)
+        # put_on_schedule(cohort + '_fu', instance=instance,
+                        # base_appt_datetime=django_apps.get_app_config(
+                            # 'edc_protocol').study_open_datetime)
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None,
