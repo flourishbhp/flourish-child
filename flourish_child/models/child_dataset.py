@@ -25,6 +25,15 @@ class ChildDataset(
 
     dob = models.DateField(null=True, blank=True)
 
+    age_today = models.DecimalField(
+        verbose_name='Age today',
+        decimal_places=2, max_digits=10,
+        blank=True, null=True)
+
+    age_calculation_date = models.DateField(
+        verbose_name='Age calculation date',
+        blank=True, null=True)
+
     infant_enrolldate = models.DateField(
         verbose_name='Infant enrollment date')
 

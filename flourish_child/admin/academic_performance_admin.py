@@ -22,6 +22,7 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'education_level',
                 'overall_performance',
+                'grade_points',
                 'num_days')}
          ), audit_fieldset_tuple)
 
@@ -58,7 +59,6 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                          'agriculture_marks',
                          after='education_level'),
         'senior': Insert('mathematics_marks',
-                         'science_marks',
                          'setswana_marks',
                          'single_scie_marks',
                          'biology_marks',

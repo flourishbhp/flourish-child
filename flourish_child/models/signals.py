@@ -11,6 +11,8 @@ from flourish_prn.models import ChildOffStudy
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_assent import ChildAssent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
+from .child_preg_testing import ChildPregTesting
+from .child_continued_consent import ChildContinuedConsent
 
 
 class CaregiverConsentError(Exception):
@@ -29,7 +31,7 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                 'flourish_caregiver.caregiverchildconsent')
             try:
                 caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
-                    identity=instance.identity,
+                    subject_identifier=instance.subject_identifier,
                     subject_consent__version=instance.version)
             except caregiver_child_consent_cls.DoesNotExist:
                 raise CaregiverConsentError('Associated caregiver consent on behalf of child '
@@ -72,12 +74,7 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
         else:
             put_on_schedule((instance.cohort + '_birth'), instance=instance)
 
-        if 'pool' not in instance.cohort:
-
-            put_on_schedule((instance.cohort + '_enrol'), instance=instance)
-            put_on_schedule((instance.cohort + '_quart'), instance=instance)
-        else:
-            put_on_schedule(instance.cohort, instance=instance)
+        put_cohort_onschedule(instance.cohort, instance=instance)
 
 
 @receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
@@ -91,7 +88,42 @@ def child_rapid_test_on_post_save(sender, instance, raw, created, **kwargs):
                         repeat=True)
 
 
-def put_on_schedule(cohort, instance=None, subject_identifier=None):
+@receiver(post_save, weak=False, sender=ChildPregTesting,
+          dispatch_uid='child_preg_testing_on_post_save')
+def child_preg_testing_on_post_save(sender, instance, raw, created, **kwargs):
+    """Take the participant offstudy if pregnancy test result is positive.
+    """
+    trigger_action_item(instance, 'preg_test_result', POS,
+                        ChildOffStudy, CHILDOFF_STUDY_ACTION,
+                        instance.child_visit.appointment.subject_identifier,
+                        repeat=True)
+
+
+@receiver(post_save, weak=False, sender=ChildContinuedConsent,
+          dispatch_uid='child_continued_consent_on_post_save')
+def child_continued_consent_on_post_save(sender, instance, raw, created, **kwargs):
+    """Take the participant offstudy if child ineligible on continued consent.
+    """
+    trigger_action_item(instance, 'is_eligible', False,
+                        ChildOffStudy, CHILDOFF_STUDY_ACTION,
+                        instance.subject_identifier,
+                        repeat=True)
+
+
+def put_cohort_onschedule(cohort, instance):
+
+    if cohort is not None and 'sec' in cohort or 'pool' in cohort:
+        put_on_schedule(cohort, instance=instance)
+    else:
+        put_on_schedule(cohort + '_enrol', instance=instance)
+        # put_on_schedule(cohort + '_quart', instance=instance)
+        # put_on_schedule(cohort + '_fu', instance=instance,
+                        # base_appt_datetime=django_apps.get_app_config(
+                            # 'edc_protocol').study_open_datetime)
+
+
+def put_on_schedule(cohort, instance=None, subject_identifier=None,
+                    base_appt_datetime=None):
     if instance:
         instance.registration_update_or_create()
         subject_identifier = subject_identifier or instance.subject_identifier
@@ -123,7 +155,8 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None):
             schedule.put_on_schedule(
                 subject_identifier=instance.subject_identifier,
                 onschedule_datetime=instance.created,
-                schedule_name=schedule_name)
+                schedule_name=schedule_name,
+                base_appt_datetime=base_appt_datetime)
         else:
             schedule.refresh_schedule(
                 subject_identifier=instance.subject_identifier)

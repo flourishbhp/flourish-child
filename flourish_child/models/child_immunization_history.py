@@ -2,8 +2,7 @@ from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import date_not_future
-from edc_constants.choices import YES_NO_NA
-from edc_constants.constants import NOT_APPLICABLE
+from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from .child_crf_model_mixin import ChildCrfModelMixin
@@ -15,19 +14,23 @@ class ChildImmunizationHistory(ChildCrfModelMixin):
     """ A model completed by the user on the Infant/Child/Adolescent's
         immunization history. """
 
+    vaccines_received = models.CharField(
+        max_length=25,
+        choices=YES_NO_UNKNOWN,
+        verbose_name='Did this infant receive any vaccinations?')
+
     vaccines_missed = models.CharField(
         max_length=25,
         choices=YES_NO_UNKNOWN,
-        verbose_name='Is the infant/child/adolescent missing any vaccinations?',
-        help_text='')
+        verbose_name='Is the infant/child/adolescent missing any vaccinations?')
 
     """Quartely Phone call stem question"""
     rec_add_immunization = models.CharField(
         verbose_name=('Since the last scheduled visit, have you received any '
                       'additional immunizations?'),
-        choices=YES_NO_NA,
+        choices=YES_NO,
         max_length=20,
-        default=NOT_APPLICABLE)
+        null=True)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'

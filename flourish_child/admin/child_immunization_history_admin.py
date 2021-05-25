@@ -1,5 +1,5 @@
 from django.contrib import admin
-from edc_fieldsets.fieldlist import Insert
+from edc_fieldsets.fieldlist import Insert, Remove
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
 
@@ -50,12 +50,14 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'fields': (
                 'child_visit',
                 'report_datetime',
+                'vaccines_received',
                 'vaccines_missed',)
         }),
     )
 
     inlines = [VaccinesReceivedInlineAdmin, VaccinesMissedInlineAdmin, ]
-    radio_fields = {'vaccines_missed': admin.VERTICAL,
+    radio_fields = {'vaccines_received': admin.VERTICAL,
+                    'vaccines_missed': admin.VERTICAL,
                     'rec_add_immunization': admin.VERTICAL}
 
     custom_form_labels = [
@@ -67,5 +69,17 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ]
 
     conditional_fieldlists = {
+        'child_a_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_a_sec_schedule1': Remove('vaccines_received'),
+        'child_a_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_a_quart_schedule1': Remove('vaccines_received'),
         'child_b_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_c_quart_schedule1': Insert('rec_add_immunization', after='report_datetime')}
+        'child_b_quart_schedule1': Remove('vaccines_received'),
+        'child_b_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_b_sec_schedule1': Remove('vaccines_received'),
+        'child_c_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_c_sec_schedule1': Remove('vaccines_received'),
+        'child_c_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_c_quart_schedule1': Remove('vaccines_received'),
+        'child_pool_schedule1': Insert('rec_add_immunization', after='report_datetime'),
+        'child_pool_schedule1': Remove('vaccines_received'), }

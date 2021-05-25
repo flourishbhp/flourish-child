@@ -19,6 +19,13 @@ class ChildAssentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
         widget=forms.TextInput(attrs={'readonly': 'readonly'}),
         required=False)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        if instance and instance.id:
+            for key in self.fields.keys():
+                self.fields[key].disabled = True
+
     class Meta:
         model = ChildAssent
         fields = '__all__'

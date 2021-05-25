@@ -1,7 +1,8 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from edc_base.model_fields import OtherCharField
-from edc_constants.choices import YES_NO
+from edc_constants.choices import YES_NO, YES_NO_NA
+from edc_constants.constants import NOT_APPLICABLE
 
 from ..choices import (
     WATER_SOURCE, COOKING_METHOD, TOILET_FACILITY, HOUSE_TYPE,
@@ -104,7 +105,7 @@ class ChildSocioDemographic(ChildCrfModelMixin):
         verbose_name='What level/class of school is the child currently in?',
         max_length=20,
         choices=HIGHEST_EDUCATION,
-        blank=True, null=True)
+        default='no_schooling')
 
     education_level_other = OtherCharField(
         verbose_name='Specify other',
@@ -116,9 +117,8 @@ class ChildSocioDemographic(ChildCrfModelMixin):
         verbose_name='Is this adolescent currently working in return '
                      'for cash?',
         max_length=7,
-        choices=YES_NO,
-        blank=True,
-        null=True,)
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'

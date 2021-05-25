@@ -98,7 +98,10 @@ COHORTS = (
     ('cohort_a', 'Cohort A'),
     ('cohort_b', 'Cohort B'),
     ('cohort_c', 'Cohort C'),
-    ('cohort_pool', 'Cohort Pool'),)
+    ('cohort_a_sec', 'Cohort A Secondary Aims'),
+    ('cohort_b_sec', 'Cohort B Secondary Aims'),
+    ('cohort_c_sec', 'Cohort C Secondary Aims'),
+    ('cohort_pool', 'Cohort Pool Secondary Aims'),)
 
 COWS_MILK = (
     ('boiled', '1. Boiled from cow'),
@@ -276,6 +279,7 @@ INFO_PROVIDER = (
     ('FATHER', 'Father'),
     ('GRANDFATHER', 'Grandfather'),
     ('SIBLING', 'Sibling'),
+    ('self', 'Self'),
     (OTHER, 'Other'),
 )
 
@@ -334,6 +338,8 @@ MARKS = (
     ('c', 'C'),
     ('d', 'D'),
     ('e', 'E'),
+    ('f', 'F'),
+    ('g', 'G'),
     ('u', 'U'),
     ('not_taking_subject', 'Not taking subject')
 )
@@ -442,7 +448,10 @@ OVERALL_MARKS = (
     ('c', 'C'),
     ('d', 'D'),
     ('e', 'E'),
-    ('u', 'U')
+    ('f', 'F'),
+    ('g', 'G'),
+    ('u', 'U'),
+    ('points', 'Points')
 )
 
 PHYS_ACTIVITY_TIME = (

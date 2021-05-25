@@ -25,14 +25,13 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'chronic_since',
                 'child_chronic',
-                'child_chronic_other',
-                'who']}
+                'child_chronic_other']}
          ), audit_fieldset_tuple)
 
     radio_fields = {'chronic_since': admin.VERTICAL,
                     'med_history_changed': admin.VERTICAL}
 
-    filter_horizontal = ('child_chronic', 'who',)
+    filter_horizontal = ('child_chronic',)
 
     custom_form_labels = [
         FormLabel(
@@ -43,5 +42,15 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ]
 
     conditional_fieldlists = {
+        'child_a_sec_schedule1': Insert('med_history_changed', after='report_datetime'),
+        'child_a_quart_schedule1': Insert('med_history_changed', after='report_datetime'),
+        'child_b_sec_schedule1': Insert('med_history_changed', after='report_datetime'),
         'child_b_quart_schedule1': Insert('med_history_changed', after='report_datetime'),
-        'child_c_quart_schedule1': Insert('med_history_changed', after='report_datetime')}
+        'child_c_sec_schedule1': Insert('med_history_changed', after='report_datetime'),
+        'child_c_quart_schedule1': Insert('med_history_changed', after='report_datetime'),
+        'child_pool_schedule1': Insert('med_history_changed', after='report_datetime'), }
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        form = super().get_form(request, *args, **kwargs)
+        form.previous_instance = self.get_previous_instance(request)
+        return form
