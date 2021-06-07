@@ -6,6 +6,7 @@ from .child_appointment import Appointment
 from .child_assent import ChildAssent
 from .child_birth_weight_length_screening import ChildBirthScreening
 from .child_clinical_measurements import ChildClinicalMeasurements
+from .child_clinician_notes import ChildClinicianNotes, ClinicianNotesImage
 from .child_continued_consent import ChildContinuedConsent
 from .child_dataset import ChildDataset
 from .child_dummy_consent import ChildDummySubjectConsent

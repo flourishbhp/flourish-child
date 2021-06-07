@@ -11,3 +11,8 @@ class ChildModelFormMixin(
         FormValidatorMixin, forms.ModelForm):
 
     visit_model = ChildVisit
+
+
+class InlineChildModelFormMixin(FormValidatorMixin, forms.ModelForm):
+
+    visit_model = ChildVisit
