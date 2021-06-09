@@ -52,15 +52,43 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
-    date_given = models.DateField(
-        verbose_name="Date Given",
+    first_dose_dt = models.DateField(
+        verbose_name="1st Dose Date Given",
         validators=[
             date_not_future, ],
         null=True,
         blank=True)
 
-    child_age = models.CharField(
-        verbose_name="Infant/Child/Adolescent age when vaccine given",
+    first_dose_age = models.CharField(
+        verbose_name="Infant/Child/Adolescent age when 1st dose given",
+        choices=CHILD_AGE_VACCINE_GIVEN,
+        null=True,
+        blank=True,
+        max_length=35)
+
+    second_dose_dt = models.DateField(
+        verbose_name='2nd dose date given',
+        validators=[
+            date_not_future, ],
+        null=True,
+        blank=True)
+
+    second_dose_age = models.CharField(
+        verbose_name='Infant/Child/Adolescent age when 2nd dose given',
+        choices=CHILD_AGE_VACCINE_GIVEN,
+        null=True,
+        blank=True,
+        max_length=35)
+
+    third_dose_dt = models.DateField(
+        verbose_name="3rd Dose Date Given",
+        validators=[
+            date_not_future, ],
+        null=True,
+        blank=True)
+
+    third_dose_age = models.CharField(
+        verbose_name='Infant/Child/Adolescent age when 3rd dose given',
         choices=CHILD_AGE_VACCINE_GIVEN,
         null=True,
         blank=True,
@@ -74,7 +102,10 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
         verbose_name = 'Received Vaccines'
         verbose_name_plural = 'Received Vaccines'
         unique_together = (
-            'received_vaccine_name', 'child_immunization_history', 'child_age')
+            ('received_vaccine_name', 'child_immunization_history'),
+            ('received_vaccine_name', 'child_immunization_history', 'first_dose_dt'),
+            ('received_vaccine_name', 'child_immunization_history', 'second_dose_dt'),
+            ('received_vaccine_name', 'child_immunization_history', 'third_dose_dt'))
 
 
 class VaccinesMissed(CrfInlineModelMixin, BaseUuidModel):

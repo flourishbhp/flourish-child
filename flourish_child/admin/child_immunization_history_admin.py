@@ -19,9 +19,13 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
         (None, {
             'fields': (
                 'received_vaccine_name',
-                'date_given',
-                'child_age')
-        }), audit_fieldset_tuple
+                'first_dose_dt',
+                'first_dose_age',
+                'second_dose_dt',
+                'second_dose_age',
+                'third_dose_dt',
+                'third_dose_age')
+        }),
     )
 
 
