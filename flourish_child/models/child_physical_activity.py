@@ -10,8 +10,11 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
 
     vig_activity_days = models.CharField(
         verbose_name=('During the last 7 days, on how many days did you do '
-                      'vigorous physical activities like heavy lifting, '
-                      'digging, aerobics, or fast bicycling?'),
+                      'vigorous physical activities like heavy lifting(carrying'
+                      ' firewood, large buckets of water), digging, chopping '
+                      'firewood, fast bicycling, sports(football, trackfield, etc'
+                      ' ), or other activities where you are breathing hard '
+                      'and exerting yourself?'),
         choices=VIGOROUS_ACTIVITY_DAYS,
         max_length=15)
 
@@ -38,7 +41,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
 
     specify_vig_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(1), MaxValueValidator(1440), ],
+        validators=[MinValueValidator(10), MaxValueValidator(60), ],
         help_text='minutes',
         blank=True,
         null=True)
@@ -46,8 +49,8 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
     mod_activity_days = models.CharField(
         verbose_name=('During the last 7 days, on how many days did you do '
                       'moderate physical activities like carrying light loads,'
-                      'bicycling at a regular pace, or doubles tennis? Do not '
-                      'include walking.'),
+                      'bicycling at a regular/leisurely pace, or sports such as'
+                      ' doubles tennis, badminton or shotput? Do not include walking.'),
         choices=MODERATE_ACTIVITY_DAYS,
         max_length=15)
 
@@ -74,7 +77,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
 
     specify_mod_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(1), MaxValueValidator(1440), ],
+        validators=[MinValueValidator(10), MaxValueValidator(60), ],
         help_text='minutes',
         blank=True,
         null=True)
@@ -108,14 +111,14 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
 
     specify_walk_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(1), MaxValueValidator(1440), ],
+        validators=[MinValueValidator(10), MaxValueValidator(60), ],
         help_text='minutes',
         blank=True,
         null=True)
 
     sitting_time = models.CharField(
         verbose_name=('During the last 7days, how much time did you spend '
-                      'sitting on a weekday?'),
+                      'sitting on a week day?'),
         choices=PHYS_ACTIVITY_TIME,
         max_length=16,)
 
@@ -128,7 +131,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
 
     specify_sit_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(1), MaxValueValidator(1440), ],
+        validators=[MinValueValidator(1), MaxValueValidator(60), ],
         help_text='minutes',
         blank=True,
         null=True)
