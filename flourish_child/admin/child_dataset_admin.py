@@ -86,16 +86,22 @@ class ChildDatasetAdmin(ModelAdminSiteMixin, admin.ModelAdmin):
             ]}
          ), audit_fieldset_tuple)
 
+    def formatted_dob(self, obj):
+        return obj.dob.strftime("%Y-%m-%d ")
+
     list_display = ('study_child_identifier',
                     'subject_identifier',
-                    'infant_enrolldate',
+                    'study_maternal_identifier',
                     'infant_sex',
                     'infant_hiv_exposed',
                     'infant_hiv_status',
-                    'infant_offstudydate',
-                    'infant_offstudy_reason')
+                    'formatted_dob',
+                    'age_today')
 
-    search_fields = ['subject_identifier', 'study_child_identifier']
+    list_filter = ('infant_sex',)
+
+    search_fields = ['subject_identifier', 'study_child_identifier',
+                     'study_maternal_identifier', 'infant_sex', 'dob', 'age_today']
 
     def has_delete_permission(self, request, obj=None):
         return False
