@@ -6,7 +6,7 @@ from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import YES_NO_UNKNOWN, IMMUNIZATIONS, CHILD_AGE_VACCINE_GIVEN
+from ..choices import YES_NO_UNKNOWN, IMMUNIZATIONS
 from ..choices import REASONS_VACCINES_MISSED
 
 
@@ -59,13 +59,6 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
-    first_dose_age = models.CharField(
-        verbose_name="Infant/Child/Adolescent age when 1st dose given",
-        choices=CHILD_AGE_VACCINE_GIVEN,
-        null=True,
-        blank=True,
-        max_length=35)
-
     second_dose_dt = models.DateField(
         verbose_name='2nd dose date given',
         validators=[
@@ -73,26 +66,12 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
-    second_dose_age = models.CharField(
-        verbose_name='Infant/Child/Adolescent age when 2nd dose given',
-        choices=CHILD_AGE_VACCINE_GIVEN,
-        null=True,
-        blank=True,
-        max_length=35)
-
     third_dose_dt = models.DateField(
         verbose_name="3rd Dose Date Given",
         validators=[
             date_not_future, ],
         null=True,
         blank=True)
-
-    third_dose_age = models.CharField(
-        verbose_name='Infant/Child/Adolescent age when 3rd dose given',
-        choices=CHILD_AGE_VACCINE_GIVEN,
-        null=True,
-        blank=True,
-        max_length=35)
 
     def natural_key(self):
         return (self.received_vaccine_name,) + self.child_immunization_history.natural_key()

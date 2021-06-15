@@ -93,10 +93,6 @@ class VaccinesReceivedForm(ChildModelFormMixin, forms.ModelForm):
         model = VaccinesReceived
         fields = '__all__'
 
-        widgets = {
-            'received_vaccine_name': forms.Select(attrs={'style': 'width:160px'})
-            }
-
 
 class VaccinesMissedForm(ChildModelFormMixin, forms.ModelForm):
 
