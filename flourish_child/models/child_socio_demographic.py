@@ -7,7 +7,7 @@ from edc_constants.constants import NOT_APPLICABLE
 from ..choices import (
     WATER_SOURCE, COOKING_METHOD, TOILET_FACILITY, HOUSE_TYPE,
     HIGHEST_EDUCATION)
-from ..choices import ETHNICITY
+from ..choices import ETHNICITY, SCHOOL_TYPE
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 
@@ -112,6 +112,12 @@ class ChildSocioDemographic(ChildCrfModelMixin):
         blank=True,
         null=True,
         max_length=30)
+
+    school_type = models.CharField(
+        verbose_name='What type of school does this child attend?',
+        choices=SCHOOL_TYPE,
+        max_length=15,
+        default=NOT_APPLICABLE)
 
     working = models.CharField(
         verbose_name='Is this adolescent currently working in return '
