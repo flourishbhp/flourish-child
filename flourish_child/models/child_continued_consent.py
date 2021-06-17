@@ -1,4 +1,5 @@
 from django.db import models
+from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import eligible_if_yes, datetime_not_future
@@ -7,11 +8,11 @@ from edc_consent.field_mixins import (IdentityFieldsMixin, PersonalFieldsMixin,
                                       ReviewFieldsMixin, VulnerabilityFieldsMixin,
                                       CitizenFieldsMixin)
 from edc_constants.choices import YES_NO, GENDER, YES_NO_NA
-from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
 
 
+from ..action_items import CHILDCONTINUEDCONSENT_STUDY_ACTION
 from .eligibility import ContinuedConsentEligibility
 from .model_mixins import SearchSlugModelMixin
 from ..choices import IDENTITY_TYPE
@@ -24,10 +25,18 @@ class ChildContinuedConsentManager(SearchSlugManager, models.Manager):
             subject_identifier=subject_identifier)
 
 
-class ChildContinuedConsent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
-                            IdentityFieldsMixin, PersonalFieldsMixin, ReviewFieldsMixin,
-                            VulnerabilityFieldsMixin, CitizenFieldsMixin, SearchSlugModelMixin,
-                            BaseUuidModel):
+class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsMixin,
+                            ReviewFieldsMixin, VulnerabilityFieldsMixin,
+                            CitizenFieldsMixin, SearchSlugModelMixin,
+                            ActionModelMixin, BaseUuidModel):
+
+    tracking_identifier_prefix = 'CC'
+
+    action_name = CHILDCONTINUEDCONSENT_STUDY_ACTION
+
+    subject_identifier = models.CharField(
+        verbose_name="Subject Identifier",
+        max_length=50)
 
     citizen = models.CharField(
         verbose_name='Is the participant a Botswana citizen? ',
