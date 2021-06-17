@@ -73,6 +73,13 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
+    booster_dose_dt = models.DateField(
+        verbose_name="Booster Dose Date Given",
+        validators=[
+            date_not_future, ],
+        null=True,
+        blank=True)
+
     def natural_key(self):
         return (self.received_vaccine_name,) + self.child_immunization_history.natural_key()
 
@@ -84,7 +91,8 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
             ('received_vaccine_name', 'child_immunization_history'),
             ('received_vaccine_name', 'child_immunization_history', 'first_dose_dt'),
             ('received_vaccine_name', 'child_immunization_history', 'second_dose_dt'),
-            ('received_vaccine_name', 'child_immunization_history', 'third_dose_dt'))
+            ('received_vaccine_name', 'child_immunization_history', 'third_dose_dt'),
+            ('received_vaccine_name', 'child_immunization_history', 'booster_dose_dt'))
 
 
 class VaccinesMissed(CrfInlineModelMixin, BaseUuidModel):

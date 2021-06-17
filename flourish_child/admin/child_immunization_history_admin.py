@@ -21,7 +21,8 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
                 'received_vaccine_name',
                 'first_dose_dt',
                 'second_dose_dt',
-                'third_dose_dt')
+                'third_dose_dt',
+                'booster_dose_dt')
         }),
     )
 
