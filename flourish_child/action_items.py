@@ -1,0 +1,15 @@
+from edc_action_item import Action, site_action_items, HIGH_PRIORITY
+
+CHILDCONTINUEDCONSENT_STUDY_ACTION = 'submit-childcontinuedconsent-study'
+
+
+class ChildContinuedConsentAction(Action):
+    name = CHILDCONTINUEDCONSENT_STUDY_ACTION
+    display_name = 'Submit Child Continued Consent'
+    reference_model = 'flourish_child.childcontinuedconsent'
+    admin_site_name = 'flourish_child_admin'
+    priority = HIGH_PRIORITY
+    singleton = True
+
+
+site_action_items.register(ChildContinuedConsentAction)

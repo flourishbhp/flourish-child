@@ -519,6 +519,12 @@ RESPIRATORY_DEFECT = (
     (OTHER, 'Other respiratory anomaly, specify'),
 )
 
+SCHOOL_TYPE = (
+    ('public', 'Public'),
+    ('private', 'Private'),
+    (NOT_APPLICABLE, 'Not applicable'),
+)
+
 SKIN_ABNORMALITY = (
     ('None', 'None'),
     ('Icthyosis', 'Icthyosis'),

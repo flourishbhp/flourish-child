@@ -64,9 +64,6 @@ class ChildImmunizationHistoryForm(ChildModelFormMixin, forms.ModelForm):
                 raise forms.ValidationError(message)
 
     def validate_add_immunization(self, add_immunization, vaccine_name):
-        if add_immunization == NOT_APPLICABLE:
-            msg = {'rec_add_immunization': 'This field is applicable.'}
-            raise forms.ValidationError(msg)
         if add_immunization == YES:
             if not vaccine_name:
                 msg = {'rec_add_immunization':

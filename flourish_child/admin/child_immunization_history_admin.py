@@ -1,5 +1,5 @@
 from django.contrib import admin
-from edc_fieldsets.fieldlist import Insert, Remove
+from edc_fieldsets.fieldlist import Fieldlist
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
 
@@ -19,9 +19,11 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
         (None, {
             'fields': (
                 'received_vaccine_name',
-                'date_given',
-                'child_age')
-        }), audit_fieldset_tuple
+                'first_dose_dt',
+                'second_dose_dt',
+                'third_dose_dt',
+                'booster_dose_dt')
+        }),
     )
 
 
@@ -69,17 +71,25 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ]
 
     conditional_fieldlists = {
-        'child_a_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_a_sec_schedule1': Remove('vaccines_received'),
-        'child_a_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_a_quart_schedule1': Remove('vaccines_received'),
-        'child_b_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_b_quart_schedule1': Remove('vaccines_received'),
-        'child_b_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_b_sec_schedule1': Remove('vaccines_received'),
-        'child_c_sec_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_c_sec_schedule1': Remove('vaccines_received'),
-        'child_c_quart_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_c_quart_schedule1': Remove('vaccines_received'),
-        'child_pool_schedule1': Insert('rec_add_immunization', after='report_datetime'),
-        'child_pool_schedule1': Remove('vaccines_received'), }
+        'child_a_sec_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                           remove_fields=('vaccines_received',),
+                                           insert_after='report_datetime'),
+        'child_a_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                             remove_fields=('vaccines_received',),
+                                             insert_after='report_datetime'),
+        'child_b_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                             remove_fields=('vaccines_received',),
+                                             insert_after='report_datetime'),
+        'child_b_sec_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                           remove_fields=('vaccines_received',),
+                                           insert_after='report_datetime'),
+        'child_c_sec_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                           remove_fields=('vaccines_received',),
+                                           insert_after='report_datetime'),
+        'child_c_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                             remove_fields=('vaccines_received',),
+                                             insert_after='report_datetime'),
+        'child_pool_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                          remove_fields=('vaccines_received',),
+                                          insert_after='report_datetime'),
+    }

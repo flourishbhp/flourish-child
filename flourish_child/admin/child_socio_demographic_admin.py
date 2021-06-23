@@ -36,6 +36,7 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'attend_school',
                 'education_level',
                 'education_level_other',
+                'school_type',
                 'working']}
          ), audit_fieldset_tuple)
 
@@ -49,4 +50,5 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'house_type': admin.VERTICAL,
                     'attend_school': admin.VERTICAL,
                     'education_level': admin.VERTICAL,
+                    'school_type': admin.VERTICAL,
                     'working': admin.VERTICAL}
