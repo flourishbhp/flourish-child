@@ -94,9 +94,9 @@ class AppointmentAdmin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirec
 
         ideal_start = app_obj.timepoint_opened_datetime
 
-        extra_context.update({'earliest_start': earliest_start.strftime("%Y/%d/%m, %H:%M:%S"),
-                              'latest_start': latest_start.strftime("%Y/%d/%m, %H:%M:%S"),
-                              'ideal_start': ideal_start.strftime("%Y/%d/%m, %H:%M:%S"), })
+        extra_context.update({'earliest_start': earliest_start.strftime("%Y-%m/%d, %H:%M:%S"),
+                              'latest_start': latest_start.strftime("%Y-%m-%d, %H:%M:%S"),
+                              'ideal_start': ideal_start.strftime("%Y-%m-%d, %H:%M:%S"), })
 
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
