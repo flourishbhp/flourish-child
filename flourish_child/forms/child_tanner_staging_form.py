@@ -17,7 +17,7 @@ class ChildTannerStagingForm(ChildModelFormMixin, forms.ModelForm):
                 assent = ChildAssent.objects.get(
                     subject_identifier=subject_identifier)
             except ChildAssent.DoesNotExist:
-                return None
+                pass
             else:
                 initial['child_gender'] = getattr(assent, 'gender')
         kwargs['initial'] = initial
