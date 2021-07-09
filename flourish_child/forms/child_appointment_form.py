@@ -22,9 +22,9 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
 
             visit_definition = self.instance.visits.get(self.instance.visit_code)
 
-            earlist_appt_date = (self.instance.timepoint_opened_datetime -
+            earlist_appt_date = (self.instance.timepoint_datetime -
                                  visit_definition.rlower)
-            latest_appt_date = (self.instance.timepoint_opened_datetime +
+            latest_appt_date = (self.instance.timepoint_datetime +
                                 visit_definition.rupper)
 
             if (cleaned_data.get('appt_datetime') < earlist_appt_date
