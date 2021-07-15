@@ -17,6 +17,7 @@ class ChildDummySubjectConsentAdmin(ModelAdminMixin, admin.ModelAdmin):
             'fields': [
                 'subject_identifier',
                 'consent_datetime',
+                'dob',
                 'cohort']}
          ), audit_fieldset_tuple)
 
