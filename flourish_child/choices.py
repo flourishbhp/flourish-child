@@ -254,7 +254,8 @@ IMMUNIZATIONS = (
     ('pentavalent',
      'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
     ('diptheria_tetanus', 'Diptheria and Tetanus'),
-    ('hpv_vaccine', 'HPV Vaccine')
+    ('hpv_vaccine', 'HPV Vaccine'),
+    ('measles_rubella', 'Measles and Rubella')
 )
 
 INFANT_VACCINATIONS = (
