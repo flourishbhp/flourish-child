@@ -3,7 +3,6 @@ from django.db import models
 from edc_constants.choices import YES_NO, GENDER
 from edc_constants.constants import YES
 
-
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
@@ -13,8 +12,7 @@ class BirthData(ChildCrfModelMixin):
     infant_gender = models.CharField(
         max_length=6,
         choices=GENDER,
-        verbose_name="What is the gender of the infant?",
-        help_text="")
+        verbose_name="What is the gender of the infant?")
 
     weight_avail = models.CharField(
         max_length=3,
