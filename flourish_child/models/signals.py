@@ -26,37 +26,46 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
     """
     age_in_years = age(instance.dob, get_utcnow()).years
     if not raw and instance.is_eligible:
-        if age_in_years >= 7:
-            caregiver_child_consent_cls = django_apps.get_model(
-                'flourish_caregiver.caregiverchildconsent')
-            try:
-                caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
-                    subject_identifier=instance.subject_identifier,
-                    subject_consent__version=instance.version)
-            except caregiver_child_consent_cls.DoesNotExist:
-                raise CaregiverConsentError('Associated caregiver consent on behalf of child '
-                                            'for this participant not found')
-            else:
-                if caregiver_child_consent_obj.is_eligible:
-                    try:
-                        dummy_consent_obj = ChildDummySubjectConsent.objects.get(
-                            subject_identifier=instance.subject_identifier)
-                    except ChildDummySubjectConsent.DoesNotExist:
-                        ChildDummySubjectConsent.objects.create(
-                                    subject_identifier=instance.subject_identifier,
-                                    consent_datetime=instance.consent_datetime,
-                                    identity=instance.identity,
-                                    dob=instance.dob,
-                                    cohort=caregiver_child_consent_obj.cohort,
-                                    version=instance.version)
-                    else:
-                        if not dummy_consent_obj.cohort:
-                            dummy_consent_obj.cohort = caregiver_child_consent_obj.cohort
-                            dummy_consent_obj.save()
 
-                    caregiver_child_consent_obj.subject_identifier = instance.subject_identifier
-                    caregiver_child_consent_obj.save(
-                        update_fields=['subject_identifier', 'modified', 'user_modified'])
+        if age_in_years >= 7:
+            caregiver_prev_enrolled_cls = django_apps.get_model(
+                    'flourish_caregiver.caregiverpreviouslyenrolled')
+            try:
+                caregiver_prev_enrolled_cls.objects.get(
+                    subject_identifier=instance.subject_identifier[:-3])
+            except caregiver_prev_enrolled_cls.DoesNotExist:
+                pass
+            else:
+                caregiver_child_consent_cls = django_apps.get_model(
+                    'flourish_caregiver.caregiverchildconsent')
+                try:
+                    caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
+                        subject_identifier=instance.subject_identifier,
+                        subject_consent__version=instance.version)
+                except caregiver_child_consent_cls.DoesNotExist:
+                    raise CaregiverConsentError('Associated caregiver consent on behalf of child '
+                                                'for this participant not found')
+                else:
+                    if caregiver_child_consent_obj.is_eligible:
+                        try:
+                            dummy_consent_obj = ChildDummySubjectConsent.objects.get(
+                                subject_identifier=instance.subject_identifier)
+                        except ChildDummySubjectConsent.DoesNotExist:
+                            ChildDummySubjectConsent.objects.create(
+                                        subject_identifier=instance.subject_identifier,
+                                        consent_datetime=instance.consent_datetime,
+                                        identity=instance.identity,
+                                        dob=instance.dob,
+                                        cohort=caregiver_child_consent_obj.cohort,
+                                        version=instance.version)
+                        else:
+                            if not dummy_consent_obj.cohort:
+                                dummy_consent_obj.cohort = caregiver_child_consent_obj.cohort
+                                dummy_consent_obj.save()
+
+                        caregiver_child_consent_obj.subject_identifier = instance.subject_identifier
+                        caregiver_child_consent_obj.save(
+                            update_fields=['subject_identifier', 'modified', 'user_modified'])
 
 
 @receiver(post_save, weak=False, sender=ChildDummySubjectConsent,
@@ -125,6 +134,7 @@ def put_cohort_onschedule(cohort, instance):
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None,
                     base_appt_datetime=None):
+
     if instance:
         instance.registration_update_or_create()
         subject_identifier = subject_identifier or instance.subject_identifier
@@ -138,9 +148,6 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
         onschedule_model = 'flourish_child.onschedulechild' + cohort_label_lower
 
-        _, schedule = site_visit_schedules.get_by_onschedule_model(
-            onschedule_model)
-
         onschedule_model_cls = django_apps.get_model(onschedule_model)
 
         if 'pool' not in cohort:
@@ -148,19 +155,22 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
         else:
             schedule_name = 'child_pool_schedule1'
 
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model=onschedule_model, name=schedule_name)
+
         try:
             onschedule_model_cls.objects.get(
-                subject_identifier=instance.subject_identifier,
+                subject_identifier=subject_identifier,
                 schedule_name=schedule_name)
         except onschedule_model_cls.DoesNotExist:
             schedule.put_on_schedule(
-                subject_identifier=instance.subject_identifier,
-                onschedule_datetime=instance.created,
+                subject_identifier=subject_identifier,
+                onschedule_datetime=base_appt_datetime,
                 schedule_name=schedule_name,
                 base_appt_datetime=base_appt_datetime)
         else:
             schedule.refresh_schedule(
-                subject_identifier=instance.subject_identifier)
+                subject_identifier=subject_identifier)
 
 
 def trigger_action_item(obj, field, response, model_cls,
