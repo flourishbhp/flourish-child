@@ -72,7 +72,7 @@ class TestRuleGroups(TestCase):
 
         mommy.make_recipe(
             'flourish_child.childvisit',
-            appointment=Appointment.objects.get(visit_code='2000'),
+            appointment=Appointment.objects.get(visit_code='1000'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
 
@@ -84,7 +84,7 @@ class TestRuleGroups(TestCase):
             CrfMetadata.objects.get(
                 model='flourish_child.academicperformance',
                 subject_identifier=self.subject_identifier,
-                visit_code='2000').entry_status, REQUIRED)
+                visit_code='1000').entry_status, REQUIRED)
 
     def test_academic_performance_not_required(self):
         visit = ChildVisit.objects.get(visit_code='1000')
@@ -95,7 +95,7 @@ class TestRuleGroups(TestCase):
             CrfMetadata.objects.get(
                 model='flourish_child.academicperformance',
                 subject_identifier=self.subject_identifier,
-                visit_code='2000').entry_status, NOT_REQUIRED)
+                visit_code='1000').entry_status, NOT_REQUIRED)
 
     def test_gad_score_gte10_referral_required(self):
         visit = ChildVisit.objects.get(visit_code='1000')
@@ -105,7 +105,7 @@ class TestRuleGroups(TestCase):
             CrfMetadata.objects.get(
                 model='flourish_child.childgadreferral',
                 subject_identifier=self.subject_identifier,
-                visit_code='2000').entry_status, REQUIRED)
+                visit_code='1000').entry_status, REQUIRED)
 
     def test_gad_score_lte10_referral_not_required(self):
         visit = ChildVisit.objects.get(visit_code='1000')
@@ -118,7 +118,7 @@ class TestRuleGroups(TestCase):
             CrfMetadata.objects.get(
                 model='flourish_child.childgadreferral',
                 subject_identifier=self.subject_identifier,
-                visit_code='2000').entry_status, NOT_REQUIRED)
+                visit_code='1000').entry_status, NOT_REQUIRED)
 
     def test_phq9_gte10_referral_required(self):
         visit = ChildVisit.objects.get(visit_code='1000')
@@ -128,7 +128,7 @@ class TestRuleGroups(TestCase):
             CrfMetadata.objects.get(
                 model='flourish_child.childphqreferral',
                 subject_identifier=self.subject_identifier,
-                visit_code='2000').entry_status, REQUIRED)
+                visit_code='1000').entry_status, REQUIRED)
 
     def test_phq9_suicide_attmptyes_referral_required(self):
         visit = ChildVisit.objects.get(visit_code='1000')
@@ -140,4 +140,4 @@ class TestRuleGroups(TestCase):
             CrfMetadata.objects.get(
                 model='flourish_child.childphqreferral',
                 subject_identifier=self.subject_identifier,
-                visit_code='2000').entry_status, REQUIRED)
+                visit_code='1000').entry_status, REQUIRED)

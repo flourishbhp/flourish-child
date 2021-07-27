@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'edc_registration.apps.AppConfig',
     'edc_reference.apps.AppConfig',
     'edc_metadata_rules.apps.AppConfig',
-    'edc_odk.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
     'flourish_caregiver.apps.AppConfig',
     'flourish_reference.apps.AppConfig',
