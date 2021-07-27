@@ -1,3 +1,5 @@
+from datetime import datetime
+from dateutil.tz import gettz
 from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 
@@ -6,6 +8,10 @@ class AppConfig(DjangoAppConfig):
     name = 'flourish_child'
     verbose_name = 'Flourish Child'
     admin_site_name = 'flourish_child_admin'
+    start_date_year_3 = datetime(
+            2022, 7, 1, 0, 0, 0, tzinfo=gettz('UTC')).date()
+    end_date_year_5 = datetime(
+            2024, 6, 30, 0, 0, 0, tzinfo=gettz('UTC')).date()
 
     def ready(self):
         from .models import child_consent_on_post_save
