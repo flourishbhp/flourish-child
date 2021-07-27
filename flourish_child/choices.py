@@ -342,7 +342,9 @@ MARKS = (
     ('f', 'F'),
     ('g', 'G'),
     ('u', 'U'),
-    ('not_taking_subject', 'Not taking subject')
+    ('pending', 'Pending'),
+    ('not_taking_subject', 'Not taking subject'),
+    ('never_sat_for_exam', 'Never sat for subject examination')
 )
 
 MENARCHE_AVAIL = (

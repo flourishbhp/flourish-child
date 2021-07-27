@@ -28,6 +28,11 @@ class ChildDummySubjectConsent(
     identity = IdentityField(
         verbose_name='Identity number')
 
+    dob = models.DateField(
+        verbose_name="Date of birth",
+        null=True,
+        blank=False)
+
     version = models.CharField(
         verbose_name='Consent version',
         max_length=10,

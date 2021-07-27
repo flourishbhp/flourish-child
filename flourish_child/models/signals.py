@@ -46,6 +46,7 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                                     subject_identifier=instance.subject_identifier,
                                     consent_datetime=instance.consent_datetime,
                                     identity=instance.identity,
+                                    dob=instance.dob,
                                     cohort=caregiver_child_consent_obj.cohort,
                                     version=instance.version)
                     else:
