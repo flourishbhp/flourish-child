@@ -148,8 +148,6 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
         onschedule_model = 'flourish_child.onschedulechild' + cohort_label_lower
 
-        onschedule_model_cls = django_apps.get_model(onschedule_model)
-
         if 'pool' not in cohort:
             schedule_name = cohort.replace('cohort', 'child') + '_schedule1'
         else:
@@ -158,19 +156,11 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
 
-        try:
-            onschedule_model_cls.objects.get(
-                subject_identifier=subject_identifier,
-                schedule_name=schedule_name)
-        except onschedule_model_cls.DoesNotExist:
-            schedule.put_on_schedule(
-                subject_identifier=subject_identifier,
-                onschedule_datetime=base_appt_datetime,
-                schedule_name=schedule_name,
-                base_appt_datetime=base_appt_datetime)
-        else:
-            schedule.refresh_schedule(
-                subject_identifier=subject_identifier)
+        schedule.put_on_schedule(
+            subject_identifier=subject_identifier,
+            onschedule_datetime=base_appt_datetime,
+            schedule_name=schedule_name,
+            base_appt_datetime=base_appt_datetime)
 
 
 def trigger_action_item(obj, field, response, model_cls,
