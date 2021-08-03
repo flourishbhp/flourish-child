@@ -74,17 +74,27 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     """Put subject on cohort a schedule after consenting.
     """
     if instance.cohort:
-        maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
+        caregiver_prev_enrolled_cls = django_apps.get_model(
+                    'flourish_caregiver.caregiverpreviouslyenrolled')
         try:
-            maternal_delivery_cls.objects.get(
-                delivery_datetime=instance.consent_datetime,
+            prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
                 subject_identifier=instance.subject_identifier[:-3])
-        except maternal_delivery_cls.DoesNotExist:
+        except caregiver_prev_enrolled_cls.DoesNotExist:
             pass
         else:
-            put_on_schedule((instance.cohort + '_birth'), instance=instance)
+            maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
+            try:
+                maternal_delivery_obj = maternal_delivery_cls.objects.get(
+                    delivery_datetime=instance.consent_datetime,
+                    subject_identifier=instance.subject_identifier[:-3])
+            except maternal_delivery_cls.DoesNotExist:
+                pass
+            else:
+                put_on_schedule((instance.cohort + '_birth'), instance=instance,
+                                base_appt_datetime=maternal_delivery_obj.created)
 
-        put_cohort_onschedule(instance.cohort, instance=instance)
+            put_cohort_onschedule(instance.cohort, instance=instance,
+                                  base_appt_datetime=prev_enrolled.created)
 
 
 @receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
@@ -120,13 +130,15 @@ def child_continued_consent_on_post_save(sender, instance, raw, created, **kwarg
                         repeat=True)
 
 
-def put_cohort_onschedule(cohort, instance):
+def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
     if cohort is not None and 'sec' in cohort or 'pool' in cohort:
         put_on_schedule(cohort, instance=instance)
     else:
-        put_on_schedule(cohort + '_enrol', instance=instance)
-        put_on_schedule(cohort + '_quart', instance=instance)
+        put_on_schedule(cohort + '_enrol', instance=instance,
+                        base_appt_datetime=base_appt_datetime)
+        put_on_schedule(cohort + '_quart', instance=instance,
+                        base_appt_datetime=base_appt_datetime)
         # put_on_schedule(cohort + '_fu', instance=instance,
                         # base_appt_datetime=django_apps.get_app_config(
                             # 'edc_protocol').study_open_datetime)
