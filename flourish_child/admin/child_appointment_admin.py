@@ -125,7 +125,7 @@ class AppointmentAdmin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirec
             'appointment status below to "In Progress" and click SAVE. <BR>'
             '<i>Note: You may only edit one appointment at a time. '
             'Before you move to another appointment, change the appointment '
-            'status below to "Incomplete or "Done".</i>')
+            'status below to "Incomplete" or "Done".</i>')
 
         extra_context['additional_instructions'] = additional_instructions
         return extra_context
