@@ -1,3 +1,4 @@
+import pytz
 from django import forms
 from edc_appointment.form_validators import AppointmentFormValidator
 from edc_base.sites.forms import SiteModelFormMixin
@@ -23,12 +24,14 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
             visit_definition = self.instance.visits.get(self.instance.visit_code)
 
             earlist_appt_date = (self.instance.timepoint_datetime -
-                                 visit_definition.rlower)
+                                 visit_definition.rlower).astimezone(
+                                      pytz.timezone('Africa/Gaborone'))
             latest_appt_date = (self.instance.timepoint_datetime +
-                                visit_definition.rupper)
+                                visit_definition.rupper).astimezone(
+                                      pytz.timezone('Africa/Gaborone'))
 
-            if (cleaned_data.get('appt_datetime') < earlist_appt_date
-                    or cleaned_data.get('appt_datetime') > latest_appt_date):
+            if (cleaned_data.get('appt_datetime') < earlist_appt_date.replace(microsecond=0)
+                    or cleaned_data.get('appt_datetime') > latest_appt_date.replace(microsecond=0)):
                 raise forms.ValidationError(
                             'The appointment datetime cannot be outside the window period, '
                             'please correct. See earliest, ideal and latest datetimes below.')

@@ -1,3 +1,4 @@
+import pytz
 from edc_visit_schedule.fieldsets import visit_schedule_fieldset_tuple, visit_schedule_fields
 
 from django.conf import settings
@@ -87,12 +88,15 @@ class AppointmentAdmin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirec
         app_obj = Appointment.objects.get(id=object_id)
 
         earliest_start = (app_obj.timepoint_datetime -
-                          app_obj.visits.get(app_obj.visit_code).rlower)
+                          app_obj.visits.get(app_obj.visit_code).rlower).astimezone(
+                                      pytz.timezone('Africa/Gaborone'))
 
         latest_start = (app_obj.timepoint_datetime +
-                        app_obj.visits.get(app_obj.visit_code).rupper)
+                        app_obj.visits.get(app_obj.visit_code).rupper).astimezone(
+                                      pytz.timezone('Africa/Gaborone'))
 
-        ideal_start = app_obj.timepoint_datetime
+        ideal_start = app_obj.timepoint_datetime.astimezone(
+                                      pytz.timezone('Africa/Gaborone'))
 
         extra_context.update({'earliest_start': earliest_start.strftime("%Y-%m/%d, %H:%M:%S"),
                               'latest_start': latest_start.strftime("%Y-%m-%d, %H:%M:%S"),
