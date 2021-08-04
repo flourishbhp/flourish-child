@@ -454,7 +454,9 @@ OVERALL_MARKS = (
     ('f', 'F'),
     ('g', 'G'),
     ('u', 'U'),
-    ('points', 'Points')
+    ('points', 'Points'),
+    ('pending', 'Pending'),
+    ('never_sat', 'Never sat for subject examination'),
 )
 
 PHYS_ACTIVITY_TIME = (
