@@ -53,7 +53,8 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'attend_school': admin.VERTICAL,
                     'education_level': admin.VERTICAL,
                     'school_type': admin.VERTICAL,
-                    'working': admin.VERTICAL}
+                    'working': admin.VERTICAL,
+                    'socio_demo_changed': admin.VERTICAL}
 
     custom_form_labels = [
         FormLabel(
@@ -63,15 +64,11 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             previous_appointment=True)
         ]
 
-    quartely_schedules = ['a_quarterly1_schedule1', 'a_quarterly2_schedule1',
-                          'a_quarterly3_schedule1', 'a_sec1_schedule1',
-                          'a_sec2_schedule1', 'a_sec3_schedule1',
-                          'b_quarterly1_schedule1', 'b_quarterly2_schedule1',
-                          'b_quarterly3_schedule1', 'c_quarterly2_schedule1',
-                          'c_quarterly1_schedule1', 'c_quarterly3_schedule1',
-                          'b_sec1_schedule1', 'b_sec2_schedule1', 'b_sec3_schedule1',
-                          'c_sec1_schedule1', 'c_sec2_schedule1', 'c_sec3_schedule1',
-                          'pool1_schedule1', 'pool2_schedule1', 'pool3_schedule1']
+    quartely_schedules = ['child_a_quart_schedule1', 'child_a_fu_quart_schedule1',
+                          'child_a_sec_schedule1', 'child_b_quart_schedule1',
+                          'child_b_fu_quart_schedule1', 'child_b_sec_schedule1',
+                          'child_c_quart_schedule1', 'child_c_fu_quart_schedule1',
+                          'child_c_sec_schedule1', ]
 
     conditional_fieldlists = {}
     for schedule in quartely_schedules:
