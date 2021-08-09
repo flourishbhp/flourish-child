@@ -126,6 +126,13 @@ class ChildSocioDemographic(ChildCrfModelMixin):
         choices=YES_NO_NA,
         default=NOT_APPLICABLE)
 
+    """Quartely phone calls stem question"""
+    socio_demo_changed = models.CharField(
+        verbose_name='Has any of your following socio demographic data changed?',
+        max_length=3,
+        choices=YES_NO,
+        null=True)
+
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = "Child Sociodemographic Data"
