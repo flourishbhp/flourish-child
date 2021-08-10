@@ -4,6 +4,7 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 
 from ..choices import MARKS, NUMBER_OF_DAYS, OVERALL_MARKS
 from edc_base.model_fields import OtherCharField
+from edc_constants.choices import YES_NO
 
 
 class AcademicPerformance(ChildCrfModelMixin):
@@ -108,6 +109,14 @@ class AcademicPerformance(ChildCrfModelMixin):
         verbose_name='How many days a week do you attend in-person classes?',
         max_length=10,
         choices=NUMBER_OF_DAYS)
+
+    """Quartely phone calls stem question"""
+    academic_perf_changed = models.CharField(
+        verbose_name=('Has any of your subject marks or overall performance in your last '
+                      'examination changed?'),
+        max_length=3,
+        choices=YES_NO,
+        null=True)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
