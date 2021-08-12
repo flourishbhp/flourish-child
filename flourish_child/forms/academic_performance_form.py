@@ -55,8 +55,9 @@ class AcademicPerformanceForm(ChildModelFormMixin):
             other_values = self.model_to_dict(prev_instance, exclude=exclude_fields)
             values = {key: self.data.get(key) or 'not_taking_subject' for
                       key in other_values.keys()}
-            if self.data.get('grade_points') is None:
+            if self.data.get('grade_points') == '':
                 values['grade_points'] = None
+            values['education_level_other'] = self.data.get('education_level_other')
             return values != other_values
         return False
 
