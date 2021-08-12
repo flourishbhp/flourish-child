@@ -50,6 +50,8 @@ class ChildSocioDemographicForm(ChildModelFormMixin, forms.ModelForm):
         if prev_instance:
             other_values = self.model_to_dict(prev_instance, exclude=exclude_fields)
             values = {key: self.data.get(key) or None for key in other_values.keys()}
+            values['house_people_number'] = int(values.get('house_people_number'))
+            values['older_than18'] = int(values.get('older_than18'))
             return values != other_values
         return False
 
