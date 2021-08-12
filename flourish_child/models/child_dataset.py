@@ -47,7 +47,7 @@ class ChildDataset(
 
     infant_azt_birth = models.CharField(
         verbose_name='Infant started AZT',
-        max_length=3)
+        max_length=15)
 
     infant_azt_days = models.IntegerField(
         verbose_name='Duration of infant AZT (days)',
@@ -63,7 +63,7 @@ class ChildDataset(
 
     infant_sdnvp_birth = models.CharField(
         verbose_name='Infant received sdNVP',
-        max_length=3)
+        max_length=15)
 
     infant_hiv_exposed = models.CharField(
         verbose_name='Infant HIV exposure status',
@@ -75,7 +75,8 @@ class ChildDataset(
 
     infant_breastfed = models.CharField(
         verbose_name='Infant breastfed',
-        max_length=150)
+        max_length=150,
+        blank=True, null=True)
 
     infant_breastfed_days = models.IntegerField(
         verbose_name='Breastfeeding duration (days)',
@@ -126,7 +127,8 @@ class ChildDataset(
 
     low_birthweight = models.CharField(
         verbose_name='Infant born low birth weight',
-        max_length=150)
+        max_length=150,
+        blank=True, null=True)
 
     infant_premature = models.CharField(
         verbose_name='Infant born premature (<37 weeks)',
