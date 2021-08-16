@@ -35,12 +35,12 @@ class AcademicPerformanceForm(ChildModelFormMixin):
         if academic_perf_changed:
             if academic_perf_changed == YES and not has_changed:
                 message = {'academic_perf_changed':
-                           'Participant\'s Socio-demographic information has changed since '
-                           'last visit. Please update the information on this form.'}
+                           'Participant\'s academic performance  information has changed since'
+                           ' last visit. Please update the information on this form.'}
                 raise forms.ValidationError(message)
             elif academic_perf_changed == NO and has_changed:
                 message = {'academic_perf_changed':
-                           'Participant\'s Socio-demographic information has not changed '
+                           'Participant\'s academic performance information has not changed '
                            'since last visit. Please don\'t make any changes to this form.'}
                 raise forms.ValidationError(message)
         cleaned_data = super().clean()

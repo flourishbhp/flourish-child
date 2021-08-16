@@ -98,7 +98,7 @@ class ChildDatasetAdmin(ModelAdminSiteMixin, admin.ModelAdmin):
                     'formatted_dob',
                     'age_today')
 
-    list_filter = ('infant_sex',)
+    list_filter = ('infant_sex', 'infant_hiv_exposed', 'infant_offstudy_complete')
 
     search_fields = ['subject_identifier', 'study_child_identifier',
                      'study_maternal_identifier', 'infant_sex', 'dob', 'age_today']

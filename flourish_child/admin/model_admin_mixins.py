@@ -79,32 +79,15 @@ class ChildCrfModelAdminMixin(
         """
         obj = None
         appointment = instance or self.get_instance(request)
-        if appointment:
-            while self.get_previous_appointment(request):
-                options = {
-                    '{}__appointment'.format(self.model.visit_model_attr()):
-                    appointment.previous_by_timepoint}
-                try:
-                    obj = self.model.objects.get(**options)
-                except ObjectDoesNotExist:
-                    pass
-                else:
-                    break
-                appointment = self.get_previous_appointment(request)
+        if appointment and appointment.previous_by_timepoint:
+            options = {
+                '{}__appointment'.format(self.model.visit_model_attr()):
+                appointment.previous_by_timepoint}
+            try:
+                obj = self.model.objects.get(**options)
+            except ObjectDoesNotExist:
+                pass
         return obj
-
-    def get_previous_appointment(self, request):
-        try:
-            appointment = self.get_appointment(request)
-        except ObjectDoesNotExist:
-            return None
-        else:
-            return appointment.__class__.objects.filter(
-                subject_identifier=appointment.subject_identifier,
-                visit_schedule_name=appointment.visit_schedule_name,
-                schedule_name__endswith=appointment.schedule_name[-11:],
-                timepoint__lt=appointment.timepoint,
-                visit_code_sequence=0).order_by('timepoint').last()
 
     def get_instance(self, request):
         try:
