@@ -26,7 +26,6 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
     """
     age_in_years = age(instance.dob, get_utcnow()).years
     if not raw and instance.is_eligible:
-
         if age_in_years >= 7:
             caregiver_prev_enrolled_cls = django_apps.get_model(
                     'flourish_caregiver.caregiverpreviouslyenrolled')
@@ -133,7 +132,8 @@ def child_continued_consent_on_post_save(sender, instance, raw, created, **kwarg
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
     if cohort is not None and 'sec' in cohort or 'pool' in cohort:
-        put_on_schedule(cohort, instance=instance)
+        put_on_schedule(cohort, instance=instance,
+                        base_appt_datetime=base_appt_datetime)
     else:
         put_on_schedule(cohort + '_enrol', instance=instance,
                         base_appt_datetime=base_appt_datetime)
