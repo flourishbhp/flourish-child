@@ -58,6 +58,8 @@ class AcademicPerformanceForm(ChildModelFormMixin):
             if self.data.get('grade_points') == '':
                 values['grade_points'] = None
             values['education_level_other'] = self.data.get('education_level_other')
+            if values.get('grade_points'):
+                values['grade_points'] = int(values.get('grade_points'))
             return values != other_values
         return False
 
