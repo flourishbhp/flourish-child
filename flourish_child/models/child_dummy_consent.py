@@ -8,11 +8,20 @@ from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_registration.model_mixins import (
     UpdatesOrCreatesRegistrationModelMixin)
+from edc_search.model_mixins import SearchSlugManager
+from .model_mixins import SearchSlugModelMixin
 from ..choices import COHORTS
 
 
+class ChildDummySubjectConsentManager(SearchSlugManager, models.Manager):
+
+    def get_by_natural_key(self, subject_identifier, version):
+        return self.get(
+            subject_identifier=subject_identifier, version=version)
+
+
 class ChildDummySubjectConsent(
-        ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin,
+        ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin, SearchSlugModelMixin,
         SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin, BaseUuidModel):
 
     """ A dummy child model auto completed by the s. """
@@ -46,6 +55,8 @@ class ChildDummySubjectConsent(
         null=True)
 
     history = HistoricalRecords()
+
+    objects = ChildDummySubjectConsentManager()
 
     def save(self, *args, **kwargs):
         self.relative_identifier = self.subject_identifier[:-3]
