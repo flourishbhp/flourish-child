@@ -57,10 +57,6 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                                         dob=instance.dob,
                                         cohort=caregiver_child_consent_obj.cohort,
                                         version=instance.version)
-                        else:
-                            if not dummy_consent_obj.cohort:
-                                dummy_consent_obj.cohort = caregiver_child_consent_obj.cohort
-                                dummy_consent_obj.save()
 
                         caregiver_child_consent_obj.subject_identifier = instance.subject_identifier
                         caregiver_child_consent_obj.save(
