@@ -114,7 +114,7 @@ class ChildCrfModelAdminMixin(
     def get_key(self, request, obj=None):
 
         if obj:
-            return obj.maternal_visit.schedule_name
+            return obj.child_visit.schedule_name
         elif request.GET.get('appointment'):
             appointment = self.get_appointment(request)
 
