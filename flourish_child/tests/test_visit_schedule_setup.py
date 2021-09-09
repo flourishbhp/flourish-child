@@ -36,7 +36,6 @@ class TestVisitScheduleSetup(TestCase):
             'study_maternal_identifier': '12345',
             'study_child_identifier': '1234'}
 
-    @tag('t')
     def test_cohort_a_onschedule_consent_valid(self):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
@@ -85,7 +84,6 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('t')
     def test_cohort_b_onschedule_valid(self):
         self.maternal_dataset_options['protocol'] = 'Mpepu'
         self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=5,
@@ -136,7 +134,7 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('t')
+    @tag('t1')
     def test_cohort_b_assent_onschedule_valid(self):
         self.maternal_dataset_options['protocol'] = 'Mpepu'
         self.maternal_dataset_options['mom_hivstatus'] = 'HIV uninfected'
@@ -198,10 +196,10 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
+    @tag('ch1')
     def test_cohort_c_onschedule_valid(self):
-        self.maternal_dataset_options['preg_pi'] = 1
         self.child_dataset_options['infant_hiv_exposed'] = 'Unexposed'
-        self.maternal_dataset_options['protocol'] = 'Mashi'
+        self.maternal_dataset_options['protocol'] = 'Tshipidi'
         self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=10,
                                                                                 months=2)
 
@@ -229,7 +227,8 @@ class TestVisitScheduleSetup(TestCase):
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
             study_child_identifier=child_dataset.study_child_identifier,
-            child_dob=maternal_dataset_obj.delivdt,)
+            child_dob=maternal_dataset_obj.delivdt,
+            cohort=None)
 
         child_assent = mommy.make_recipe(
             'flourish_child.childassent',
@@ -260,17 +259,16 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('t2')
+    @tag('cvs3')
     def test_cohort_c_sec_onschedule_valid(self):
         self.maternal_dataset_options['preg_pi'] = 1
         self.child_dataset_options['infant_hiv_exposed'] = 'exposed'
         self.maternal_dataset_options['protocol'] = 'Mashi'
-        self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=9,
-                                                                                months=6)
+        self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=11)
 
         child_dataset = mommy.make_recipe(
             'flourish_child.childdataset',
-            dob=get_utcnow() - relativedelta(years=9, months=6),
+            dob=get_utcnow() - relativedelta(years=11),
             **self.child_dataset_options)
 
         maternal_dataset_obj = mommy.make_recipe(
@@ -320,9 +318,8 @@ class TestVisitScheduleSetup(TestCase):
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
     def test_cohort_c_twins_onschedule_valid(self):
-        self.maternal_dataset_options['preg_pi'] = 1
         self.child_dataset_options['infant_hiv_exposed'] = 'Unexposed'
-        self.maternal_dataset_options['protocol'] = 'Mashi'
+        self.maternal_dataset_options['protocol'] = 'Tshipidi'
         self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=10,
                                                                                 months=2)
 
