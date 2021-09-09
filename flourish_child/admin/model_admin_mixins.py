@@ -98,8 +98,6 @@ class ChildCrfModelAdminMixin(
 
         return appointment.__class__.objects.filter(
             subject_identifier=appointment.subject_identifier,
-            visit_schedule_name=appointment.visit_schedule_name,
-            schedule_name__endswith=appointment.schedule_name[-11:],
             timepoint__lt=appointment.timepoint,
             visit_code_sequence=0).order_by('timepoint').last()
 
@@ -114,7 +112,7 @@ class ChildCrfModelAdminMixin(
     def get_key(self, request, obj=None):
 
         if obj:
-            return obj.maternal_visit.schedule_name
+            return obj.child_visit.schedule_name
         elif request.GET.get('appointment'):
             appointment = self.get_appointment(request)
 
