@@ -98,8 +98,6 @@ class ChildCrfModelAdminMixin(
 
         return appointment.__class__.objects.filter(
             subject_identifier=appointment.subject_identifier,
-            visit_schedule_name=appointment.visit_schedule_name,
-            schedule_name__endswith=appointment.schedule_name[-11:],
             timepoint__lt=appointment.timepoint,
             visit_code_sequence=0).order_by('timepoint').last()
 
