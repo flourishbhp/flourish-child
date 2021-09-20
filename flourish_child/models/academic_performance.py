@@ -19,7 +19,7 @@ class AcademicPerformance(ChildCrfModelMixin):
 
     mathematics_marks = models.CharField(
         verbose_name='What are your marks in Mathematics?',
-        max_length=20,
+        max_length=25,
         choices=MARKS,
         default='not_taking_subject')
 
