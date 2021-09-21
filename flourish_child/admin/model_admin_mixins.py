@@ -13,10 +13,9 @@ from edc_model_admin import (
     ModelAdminFormAutoNumberMixin, ModelAdminAuditFieldsMixin,
     ModelAdminReadOnlyMixin, ModelAdminInstitutionMixin,
     FormAsJSONModelAdminMixin, ModelAdminRedirectOnDeleteMixin)
-from simple_history.admin import SimpleHistoryAdmin
-
 from edc_visit_tracking.modeladmin_mixins import (
     CrfModelAdminMixin as VisitTrackingCrfModelAdminMixin)
+from simple_history.admin import SimpleHistoryAdmin
 
 from .exportaction_mixin import ExportActionMixin
 
@@ -99,7 +98,7 @@ class ChildCrfModelAdminMixin(
         return appointment.__class__.objects.filter(
             subject_identifier=appointment.subject_identifier,
             timepoint__lt=appointment.timepoint,
-            schedule_name__endswith=appointment.schedule_name[-11:],
+            schedule_name__startswith=appointment.schedule_name[:7],
             visit_code_sequence=0).order_by('timepoint').last()
 
     def get_instance(self, request):
