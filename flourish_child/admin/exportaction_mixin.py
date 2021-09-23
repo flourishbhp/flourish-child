@@ -32,11 +32,21 @@ class ExportActionMixin:
         if queryset and self.is_assent(queryset[0]):
             field_names.append('previous study name')
 
+        if queryset and getattr(queryset[0], 'child_visit', None):
+            field_names.insert(14, 'subject_identifier')
+            field_names.insert(17, 'visit_code')
+
         for col_num in range(len(field_names)):
             ws.write(row_num, col_num, field_names[col_num], font_style)
 
         for obj in queryset:
             obj_data = obj.__dict__
+
+            # Add subject identifier and visit code
+            if getattr(obj, 'child_visit', None):
+                obj_data['visit_code'] = obj.child_visit.visit_code
+                obj_data['subject_identifier'] = obj.child_visit.subject_identifier
+
             screening_identifier = getattr(obj, 'screening_identifier', None)
             previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
             data = [obj_data[field] if field != 'previous study name' else previous_study for field in field_names]
