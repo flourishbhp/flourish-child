@@ -32,14 +32,34 @@ class ExportActionMixin:
         if queryset and self.is_assent(queryset[0]):
             field_names.append('previous study name')
 
+        if queryset and getattr(queryset[0], 'child_visit', None):
+            field_names.insert(0, 'subject_identifier')
+            field_names.insert(1, 'new_study_subject_identifier')
+            field_names.insert(2, 'old_study_maternal_identifier')
+            field_names.insert(3, 'previous_study')
+            field_names.insert(4, 'visit_code')
+
         for col_num in range(len(field_names)):
             ws.write(row_num, col_num, field_names[col_num], font_style)
 
         for obj in queryset:
             obj_data = obj.__dict__
-            screening_identifier = getattr(obj, 'screening_identifier', None)
+
+            # Add subject identifier and visit code
+            if getattr(obj, 'child_visit', None):
+                obj_data['visit_code'] = obj.child_visit.visit_code
+                obj_data['subject_identifier'] = obj.child_visit.subject_identifier
+            
+
+            subject_identifier = obj_data.get('subject_identifier', None)
+            screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
             previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
-            data = [obj_data[field] if field != 'previous study name' else previous_study for field in field_names]
+            study_maternal_identifier = self.study_maternal_identifier(screening_identifier=screening_identifier)
+            obj_data['new_study_subject_identifier'] = subject_identifier[:-3]
+            obj_data['previous_study'] = previous_study
+            obj_data['old_study_maternal_identifier'] = study_maternal_identifier
+
+            data = [obj_data[field] for field in field_names]
 
             row_num += 1
             for col_num in range(len(data)):
@@ -62,6 +82,15 @@ class ExportActionMixin:
         date_str = datetime.datetime.now().strftime('%Y-%m-%d')
         filename = "%s-%s" % (self.model.__name__, date_str)
         return filename
+
+    def screening_identifier(self, subject_identifier=None):
+        """Returns a screening identifier.
+        """
+        consent_cls = django_apps.get_model('flourish_caregiver.subjectconsent')
+        consent =  consent_cls.objects.filter(subject_identifier=subject_identifier)
+        if consent:
+            return consent.last().screening_identifier
+        return None
 
     def previous_bhp_study(self, screening_identifier=None):
         dataset_cls = django_apps.get_model('flourish_caregiver.maternaldataset')
