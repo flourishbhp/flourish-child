@@ -102,6 +102,17 @@ class ExportActionMixin:
             else:
                 return dataset_obj.protocol
 
+    def study_maternal_identifier(self, screening_identifier=None):
+        dataset_cls = django_apps.get_model('flourish_caregiver.maternaldataset')
+        if screening_identifier:
+            try:
+                dataset_obj = dataset_cls.objects.get(
+                    screening_identifier=screening_identifier)
+            except dataset_cls.DoesNotExist:
+                return None
+            else:
+                return dataset_obj.study_maternal_identifier
+
     def is_assent(self, obj):
         assent_cls = django_apps.get_model('flourish_child.childassent')
         return isinstance(obj, assent_cls)
