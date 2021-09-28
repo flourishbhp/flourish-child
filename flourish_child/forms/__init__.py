@@ -45,3 +45,4 @@ from .infant_congenital_anomalies_form import InfantRespiratoryDefectForm
 from .infant_congenital_anomalies_form import InfantSkinForm
 from .infant_congenital_anomalies_form import InfantTrisomiesForm
 from .infant_feeding_form import InfantFeedingForm
+from .child_covid_19_form import ChildCovid19Form
