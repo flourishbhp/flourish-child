@@ -34,7 +34,7 @@ class ExportActionMixin:
 
         if queryset and getattr(queryset[0], 'child_visit', None):
             field_names.insert(0, 'subject_identifier')
-            field_names.insert(1, 'new_study_subject_identifier')
+            field_names.insert(1, 'new_maternal_study_subject_identifier')
             field_names.insert(2, 'old_study_maternal_identifier')
             field_names.insert(3, 'previous_study')
             field_names.insert(4, 'visit_code')
@@ -55,7 +55,7 @@ class ExportActionMixin:
             screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
             previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
             study_maternal_identifier = self.study_maternal_identifier(screening_identifier=screening_identifier)
-            obj_data['new_study_subject_identifier'] = subject_identifier[:-3]
+            obj_data['new_maternal_study_subject_identifier'] = subject_identifier[:-3]
             obj_data['previous_study'] = previous_study
             obj_data['old_study_maternal_identifier'] = study_maternal_identifier
 
