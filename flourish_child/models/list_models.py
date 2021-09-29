@@ -15,3 +15,11 @@ class WcsDxAdult(ListModelMixin, BaseUuidModel):
 
 class ChildDiseases(ListModelMixin, BaseUuidModel):
     pass
+
+
+class ChildCovidSymptoms(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class ChildCovidSymptomsAfter14Days(ListModelMixin, BaseUuidModel):
+    pass

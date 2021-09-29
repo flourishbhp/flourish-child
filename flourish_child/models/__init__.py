@@ -45,3 +45,6 @@ from .onschedule import OnScheduleChildCohortCSec, OnScheduleChildCohortAFU
 from .onschedule import OnScheduleChildCohortBFU, OnScheduleChildCohortCFU
 from .signals import child_consent_on_post_save
 from .offschedule import ChildOffSchedule
+from .child_covid_19 import ChildCovid19
+from .list_models import *
+
