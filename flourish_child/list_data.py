@@ -105,6 +105,31 @@ list_data = {
          'Sympt nephropathy/cardiomyopathy'),
         (NONE, 'None')
     ],
+    'flourish_child.childcovidsymptoms': [
+        ('chest_pain', 'Chest pain'),
+        ('chills', 'Chills'),
+        ('Cough', 'Cough'),
+        ('Diarrhea ', 'Diarrhea '),
+        ('Fever', 'Fever > 37.5 Degree Celsius'),
+        ('muscle_aches', 'Muscle aches'),
+        ('nasal_congestion', 'Nasal Congestion'),
+        ('Nausea_or_vomiting  ', 'Nausea/vomiting'),
+        ('shortness_of_breath', 'Shortness of breath'),
+        ('sore_throat', 'Sore throat'),
+    ],
+
+    'flourish_child.childcovidsymptomsafter14days': [
+        ('chest_pain', 'Chest pain'),
+        ('chills', 'Chills'),
+        ('Cough', 'Cough'),
+        ('Diarrhea ', 'Diarrhea '),
+        ('Fever', 'Fever > 37.5 Degree Celsius'),
+        ('muscle_aches', 'Muscle aches'),
+        ('nasal_congestion', 'Nasal Congestion'),
+        ('Nausea_or_vomiting  ', 'Nausea/vomiting'),
+        ('shortness_of_breath', 'Shortness of breath'),
+        ('sore_throat', 'Sore throat'),
+    ],
 }
 
 preload_data = PreloadData(
