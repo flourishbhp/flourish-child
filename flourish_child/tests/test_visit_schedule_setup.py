@@ -1,16 +1,17 @@
 from dateutil.relativedelta import relativedelta
+from django.apps import apps as django_apps
 from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 from edc_constants.constants import NOT_APPLICABLE, YES
 from edc_facility.import_holidays import import_holidays
 from model_mommy import mommy
 
+from ..models import ChildDummySubjectConsent, Appointment
 from ..models import OnScheduleChildCohortAEnrollment, OnScheduleChildCohortABirth
 from ..models import OnScheduleChildCohortAQuarterly, OnScheduleChildCohortBEnrollment
+from ..models import OnScheduleChildCohortASec, OnScheduleChildCohortBSec, OnScheduleChildCohortCSec
 from ..models import OnScheduleChildCohortBQuarterly, OnScheduleChildCohortCEnrollment
 from ..models import OnScheduleChildCohortCQuarterly, OnScheduleChildCohortCPool
-from ..models import OnScheduleChildCohortASec, OnScheduleChildCohortBSec, OnScheduleChildCohortCSec
-from ..models import ChildDummySubjectConsent, Appointment
 
 
 @tag('cvs')
@@ -24,7 +25,7 @@ class TestVisitScheduleSetup(TestCase):
             'version': '1'}
 
         self.maternal_dataset_options = {
-            'delivdt': get_utcnow() - relativedelta(years=2, months=5),
+            'delivdt': get_utcnow() - relativedelta(years=2, months=0),
             'mom_enrolldate': get_utcnow(),
             'mom_hivstatus': 'HIV-infected',
             'study_maternal_identifier': '12345',
@@ -36,6 +37,17 @@ class TestVisitScheduleSetup(TestCase):
             'study_maternal_identifier': '12345',
             'study_child_identifier': '1234'}
 
+    def year_3_age(self, year_3_years, year_3_months):
+        """Returns the age at year 3.
+        """
+        app_config = django_apps.get_app_config('flourish_caregiver')
+        start_date_year_3 = app_config.start_date_year_3
+
+        child_dob = start_date_year_3 - relativedelta(years=year_3_years,
+                                                      months=year_3_months)
+        return child_dob
+
+    @tag('cvs0')
     def test_cohort_a_onschedule_consent_valid(self):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
@@ -43,7 +55,7 @@ class TestVisitScheduleSetup(TestCase):
 
         child_dataset = mommy.make_recipe(
             'flourish_child.childdataset',
-            dob=get_utcnow() - relativedelta(years=2, months=5),
+            dob=get_utcnow() - relativedelta(years=2, months=0),
             **self.child_dataset_options)
 
         mommy.make_recipe(
@@ -84,6 +96,7 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
+    @tag('cvs1')
     def test_cohort_b_onschedule_valid(self):
         self.maternal_dataset_options['protocol'] = 'Mpepu'
         self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=5,

@@ -50,7 +50,6 @@ class ExportActionMixin:
                 obj_data['visit_code'] = obj.child_visit.visit_code
                 obj_data['subject_identifier'] = obj.child_visit.subject_identifier
             
-
             subject_identifier = obj_data.get('subject_identifier', None)
             screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
             previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)

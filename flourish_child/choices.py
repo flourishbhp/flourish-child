@@ -682,3 +682,51 @@ YES_NO_UNCERTAIN = (
     ('1', YES),
     ('2', 'Uncertain'),
 )
+
+'''
+Choices for the covid form
+'''
+
+YES_NO_COVID_FORM = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    ('tried_but_could_not_get_tested', 'Tried, but could not get tested '),
+    (UNKNOWN, 'Unknown'),
+
+)
+
+TESTING_REASONS = (
+    ('pre-traveling_screening ', 'Pre-Traveling screening '),
+    ('routine_testing ', 'Routine testing '),
+    ('contact_tracing', 'Contact tracing'),
+    (OTHER, 'Other')
+)
+
+POS_NEG_PENDING_UNKNOWN = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    ('PENDING', 'Pending'),
+    (UNKNOWN, 'Unknown'),
+)
+
+ISOLATION_LOCATION = (
+    ('home', 'Home'),
+    ('hospital', 'Hospital'),
+    ('clinic', 'Clinic'),
+    (OTHER, 'Other'),
+)
+
+YES_NO_PARTIALLY = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    ('partially_jab', 'Partially (one jab)'),
+
+)
+
+VACCINATION_TYPE = (
+    ('astrazeneca', 'AstraZeneca'),
+    ('sinovac', 'Sinovac'),
+    ('pfizer', 'Pfizer'),
+    (OTHER, 'Other')
+)
+
