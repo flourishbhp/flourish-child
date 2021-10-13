@@ -28,5 +28,6 @@ from .infant_arv_exposure_admin import InfantArvExposureAdmin
 from .child_medical_history_admin import ChildMedicalHistoryAdmin
 from .infant_congenital_anomalies_admin import InfantCongenitalAnomaliesAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
+from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
 from .child_covid_19_admin import ChildCovid19Form

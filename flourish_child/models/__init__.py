@@ -36,6 +36,7 @@ from .infant_congenital_anomalies import InfantMusculoskeletal, InfantSkin
 from .infant_congenital_anomalies import InfantOtherAbnormalityItems, InfantMaleGenital
 from .infant_congenital_anomalies import InfantRespiratoryDefect, InfantLowerGi
 from .infant_feeding import InfantFeeding
+from .infant_feeding_practices import InfantFeedingPractices
 from .onschedule import OnScheduleChildCohortAEnrollment, OnScheduleChildCohortABirth
 from .onschedule import OnScheduleChildCohortAQuarterly, OnScheduleChildCohortBEnrollment
 from .onschedule import OnScheduleChildCohortBQuarterly, OnScheduleChildCohortCEnrollment
