@@ -1,9 +1,9 @@
 from django.db import models
 from edc_base.model_fields.custom_fields import OtherCharField
-from edc_base.model_validators.date import datetime_not_future
+from edc_base.model_validators.date import date_not_future
 from edc_constants.choices import YES_NO, YES_NO_UNSURE
 from edc_constants.constants import NOT_APPLICABLE
-from edc_protocol.validators import datetime_not_before_study_start
+from edc_protocol.validators import date_not_before_study_start
 
 from ..choices import (WATER_USED, FREQUENCY_BREASTMILK_REC, BF_ESTIMATED,
                        COWS_MILK)
@@ -29,8 +29,8 @@ class InfantFeeding(ChildCrfModelMixin):
     bf_start_dt = models.DateField(
         verbose_name='Date start of breast feeding',
         validators=[
-            datetime_not_before_study_start,
-            datetime_not_future],
+            date_not_before_study_start,
+            date_not_future],
         blank=True,
         null=True)
 
@@ -192,8 +192,8 @@ class InfantFeeding(ChildCrfModelMixin):
 
     solid_foods_age = models.IntegerField(
         verbose_name=('At approximately what age, in months, did this child '
-                      'in months, did this child start taking solid foods '
-                      '(foods other than breast milk or formula)?'),
+                      'start taking solid foods (foods other than breast '
+                      'milk or formula)?'),
         blank=True,
         null=True)
 
@@ -272,16 +272,16 @@ class InfantFeeding(ChildCrfModelMixin):
         null=True)
 
     def save(self, *args, **kwargs):
-        previous_infant_feeding = self.previous_infant_feeding(self.infant_visit)
+        previous_infant_feeding = self.previous_infant_feeding(self.child_visit)
         if previous_infant_feeding:
             self.last_att_sche_visit = previous_infant_feeding.report_datetime.date()
         super().save(*args, **kwargs)
 
-    def previous_infant_feeding(self, infant_visit):
+    def previous_infant_feeding(self, child_visit):
         """ Return previous infant feeding from. """
 
         return self.__class__.objects.filter(
-            infant_visit__appointment__subject_identifier=infant_visit.appointment.subject_identifier,
+            child_visit__appointment__subject_identifier=child_visit.appointment.subject_identifier,
             report_datetime__lt=self.report_datetime).order_by(
                 '-report_datetime').first()
 

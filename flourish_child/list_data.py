@@ -132,8 +132,8 @@ list_data = {
     'flourish_child.solidfoods': [
         ('grains_roots_tubers', 'Grains, roots and tubers'),
         ('legumes_nuts', 'Legumes and nuts'),
-        ('dairy_products', 'Dairy products (milk, yogurt, cheese'),
-        ('flesh_foods', 'Flesh foods (meat, fish, poultry and liver/organ meat'),
+        ('dairy_products', 'Dairy products (milk, yogurt, cheese)'),
+        ('flesh_foods', 'Flesh foods (meat, fish, poultry and liver/organ meat)'),
         ('eggs', 'Eggs'),
         ('porridge', 'Porridge'),
         ('vitamin_a_rich_fruits_vegies',
