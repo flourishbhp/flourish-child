@@ -150,7 +150,7 @@ class TestVisitScheduleSetup(TestCase):
     @tag('t1')
     def test_cohort_b_assent_onschedule_valid(self):
         self.maternal_dataset_options['protocol'] = 'Mpepu'
-        self.maternal_dataset_options['mom_hivstatus'] = 'HIV uninfected'
+        self.maternal_dataset_options['mom_hivstatus'] = 'HIV-uninfected'
         self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=7,
                                                                                 months=2)
 
@@ -209,16 +209,15 @@ class TestVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('ch1')
     def test_cohort_c_onschedule_valid(self):
         self.child_dataset_options['infant_hiv_exposed'] = 'Unexposed'
         self.maternal_dataset_options['protocol'] = 'Tshipidi'
-        self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=10,
+        self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(years=11,
                                                                                 months=2)
 
         child_dataset = mommy.make_recipe(
             'flourish_child.childdataset',
-            dob=get_utcnow() - relativedelta(years=10, months=2),
+            dob=get_utcnow() - relativedelta(years=11, months=2),
             **self.child_dataset_options)
 
         maternal_dataset_obj = mommy.make_recipe(

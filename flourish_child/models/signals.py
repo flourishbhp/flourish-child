@@ -26,6 +26,7 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
     """Put subject on schedule after consenting.
     """
     age_in_years = age(instance.dob, get_utcnow()).years
+
     if not raw and instance.is_eligible:
         if age_in_years >= 7:
             caregiver_child_consent_cls = django_apps.get_model(
