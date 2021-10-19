@@ -1,4 +1,6 @@
 from django.contrib import admin
+from edc_fieldsets.fieldlist import Insert
+from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import audit_fieldset_tuple
 
 from ..admin_site import flourish_child_admin
@@ -62,8 +64,6 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         audit_fieldset_tuple
     )
 
-    readonly_fields = ('last_att_sche_visit',)
-
     radio_fields = {
         'ever_breastfed': admin.VERTICAL,
         'bf_start_dt_est': admin.VERTICAL,
@@ -82,8 +82,33 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'taken_animal_milk': admin.VERTICAL,
         'milk_boiled': admin.VERTICAL,
         'taken_salts': admin.VERTICAL,
-        'taken_solid_foods': admin.VERTICAL, }
+        'taken_solid_foods': admin.VERTICAL,
+        'infant_feeding_changed': admin.VERTICAL, }
 
     filter_horizontal = ('solid_foods', )
 
     list_display = ('child_visit', 'report_datetime', 'last_att_sche_visit', )
+
+    custom_form_labels = [
+        FormLabel(
+            field='infant_feeding_changed',
+            label=('Since the last scheduled visit in {previous}, has any of '
+                   'your infant feeding information changed?'),
+            previous_appointment=True)
+    ]
+
+    schedules = ['child_a_sec_schedule1', 'child_a_quart_schedule1',
+                 'child_b_sec_schedule1', 'child_b_quart_schedule1',
+                 'child_c_sec_schedule1', 'child_c_quart_schedule1',
+                 'child_pool_schedule1']
+
+    conditional_fieldlists = {}
+    for schedule in schedules:
+        conditional_fieldlists.update({schedule: Insert(
+            'last_att_sche_visit', 'infant_feeding_changed',
+            after='report_datetime')})
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        form = super().get_form(request, *args, **kwargs)
+        form.previous_instance = self.get_previous_instance(request)
+        return form

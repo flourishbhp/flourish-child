@@ -16,9 +16,14 @@ class InfantFeeding(ChildCrfModelMixin):
     """ A model completed by the user on the infant's feeding. """
 
     last_att_sche_visit = models.DateField(
-        verbose_name=('When was the last attended scheduled visit where an '
-                      'infant feeding form was completed? '),
-        blank=True,
+        verbose_name=('The last infant feeding form was completed on '),
+        null=True)
+
+    """Quartely Phone call stem question"""
+    infant_feeding_changed = models.CharField(
+        verbose_name=('Has any of your following infant feeding information changed?'),
+        choices=YES_NO,
+        max_length=20,
         null=True)
 
     ever_breastfed = models.CharField(
@@ -270,20 +275,6 @@ class InfantFeeding(ChildCrfModelMixin):
                       'the other foods'),
         blank=True,
         null=True)
-
-    def save(self, *args, **kwargs):
-        previous_infant_feeding = self.previous_infant_feeding(self.child_visit)
-        if previous_infant_feeding:
-            self.last_att_sche_visit = previous_infant_feeding.report_datetime.date()
-        super().save(*args, **kwargs)
-
-    def previous_infant_feeding(self, child_visit):
-        """ Return previous infant feeding from. """
-
-        return self.__class__.objects.filter(
-            child_visit__appointment__subject_identifier=child_visit.appointment.subject_identifier,
-            report_datetime__lt=self.report_datetime).order_by(
-                '-report_datetime').first()
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
