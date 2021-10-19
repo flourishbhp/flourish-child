@@ -84,7 +84,7 @@ class OnScheduleChildCohortASec(OnScheduleModelMixin):
     pass
 
 
-class OnScheduleChildCohortAQuartSec(OnScheduleModelMixin):
+class OnScheduleChildCohortASecQuart(OnScheduleModelMixin):
     pass
 
 
@@ -92,11 +92,11 @@ class OnScheduleChildCohortBSec(OnScheduleModelMixin):
     pass
 
 
-class OnScheduleChildCohortQuartBSec(OnScheduleModelMixin):
+class OnScheduleChildCohortBSecQuart(OnScheduleModelMixin):
     pass
 
 
-class OnScheduleChildCohortCQuartSec(OnScheduleModelMixin):
+class OnScheduleChildCohortCSecQuart(OnScheduleModelMixin):
     pass
 
 

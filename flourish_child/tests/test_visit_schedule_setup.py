@@ -5,8 +5,9 @@ from edc_base.utils import get_utcnow
 from edc_constants.constants import NOT_APPLICABLE, YES
 from edc_facility.import_holidays import import_holidays
 from model_mommy import mommy
+from edc_visit_tracking.constants import SCHEDULED
 
-from ..models import ChildDummySubjectConsent, Appointment
+from ..models import ChildDummySubjectConsent, Appointment, OnScheduleChildCohortCSecQuart
 from ..models import OnScheduleChildCohortAEnrollment, OnScheduleChildCohortABirth
 from ..models import OnScheduleChildCohortAQuarterly, OnScheduleChildCohortBEnrollment
 from ..models import OnScheduleChildCohortASec, OnScheduleChildCohortBSec, OnScheduleChildCohortCSec
@@ -91,6 +92,18 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortAQuarterly.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
+            schedule_name='child_a_quart_schedule1').count(), 0)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(OnScheduleChildCohortAQuarterly.objects.filter(
+            subject_identifier=dummy_consent.subject_identifier,
             schedule_name='child_a_quart_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
@@ -142,12 +155,24 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortBQuarterly.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
+            schedule_name='child_b_quart_schedule1').count(), 0)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(OnScheduleChildCohortBQuarterly.objects.filter(
+            subject_identifier=dummy_consent.subject_identifier,
             schedule_name='child_b_quart_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('t1')
+    @tag('cvs2')
     def test_cohort_b_assent_onschedule_valid(self):
         self.maternal_dataset_options['protocol'] = 'Mpepu'
         self.maternal_dataset_options['mom_hivstatus'] = 'HIV-uninfected'
@@ -204,11 +229,24 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortBQuarterly.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
+            schedule_name='child_b_quart_schedule1').count(), 0)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=dummy_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(OnScheduleChildCohortBQuarterly.objects.filter(
+            subject_identifier=dummy_consent.subject_identifier,
             schedule_name='child_b_quart_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
+    @tag('cvs3')
     def test_cohort_c_onschedule_valid(self):
         self.child_dataset_options['infant_hiv_exposed'] = 'Unexposed'
         self.maternal_dataset_options['protocol'] = 'Tshipidi'
@@ -266,12 +304,24 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
+            schedule_name='child_c_quart_schedule1').count(), 0)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=dummy_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
+            subject_identifier=dummy_consent.subject_identifier,
             schedule_name='child_c_quart_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('cvs3')
+    @tag('cvs4')
     def test_cohort_c_sec_onschedule_valid(self):
         self.maternal_dataset_options['preg_pi'] = 1
         self.child_dataset_options['infant_hiv_exposed'] = 'exposed'
@@ -326,9 +376,26 @@ class TestVisitScheduleSetup(TestCase):
             subject_identifier=dummy_consent.subject_identifier,
             schedule_name='child_c_sec_schedule1').count(), 1)
 
+        self.assertEqual(OnScheduleChildCohortCSecQuart.objects.filter(
+            subject_identifier=dummy_consent.subject_identifier,
+            schedule_name='child_c_sec_quart_schedule1').count(), 0)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=dummy_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(OnScheduleChildCohortCSecQuart.objects.filter(
+            subject_identifier=dummy_consent.subject_identifier,
+            schedule_name='child_c_sec_quart_schedule1').count(), 1)
+
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
+    @tag('cvs5')
     def test_cohort_c_twins_onschedule_valid(self):
         self.child_dataset_options['infant_hiv_exposed'] = 'Unexposed'
         self.maternal_dataset_options['protocol'] = 'Tshipidi'
@@ -413,6 +480,18 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
             subject_identifier=dummy_consent1.subject_identifier,
+            schedule_name='child_c_quart_schedule1').count(), 0)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=dummy_consent1.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
+            subject_identifier=dummy_consent1.subject_identifier,
             schedule_name='child_c_quart_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
@@ -424,7 +503,19 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
             subject_identifier=dummy_consent2.subject_identifier,
-            schedule_name='child_c_quart_schedule1').count(), 1)
+            schedule_name='child_c_quart_schedule1').count(), 0)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=dummy_consent2.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
+            subject_identifier=dummy_consent2.subject_identifier,
+            schedule_name='child_c_quart_schedule1').count(), 0)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent2.subject_identifier).count(), 0)

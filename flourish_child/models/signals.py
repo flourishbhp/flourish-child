@@ -14,6 +14,7 @@ from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
+from .child_visit import ChildVisit
 
 
 class CaregiverConsentError(Exception):
@@ -95,6 +96,30 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
                               base_appt_datetime=prev_enrolled.created)
 
 
+@receiver(post_save, weak=False, sender=ChildVisit,
+          dispatch_uid='child_visit_on_post_save')
+def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
+    """
+    - Put subject on quarterly schedule at enrollment visit.
+    """
+    if not raw and created and instance.visit_code == '2000':
+
+        if 'sec' in instance.schedule_name:
+
+            cohort_list = instance.schedule_name.split('_')
+
+            cohort = '_'.join(['cohort', cohort_list[1], 'sec_quart'])
+
+        else:
+            cohort_list = instance.schedule_name.split('_')
+
+            cohort = '_'.join(['cohort', cohort_list[1], 'quarterly'])
+
+        put_on_schedule(cohort, instance=instance,
+                        subject_identifier=instance.subject_identifier,
+                        base_appt_datetime=instance.created.replace(microsecond=0))
+
+
 @receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
           dispatch_uid='child_rapid_test_on_post_save')
 def child_rapid_test_on_post_save(sender, instance, raw, created, **kwargs):
@@ -131,14 +156,15 @@ def child_continued_consent_on_post_save(sender, instance, raw, created, **kwarg
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
     if cohort:
+        instance.registration_update_or_create()
         if 'sec' in cohort or 'pool' in cohort:
             put_on_schedule(cohort, instance=instance,
                             base_appt_datetime=base_appt_datetime)
         else:
             put_on_schedule(cohort + '_enrol', instance=instance,
                             base_appt_datetime=base_appt_datetime)
-            put_on_schedule(cohort + '_quart', instance=instance,
-                            base_appt_datetime=base_appt_datetime)
+            # put_on_schedule(cohort + '_quart', instance=instance,
+                            # base_appt_datetime=base_appt_datetime)
         # put_on_schedule(cohort + '_fu', instance=instance,
                         # base_appt_datetime=django_apps.get_app_config(
                             # 'edc_protocol').study_open_datetime)
@@ -148,22 +174,19 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
                     base_appt_datetime=None):
 
     if instance:
-        instance.registration_update_or_create()
         subject_identifier = subject_identifier or instance.subject_identifier
 
         cohort_label_lower = ''.join(cohort.split('_'))
 
         if 'enrol' in cohort:
             cohort_label_lower = cohort_label_lower.replace('enrol', 'enrollment')
-        elif 'quart' in cohort:
-            cohort_label_lower = cohort_label_lower.replace('quart', 'quarterly')
+        if 'sec' in cohort:
+            cohort_label_lower = cohort_label_lower.replace('quarterly', 'quart')
 
         onschedule_model = 'flourish_child.onschedulechild' + cohort_label_lower
 
-        if 'pool' not in cohort:
-            schedule_name = cohort.replace('cohort', 'child') + '_schedule1'
-        else:
-            schedule_name = 'child_pool_schedule1'
+        schedule_name = cohort.replace('cohort', 'child') + '_schedule1'
+        schedule_name = schedule_name.replace('quarterly', 'quart')
 
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)

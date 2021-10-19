@@ -40,12 +40,12 @@ from .infant_feeding import InfantFeeding
 from .list_models import *
 from .offschedule import ChildOffSchedule
 from .onschedule import OnScheduleChildCohortAEnrollment, OnScheduleChildCohortABirth
-from .onschedule import OnScheduleChildCohortAQuartSec, OnScheduleChildCohortQuartBSec
 from .onschedule import OnScheduleChildCohortAQuarterly, OnScheduleChildCohortBEnrollment
 from .onschedule import OnScheduleChildCohortASec, OnScheduleChildCohortBSec
+from .onschedule import OnScheduleChildCohortASecQuart, OnScheduleChildCohortBSecQuart
 from .onschedule import OnScheduleChildCohortBFU, OnScheduleChildCohortCFU
 from .onschedule import OnScheduleChildCohortBQuarterly, OnScheduleChildCohortCEnrollment
-from .onschedule import OnScheduleChildCohortCQuartSec
-from .onschedule import OnScheduleChildCohortCQuarterly, OnScheduleChildCohortCPool
+from .onschedule import OnScheduleChildCohortCPool, OnScheduleChildCohortCSecQuart
+from .onschedule import OnScheduleChildCohortCQuarterly
 from .onschedule import OnScheduleChildCohortCSec, OnScheduleChildCohortAFU
 from .signals import child_consent_on_post_save
