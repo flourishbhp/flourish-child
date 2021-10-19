@@ -178,6 +178,15 @@ FEM_GENITAL_ANOMALY = (
      'Other ovarian, fallopian, uterine, cervical, vaginal, or vulvar abnormality'),
 )
 
+FREQUENCY_BREASTMILK_REC = (
+    ('less_than_once_per_week', 'Less than once per week'),
+    ('less_than_once_per_day', 'Less than once per day, but at least once per week'),
+    ('once_per_day', 'About once per day on most days'),
+    ('more_than_once_per_day', 'More than once per day, but not for all feedings'),
+    ('all_feedings', 'For all feedings (i.e no formula or other foods or liquids'),
+    (NOT_APPLICABLE, 'Not applicable'),
+)
+
 GENDER_NA = (
     (MALE, _('Male')),
     (FEMALE, _('Female')),
@@ -681,6 +690,12 @@ YES_NO_UNCERTAIN = (
     ('0', NO),
     ('1', YES),
     ('2', 'Uncertain'),
+)
+
+BF_ESTIMATED = (
+    ('gen_est', 'Yes - General estimation'),
+    ('used_infant_dob', 'Yes - Used infant date of birth'),
+    (NO, NO)
 )
 
 '''
