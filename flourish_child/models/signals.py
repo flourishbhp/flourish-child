@@ -181,7 +181,7 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
         if 'enrol' in cohort:
             cohort_label_lower = cohort_label_lower.replace('enrol', 'enrollment')
         if 'sec' in cohort:
-            cohort_label_lower = cohort_label_lower.replace('quarterly', 'quart')
+            cohort_label_lower = cohort_label_lower.replace('quarterly', 'qt')
 
         onschedule_model = 'flourish_child.onschedulechild' + cohort_label_lower
 
