@@ -108,12 +108,12 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
 
             cohort_list = instance.schedule_name.split('_')
 
-            cohort = '_'.join(['cohort', cohort_list[1], 'sec_quart'])
+            cohort = '_'.join(['cohort', cohort_list[1], 'sec_qt'])
 
         else:
             cohort_list = instance.schedule_name.split('_')
 
-            cohort = '_'.join(['cohort', cohort_list[1], 'quarterly'])
+            cohort = '_'.join(['cohort', cohort_list[1], 'quart'])
 
         put_on_schedule(cohort, instance=instance,
                         subject_identifier=instance.subject_identifier,
@@ -181,12 +181,11 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
         if 'enrol' in cohort:
             cohort_label_lower = cohort_label_lower.replace('enrol', 'enrollment')
         if 'sec' in cohort:
-            cohort_label_lower = cohort_label_lower.replace('quarterly', 'qt')
+            cohort_label_lower = cohort_label_lower.replace('qt', 'quart')
 
         onschedule_model = 'flourish_child.onschedulechild' + cohort_label_lower
 
         schedule_name = cohort.replace('cohort', 'child') + '_schedule1'
-        schedule_name = schedule_name.replace('quarterly', 'quart')
 
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
