@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import sys
 import os
 from pathlib import Path
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +31,8 @@ SECRET_KEY = 'u6n_*li7t!e23ne*cs))g^b3k2w8%258)&3q8g4k)_im*rf)qt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+DEFAULT_STUDY_SITE = 40
+
 ALLOWED_HOSTS = []
 
 # Application definition
@@ -42,20 +44,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites',
     'django_crypto_fields.apps.AppConfig',
+    'django.contrib.sites',
+    'django_q',
     'edc_action_item.apps.AppConfig',
-    'edc_consent.apps.AppConfig',
+    'edc_dashboard.apps.AppConfig',
     'edc_device.apps.AppConfig',
+    'edc_lab.apps.AppConfig',
+    'edc_odk.apps.AppConfig',
     'edc_identifier.apps.AppConfig',
     'edc_registration.apps.AppConfig',
     'edc_reference.apps.AppConfig',
     'edc_metadata_rules.apps.AppConfig',
-    'edc_odk.apps.AppConfig',
+    'edc_base.apps.AppConfig',
+    'edc_consent.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
-    'flourish_caregiver.apps.AppConfig',
+    'flourish_prn.apps.AppConfig',
     'flourish_reference.apps.AppConfig',
     'flourish_metadata_rules.apps.AppConfig',
+    'flourish_follow.apps.AppConfig',
+    'flourish_labs.apps.AppConfig',
+    'flourish_caregiver.apps.AppConfig',
     'flourish_child.apps.EdcAppointmentAppConfig',
     'flourish_child.apps.EdcMetadataAppConfig',
     'flourish_child.apps.EdcProtocolAppConfig',
@@ -63,8 +72,6 @@ INSTALLED_APPS = [
     'flourish_child.apps.EdcVisitTrackingAppConfig',
     'flourish_child.apps.EdcFacilityAppConfig',
     'flourish_visit_schedule.apps.AppConfig',
-    'flourish_prn.apps.AppConfig',
-    'flourish_follow.apps.AppConfig',
     'flourish_child.apps.AppConfig'
 ]
 
