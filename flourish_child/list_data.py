@@ -128,7 +128,7 @@ list_data = {
         ('Nausea_or_vomiting  ', 'Nausea/vomiting'),
         ('shortness_of_breath', 'Shortness of breath'),
         ('sore_throat', 'Sore throat'),
-        (NOT_APPLICABLE, 'Not Applicable'),
+        ('no_symptoms', 'No Symptoms'),
     ],
     'flourish_child.solidfoods': [
         ('grains_roots_tubers', 'Grains, roots and tubers'),
