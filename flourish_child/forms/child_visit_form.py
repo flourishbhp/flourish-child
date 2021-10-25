@@ -17,10 +17,11 @@ class ChildVisitForm(
 
     def clean(self):
         super().clean()
-        self.validate_incomplete_continued_consent()
-
-    def validate_incomplete_continued_consent(self):
         subject_identifier = self.cleaned_data.get('appointment').subject_identifier
+        self.validate_incomplete_continued_consent(subject_identifier=subject_identifier)
+        self.validate_incomplete_child_assent(subject_identifier=subject_identifier)
+
+    def validate_incomplete_continued_consent(self, subject_identifier=None):
         continued_consent_cls = django_apps.get_model(
             'flourish_child.childcontinuedconsent')
         action_cls = site_action_items.get(
@@ -49,6 +50,15 @@ class ChildVisitForm(
             raise forms.ValidationError(
                 'Participant is 18 years of age, cannot edit visit until'
                 ' participant has given their continued consent for participation.')
+
+    def validate_incomplete_child_assent(self, subject_identifier=None):
+        assent_cls = django_apps.get_model('flourish_child.childassent')
+        try:
+            assent_cls.objects.get(subject_identifier=subject_identifier)
+        except assent_cls.DoesNotExist:
+            raise forms.ValidationError(
+                'Participant is older than 7 years, please complete the child '
+                'assent form before continuing with the visits.')
 
     class Meta:
         model = ChildVisit

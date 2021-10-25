@@ -1,8 +1,11 @@
 from collections import OrderedDict
+from django.conf import settings
 from django.contrib import admin
+from django.urls.base import reverse
+from django.urls.exceptions import NoReverseMatch
 from edc_consent.actions import (
     flag_as_verified_against_paper, unflag_as_verified_against_paper)
-from edc_model_admin import audit_fieldset_tuple, audit_fields
+from edc_model_admin import ModelAdminNextUrlRedirectError, audit_fieldset_tuple, audit_fields
 from simple_history.admin import SimpleHistoryAdmin
 
 from ..admin_site import flourish_child_admin
@@ -88,6 +91,22 @@ class ChildAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
                    'identity_type')
     search_fields = ('subject_identifier', 'dob',)
 
+    def redirect_url(self, request, obj, post_url_continue=None):
+        redirect_url = super().redirect_url(
+            request, obj, post_url_continue=post_url_continue)
+        if request.GET.dict().get('next'):
+            url_name = settings.DASHBOARD_URL_NAMES.get('child_dashboard_url')
+            attrs = ['subject_identifier', ]
+            options = {k: request.GET.dict().get(k)
+                       for k in attrs if request.GET.dict().get(k)}
+            options.update(subject_identifier=obj.subject_identifier)
+            try:
+                redirect_url = reverse(url_name, kwargs=options)
+            except NoReverseMatch as e:
+                raise ModelAdminNextUrlRedirectError(
+                    f'{e}. Got url_name={url_name}, kwargs={options}.')
+        return redirect_url
+
     def get_actions(self, request):
 
         super_actions = super().get_actions(request)
@@ -117,4 +136,4 @@ class ChildAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         return (super().get_readonly_fields(request, obj=obj)
-                +audit_fields)
+                + audit_fields)
