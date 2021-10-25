@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django_crypto_fields.fields import IdentityField
 
+from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites.site_model_mixin import SiteModelMixin
@@ -19,6 +20,7 @@ from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
 
+from ..action_items import CHILDASSENT_ACTION
 from ..choices import IDENTITY_TYPE
 from .eligibility import AssentEligibility
 from .model_mixins import SearchSlugModelMixin
@@ -34,7 +36,11 @@ class ChildAssentManager(SearchSlugManager, models.Manager):
 class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                   IdentityFieldsMixin, PersonalFieldsMixin, ReviewFieldsMixin,
                   VulnerabilityFieldsMixin, CitizenFieldsMixin, SearchSlugModelMixin,
-                  VerificationFieldsMixin, BaseUuidModel):
+                  ActionModelMixin, VerificationFieldsMixin, BaseUuidModel):
+
+    tracking_identifier_prefix = 'CA'
+
+    action_name = CHILDASSENT_ACTION
 
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",

@@ -3,7 +3,6 @@ from edc_base.model_fields.custom_fields import OtherCharField
 from edc_base.model_validators.date import date_not_future
 from edc_constants.choices import YES_NO, YES_NO_UNSURE
 from edc_constants.constants import NOT_APPLICABLE
-from edc_protocol.validators import date_not_before_study_start
 
 from ..choices import (WATER_USED, FREQUENCY_BREASTMILK_REC, BF_ESTIMATED,
                        COWS_MILK)
@@ -33,9 +32,7 @@ class InfantFeeding(ChildCrfModelMixin):
 
     bf_start_dt = models.DateField(
         verbose_name='Date start of breast feeding',
-        validators=[
-            date_not_before_study_start,
-            date_not_future],
+        validators=[date_not_future],
         blank=True,
         null=True)
 
