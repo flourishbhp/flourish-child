@@ -23,3 +23,7 @@ class ChildCovidSymptoms(ListModelMixin, BaseUuidModel):
 
 class ChildCovidSymptomsAfter14Days(ListModelMixin, BaseUuidModel):
     pass
+
+
+class SolidFoods(ListModelMixin, BaseUuidModel):
+    pass
