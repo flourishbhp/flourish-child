@@ -116,6 +116,7 @@ list_data = {
         ('Nausea_or_vomiting  ', 'Nausea/vomiting'),
         ('shortness_of_breath', 'Shortness of breath'),
         ('sore_throat', 'Sore throat'),
+        ('no_symptoms', 'No Symptoms'),
     ],
     'flourish_child.childcovidsymptomsafter14days': [
         ('chest_pain', 'Chest pain'),
