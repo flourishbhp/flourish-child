@@ -30,7 +30,7 @@ class ExportActionMixin:
         field_names.remove('_state')
 
         if queryset and self.is_assent(queryset[0]):
-            field_names.append('previous study name')
+            field_names.append('previous_study')
 
         if queryset and getattr(queryset[0], 'child_visit', None):
             field_names.insert(0, 'subject_identifier')
@@ -49,7 +49,7 @@ class ExportActionMixin:
             if getattr(obj, 'child_visit', None):
                 obj_data['visit_code'] = obj.child_visit.visit_code
                 obj_data['subject_identifier'] = obj.child_visit.subject_identifier
-            
+
             subject_identifier = obj_data.get('subject_identifier', None)
             screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
             previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
@@ -86,7 +86,7 @@ class ExportActionMixin:
         """Returns a screening identifier.
         """
         consent_cls = django_apps.get_model('flourish_caregiver.subjectconsent')
-        consent =  consent_cls.objects.filter(subject_identifier=subject_identifier)
+        consent = consent_cls.objects.filter(subject_identifier=subject_identifier)
         if consent:
             return consent.last().screening_identifier
         return None
