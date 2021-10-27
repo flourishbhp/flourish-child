@@ -1,14 +1,15 @@
 from django.apps import apps as django_apps
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 from edc_fieldsets.fieldlist import Insert
 from edc_fieldsets.fieldsets import Fieldsets
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import audit_fieldset_tuple
+
 from ..admin_site import flourish_child_admin
 from ..forms import AcademicPerformanceForm
 from ..models import AcademicPerformance
 from .model_admin_mixins import ChildCrfModelAdminMixin
-from django.core.exceptions import ObjectDoesNotExist
 
 
 @admin.register(AcademicPerformance, site=flourish_child_admin)
@@ -117,10 +118,10 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ]
 
     quartely_schedules = ['child_a_quart_schedule1', 'child_a_fu_quart_schedule1',
-                          'child_a_sec_schedule1', 'child_b_quart_schedule1',
-                          'child_b_fu_quart_schedule1', 'child_b_sec_schedule1',
+                          'child_a_sec_qt_schedule1', 'child_b_quart_schedule1',
+                          'child_b_fu_quart_schedule1', 'child_b_sec_qt_schedule1',
                           'child_c_quart_schedule1', 'child_c_fu_quart_schedule1',
-                          'child_c_sec_schedule1', ]
+                          'child_c_sec_qt_schedule1', ]
 
     for schedule in quartely_schedules:
         conditional_fieldlists.update(
