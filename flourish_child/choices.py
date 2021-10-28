@@ -731,12 +731,14 @@ ISOLATION_LOCATION = (
     (OTHER, 'Other'),
 )
 
+
 YES_NO_PARTIALLY = (
     (YES, 'Yes'),
     (NO, 'No'),
-    ('partially_jab', 'Partially (one jab)'),
+    ('partially_or_one_jab', 'Partially / one jab'),
 
 )
+
 
 VACCINATION_TYPE = (
     ('astrazeneca', 'AstraZeneca'),
