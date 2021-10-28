@@ -3,11 +3,11 @@ from edc_fieldsets.fieldlist import Fieldlist
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
 
-from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import (
     ChildImmunizationHistoryForm, VaccinesReceivedForm, VaccinesMissedForm)
 from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived
+from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
@@ -71,21 +71,21 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ]
 
     conditional_fieldlists = {
-        'child_a_sec_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                           remove_fields=('vaccines_received',),
-                                           insert_after='report_datetime'),
+        'child_a_sec_qt_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                              remove_fields=('vaccines_received',),
+                                              insert_after='report_datetime'),
         'child_a_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
                                              remove_fields=('vaccines_received',),
                                              insert_after='report_datetime'),
         'child_b_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
                                              remove_fields=('vaccines_received',),
                                              insert_after='report_datetime'),
-        'child_b_sec_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                           remove_fields=('vaccines_received',),
-                                           insert_after='report_datetime'),
-        'child_c_sec_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                           remove_fields=('vaccines_received',),
-                                           insert_after='report_datetime'),
+        'child_b_sec_qt_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                              remove_fields=('vaccines_received',),
+                                              insert_after='report_datetime'),
+        'child_c_sec_qt_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
+                                              remove_fields=('vaccines_received',),
+                                              insert_after='report_datetime'),
         'child_c_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
                                              remove_fields=('vaccines_received',),
                                              insert_after='report_datetime'),

@@ -65,10 +65,10 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ]
 
     quartely_schedules = ['child_a_quart_schedule1', 'child_a_fu_quart_schedule1',
-                          'child_a_sec_schedule1', 'child_b_quart_schedule1',
-                          'child_b_fu_quart_schedule1', 'child_b_sec_schedule1',
+                          'child_a_sec_qt_schedule1', 'child_b_quart_schedule1',
+                          'child_b_fu_quart_schedule1', 'child_b_sec_qt_schedule1',
                           'child_c_quart_schedule1', 'child_c_fu_quart_schedule1',
-                          'child_c_sec_schedule1', ]
+                          'child_c_sec_qt_schedule1', ]
 
     conditional_fieldlists = {}
     for schedule in quartely_schedules:

@@ -85,9 +85,9 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'taken_solid_foods': admin.VERTICAL,
         'infant_feeding_changed': admin.VERTICAL, }
 
-    filter_horizontal = ('solid_foods', )
+    filter_horizontal = ('solid_foods',)
 
-    list_display = ('child_visit', 'report_datetime', 'last_att_sche_visit', )
+    list_display = ('child_visit', 'report_datetime', 'last_att_sche_visit',)
 
     custom_form_labels = [
         FormLabel(
@@ -97,9 +97,9 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             previous_appointment=True)
     ]
 
-    schedules = ['child_a_sec_schedule1', 'child_a_quart_schedule1',
-                 'child_b_sec_schedule1', 'child_b_quart_schedule1',
-                 'child_c_sec_schedule1', 'child_c_quart_schedule1',
+    schedules = ['child_a_sec_qt_schedule1', 'child_a_quart_schedule1',
+                 'child_b_sec_qt_schedule1', 'child_b_quart_schedule1',
+                 'child_c_sec_qt_schedule1', 'child_c_quart_schedule1',
                  'child_pool_schedule1']
 
     conditional_fieldlists = {}
