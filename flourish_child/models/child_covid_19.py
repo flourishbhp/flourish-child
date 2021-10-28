@@ -95,8 +95,7 @@ class ChildCovid19(CrfModelMixin):
         verbose_name='Have you been in close contact with anyone outside of your household who tested positive for '
                      'COVID-19',
         max_length=10,
-        choices=YES_NO_UNKNOWN,
-        blank=False
+        choices=YES_NO_UNKNOWN
     )
 
     symptoms_for_past_14days = models.ManyToManyField(
