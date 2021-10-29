@@ -28,12 +28,13 @@ class ChildVisitForm(
                  'participant has given their continued consent for participation.'))
 
         # Validate incomplete child assent form if child >= 7 years of age.
-        self.validate_incomplete_required_model(
-            subject_identifier=subject_identifier,
-            model='flourish_child.childassent',
-            action_name=CHILDASSENT_ACTION,
-            msg=('Participant is older than 7 years, please complete the child'
-                 ' assent form before continuing with the visits.'))
+        if 'quart' not in self.cleaned_data.get('appointment').schedule_name:
+            self.validate_incomplete_required_model(
+                subject_identifier=subject_identifier,
+                model='flourish_child.childassent',
+                action_name=CHILDASSENT_ACTION,
+                msg=('Participant is older than 7 years, please complete the child'
+                     ' assent form before continuing with the visits.'))
 
     def validate_incomplete_required_model(
             self, subject_identifier=None, model=None, action_name=None, msg=None):
