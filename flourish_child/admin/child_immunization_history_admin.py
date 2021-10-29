@@ -70,26 +70,16 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             previous_appointment=True)
         ]
 
-    conditional_fieldlists = {
-        'child_a_sec_qt_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                              remove_fields=('vaccines_received',),
-                                              insert_after='report_datetime'),
-        'child_a_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                             remove_fields=('vaccines_received',),
-                                             insert_after='report_datetime'),
-        'child_b_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                             remove_fields=('vaccines_received',),
-                                             insert_after='report_datetime'),
-        'child_b_sec_qt_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                              remove_fields=('vaccines_received',),
-                                              insert_after='report_datetime'),
-        'child_c_sec_qt_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                              remove_fields=('vaccines_received',),
-                                              insert_after='report_datetime'),
-        'child_c_quart_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                             remove_fields=('vaccines_received',),
-                                             insert_after='report_datetime'),
-        'child_pool_schedule1': Fieldlist(insert_fields=('rec_add_immunization',),
-                                          remove_fields=('vaccines_received',),
-                                          insert_after='report_datetime'),
-    }
+    quartely_schedules = ['child_a_quart_schedule1', 'child_a_fu_quart_schedule1',
+                          'child_a_sec_qt_schedule1', 'child_b_quart_schedule1',
+                          'child_b_fu_quart_schedule1', 'child_b_sec_qt_schedule1',
+                          'child_c_quart_schedule1', 'child_c_fu_quart_schedule1',
+                          'child_c_sec_qt_schedule1', 'child_pool_schedule1', ]
+
+    conditional_fieldlists = {}
+
+    for schedule in quartely_schedules:
+        conditional_fieldlists.update(
+            {schedule: Fieldlist(insert_fields=('rec_add_immunization',),
+                                 remove_fields=('vaccines_received',),
+                                 insert_after='report_datetime')})
