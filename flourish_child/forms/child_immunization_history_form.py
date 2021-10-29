@@ -1,6 +1,6 @@
 from django import forms
 
-from edc_constants.constants import OTHER, YES, NOT_APPLICABLE
+from edc_constants.constants import OTHER, YES
 from flourish_child_validations.form_validators import VaccinesReceivedFormValidator
 
 from .child_form_mixin import ChildModelFormMixin

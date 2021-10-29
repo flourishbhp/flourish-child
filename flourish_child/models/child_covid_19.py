@@ -95,9 +95,7 @@ class ChildCovid19(CrfModelMixin):
         verbose_name='Have you been in close contact with anyone outside of your household who tested positive for '
                      'COVID-19',
         max_length=10,
-        choices=YES_NO_UNKNOWN,
-        null=True,
-        blank=True
+        choices=YES_NO_UNKNOWN
     )
 
     symptoms_for_past_14days = models.ManyToManyField(
@@ -108,7 +106,7 @@ class ChildCovid19(CrfModelMixin):
 
     fully_vaccinated = models.CharField(
         verbose_name='Have you been fully vaccinated for COVID-19',
-        max_length=20,
+        max_length=25,
         choices=YES_NO_PARTIALLY
     )
 
