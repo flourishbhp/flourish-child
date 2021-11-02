@@ -90,28 +90,33 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     def add_view(self, request, form_url='', extra_context=None):
 
         extra_context = extra_context or {}
+        subject_identifier = request.GET.get('subject_identifier')
+        child_visit = request.GET.get('child_visit')
         if self.extra_context_models:
             extra_context = self.get_model_data_per_visit(
-                subject_identifier=request.GET.get('subject_identifier'))
+                subject_identifier=subject_identifier, child_visit=child_visit)
         return super().add_view(
             request, form_url=form_url, extra_context=extra_context)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
 
         extra_context = extra_context or {}
+        subject_identifier = request.GET.get('subject_identifier')
+        child_visit = request.GET.get('child_visit')
         if self.extra_context_models:
             extra_context = self.get_model_data_per_visit(
-                subject_identifier=request.GET.get('subject_identifier'))
+                subject_identifier=subject_identifier, child_visit=child_visit)
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
 
-    def get_model_data_per_visit(self, subject_identifier=None):
+    def get_model_data_per_visit(self, subject_identifier=None, child_visit=None):
         model_dict = {}
         for model_name in self.extra_context_models:
             data_dict = {}
             model_cls = django_apps.get_model(f'flourish_child.{model_name}')
             model_objs = model_cls.objects.filter(
-                child_immunization_history__child_visit__subject_identifier=subject_identifier)
+                child_immunization_history__child_visit__subject_identifier=subject_identifier).exclude(
+                    child_immunization_history__child_visit=child_visit)
             for model_obj in model_objs:
                 visit_code = model_obj.visit.visit_code
                 data_dict.setdefault(visit_code, [])

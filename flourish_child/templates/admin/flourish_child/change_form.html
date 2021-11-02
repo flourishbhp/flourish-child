@@ -78,7 +78,9 @@
 			</table>
 		</div>
 	{% endif %}
-	<div class='clearfix'></div>
+	{% if vaccinesreceived or vaccinesmissed %}
+		<div class='clearfix'></div>
+	{% endif %}
   	{{ block.super }}
 {% endblock field_sets %}
 
