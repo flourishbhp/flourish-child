@@ -1,3 +1,4 @@
+from django.apps import apps as django_apps
 from django.contrib import admin
 from edc_fieldsets.fieldlist import Fieldlist
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
@@ -47,6 +48,8 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     form = ChildImmunizationHistoryForm
 
+    extra_context_models = ['vaccinesmissed', 'vaccinesreceived']
+
     fieldsets = (
         (None, {
             'fields': (
@@ -83,3 +86,36 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             {schedule: Fieldlist(insert_fields=('rec_add_immunization',),
                                  remove_fields=('vaccines_received',),
                                  insert_after='report_datetime')})
+
+    def add_view(self, request, form_url='', extra_context=None):
+
+        extra_context = extra_context or {}
+        if self.extra_context_models:
+            extra_context = self.get_model_data_per_visit(
+                subject_identifier=request.GET.get('subject_identifier'))
+        return super().add_view(
+            request, form_url=form_url, extra_context=extra_context)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+
+        extra_context = extra_context or {}
+        if self.extra_context_models:
+            extra_context = self.get_model_data_per_visit(
+                subject_identifier=request.GET.get('subject_identifier'))
+        return super().change_view(
+            request, object_id, form_url=form_url, extra_context=extra_context)
+
+    def get_model_data_per_visit(self, subject_identifier=None):
+        model_dict = {}
+        for model_name in self.extra_context_models:
+            data_dict = {}
+            model_cls = django_apps.get_model(f'flourish_child.{model_name}')
+            model_objs = model_cls.objects.filter(
+                child_immunization_history__child_visit__subject_identifier=subject_identifier)
+            for model_obj in model_objs:
+                visit_code = model_obj.visit.visit_code
+                data_dict.setdefault(visit_code, [])
+                data_dict[visit_code].append(model_obj)
+
+            model_dict.update({model_name: data_dict})
+        return model_dict
