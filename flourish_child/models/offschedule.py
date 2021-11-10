@@ -24,5 +24,9 @@ class ChildOffSchedule(OffScheduleModelMixin, BaseUuidModel):
     def take_off_schedule(self):
         pass
 
+    def save(self, *args, **kwargs):
+        self.consent_version = '1'
+        super().save(*args, **kwargs)
+
     class Meta:
         unique_together = ('subject_identifier', 'schedule_name')

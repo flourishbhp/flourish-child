@@ -15,6 +15,9 @@ from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
+from ..models import ChildOffSchedule
+from django.core.exceptions import ObjectDoesNotExist
+
 
 
 class CaregiverConsentError(Exception):
@@ -235,3 +238,34 @@ def trigger_action_item(obj, field, response, model_cls,
             pass
         else:
             action_item.delete()
+
+@receiver(post_save, weak=False, sender=ChildOffSchedule,
+        dispatch_uid='child_off_schedule_on_post_save')
+def child_take_off_study(sender, instance, raw, created, **kwargs):
+    for visit_schedule in site_visit_schedules.visit_schedules.values():
+            for schedule in visit_schedule.schedules.values():
+                onschedule_model_obj = get_child_onschedule_model_obj(schedule,instance.subject_identifier)
+                if onschedule_model_obj:
+                    _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                        onschedule_model=onschedule_model_obj._meta.label_lower,name=onschedule_model_obj.schedule_name)
+                    schedule.take_off_schedule(subject_identifier=instance.subject_identifier)
+
+                    #remove care giver from child schedules also
+                    #caregiver_subject_identifier = instance.subject_identifier[:-3]
+                    #onschedule_model_obj = get_caregiver_onschedule_model_obj(schedule,caregiver_subject_identifier)
+                    #schedule.take_off_schedule(subject_identifier=caregiver_subject_identifier)
+                        
+
+def get_caregiver_onschedule_model_obj(schedule, subject_identifier):
+        try:
+            return schedule.onschedule_model_cls.objects.get(
+                child_subject_identifier=subject_identifier)
+        except ObjectDoesNotExist:
+            return None
+
+def get_child_onschedule_model_obj(schedule, subject_identifier):
+        try:
+            return schedule.onschedule_model_cls.objects.get(
+                subject_identifier=subject_identifier)
+        except ObjectDoesNotExist:
+            return None
