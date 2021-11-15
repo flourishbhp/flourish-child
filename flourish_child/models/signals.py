@@ -76,27 +76,26 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
 def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     """Put subject on cohort a schedule after consenting.
     """
-    caregiver_prev_enrolled_cls = django_apps.get_model(
-                'flourish_caregiver.caregiverpreviouslyenrolled')
-    try:
-        prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
-            subject_identifier=instance.subject_identifier[:-3])
-    except caregiver_prev_enrolled_cls.DoesNotExist:
-        pass
-    else:
-        maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
+    if not raw:
+        caregiver_prev_enrolled_cls = django_apps.get_model(
+                    'flourish_caregiver.caregiverpreviouslyenrolled')
         try:
-            maternal_delivery_obj = maternal_delivery_cls.objects.get(
-                delivery_datetime=instance.consent_datetime,
+            prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
                 subject_identifier=instance.subject_identifier[:-3])
-        except maternal_delivery_cls.DoesNotExist:
+        except caregiver_prev_enrolled_cls.DoesNotExist:
             pass
         else:
-            put_on_schedule((instance.cohort + '_birth'), instance=instance,
-                            base_appt_datetime=maternal_delivery_obj.created)
-
-        put_cohort_onschedule(instance.cohort, instance=instance,
-                              base_appt_datetime=prev_enrolled.created)
+            maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
+            try:
+                maternal_delivery_obj = maternal_delivery_cls.objects.get(
+                    delivery_datetime=instance.consent_datetime,
+                    subject_identifier=instance.subject_identifier[:-3])
+            except maternal_delivery_cls.DoesNotExist:
+                put_cohort_onschedule(instance.cohort, instance=instance,
+                                  base_appt_datetime=prev_enrolled.created)
+            else:
+                put_on_schedule((instance.cohort + '_birth'), instance=instance,
+                                base_appt_datetime=maternal_delivery_obj.created)
 
 
 @receiver(post_save, weak=False, sender=ChildVisit,
