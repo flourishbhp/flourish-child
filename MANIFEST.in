@@ -1,2 +1,3 @@
 include AUTHORS CHANGES README.md LICENCE
 recursive-include flourish_child/templates *
+recursive-include flourish_child/static *
