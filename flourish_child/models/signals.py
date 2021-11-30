@@ -1,23 +1,23 @@
 from django.apps import apps as django_apps
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
+
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION
 from flourish_prn.models import ChildOffStudy
 
+from ..models import ChildOffSchedule
 from .child_assent import ChildAssent
 from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
-from ..models import ChildOffSchedule
-from django.core.exceptions import ObjectDoesNotExist
-
 
 
 class CaregiverConsentError(Exception):
@@ -76,27 +76,26 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
 def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     """Put subject on cohort a schedule after consenting.
     """
-    caregiver_prev_enrolled_cls = django_apps.get_model(
-                'flourish_caregiver.caregiverpreviouslyenrolled')
-    try:
-        prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
-            subject_identifier=instance.subject_identifier[:-3])
-    except caregiver_prev_enrolled_cls.DoesNotExist:
-        pass
-    else:
-        maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
+    if not raw:
+        caregiver_prev_enrolled_cls = django_apps.get_model(
+                    'flourish_caregiver.caregiverpreviouslyenrolled')
         try:
-            maternal_delivery_obj = maternal_delivery_cls.objects.get(
-                delivery_datetime=instance.consent_datetime,
+            prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
                 subject_identifier=instance.subject_identifier[:-3])
-        except maternal_delivery_cls.DoesNotExist:
+        except caregiver_prev_enrolled_cls.DoesNotExist:
             pass
         else:
-            put_on_schedule((instance.cohort + '_birth'), instance=instance,
-                            base_appt_datetime=maternal_delivery_obj.created)
-
-        put_cohort_onschedule(instance.cohort, instance=instance,
-                              base_appt_datetime=prev_enrolled.created)
+            maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
+            try:
+                maternal_delivery_obj = maternal_delivery_cls.objects.get(
+                    delivery_datetime=instance.consent_datetime,
+                    subject_identifier=instance.subject_identifier[:-3])
+            except maternal_delivery_cls.DoesNotExist:
+                put_cohort_onschedule(instance.cohort, instance=instance,
+                                  base_appt_datetime=prev_enrolled.created)
+            else:
+                put_on_schedule((instance.cohort + '_birth'), instance=instance,
+                                base_appt_datetime=maternal_delivery_obj.created)
 
 
 @receiver(post_save, weak=False, sender=ChildVisit,
@@ -239,22 +238,23 @@ def trigger_action_item(obj, field, response, model_cls,
         else:
             action_item.delete()
 
+
 @receiver(post_save, weak=False, sender=ChildOffSchedule,
         dispatch_uid='child_off_schedule_on_post_save')
 def child_take_off_study(sender, instance, raw, created, **kwargs):
     for visit_schedule in site_visit_schedules.visit_schedules.values():
             for schedule in visit_schedule.schedules.values():
-                onschedule_model_obj = get_child_onschedule_model_obj(schedule,instance.subject_identifier)
+                onschedule_model_obj = get_child_onschedule_model_obj(schedule, instance.subject_identifier)
                 if onschedule_model_obj:
                     _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-                        onschedule_model=onschedule_model_obj._meta.label_lower,name=onschedule_model_obj.schedule_name)
+                        onschedule_model=onschedule_model_obj._meta.label_lower, name=onschedule_model_obj.schedule_name)
                     schedule.take_off_schedule(subject_identifier=instance.subject_identifier)
 
-                    #remove care giver from child schedules also
-                    #caregiver_subject_identifier = instance.subject_identifier[:-3]
-                    #onschedule_model_obj = get_caregiver_onschedule_model_obj(schedule,caregiver_subject_identifier)
-                    #schedule.take_off_schedule(subject_identifier=caregiver_subject_identifier)
-                        
+                    # remove care giver from child schedules also
+                    # caregiver_subject_identifier = instance.subject_identifier[:-3]
+                    # onschedule_model_obj = get_caregiver_onschedule_model_obj(schedule,caregiver_subject_identifier)
+                    # schedule.take_off_schedule(subject_identifier=caregiver_subject_identifier)
+
 
 def get_caregiver_onschedule_model_obj(schedule, subject_identifier):
         try:
@@ -262,6 +262,7 @@ def get_caregiver_onschedule_model_obj(schedule, subject_identifier):
                 child_subject_identifier=subject_identifier)
         except ObjectDoesNotExist:
             return None
+
 
 def get_child_onschedule_model_obj(schedule, subject_identifier):
         try:
