@@ -8,7 +8,7 @@ from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-from flourish_prn.action_items import CHILDOFF_STUDY_ACTION
+from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 
 from ..models import ChildOffSchedule
@@ -18,6 +18,7 @@ from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
+from flourish_prn.models.child_death_report import ChildDeathReport
 
 
 class CaregiverConsentError(Exception):
@@ -104,6 +105,12 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
     """
     - Put subject on quarterly schedule at enrollment visit.
     """
+    
+    trigger_action_item(instance, 'survival_status', 'dead',
+                    ChildDeathReport, CHILD_DEATH_REPORT_ACTION,
+                    instance.subject_identifier,
+                    repeat=True)
+        
     if not raw and created and instance.visit_code == '2000':
 
         if 'sec' in instance.schedule_name:
