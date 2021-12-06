@@ -378,7 +378,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCSecQuart.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_c_sec_quart_schedule1').count(), 0)
+            schedule_name='child_c_sec_qt_schedule1').count(), 0)
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -390,7 +390,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCSecQuart.objects.filter(
             subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_c_sec_quart_schedule1').count(), 1)
+            schedule_name='child_c_sec_qt_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
@@ -480,7 +480,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
             subject_identifier=dummy_consent1.subject_identifier,
-            schedule_name='child_c_quart_schedule1').count(), 0)
+            schedule_name='child_c_qt_schedule1').count(), 0)
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -492,7 +492,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
             subject_identifier=dummy_consent1.subject_identifier,
-            schedule_name='child_c_quart_schedule1').count(), 1)
+            schedule_name='child_c_qt_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent1.subject_identifier).count(), 0)
@@ -503,7 +503,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
             subject_identifier=dummy_consent2.subject_identifier,
-            schedule_name='child_c_quart_schedule1').count(), 0)
+            schedule_name='child_c_qt_schedule1').count(), 0)
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -515,7 +515,7 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertEqual(OnScheduleChildCohortCQuarterly.objects.filter(
             subject_identifier=dummy_consent2.subject_identifier,
-            schedule_name='child_c_quart_schedule1').count(), 0)
+            schedule_name='child_c_qt_schedule2').count(), 0)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent2.subject_identifier).count(), 0)

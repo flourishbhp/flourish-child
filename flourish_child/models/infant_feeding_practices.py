@@ -230,5 +230,5 @@ class InfantFeedingPractices(ChildCrfModelMixin):
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = "Infant Feeding Practices"
-        verbose_name_plural = "Infant Feeding Practices"
+        verbose_name = "Infant Feeding Practices Follow-up"
+        verbose_name_plural = "Infant Feeding Practices Follow-up"
