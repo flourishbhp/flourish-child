@@ -23,6 +23,7 @@ class BirthDataAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'head_circ_avail',
                 'head_circumference',
                 'apgar_score',
+                'gestational_age',
                 'apgar_score_min_1',
                 'apgar_score_min_5',
                 'apgar_score_min_10',
