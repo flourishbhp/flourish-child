@@ -1,12 +1,12 @@
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from edc_model_admin import audit_fieldset_tuple
 from edc_fieldsets.fieldlist import Remove
+from edc_model_admin import audit_fieldset_tuple
 
-from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import ChildClinicalMeasurementsForm
 from ..models import ChildClinicalMeasurements
+from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 @admin.register(ChildClinicalMeasurements, site=flourish_child_admin)
@@ -24,6 +24,7 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
             'fields': [
                 'child_visit',
                 'report_datetime',
+                'is_child_preg',
                 'child_weight_kg',
                 'child_systolic_bp',
                 'child_diastolic_bp',
@@ -36,6 +37,9 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
                 'child_muac'
             ]}
          ), audit_fieldset_tuple)
+
+    radio_fields = {
+        'is_child_preg': admin.VERTICAL, }
 
     conditional_fieldlists = {}
 
