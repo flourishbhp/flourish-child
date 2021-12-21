@@ -27,6 +27,7 @@ class ExportActionMixin:
 
         field_names = queryset[0].__dict__
         field_names = [a for a in field_names.keys()]
+        field_names.append('on_study')
         field_names.remove('_state')
 
         if queryset and self.is_assent(queryset[0]):
@@ -57,6 +58,7 @@ class ExportActionMixin:
             obj_data['new_maternal_study_subject_identifier'] = subject_identifier[:-3]
             obj_data['previous_study'] = previous_study
             obj_data['old_study_maternal_identifier'] = study_maternal_identifier
+            obj_data['on_study'] = self.on_study(subject_identifier=subject_identifier)
 
             data = [obj_data[field] for field in field_names]
 
@@ -116,3 +118,9 @@ class ExportActionMixin:
     def is_assent(self, obj):
         assent_cls = django_apps.get_model('flourish_child.childassent')
         return isinstance(obj, assent_cls)
+
+    def on_study(self, subject_identifier):
+        caregiver_offstudy_cls = django_apps.get_model('flourish_prn.childoffstudy')
+        is_offstudy = caregiver_offstudy_cls.objects.filter(subject_identifier=subject_identifier).exists()
+
+        return 'No' if is_offstudy else 'Yes'
