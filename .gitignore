@@ -138,3 +138,11 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.ide/
+ide/
+flourish_child/migrations/
+crypto_fields/
+/crypto_fields
+crypto_fields/user-aes-local.key
+crypto_fields/user-aes-restricted.key
+crypto_fields/user-aes-local.key
