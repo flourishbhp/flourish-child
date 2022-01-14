@@ -45,7 +45,6 @@ class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
 
 @admin.register(ChildImmunizationHistory, site=flourish_child_admin)
 class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = ChildImmunizationHistoryForm
 
     extra_context_models = ['vaccinesmissed', 'vaccinesreceived']
@@ -71,12 +70,15 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             label=('Since the last scheduled visit in {previous}, have you '
                    'received any additional immunizations?'),
             previous_appointment=True)
-        ]
+    ]
 
-    quartely_schedules = ['child_a_quart_schedule1', 'child_a_fu_quart_schedule1',
+    quartely_schedules = ['child_a_quart_schedule1',
+                          'child_a_fu_quart_schedule1',
                           'child_a_sec_qt_schedule1', 'child_b_quart_schedule1',
-                          'child_b_fu_quart_schedule1', 'child_b_sec_qt_schedule1',
-                          'child_c_quart_schedule1', 'child_c_fu_quart_schedule1',
+                          'child_b_fu_quart_schedule1',
+                          'child_b_sec_qt_schedule1',
+                          'child_c_quart_schedule1',
+                          'child_c_fu_quart_schedule1',
                           'child_c_sec_qt_schedule1', 'child_pool_schedule1', ]
 
     conditional_fieldlists = {}
@@ -109,14 +111,15 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
 
-    def get_model_data_per_visit(self, subject_identifier=None, child_visit=None):
+    def get_model_data_per_visit(self, subject_identifier=None,
+                                 child_visit=None):
         model_dict = {}
         for model_name in self.extra_context_models:
             data_dict = {}
             model_cls = django_apps.get_model(f'flourish_child.{model_name}')
             model_objs = model_cls.objects.filter(
                 child_immunization_history__child_visit__subject_identifier=subject_identifier).exclude(
-                    child_immunization_history__child_visit=child_visit)
+                child_immunization_history__child_visit=child_visit)
             for model_obj in model_objs:
                 visit_code = model_obj.visit.visit_code
                 data_dict.setdefault(visit_code, [])

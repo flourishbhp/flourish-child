@@ -8,15 +8,20 @@ from .child_assent_form import ChildAssentForm
 from .child_birth_form import ChildBirthForm
 from .child_birth_weight_length_screening_form import ChildBirthScreeningForm
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
-from .child_clinician_notes_form import ClinicianNotesImageForm, ChildClinicianNotesForm
+from .child_clinician_notes_form import ClinicianNotesImageForm, \
+    ChildClinicianNotesForm
 from .child_continued_consent_form import ChildContinuedConsentForm
 from .child_covid_19_form import ChildCovid19Form
 from .child_dataset_form import ChildDatasetForm
 from .child_dummy_consent_form import ChildDummySubjectConsentForm
-from .child_food_security_questionnaire_form import ChildFoodSecurityQuestionnaireForm
+from .child_food_security_questionnaire_form import \
+    ChildFoodSecurityQuestionnaireForm
 from .child_gad_anxiety_screening_form import ChildGadAnxietyScreeningForm
 from .child_gad_referral_form import ChildGadReferralForm
-from .child_hiv_rapid_test_counseling_form import ChildHIVRapidTestCounselingForm
+from .child_hiv_rapid_test_counseling_form import \
+    ChildHIVRapidTestCounselingForm
+from .child_hospitalization_form import ChildHospitalisationForm, \
+    AdmissionsReasonsForms
 from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
@@ -25,8 +30,10 @@ from .child_phq_depression_screening_form import ChildPhqDepressionScreeningForm
 from .child_phq_referral_form import ChildPhqReferralForm
 from .child_physical_activity_form import ChildPhysicalActivityForm
 from .child_preg_testing_form import ChildPregTestingForm
-from .child_previous_hospitalisation_form import ChildPreHospitalizationInlineForm
-from .child_previous_hospitalisation_form import ChildPreviousHospitalizationForm
+from .child_previous_hospitalisation_form import \
+    ChildPreHospitalizationInlineForm
+from .child_previous_hospitalisation_form import \
+    ChildPreviousHospitalizationForm
 from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_tanner_staging_form import ChildTannerStagingForm
 from .child_visit_form import ChildVisitForm
@@ -49,4 +56,3 @@ from .infant_congenital_anomalies_form import InfantTrisomiesForm
 from .infant_feeding_form import InfantFeedingForm
 from .infant_feeding_practices_form import InfantFeedingPracticesForm
 from .offschedule_form import ChildOffScheduleForm
-
