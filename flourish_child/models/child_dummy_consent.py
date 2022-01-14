@@ -35,7 +35,8 @@ class ChildDummySubjectConsent(
         default=get_utcnow)
 
     identity = IdentityField(
-        verbose_name='Identity number')
+        verbose_name='Identity number',
+        null=True)
 
     dob = models.DateField(
         verbose_name="Date of birth",
