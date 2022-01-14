@@ -9,6 +9,8 @@ from model_mommy.recipe import Recipe, seq
 
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, ChildVisit
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, ChildSocioDemographic
+from flourish_child.models.birth_data import BirthData
+from flourish_child.models.child_birth import ChildBirth
 
 fake = Faker()
 
@@ -33,6 +35,9 @@ childassent = Recipe(
 
 childdataset = Recipe(
     ChildDataset,)
+
+childbirth = Recipe(
+    ChildBirth)
 
 registeredsubject = Recipe(
     RegisteredSubject,
@@ -68,9 +73,14 @@ childvisit = Recipe(
     survival_status=ALIVE,
     info_source=PARTICIPANT)
 
+
 childsociodemographic = Recipe(
     ChildSocioDemographic,
     attend_school=YES)
+
+birthdata = Recipe(
+    BirthData,
+    congenital_anomalities=YES)
 
 childgadanxietyscreening = Recipe(
     ChildGadAnxietyScreening,
