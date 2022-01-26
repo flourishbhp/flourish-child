@@ -150,3 +150,104 @@ class TestRuleGroups(TestCase):
                 model='flourish_child.childphqreferral',
                 subject_identifier=self.subject_identifier,
                 visit_code='2000').entry_status, REQUIRED)
+
+    def test_congenital_anomalies_required(self):
+        self.options = {
+            'consent_datetime': get_utcnow(),
+            'version': '1'}
+
+        screening_preg = mommy.make_recipe(
+            'flourish_caregiver.screeningpregwomen',)
+
+        subject_consent = mommy.make_recipe(
+            'flourish_caregiver.subjectconsent',
+            screening_identifier=screening_preg.screening_identifier,
+            breastfeed_intent=YES,
+            **self.options)
+
+        caregiver_child_consent_obj = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            version='1')
+
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            subject_identifier=subject_consent.subject_identifier,)
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=subject_consent.subject_identifier,)
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(),)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(subject_identifier=caregiver_child_consent_obj.subject_identifier,
+                                                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        visit = ChildVisit.objects.get(visit_code='2000D')
+
+        mommy.make_recipe('flourish_child.birthdata',
+                          congenital_anomalities=YES,
+                          child_visit=visit,)
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infantcongenitalanomalies',
+                subject_identifier=caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D').entry_status, REQUIRED)
+
+    def test_congenital_anomalies_not_required(self):
+        self.options = {
+            'consent_datetime': get_utcnow(),
+            'version': '1'}
+
+        screening_preg = mommy.make_recipe(
+            'flourish_caregiver.screeningpregwomen',)
+
+        subject_consent = mommy.make_recipe(
+            'flourish_caregiver.subjectconsent',
+            screening_identifier=screening_preg.screening_identifier,
+            breastfeed_intent=YES,
+            **self.options)
+
+        caregiver_child_consent_obj = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            version='1')
+
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            subject_identifier=subject_consent.subject_identifier,)
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=subject_consent.subject_identifier,)
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(),)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        visit = ChildVisit.objects.get(visit_code='2000D')
+
+        mommy.make_recipe('flourish_child.birthdata',
+                          congenital_anomalities=NO,
+                          child_visit=visit,)
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infantcongenitalanomalies',
+                subject_identifier=caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D').entry_status, NOT_REQUIRED)

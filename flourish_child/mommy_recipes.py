@@ -4,11 +4,14 @@ from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT, NO
 from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
-from flourish_caregiver.models import ScreeningPriorBhpParticipants, SubjectConsent
 from model_mommy.recipe import Recipe, seq
-
-from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, ChildVisit
-from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, ChildSocioDemographic
+from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
+    SubjectConsent
+from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
+    ChildVisit, ChildBirth
+from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
+    ChildSocioDemographic
+from flourish_child.models.birth_data import BirthData
 
 fake = Faker()
 
@@ -31,8 +34,23 @@ childassent = Recipe(
     remain_in_study=YES,
 )
 
+# TODO
+# Recipe for child birth
+# throws an error: CaregiverChildConsent matching query does not exist.
+childbirth = Recipe(
+    ChildBirth,
+    report_datetime=get_utcnow(),
+    first_name='AS',
+    initials='AY',
+    dob=get_utcnow(),
+    gender='Male'
+)
+
 childdataset = Recipe(
-    ChildDataset,)
+    ChildDataset, )
+
+childbirth = Recipe(
+    ChildBirth)
 
 registeredsubject = Recipe(
     RegisteredSubject,
@@ -68,9 +86,14 @@ childvisit = Recipe(
     survival_status=ALIVE,
     info_source=PARTICIPANT)
 
+
 childsociodemographic = Recipe(
     ChildSocioDemographic,
     attend_school=YES)
+
+birthdata = Recipe(
+    BirthData,
+    congenital_anomalities=YES)
 
 childgadanxietyscreening = Recipe(
     ChildGadAnxietyScreening,
@@ -80,7 +103,7 @@ childgadanxietyscreening = Recipe(
     trouble_relaxing='0',
     restlessness='1',
     easily_annoyed='2',
-    fearful='3',)
+    fearful='3', )
 
 childphqdeprscreening = Recipe(
     ChildPhqDepressionScreening,
@@ -95,4 +118,3 @@ childphqdeprscreening = Recipe(
     self_harm='4',
     self_harm_thoughts=NO,
     suidice_attempt=NO)
-

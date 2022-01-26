@@ -6,8 +6,8 @@ from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import YES_NO_UNKNOWN, IMMUNIZATIONS
 from ..choices import REASONS_VACCINES_MISSED
+from ..choices import YES_NO_UNKNOWN, IMMUNIZATIONS
 
 
 class ChildImmunizationHistory(ChildCrfModelMixin):
@@ -39,7 +39,6 @@ class ChildImmunizationHistory(ChildCrfModelMixin):
 
 
 class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
-
     """ALL possible vaccines given to Infant/Child/Adolescent"""
 
     child_immunization_history = models.ForeignKey(
@@ -81,7 +80,8 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
         blank=True)
 
     def natural_key(self):
-        return (self.received_vaccine_name,) + self.child_immunization_history.natural_key()
+        return (
+                   self.received_vaccine_name,) + self.child_immunization_history.natural_key()
 
     class Meta:
         app_label = 'flourish_child'
@@ -89,14 +89,17 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
         verbose_name_plural = 'Received Vaccines'
         unique_together = (
             ('received_vaccine_name', 'child_immunization_history'),
-            ('received_vaccine_name', 'child_immunization_history', 'first_dose_dt'),
-            ('received_vaccine_name', 'child_immunization_history', 'second_dose_dt'),
-            ('received_vaccine_name', 'child_immunization_history', 'third_dose_dt'),
-            ('received_vaccine_name', 'child_immunization_history', 'booster_dose_dt'))
+            ('received_vaccine_name', 'child_immunization_history',
+             'first_dose_dt'),
+            ('received_vaccine_name', 'child_immunization_history',
+             'second_dose_dt'),
+            ('received_vaccine_name', 'child_immunization_history',
+             'third_dose_dt'),
+            ('received_vaccine_name', 'child_immunization_history',
+             'booster_dose_dt'))
 
 
 class VaccinesMissed(CrfInlineModelMixin, BaseUuidModel):
-
     """All vaccines missed by Infant/Child/Adolescent"""
 
     parent_model_attr = 'child_immunization_history'
@@ -121,11 +124,13 @@ class VaccinesMissed(CrfInlineModelMixin, BaseUuidModel):
     reason_missed_other = OtherCharField()
 
     def natural_key(self):
-        return (self.missed_vaccine_name,) + self.child_immunization_history.natural_key()
+        return (
+                   self.missed_vaccine_name,) + self.child_immunization_history.natural_key()
 
     class Meta:
         app_label = 'flourish_child'
         verbose_name = 'Missed Vaccines'
         verbose_name_plural = 'Missed Vaccines'
         unique_together = (
-            'missed_vaccine_name', 'child_immunization_history', 'reason_missed')
+            'missed_vaccine_name', 'child_immunization_history',
+            'reason_missed')
