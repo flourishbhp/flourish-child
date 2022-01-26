@@ -1,4 +1,4 @@
-from django import apps as django_apps
+from django.apps import apps as django_apps
 from django.db import models
 from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
