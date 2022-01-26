@@ -2,20 +2,18 @@ from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.db import models
 from django_crypto_fields.fields import IdentityField
-
 from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
-from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_base.model_validators import datetime_not_future
-from edc_constants.constants import NOT_APPLICABLE
+from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_consent.field_mixins import (
     CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin,
     VerificationFieldsMixin)
-
 from edc_consent.field_mixins import IdentityFieldsMixin, PersonalFieldsMixin
 from edc_consent.validators import eligible_if_yes
 from edc_constants.choices import YES_NO, GENDER, YES_NO_NA
+from edc_constants.constants import NOT_APPLICABLE
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
@@ -134,12 +132,43 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     def natural_key(self):
         return self.subject_identifier
 
+    @property
+    def consent_version_cls(self):
+        return django_apps.get_model('flourish_caregiver.flourishconsentversion')
+
+    @property
+    def subject_consent_cls(self):
+        return django_apps.get_model('flourish_caregiver.subjectconsent')
+
+    @property
+    def latest_consent_version(self):
+        subject_identifier = self.subject_identifier.split('-')
+        subject_identifier.pop()
+        caregiver_subject_identifier = '-'.join(subject_identifier)
+
+        version = None
+        try:
+            consent = self.subject_consent_cls.objects.filter(
+                subject_identifier=caregiver_subject_identifier)
+        except self.subject_consent_cls.ObjectDoesNotExist:
+            return None
+        else:
+            latest_consent = consent[0]
+            try:
+                consent_version_obj = self.consent_version_cls.objects.get(
+                    screening_identifier=latest_consent.screening_identifier)
+            except self.consent_version_cls.DoesNotExist:
+                version = '1'
+            else:
+                version = consent_version_obj.version
+            return version
+
     def save(self, *args, **kwargs):
         eligibility_criteria = AssentEligibility(
             self.remain_in_study, self.hiv_testing, self.preg_testing)
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
-        self.version = '1'
+        self.version = self.latest_consent_version
         if self.is_eligible and not self.subject_identifier:
                 self.subject_identifier = self.update_subject_identifier
         super().save(*args, **kwargs)

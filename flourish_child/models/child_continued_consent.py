@@ -1,3 +1,4 @@
+from django import apps as django_apps
 from django.db import models
 from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
@@ -11,11 +12,10 @@ from edc_constants.choices import YES_NO, GENDER, YES_NO_NA
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
 
-
 from ..action_items import CHILDCONTINUEDCONSENT_STUDY_ACTION
+from ..choices import IDENTITY_TYPE
 from .eligibility import ContinuedConsentEligibility
 from .model_mixins import SearchSlugModelMixin
-from ..choices import IDENTITY_TYPE
 
 
 class ChildContinuedConsentManager(SearchSlugManager, models.Manager):
@@ -108,15 +108,46 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
     def natural_key(self):
         return self.subject_identifier
 
+    @property
+    def consent_version_cls(self):
+        return django_apps.get_model('flourish_caregiver.flourishconsentversion')
+
+    @property
+    def subject_consent_cls(self):
+        return django_apps.get_model('flourish_caregiver.subjectconsent')
+
+    @property
+    def latest_consent_version(self):
+        subject_identifier = self.subject_identifier.split('-')
+        subject_identifier.pop()
+        caregiver_subject_identifier = '-'.join(subject_identifier)
+
+        version = None
+        try:
+            consent = self.subject_consent_cls.objects.filter(
+                subject_identifier=caregiver_subject_identifier)
+        except self.subject_consent_cls.ObjectDoesNotExist:
+            return None
+        else:
+            latest_consent = consent[0]
+            try:
+                consent_version_obj = self.consent_version_cls.objects.get(
+                    screening_identifier=latest_consent.screening_identifier)
+            except self.consent_version_cls.DoesNotExist:
+                version = '1'
+            else:
+                version = consent_version_obj.version
+            return version
+
     def save(self, *args, **kwargs):
         eligibility_criteria = ContinuedConsentEligibility(
             self.remain_in_study, self.hiv_testing, self.preg_testing)
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
-        self.version = '1'
+        self.version = self.latest_consent_version
         super().save(*args, **kwargs)
 
     class Meta:
         app_label = 'flourish_child'
         verbose_name = 'Child Continued Consent'
-        unique_together = (('subject_identifier', 'version'), )
+        unique_together = (('subject_identifier', 'version'),)
