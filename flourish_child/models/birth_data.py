@@ -65,7 +65,7 @@ class BirthData(ChildCrfModelMixin):
         choices=YES_NO,
         verbose_name="Was Apgar Score performed? ",
         help_text="If 'No' go to question 10. Otherwise continue")
-    
+
     gestational_age = models.IntegerField(
         verbose_name="What is the infant's determined gestational age: ")
 

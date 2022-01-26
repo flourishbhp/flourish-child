@@ -1,13 +1,12 @@
 from django.utils.translation import ugettext_lazy as _
-from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
-    ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
 from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
     NOT_APPLICABLE
-
+from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
+    ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
+from edc_constants.constants import NEG, POS, IND
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
-from edc_constants.constants import NEG, POS, IND
 from .constants import BREASTFEED_ONLY
 
 ALIVE_DEAD_UNKNOWN = (
@@ -180,10 +179,13 @@ FEM_GENITAL_ANOMALY = (
 
 FREQUENCY_BREASTMILK_REC = (
     ('less_than_once_per_week', 'Less than once per week'),
-    ('less_than_once_per_day', 'Less than once per day, but at least once per week'),
+    ('less_than_once_per_day',
+     'Less than once per day, but at least once per week'),
     ('once_per_day', 'About once per day on most days'),
-    ('more_than_once_per_day', 'More than once per day, but not for all feedings'),
-    ('all_feedings', 'For all feedings (i.e no formula or other foods or liquids'),
+    ('more_than_once_per_day',
+     'More than once per day, but not for all feedings'),
+    ('all_feedings',
+     'For all feedings (i.e no formula or other foods or liquids'),
     (NOT_APPLICABLE, 'Not applicable'),
 )
 
@@ -225,6 +227,23 @@ HOSPITAL = (
     ('blh', 'BLH'),
     ('athlone ', 'Athlone '),
     (OTHER, 'Other'),
+)
+HOSPITALISATION_REASON = (
+    ('pneumonia', 'Pneumonia'),
+    ('tuberculosis', 'Tuberculosis'),
+    ('bronchiolitis', 'Bronchiolitis'),
+    ('laryngotracheobronchitis', 'Laryngotracheobronchitis/Croup'),
+    ('acute', 'Acute diarrheal disease'),
+    ('persistent', 'Persistent diarrheal disease'),
+    ('meningitis', 'Meningitis'),
+    ('malaria', 'Malaria'),
+    ('measles', 'Measles'),
+    ('trauma', 'Trauma'),
+    ('febrile', 'Febrile seizure'),
+    ('malnutrition', 'Malnutrition'),
+    ('anemia', 'Anemia'),
+    ('surgical', 'Surgical reasons'),
+    ('other', 'Other'),
 )
 HOUSE_TYPE = (
     ('Formal:Tin-roofed, concrete walls',
@@ -476,14 +495,14 @@ PHYS_ACTIVITY_TIME = (
 )
 
 POS_NEG_IND = (
-  (POS, 'Positive'),
-  (NEG, 'Negative'),
-  (IND, 'Indeterminate')
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (IND, 'Indeterminate')
 )
 
 REASONS_VACCINES_MISSED = (
     ('missed_sched_vaccine', 'Mother or Caregiver has not yet taken infant '
-        'to clinic for this scheduled vaccination'),
+                             'to clinic for this scheduled vaccination'),
     ('caregiver_declines_vaccination',
      'Mother or Caregiver declines this vaccicnation'),
     ('no_stock', 'Stock out at clinic'),
@@ -731,7 +750,6 @@ ISOLATION_LOCATION = (
     (OTHER, 'Other'),
 )
 
-
 YES_NO_PARTIALLY = (
     (YES, 'Yes'),
     (NO, 'No'),
@@ -746,5 +764,3 @@ VACCINATION_TYPE = (
     ('johnson_and_johnson', 'Johnson & Johnson '),
     (OTHER, 'Other')
 )
-
-

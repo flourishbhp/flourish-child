@@ -50,5 +50,3 @@ class Covid19Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     }
 
     filter_horizontal = ('isolations_symptoms', 'symptoms_for_past_14days')
-
-

@@ -1,3 +1,4 @@
+from django.apps import apps as django_apps
 from django.db import models
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
@@ -28,8 +29,36 @@ class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
         pass
 
     def save(self, *args, **kwargs):
-        self.consent_version = '1'
+        self.consent_version = self.get_consent_version()
         super().save(*args, **kwargs)
+
+    @property
+    def consent_version_cls(self):
+        return django_apps.get_model('flourish_caregiver.flourishconsentversion')
+
+    @property
+    def subject_consent_cls(self):
+        return django_apps.get_model('flourish_caregiver.subjectconsent')
+
+    def get_consent_version(self):
+        version = None
+
+        try:
+            subject_consent_obj = self.subject_consent_cls.objects.get(
+                subject_identifier=self.subject_identifier[:-3])
+        except self.subject_consent_cls.DoesNotExist:
+            pass
+        else:
+            try:
+                consent_version_obj = self.consent_version_cls.objects.get(
+                    screening_identifier=subject_consent_obj.screening_identifier)
+            except self.consent_version_cls.DoesNotExist:
+
+                version = '1'
+            else:
+                version = consent_version_obj.version
+
+        return version
 
     class Meta:
         unique_together = ('subject_identifier', 'schedule_name')
