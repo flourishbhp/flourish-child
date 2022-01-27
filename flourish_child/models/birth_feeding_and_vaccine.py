@@ -24,6 +24,7 @@ class BirthFeedingVaccine(ChildCrfModelMixin):
     breastfeed_start_est = models.CharField(
         verbose_name='Is this date estimated?',
         choices=YES_NO,
+        null=True,
         blank=True,
         max_length=3, )
 
@@ -35,6 +36,7 @@ class BirthFeedingVaccine(ChildCrfModelMixin):
     formulafeed_start_est = models.CharField(
         verbose_name='Is this date estimated?',
         choices=YES_NO,
+        null=True,
         blank=True,
         max_length=3, )
 
