@@ -1,19 +1,17 @@
 from django.contrib import admin
 from edc_model_admin import StackedInlineMixin
 
-from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
-from ..forms.child_hospitalization_form import ChildHospitalisationForm, \
-    AdmissionsReasonsForms
-from ..models.child_hospitalization import ChildHospitalization, \
-    AdmissionsReasons
+from ..forms import ChildHospitalisationForm, AdmissionsReasonsForms
+from ..models import ChildHospitalization, AdmissionsReasons
+from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 class AdmissionsReasonAdmin(StackedInlineMixin,
                             admin.StackedInline):
     model = AdmissionsReasons
     form = AdmissionsReasonsForms
-    extra = 1
+    extra = 0
 
     radio_fields = {
         'hospital_name': admin.VERTICAL,
@@ -28,7 +26,7 @@ class AdmissionsReasonAdmin(StackedInlineMixin,
                 'reason',
                 'reason_surgical',
                 'reason_other',
-                'date',
+                'hosp_date',
             )
         }),
     )
