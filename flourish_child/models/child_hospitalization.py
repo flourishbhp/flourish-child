@@ -1,3 +1,5 @@
+from flourish_child.choices import HOSPITAL, HOSPITALISATION_REASON
+
 from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
@@ -5,7 +7,6 @@ from edc_base.model_validators.date import date_not_future
 from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from flourish_child.choices import HOSPITAL, HOSPITALISATION_REASON
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
@@ -67,8 +68,6 @@ class AdmissionsReasons(CrfInlineModelMixin, BaseUuidModel):
 
     date = models.DateField(
         verbose_name='What is the approximate date of hospitalisation?',
-        null=True,
-        blank=True,
         validators=[date_not_future]
     )
 
