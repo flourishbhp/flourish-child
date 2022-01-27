@@ -1,7 +1,7 @@
 from django import forms
 from edc_constants.constants import NO, YES
 from flourish_child.forms.child_form_mixin import ChildModelFormMixin
-from flourish_form_validations.form_validators import \
+from flourish_child_validations.form_validators import \
     ChildHospitalizationFormValidations, AdmissionsReasonFormValidations
 
 from ..models.child_hospitalization import ChildHospitalization, \
