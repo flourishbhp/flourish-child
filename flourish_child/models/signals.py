@@ -1,3 +1,4 @@
+import weakref
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
@@ -13,7 +14,7 @@ from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 
-from ..models import ChildOffSchedule
+from ..models import ChildOffSchedule, ChildSocioDemographic, AcademicPerformance
 from .child_assent import ChildAssent
 from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
@@ -25,6 +26,27 @@ from .child_visit import ChildVisit
 class CaregiverConsentError(Exception):
     pass
 
+
+@receiver(post_save, weak=False, sender=ChildSocioDemographic, 
+          dispatch_uid='child_socio_demographic_post_save')
+def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
+
+    subject_identifier = instance.child_visit.subject_identifier
+    visit_code = instance.child_visit.visit_code
+    
+    try:
+
+        academic_perfomance = AcademicPerformance.objects.get(
+            child_visit__subject_identifier=subject_identifier, 
+            child_visit__visit_code = visit_code)
+
+    except AcademicPerformance.DoesNotExist:
+        pass
+
+    else:
+        if academic_perfomance.education_level != instance.education_level:
+            academic_perfomance.education_level = instance.education_level
+            academic_perfomance.save()
 
 @receiver(post_save, weak=False, sender=ChildAssent,
           dispatch_uid='child_assent_on_post_save')

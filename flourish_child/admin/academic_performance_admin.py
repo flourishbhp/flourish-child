@@ -16,6 +16,8 @@ from .model_admin_mixins import ChildCrfModelAdminMixin
 class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = AcademicPerformanceForm
 
+    readonly_fields = ['education_level',]
+
     additional_instructions = ('If participant states the level of school is not correct, '
                                'return to Socio-demographic form to update the class level')
 

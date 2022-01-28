@@ -3,6 +3,8 @@ from django.db.models import ManyToManyField
 from flourish_child_validations.form_validators import AcademicPerformanceFormValidator
 from itertools import chain
 from edc_constants.constants import YES, NO
+
+from flourish_child.choices import HIGHEST_EDUCATION
 from ..models import AcademicPerformance
 from .child_form_mixin import ChildModelFormMixin
 
@@ -11,10 +13,12 @@ class AcademicPerformanceForm(ChildModelFormMixin):
 
     form_validator_cls = AcademicPerformanceFormValidator
 
-    education_level = forms.CharField(
-        label='What level/class of school is the child currently in?',
-        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    # education_level = forms.CharField(
+    #     label='What level/class of school is the child currently in?',
+    #     widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
+
+# disp = education_level.geteducation_level_fieldname()
     def __init__(self, *args, **kwargs):
         initial = kwargs.pop('initial', {})
         instance = kwargs.get('instance')
@@ -25,6 +29,7 @@ class AcademicPerformanceForm(ChildModelFormMixin):
                 if key not in ['child_visit', 'report_datetime']:
                     initial[key] = getattr(previous_instance, key)
         kwargs['initial'] = initial
+
         super().__init__(*args, **kwargs)
 
     def clean(self):
