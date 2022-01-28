@@ -70,20 +70,20 @@ class ExportActionMixin:
                     ws.write(row_num, col_num, data[col_num], xlwt.easyxf(num_format_str='YYYY/MM/DD h:mm:ss'))
                 else:
                     ws.write(row_num, col_num, data[col_num])
-                subject_identifier = obj.child_visit.subject_identifier
-                screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
-                previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
-                study_maternal_identifier = self.study_maternal_identifier(screening_identifier=screening_identifier)
-                data.append(subject_identifier)
-                data.append(subject_identifier[:-3])
-                data.append(study_maternal_identifier)
-                data.append(previous_study)
-                data.append(obj.child_visit.visit_code)
-            elif self.is_assent(obj):
-                subject_identifier = getattr(obj, 'subject_identifier')
-                screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
-                previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
-                data.append(previous_study)
+            #     subject_identifier = obj.child_visit.subject_identifier
+            #     screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
+            #     previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
+            #     study_maternal_identifier = self.study_maternal_identifier(screening_identifier=screening_identifier)
+            #     data.append(subject_identifier)
+            #     data.append(subject_identifier[:-3])
+            #     data.append(study_maternal_identifier)
+            #     data.append(previous_study)
+            #     data.append(obj.child_visit.visit_code)
+            # elif self.is_assent(obj):
+            #     subject_identifier = getattr(obj, 'subject_identifier')
+            #     screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
+            #     previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
+            #     data.append(previous_study)
 
             inline_objs = []
             for field in self.get_model_fields:
