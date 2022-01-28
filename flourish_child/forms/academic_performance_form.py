@@ -13,12 +13,11 @@ class AcademicPerformanceForm(ChildModelFormMixin):
 
     form_validator_cls = AcademicPerformanceFormValidator
 
-    # education_level = forms.CharField(
-    #     label='What level/class of school is the child currently in?',
-    #     widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    education_level = forms.CharField(
+        disabled=True,
+        label='What level/class of school is the child currently in?',
+        widget=forms.Select(choices=HIGHEST_EDUCATION))
 
-
-# disp = education_level.geteducation_level_fieldname()
     def __init__(self, *args, **kwargs):
         initial = kwargs.pop('initial', {})
         instance = kwargs.get('instance')

@@ -1,4 +1,3 @@
-from ctypes.wintypes import HICON
 from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
