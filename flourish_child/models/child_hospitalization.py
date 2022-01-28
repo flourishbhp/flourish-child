@@ -1,3 +1,5 @@
+from flourish_child.choices import HOSPITAL, HOSPITALISATION_REASON
+
 from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
@@ -5,7 +7,6 @@ from edc_base.model_validators.date import date_not_future
 from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from flourish_child.choices import HOSPITAL, HOSPITALISATION_REASON
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
@@ -21,7 +22,7 @@ class ChildHospitalization(ChildCrfModelMixin):
 
     number_hospitalised = models.IntegerField(
         verbose_name=(
-            'How many time has your infant/child/adolescent'
+            'How many times has your infant/child/adolescent'
             ' been hospitalized?'),
         null=True,
         blank=True
@@ -34,6 +35,7 @@ class ChildHospitalization(ChildCrfModelMixin):
 
 
 class AdmissionsReasons(CrfInlineModelMixin, BaseUuidModel):
+
     hospital_name = models.CharField(
         verbose_name='What is the name of the hospital?',
         choices=HOSPITAL,
@@ -49,7 +51,7 @@ class AdmissionsReasons(CrfInlineModelMixin, BaseUuidModel):
     hospital_name_other = OtherCharField()
 
     reason = models.CharField(
-        verbose_name='What was the reason for the Hospitalisation',
+        verbose_name='What was the reason for the hospitalisation',
         choices=HOSPITALISATION_REASON,
         max_length=35,
         null=True,
@@ -57,7 +59,7 @@ class AdmissionsReasons(CrfInlineModelMixin, BaseUuidModel):
     )
 
     reason_surgical = models.CharField(
-        verbose_name='if Surgical reason, specify',
+        verbose_name='If surgical reason, specify',
         max_length=35,
         null=True,
         blank=True
@@ -65,10 +67,8 @@ class AdmissionsReasons(CrfInlineModelMixin, BaseUuidModel):
 
     reason_other = OtherCharField()
 
-    date = models.DateField(
+    hosp_date = models.DateField(
         verbose_name='What is the approximate date of hospitalisation?',
-        null=True,
-        blank=True,
         validators=[date_not_future]
     )
 
