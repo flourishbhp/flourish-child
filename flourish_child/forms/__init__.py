@@ -16,7 +16,10 @@ from .child_dummy_consent_form import ChildDummySubjectConsentForm
 from .child_food_security_questionnaire_form import ChildFoodSecurityQuestionnaireForm
 from .child_gad_anxiety_screening_form import ChildGadAnxietyScreeningForm
 from .child_gad_referral_form import ChildGadReferralForm
-from .child_hiv_rapid_test_counseling_form import ChildHIVRapidTestCounselingForm
+from .child_hiv_rapid_test_counseling_form import \
+    ChildHIVRapidTestCounselingForm
+from .child_hospitalization_form import ChildHospitalizationForm, \
+    AdmissionsReasonsForms
 from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
