@@ -49,4 +49,8 @@ class BirthFeedingVaccineAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     inlines = [BirthVaccinesInline]
 
-    radio_fields = {'feeding_after_delivery': admin.VERTICAL}
+    radio_fields = {
+        'feeding_after_delivery': admin.VERTICAL,
+        'breastfeed_start_est': admin.VERTICAL,
+        'formulafeed_start_est': admin.VERTICAL,
+    }
