@@ -8,7 +8,7 @@ from ..models.child_hospitalization import ChildHospitalization, \
     AdmissionsReasons
 
 
-class ChildHospitalisationForm(ChildModelFormMixin, forms.ModelForm):
+class ChildHospitalizationForm(ChildModelFormMixin, forms.ModelForm):
     form_validator_cls = ChildHospitalizationFormValidations
 
     def clean(self):
@@ -17,7 +17,7 @@ class ChildHospitalisationForm(ChildModelFormMixin, forms.ModelForm):
         total_num_hosp = int(
             self.data.get('admissionsreasons_set-TOTAL_FORMS'))
 
-        if total_num_hosp != cleaned_data.get('number_hospitalised'):
+        if cleaned_data.get('number_hospitalised') and total_num_hosp:
             raise forms.ValidationError(
                 {'number_hospitalised':
                  'Must be equal to the number of inlines'})

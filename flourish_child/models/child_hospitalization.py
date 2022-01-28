@@ -11,19 +11,21 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 
 
 class ChildHospitalization(ChildCrfModelMixin):
+
     hospitalized = models.CharField(
         verbose_name=(
             'Has your infant/child/adolescent been '
             'hospitalized since the last FLOURISH Visit?'),
         choices=YES_NO,
-        max_length=100,
+        max_length=3,
         null=True,
     )
 
-    number_hospitalised = models.IntegerField(
+    number_hospitalised = models.PositiveIntegerField(
         verbose_name=(
             'How many times has your infant/child/adolescent'
             ' been hospitalized?'),
+        default=0,
         null=True,
         blank=True
     )
@@ -31,7 +33,7 @@ class ChildHospitalization(ChildCrfModelMixin):
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'Child Hospitalization'
-        verbose_name_plural = 'Child Hospitalization'
+        verbose_name_plural = 'Child Hospitalizations'
 
 
 class AdmissionsReasons(CrfInlineModelMixin, BaseUuidModel):
@@ -73,8 +75,7 @@ class AdmissionsReasons(CrfInlineModelMixin, BaseUuidModel):
     )
 
     def natural_key(self):
-        return (
-                   self.hospital_name,) + self.child_hospitalisation.natural_key()
+        return (self.hospital_name,) + self.child_hospitalisation.natural_key()
 
     class Meta:
         app_label = 'flourish_child'
