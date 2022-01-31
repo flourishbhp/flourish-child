@@ -13,7 +13,7 @@ from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
-from ..models import ChildOffSchedule
+from ..models import ChildOffSchedule, ChildSocioDemographic
 from .child_assent import ChildAssent
 from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
