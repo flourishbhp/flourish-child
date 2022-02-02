@@ -13,7 +13,7 @@ from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
-from ..models import ChildOffSchedule
+from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from .child_assent import ChildAssent
 from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
@@ -24,6 +24,29 @@ from .child_visit import ChildVisit
 
 class CaregiverConsentError(Exception):
     pass
+
+
+@receiver(post_save, weak=False, sender=ChildSocioDemographic, 
+          dispatch_uid='child_socio_demographic_post_save')
+def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
+
+    subject_identifier = instance.child_visit.subject_identifier
+    visit_code = instance.child_visit.visit_code
+    
+    try:
+
+        academic_perfomance = AcademicPerformance.objects.get(
+            child_visit__subject_identifier=subject_identifier, 
+            child_visit__visit_code = visit_code)
+
+    except AcademicPerformance.DoesNotExist:
+        pass
+
+    else:
+        if academic_perfomance.education_level != instance.education_level:
+            academic_perfomance.education_level = instance.education_level
+            academic_perfomance.save()
+
 
 
 @receiver(post_save, weak=False, sender=ChildAssent,
