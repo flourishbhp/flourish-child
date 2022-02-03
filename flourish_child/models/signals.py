@@ -14,7 +14,7 @@ from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 
-from ..models import ChildOffSchedule, ChildSocioDemographic, AcademicPerformance
+from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from .child_assent import ChildAssent
 from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
@@ -47,6 +47,8 @@ def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
         if academic_perfomance.education_level != instance.education_level:
             academic_perfomance.education_level = instance.education_level
             academic_perfomance.save()
+
+
 
 @receiver(post_save, weak=False, sender=ChildAssent,
           dispatch_uid='child_assent_on_post_save')
