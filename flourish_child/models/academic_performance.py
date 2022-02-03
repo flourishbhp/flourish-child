@@ -9,7 +9,6 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 class AcademicPerformance(ChildCrfModelMixin):
 
     education_level = models.CharField(
-        choices=HIGHEST_EDUCATION,
         verbose_name="What level/class of school is the child currently in?",
         max_length=20,
     )
