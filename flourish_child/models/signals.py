@@ -26,6 +26,14 @@ class CaregiverConsentError(Exception):
     pass
 
 
+@receiver(pre_save, weak=False, sender=AcademicPerformance, 
+dispatch_uid='academic_performance_pre_save')
+def academic_performance_pre_save(sender, instance, raw, created, **kwargs):
+    highest_education_dictionary = dict(HIGHEST_EDUCATION)
+    highest_education_swapped = {value: key for key, value in highest_education_dictionary.items()}
+    instance.education_level = highest_education_swapped['education_level']
+
+
 @receiver(post_save, weak=False, sender=ChildSocioDemographic, 
           dispatch_uid='child_socio_demographic_post_save')
 def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
