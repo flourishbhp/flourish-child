@@ -1,7 +1,4 @@
 from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
-from flourish_prn.models import ChildOffStudy
-from flourish_prn.models.child_death_report import ChildDeathReport
 
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
@@ -12,6 +9,10 @@ from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
+from flourish_prn.models import ChildOffStudy
+
+from flourish_prn.models.child_death_report import ChildDeathReport
 
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from .child_assent import ChildAssent
@@ -26,18 +27,18 @@ class CaregiverConsentError(Exception):
     pass
 
 
-@receiver(post_save, weak=False, sender=ChildSocioDemographic, 
+@receiver(post_save, weak=False, sender=ChildSocioDemographic,
           dispatch_uid='child_socio_demographic_post_save')
 def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
 
     subject_identifier = instance.child_visit.subject_identifier
     visit_code = instance.child_visit.visit_code
-    
+
     try:
 
         academic_perfomance = AcademicPerformance.objects.get(
-            child_visit__subject_identifier=subject_identifier, 
-            child_visit__visit_code = visit_code)
+            child_visit__subject_identifier=subject_identifier,
+            child_visit__visit_code=visit_code)
 
     except AcademicPerformance.DoesNotExist:
         pass
@@ -46,7 +47,6 @@ def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
         if academic_perfomance.education_level != instance.education_level:
             academic_perfomance.education_level = instance.education_level
             academic_perfomance.save()
-
 
 
 @receiver(post_save, weak=False, sender=ChildAssent,
@@ -110,14 +110,15 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
         except caregiver_prev_enrolled_cls.DoesNotExist:
             pass
         else:
-            maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
+            maternal_delivery_cls = django_apps.get_model(
+                'flourish_caregiver.maternaldelivery')
             try:
                 maternal_delivery_obj = maternal_delivery_cls.objects.get(
                     delivery_datetime=instance.consent_datetime,
                     subject_identifier=instance.subject_identifier[:-3])
             except maternal_delivery_cls.DoesNotExist:
                 put_cohort_onschedule(instance.cohort, instance=instance,
-                                  base_appt_datetime=prev_enrolled.created)
+                                      base_appt_datetime=prev_enrolled.created)
             else:
                 put_on_schedule((instance.cohort + '_birth'), instance=instance,
                                 base_appt_datetime=maternal_delivery_obj.created)
@@ -131,11 +132,11 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
     """
 
     trigger_action_item(instance, 'survival_status', 'dead',
-                    ChildDeathReport, CHILD_DEATH_REPORT_ACTION,
-                    instance.subject_identifier,
-                    repeat=True)
+                        ChildDeathReport, CHILD_DEATH_REPORT_ACTION,
+                        instance.subject_identifier,
+                        repeat=True)
 
-    if not raw and created and instance.visit_code == '2000':
+    if not raw and created and instance.visit_code in ['2000M', '2000D']:
 
         if 'sec' in instance.schedule_name:
 
