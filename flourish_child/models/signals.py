@@ -145,7 +145,7 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
                         instance.subject_identifier,
                         repeat=True)
 
-    if not raw and created and instance.visit_code in ['2000M', '2000D']:
+    if not raw and created and instance.visit_code in ['2000', '2000D']:
 
         if 'sec' in instance.schedule_name:
 
