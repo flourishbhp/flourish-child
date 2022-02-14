@@ -3,7 +3,7 @@ from flourish_child.models.child_birth import ChildBirth
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
@@ -14,6 +14,7 @@ from flourish_prn.models import ChildOffStudy
 
 from flourish_prn.models.child_death_report import ChildDeathReport
 
+from ..choices import HIGHEST_EDUCATION
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from .child_assent import ChildAssent
 from .child_continued_consent import ChildContinuedConsent
@@ -25,6 +26,14 @@ from .child_visit import ChildVisit
 
 class CaregiverConsentError(Exception):
     pass
+
+
+@receiver(pre_save, weak=False, sender=AcademicPerformance,
+dispatch_uid='academic_performance_pre_save')
+def academic_performance_pre_save(sender, instance, raw, created, **kwargs):
+    highest_education_dictionary = dict(HIGHEST_EDUCATION)
+    highest_education_swapped = {value: key for key, value in highest_education_dictionary.items()}
+    instance.education_level = highest_education_swapped['education_level']
 
 
 @receiver(post_save, weak=False, sender=ChildSocioDemographic,
@@ -110,18 +119,20 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
         except caregiver_prev_enrolled_cls.DoesNotExist:
             pass
         else:
-            maternal_delivery_cls = django_apps.get_model(
-                'flourish_caregiver.maternaldelivery')
-            try:
-                maternal_delivery_obj = maternal_delivery_cls.objects.get(
-                    delivery_datetime=instance.consent_datetime,
-                    subject_identifier=instance.subject_identifier[:-3])
-            except maternal_delivery_cls.DoesNotExist:
-                put_cohort_onschedule(instance.cohort, instance=instance,
-                                      base_appt_datetime=prev_enrolled.created)
-            else:
-                put_on_schedule((instance.cohort + '_birth'), instance=instance,
-                                base_appt_datetime=maternal_delivery_obj.created)
+            put_cohort_onschedule(instance.cohort, instance=instance,
+                                  base_appt_datetime=prev_enrolled.created)
+
+        maternal_delivery_cls = django_apps.get_model(
+            'flourish_caregiver.maternaldelivery')
+        try:
+            maternal_delivery_obj = maternal_delivery_cls.objects.get(
+                delivery_datetime=instance.consent_datetime,
+                subject_identifier=instance.subject_identifier[:-3])
+        except maternal_delivery_cls.DoesNotExist:
+            pass
+        else:
+            put_on_schedule((instance.cohort + '_birth'), instance=instance,
+                            base_appt_datetime=maternal_delivery_obj.created)
 
 
 @receiver(post_save, weak=False, sender=ChildVisit,
@@ -160,22 +171,7 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
     """
     - Put subject on birth schedule.
     """
-    if not raw:
-        caregiver_child_consent_cls = django_apps.get_model(
-            'flourish_caregiver.caregiverchildconsent')
-
-        try:
-            caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
-                subject_identifier=instance.subject_identifier)
-        except caregiver_child_consent_cls.DoesNotExist:
-            raise
-        else:
-            caregiver_child_consent_obj.first_name = instance.first_name
-            caregiver_child_consent_obj.last_name = caregiver_child_consent_obj.subject_consent.last_name
-            caregiver_child_consent_obj.gender = instance.gender
-            caregiver_child_consent_obj.child_dob = instance.dob
-            caregiver_child_consent_obj.save()
-
+    if not raw and created:
         maternal_delivery_cls = django_apps.get_model('flourish_caregiver.maternaldelivery')
 
         try:
@@ -190,6 +186,21 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
                     'child_cohort_a_birth', instance=instance,
                     subject_identifier=instance.subject_identifier,
                     base_appt_datetime=maternal_delivery_obj.created.replace(microsecond=0))
+
+        caregiver_child_consent_cls = django_apps.get_model(
+            'flourish_caregiver.caregiverchildconsent')
+
+        try:
+            caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
+                subject_identifier=instance.subject_identifier)
+        except caregiver_child_consent_cls.DoesNotExist:
+            raise
+        else:
+            caregiver_child_consent_obj.first_name = instance.first_name
+            caregiver_child_consent_obj.last_name = caregiver_child_consent_obj.subject_consent.last_name
+            caregiver_child_consent_obj.gender = instance.gender
+            caregiver_child_consent_obj.child_dob = instance.dob
+            caregiver_child_consent_obj.save()
 
 
 @receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,

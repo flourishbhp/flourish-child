@@ -1,5 +1,5 @@
 from edc_visit_schedule.model_mixins import OnScheduleModelMixin as BaseOnScheduleModelMixin
-
+from django import forms
 from django.apps import apps as django_apps
 from django.db import models
 from edc_base.model_managers import HistoricalRecords
@@ -30,7 +30,7 @@ class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
         pass
 
     def save(self, *args, **kwargs):
-        self.consent_version = self.get_consent_version()
+        self.consent_version = self.latest_consent_obj_version
         super().save(*args, **kwargs)
 
     @property
@@ -41,25 +41,19 @@ class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
     def subject_consent_cls(self):
         return django_apps.get_model('flourish_caregiver.subjectconsent')
 
-    def get_consent_version(self):
-        version = None
+    @property
+    def latest_consent_obj_version(self):
 
-        try:
-            subject_consent_obj = self.subject_consent_cls.objects.get(
-                subject_identifier=self.subject_identifier[:-3])
-        except self.subject_consent_cls.DoesNotExist:
-            pass
+        child_consent_cls = django_apps.get_model(
+            'flourish_child.childdummysubjectconsent')
+
+        subject_consents = child_consent_cls.objects.filter(
+             subject_identifier=self.subject_identifier,)
+        if subject_consents:
+            latest_consent = subject_consents.latest('consent_datetime')
+            return latest_consent.version
         else:
-            try:
-                consent_version_obj = self.consent_version_cls.objects.get(
-                    screening_identifier=subject_consent_obj.screening_identifier)
-            except self.consent_version_cls.DoesNotExist:
-
-                version = '1'
-            else:
-                version = consent_version_obj.version
-
-        return version
+            raise forms.ValidationError('Missing dummy consent obj, cannot proceed.')
 
     class Meta:
         unique_together = ('subject_identifier', 'schedule_name')

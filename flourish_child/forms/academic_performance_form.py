@@ -4,7 +4,6 @@ from django import forms
 from django.db.models import ManyToManyField
 from edc_constants.constants import NO, YES
 from flourish_child_validations.form_validators import AcademicPerformanceFormValidator
-
 from flourish_child.choices import HIGHEST_EDUCATION
 
 from ..models import AcademicPerformance
@@ -16,10 +15,8 @@ class AcademicPerformanceForm(ChildModelFormMixin):
     form_validator_cls = AcademicPerformanceFormValidator
 
     education_level = forms.CharField(
-        disabled=True,
-        label="What level/class of school is the child currently in?",
-        widget=forms.Select(choices=HIGHEST_EDUCATION),
-    )
+        label='What level/class of school is the child currently in?',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
     def __init__(self, *args, **kwargs):
         initial = kwargs.pop("initial", {})
