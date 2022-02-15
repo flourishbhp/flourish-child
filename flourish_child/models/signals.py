@@ -34,7 +34,7 @@ dispatch_uid='academic_performance_pre_save')
 def academic_performance_pre_save(sender, instance, **kwargs):
     highest_education_dictionary = dict(HIGHEST_EDUCATION)
     highest_education_swapped = {value: key for key, value in highest_education_dictionary.items()}
-    instance.education_level = highest_education_swapped['education_level']
+    instance.education_level = highest_education_swapped[instance.education_level]
 
 
 @receiver(post_save, weak=False, sender=ChildSocioDemographic,
