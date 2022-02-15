@@ -74,7 +74,7 @@ class InfantFeeding(ChildCrfModelMixin):
         max_length=3,
         choices=YES_NO)
 
-    taken_formula = models.CharField(
+    took_formula = models.CharField(
         verbose_name='Has the infant taken formula?',
         max_length=10,
         choices=YES_NO_UNSURE,
@@ -147,7 +147,7 @@ class InfantFeeding(ChildCrfModelMixin):
         blank=True,
         null=True)
 
-    cows_milk_used = models.CharField(
+    cows_milk_prep = models.CharField(
         verbose_name='If \'Yes\', cow\'s milk was...',
         max_length=10,
         choices=COWS_MILK,
