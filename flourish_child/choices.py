@@ -764,3 +764,32 @@ VACCINATION_TYPE = (
     ('johnson_and_johnson', 'Johnson & Johnson '),
     (OTHER, 'Other')
 )
+HEARING_SPECIALISTS = (
+    ('no_referral', 'No Referral'),
+    ('speech_therapy', 'Speech Therapy'),
+    ('audiology', 'Audiology'),
+    ('doctor', 'Doctor'),
+)
+
+VISION_SPECIALISTS = (
+    ('no_referral', 'No Referral'),
+    ('optometrist', 'Optometrist'),
+    ('ophthalmic_nurse', 'Ophthalmic nurse'),
+    ('occupational_therapist', 'Occupational Therapist'),
+    ('doctor', 'Doctor'),
+)
+
+COGNITIVE_SPECIALIST = (
+    ('no_referral', 'No Referral'),
+    ('psychologist', 'Psychologist'),
+    ('speech_therapy', 'Speech Therapy'),
+    ('occupational_therapist', 'Occupational Therapist'),
+    ('doctor', 'Doctor'),
+)
+
+MOTOR_SKILLS_SPECIALIST = (
+    ('no_referral', 'No Referral'),
+    ('physiotherapist', 'Physiotherapist'),
+    ('occupational_therapist', 'Occupational Therapist'),
+    ('doctor', 'Doctor'),
+)
