@@ -1,9 +1,9 @@
 from django import forms
 from edc_constants.constants import NO, YES
+
 from flourish_child.forms.child_form_mixin import ChildModelFormMixin
 from flourish_child_validations.form_validators import \
     ChildHospitalizationFormValidations, AdmissionsReasonFormValidations
-
 from ..models.child_hospitalization import ChildHospitalization, \
     AdmissionsReasons
 
@@ -17,10 +17,9 @@ class ChildHospitalizationForm(ChildModelFormMixin, forms.ModelForm):
         total_num_hosp = int(
             self.data.get('admissionsreasons_set-TOTAL_FORMS'))
 
-        if cleaned_data.get('number_hospitalised') and total_num_hosp:
+        if cleaned_data.get('number_hospitalised') != total_num_hosp:
             raise forms.ValidationError(
-                {'number_hospitalised':
-                 'Must be equal to the number of inlines'})
+                {'number_hospitalised': 'Must be equal to the number of inlines'})
 
         if cleaned_data.get('hospitalized') == NO and total_num_hosp:
             raise forms.ValidationError('Admissions information is not required if'

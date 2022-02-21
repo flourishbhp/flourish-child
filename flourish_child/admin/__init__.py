@@ -9,6 +9,7 @@ from .child_birth_weight_length_screening_admin import ChildBirthScreeningAdmin
 from .child_clinical_measurements_admin import ChildClinicalMeasurementsAdmin
 from .child_clinician_notes_admin import ClinicianNotesAdmin
 from .child_continued_consent_admin import ChildContinuedConsentAdmin
+from .child_covid_19_admin import Covid19Admin
 from .child_dataset_admin import ChildDatasetAdmin
 from .child_dummy_consent_admin import ChildDummySubjectConsentAdmin
 from .child_food_security_questionnaire_admin import \
@@ -34,7 +35,12 @@ from .child_visit_admin import ChildVisitAdmin
 from .child_working_status_admin import ChildWorkingStatusAdmin
 from .infant_arv_exposure_admin import InfantArvExposureAdmin
 from .infant_congenital_anomalies_admin import InfantCongenitalAnomaliesAdmin
+from .infant_dev_screening_12_months_admin import InfantDevScreening12MonthsAdmin
+from .infant_dev_screening_18_months_admin import InfantDevScreening18MonthsAdmin
+from .infant_dev_screening_36_months_admin import InfantDevScreening36MonthsAdmin
+from .infant_dev_screening_3_months_admin import InfantDevScreening3MonthsAdmin
+from .infant_dev_screening_60_to_72_months_admin import InfantDevScreening60To72MonthsAdmin
+from .infant_dev_screening_6_months_admin import InfantDevScreening6MonthsAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
-from .child_covid_19_admin import Covid19Admin
