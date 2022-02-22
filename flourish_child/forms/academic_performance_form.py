@@ -1,6 +1,7 @@
 from itertools import chain
 
 from django import forms
+from django.apps import apps as django_apps
 from django.db.models import ManyToManyField
 from edc_constants.constants import NO, YES
 from flourish_child_validations.form_validators import AcademicPerformanceFormValidator
@@ -14,22 +15,50 @@ class AcademicPerformanceForm(ChildModelFormMixin):
 
     form_validator_cls = AcademicPerformanceFormValidator
 
-    education_level = forms.CharField(
+    child_socio_demographic_model = 'flourish_child.childsociodemographic'
+
+
+    education_level = forms.ChoiceField(
         label='What level/class of school is the child currently in?',
-        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+        disabled=True,
+        choices=HIGHEST_EDUCATION)
 
     def __init__(self, *args, **kwargs):
         initial = kwargs.pop("initial", {})
         instance = kwargs.get("instance")
         previous_instance = getattr(self, "previous_instance", None)
 
+        # child visit is only available onload page other None
+        # args is prepolated only on save otherwise None
+        child_visit_id = initial.get('child_visit', args[0]['child_visit'] if args else None)
+
         if not instance and previous_instance:
             for key in self.base_fields.keys():
                 if key not in ["child_visit", "report_datetime"]:
                     initial[key] = getattr(previous_instance, key)
+
+        elif child_visit_id:
+            # check if child_visit_id not null to avoid exceptions
+            # then initialize education_level taken from child socio demographics in the same visit
+            initial['education_level'] = self.child_social_education_level(child_visit_id=child_visit_id)
+
+
         kwargs["initial"] = initial
 
         super().__init__(*args, **kwargs)
+
+
+
+    @property
+    def child_socio_demographic_cls(self):
+        return django_apps.get_model(self.child_socio_demographic_model)
+
+    def child_social_education_level(self, child_visit_id):
+        """
+        Get the child demographics from the same visit
+        """
+        child_socio_demographic = self.child_socio_demographic_cls.objects.get(child_visit_id=child_visit_id)
+        return child_socio_demographic.education_level
 
     def clean(self):
         previous_instance = getattr(self, "previous_instance", None)
