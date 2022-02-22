@@ -27,33 +27,26 @@ from .child_visit import ChildVisit
 class CaregiverConsentError(Exception):
     pass
 
-
-
-@receiver(pre_save, sender=AcademicPerformance, 
-dispatch_uid='academic_performance_pre_save')
-def academic_performance_pre_save(sender, instance, **kwargs):
-    highest_education_dictionary = dict(HIGHEST_EDUCATION)
-    highest_education_swapped = {value: key for key, value in highest_education_dictionary.items()}
-    instance.education_level = highest_education_swapped[instance.education_level]
-
-
 @receiver(post_save, weak=False, sender=ChildSocioDemographic,
           dispatch_uid='child_socio_demographic_post_save')
 def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
+    """
+    Update academic perfomance in the same visit without affecting any other forms beyond and after that
+    particular visit
+    """
 
-    subject_identifier = instance.child_visit.subject_identifier
-    visit_code = instance.child_visit.visit_code
+    child_visit_id = instance.child_visit.id
 
     try:
 
         academic_perfomance = AcademicPerformance.objects.get(
-            child_visit__subject_identifier=subject_identifier,
-            child_visit__visit_code=visit_code)
+            child_visit_id=child_visit_id)
 
     except AcademicPerformance.DoesNotExist:
         pass
 
     else:
+        # update only if the academic perfomance education level are different 
         if academic_perfomance.education_level != instance.education_level:
             academic_perfomance.education_level = instance.education_level
             academic_perfomance.save()
