@@ -38,12 +38,12 @@ class ChildOffSchedule(OffScheduleModelMixin, BaseUuidModel):
 
         try:
             subject_screening_obj = preg_subject_screening_cls.objects.get(
-                subject_identifier__startswith=self.subject_identifier)
+                subject_identifier=self.subject_identifier[:-3])
         except preg_subject_screening_cls.DoesNotExist:
 
             try:
                 subject_screening_obj = prior_subject_screening_cls.objects.get(
-                    subject_identifier__startswith=self.subject_identifier)
+                    subject_identifier=self.subject_identifier[:-3])
             except prior_subject_screening_cls.DoesNotExist:
                 raise ValidationError(
                     'Missing Subject Screening form. Please complete '
