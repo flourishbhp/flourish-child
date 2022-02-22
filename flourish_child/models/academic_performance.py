@@ -10,6 +10,7 @@ class AcademicPerformance(ChildCrfModelMixin):
 
     education_level = models.CharField(
         verbose_name="What level/class of school is the child currently in?",
+        choices=HIGHEST_EDUCATION,
         max_length=20,
     )
 
