@@ -18,8 +18,6 @@ from .child_gad_anxiety_screening_admin import ChildGadAnxietyScreeningAdmin
 from .child_gad_referral_admin import ChildGadReferralAdmin
 from .child_hiv_rapid_test_counseling_admin import \
     ChildHIVRapidTestCounselingAdmin
-from .child_hospitalization_admin import ChildHospitalizationAdmin, \
-    AdmissionsReasonAdmin
 from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
 from .child_medical_history_admin import ChildMedicalHistoryAdmin
 from .child_phq_depression_screening_admin import \
