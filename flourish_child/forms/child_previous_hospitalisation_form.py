@@ -21,7 +21,7 @@ class ChildPreviousHospitalizationForm(ChildModelFormMixin, forms.ModelForm):
             'childprehospitalizationinline_set-TOTAL_FORMS')
         hospitalized_count = self.cleaned_data.get('hospitalized_count')
 
-        if hospitalized_count != int(total_inlines):
+        if hospitalized_count != int(total_inlines) and hospitalized_count:
             msg = {'hospitalized_count':
                    'Times child hospitalized should match number of inlines'}
             raise ValidationError(msg)

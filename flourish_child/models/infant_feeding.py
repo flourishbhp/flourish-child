@@ -74,12 +74,12 @@ class InfantFeeding(ChildCrfModelMixin):
         max_length=3,
         choices=YES_NO)
 
-    took_formula = models.CharField(
-        verbose_name='Has the infant taken formula?',
-        max_length=10,
-        choices=YES_NO_UNSURE,
-        blank=True,
-        null=True)
+    # took_formula = models.CharField(
+    #     verbose_name='Has the infant taken formula?',
+    #     max_length=10,
+    #     choices=YES_NO_UNSURE,
+    #     blank=True,
+    #     null=True)
 
     dt_formula_introduced = models.DateField(
         verbose_name='Date infant formula introduced',
