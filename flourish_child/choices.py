@@ -793,3 +793,8 @@ MOTOR_SKILLS_SPECIALIST = (
     ('occupational_therapist', 'Occupational Therapist'),
     ('doctor', 'Doctor'),
 )
+
+STUDY_SITES = (
+    ('40', 'Gaborone'),
+)
+
