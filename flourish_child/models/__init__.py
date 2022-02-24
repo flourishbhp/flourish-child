@@ -16,7 +16,6 @@ from .child_food_security_questionnaire import ChildFoodSecurityQuestionnaire
 from .child_gad_anxiety_screening import ChildGadAnxietyScreening
 from .child_gad_referral import ChildGadReferral
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
-from .child_hospitalization import ChildHospitalization, AdmissionsReasons
 from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesMissed
 from .child_immunization_history import VaccinesReceived
