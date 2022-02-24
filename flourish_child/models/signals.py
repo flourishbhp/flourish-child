@@ -157,7 +157,7 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
 
         put_on_schedule(cohort, instance=instance,
                         subject_identifier=instance.subject_identifier,
-                        base_appt_datetime=instance.delivery_datetime.replace(microsecond=0))
+                        base_appt_datetime=instance.created.replace(microsecond=0))
 
 
 @receiver(post_save, weak=False, sender=ChildBirth,
@@ -180,7 +180,7 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
                 put_on_schedule(
                     'child_cohort_a_birth', instance=instance,
                     subject_identifier=instance.subject_identifier,
-                    base_appt_datetime=maternal_delivery_obj.created.replace(microsecond=0))
+                    base_appt_datetime=maternal_delivery_obj.instance.delivery_datetime.replace(microsecond=0))
 
         caregiver_child_consent_cls = django_apps.get_model(
             'flourish_caregiver.caregiverchildconsent')
