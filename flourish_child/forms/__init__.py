@@ -60,3 +60,4 @@ from .infant_dev_screening_6_months_form import InfantDevScreening6MonthsForm
 from .infant_feeding_form import InfantFeedingForm
 from .infant_feeding_practices_form import InfantFeedingPracticesForm
 from .offschedule_form import ChildOffScheduleForm
+from .child_requisition_form import ChildRequisitionForm

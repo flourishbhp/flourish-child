@@ -26,6 +26,7 @@ from .child_physical_activity import ChildPhysicalActivity
 from .child_preg_testing import ChildPregTesting
 from .child_previous_hospitalization import ChildPreviousHospitalization, \
     ChildPreHospitalizationInline
+from .child_requisition import ChildRequisition
 from .child_socio_demographic import ChildSocioDemographic
 from .child_tanner_staging import ChildTannerStaging
 from .child_visit import ChildVisit
