@@ -42,3 +42,4 @@ from .infant_dev_screening_6_months_admin import InfantDevScreening6MonthsAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
+from .child_requisition_admin import ChildRequisitionAdmin

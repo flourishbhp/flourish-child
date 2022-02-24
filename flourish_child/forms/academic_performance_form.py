@@ -17,7 +17,6 @@ class AcademicPerformanceForm(ChildModelFormMixin):
 
     child_socio_demographic_model = 'flourish_child.childsociodemographic'
 
-
     education_level = forms.ChoiceField(
         label='What level/class of school is the child currently in?',
         disabled=True,
@@ -30,24 +29,25 @@ class AcademicPerformanceForm(ChildModelFormMixin):
 
         # child visit is only available onload page other None
         # args is prepolated only on save otherwise None
-        child_visit_id = initial.get('child_visit', args[0]['child_visit'] if args else None)
+        child_visit_id = initial.get(
+            'child_visit', args[0]['child_visit'] if args else None)
 
         if not instance and previous_instance:
             for key in self.base_fields.keys():
-                if key not in ["child_visit", "report_datetime"]:
+                if key not in ["child_visit", "report_datetime", "education_level"]:
                     initial[key] = getattr(previous_instance, key)
 
-        elif child_visit_id:
+        if child_visit_id:
+            # get the education_level from child socio demographics in the same visit
+            # regard less of the previous education level of the previous instance
             # check if child_visit_id not null to avoid exceptions
             # then initialize education_level taken from child socio demographics in the same visit
-            initial['education_level'] = self.child_social_education_level(child_visit_id=child_visit_id)
-
+            initial['education_level'] = self.child_social_education_level(
+                child_visit_id=child_visit_id)
 
         kwargs["initial"] = initial
 
         super().__init__(*args, **kwargs)
-
-
 
     @property
     def child_socio_demographic_cls(self):
@@ -57,7 +57,8 @@ class AcademicPerformanceForm(ChildModelFormMixin):
         """
         Get the child demographics from the same visit
         """
-        child_socio_demographic = self.child_socio_demographic_cls.objects.get(child_visit_id=child_visit_id)
+        child_socio_demographic = self.child_socio_demographic_cls.objects.get(
+            child_visit_id=child_visit_id)
         return child_socio_demographic.education_level
 
     def clean(self):
@@ -96,14 +97,16 @@ class AcademicPerformanceForm(ChildModelFormMixin):
             "academic_perf_changed",
         ]
         if prev_instance:
-            other_values = self.model_to_dict(prev_instance, exclude=exclude_fields)
+            other_values = self.model_to_dict(
+                prev_instance, exclude=exclude_fields)
             values = {
                 key: self.data.get(key) or "not_taking_subject"
                 for key in other_values.keys()
             }
             if self.data.get("grade_points") == "":
                 values["grade_points"] = None
-            values["education_level_other"] = self.data.get("education_level_other")
+            values["education_level_other"] = self.data.get(
+                "education_level_other")
             if values.get("grade_points"):
                 values["grade_points"] = int(values.get("grade_points"))
             return values != other_values
@@ -118,7 +121,8 @@ class AcademicPerformanceForm(ChildModelFormMixin):
             if exclude and f.name in exclude:
                 continue
             if isinstance(f, ManyToManyField):
-                data[f.name] = [str(obj.id) for obj in f.value_from_object(instance)]
+                data[f.name] = [str(obj.id)
+                                for obj in f.value_from_object(instance)]
                 continue
             data[f.name] = f.value_from_object(instance) or None
         return data
