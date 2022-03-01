@@ -6,7 +6,7 @@ from django.db.models import ManyToManyField, ForeignKey, OneToOneField, ManyToO
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-from edc_constants.constants import NEG, POS
+from edc_constants.constants import NEG, POS, YES
 import xlwt
 
 
@@ -30,7 +30,7 @@ class ExportActionMixin:
 
         field_names = [field.name for field in self.get_model_fields]
 
-        if queryset and self.is_assent(queryset[0]):
+        if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
             field_names.insert(1, 'child_exposure_status')
 
@@ -68,7 +68,7 @@ class ExportActionMixin:
                 data.append(child_exposure_status)
                 data.append(obj.child_visit.visit_code)
 
-            elif self.is_assent(obj):
+            elif self.is_non_crf(obj):
                 subject_identifier = getattr(obj, 'subject_identifier')
                 screening_identifier = self.screening_identifier(
                     subject_identifier=subject_identifier[:-3])
@@ -207,20 +207,20 @@ class ExportActionMixin:
 
             try:
                 rapid_test_obj = rapid_test_cls.objects.get(
-                    visit_code='1000M', visit_code_sequence=0,
-                    maternal_visit__subject_identifier=subject_identifier[:-3])
+                    maternal_visit__visit_code='1000M', maternal_visit__visit_code_sequence=0,
+                    maternal_visit__subject_identifier=subject_identifier[:-3],
+                    rapid_test_done=YES)
             except rapid_test_cls.DoesNotExist:
                 antenatal_enrollment_cls = django_apps.get_model(
                     'flourish_caregiver.antenatalenrollment')
                 try:
                     antenatal_enrollment = antenatal_enrollment_cls.objects.get(
-                        subject_identifier=subject_identifier)
+                        subject_identifier=subject_identifier[:-3])
                 except antenatal_enrollment_cls.DoesNotExist:
                     # To refactor to include new enrollees
                     maternal_hiv_status = 'UNK'
                 else:
                     maternal_hiv_status = antenatal_enrollment.enrollment_hiv_status
-
             else:
                 maternal_hiv_status = rapid_test_obj.result
 
@@ -231,9 +231,12 @@ class ExportActionMixin:
             else:
                 return 'UNK'
 
-    def is_assent(self, obj):
-        assent_cls = django_apps.get_model('flourish_child.childassent')
-        return isinstance(obj, assent_cls)
+    def is_non_crf(self, obj):
+
+        if getattr(obj, 'subject_identifier'):
+            return True
+        else:
+            return False
 
     @property
     def get_model_fields(self):
