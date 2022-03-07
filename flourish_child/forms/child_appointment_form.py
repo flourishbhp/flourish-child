@@ -1,9 +1,8 @@
 from django import forms
+from edc_appointment.form_validators import AppointmentFormValidator
 from edc_base.sites.forms import SiteModelFormMixin
 from edc_form_validators import FormValidatorMixin
 import pytz
-
-from edc_appointment.form_validators import AppointmentFormValidator
 
 from ..models import Appointment
 
@@ -20,8 +19,7 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
     def clean(self):
         cleaned_data = self.cleaned_data
 
-        if (self.instance.visit_code not in ['1000', '2000']
-                and cleaned_data.get('appt_datetime')):
+        if cleaned_data.get('appt_datetime'):
 
             visit_definition = self.instance.visits.get(self.instance.visit_code)
 
@@ -33,7 +31,9 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
                                       pytz.timezone('Africa/Gaborone'))
 
             if (cleaned_data.get('appt_datetime') < earlist_appt_date.replace(microsecond=0)
-                    or cleaned_data.get('appt_datetime') > latest_appt_date.replace(microsecond=0)):
+                    or (self.instance.visit_code != '2000'
+                        and cleaned_data.get('appt_datetime') > latest_appt_date.replace(
+                            microsecond=0))):
                 raise forms.ValidationError(
                             'The appointment datetime cannot be outside the window period, '
                             'please correct. See earliest, ideal and latest datetimes below.')
