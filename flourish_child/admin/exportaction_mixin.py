@@ -191,15 +191,13 @@ class ExportActionMixin:
         child_dataset_cls = django_apps.get_model('flourish_child.childdataset')
 
         if study_maternal_identifier:
-            try:
-                child_dataset_obj = child_dataset_cls.objects.get(
-                    study_maternal_identifier=study_maternal_identifier)
-            except child_dataset_obj.DoesNotExist:
-                return None
-            else:
-                if child_dataset_obj.infant_hiv_exposed in ['Exposed', 'exposed']:
+            child_dataset_objs = child_dataset_cls.objects.filter(
+                study_maternal_identifier=study_maternal_identifier)
+
+            if child_dataset_objs:
+                if child_dataset_objs[0].infant_hiv_exposed in ['Exposed', 'exposed']:
                     return 'HEU'
-                elif child_dataset_obj.infant_hiv_exposed in ['Unexposed', 'unexposed']:
+                elif child_dataset_objs[0].infant_hiv_exposed in ['Unexposed', 'unexposed']:
                     return 'HUU'
         else:
             rapid_test_cls = django_apps.get_model('flourish_caregiver.hivrapidtestcounseling')
