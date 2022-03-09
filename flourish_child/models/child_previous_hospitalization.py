@@ -35,8 +35,8 @@ class ChildPreviousHospitalization(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'Children/Adolescents Previous Hospital'
-        verbose_name_plural = 'Children/Adolescents Previous Hospital'
+        verbose_name = 'Children/Adolescents Hospitalisation History'
+        verbose_name_plural = 'Children/Adolescents Hospitalisation History'
 
 
 class ChildPreHospitalizationInline(CrfInlineModelMixin, BaseUuidModel):
@@ -79,5 +79,5 @@ class ChildPreHospitalizationInline(CrfInlineModelMixin, BaseUuidModel):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'Children/Adolescents Hospitalisation History'
-        verbose_name_plural = 'Children/Adolescents Hospitalisation History'
+        verbose_name = 'Children/Adolescents Previous Hospital'
+        verbose_name_plural = 'Children/Adolescents Previous Hospital'
