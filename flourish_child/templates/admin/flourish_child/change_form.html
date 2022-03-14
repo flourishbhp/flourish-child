@@ -2,86 +2,126 @@
 {% load static %}
 
 {% block extrahead %}
-	{{ block.super }}
+    {{ block.super }}
 {% endblock %}
 
 {% block extrastyle %}
-	{{ block.super }}
-	<link rel="stylesheet" type="text/css" href="{% static 'flourish_child/css/immunization_history.css' %}">
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'flourish_child/css/immunization_history.css' %}">
 {% endblock %}
 
 {% block field_sets %}
 
-	{% if vaccinesreceived %}
-		<div class="col-md-6">
-			<h2 class="header-text">Received Vaccines</h2>
-			<table style="width:98%">
-				<tr>
-			    	<th>Visit Code</th>
-			    	<th>Vaccines Received</th>
-			    	<th>1st Dose Date</th>
-			    	<th>2nd Dose Date</th>
-			    	<th>3rd Dose Date</th>
-			    	<th>Booster Dose Date</th>
-			  	</tr>
-			 	{% for key, values in vaccinesreceived.items %}
-					<tr>
-				    	<th rowspan={{values|length|add:"1"}}>{{key}}</th>
-				 	</tr>
-				 	{% for value in values %}
-				    	<tr>
-						    <td>
-						    	{{value.received_vaccine_name}}
-						    </td>
-						    <td>
-						    	{{value.first_dose_dt}}
-						    </td>
-						    <td>
-						    	{{value.second_dose_dt}}
-						    </td>
-						    <td>
-						    	{{value.third_dose_dt}}
-						    </td>
-						    <td>
-						    	{{value.booster_dose_dt}}
-						    </td>
-					 	</tr>
-				  	{% endfor %}
-			  	{% endfor %}
-			</table>
-		</div>
-	{% endif %}
-	{% if vaccinesmissed %}
-		<div class="col-md-6">
-			<h2 class="header-text">Missed Vaccines</h2>
-			<table style="width:98%">
-				<tr>
-			    	<th>Visit Code</th>
-			    	<th>Vaccines Missed</th>
-			    	<th>Reason(s)</th>
-			  	</tr>
-			 	{% for key, values in vaccinesmissed.items %}
-					<tr>
-				    	<th rowspan={{values|length|add:"1"}}>{{key}}</th>
-				 	</tr>
-				 	{% for value in values %}
-				    	<tr>
-						    <td>
-						    	{{value.missed_vaccine_name}}
-						    </td>
-						    <td>
-						    	{% firstof value.reason_missed value.reason_missed_other %}
-						    </td>
-					 	</tr>
-				  	{% endfor %}
-			  	{% endfor %}
-			</table>
-		</div>
-	{% endif %}
-	{% if vaccinesreceived or vaccinesmissed %}
-		<div class='clearfix'></div>
-	{% endif %}
-  	{{ block.super }}
+    {% if vaccinesreceived %}
+        <div class="col-md-6">
+            <h2 class="header-text">Received Vaccines</h2>
+            <table style="width:98%">
+                <tr>
+                    <th>Visit Code</th>
+                    <th>Vaccines Received</th>
+                    <th>1st Dose Date</th>
+                    <th>2nd Dose Date</th>
+                    <th>3rd Dose Date</th>
+                    <th>Booster Dose Date</th>
+                </tr>
+                {% for key, values in vaccinesreceived.items %}
+                    <tr>
+                        <th rowspan={{ values|length|add:"1"}}>{{ key }}</th>
+                    </tr>
+                    {% for value in values %}
+                        <tr>
+                            <td>
+                                {{ value.received_vaccine_name }}
+                            </td>
+                            <td>
+                                {{ value.first_dose_dt }}
+                            </td>
+                            <td>
+                                {{ value.second_dose_dt }}
+                            </td>
+                            <td>
+                                {{ value.third_dose_dt }}
+                            </td>
+                            <td>
+                                {{ value.booster_dose_dt }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+    {% if vaccinesmissed %}
+        <div class="col-md-6">
+            <h2 class="header-text">Missed Vaccines</h2>
+            <table style="width:98%">
+                <tr>
+                    <th>Visit Code</th>
+                    <th>Vaccines Missed</th>
+                    <th>Reason(s)</th>
+                </tr>
+                {% for key, values in vaccinesmissed.items %}
+                    <tr>
+                        <th rowspan={{ values|length|add:"1"}}>{{ key }}</th>
+                    </tr>
+                    {% for value in values %}
+                        <tr>
+                            <td>
+                                {{ value.missed_vaccine_name }}
+                            </td>
+                            <td>
+                                {% firstof value.reason_missed value.reason_missed_other %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+    {% if childprehospitalizationInline %}
+        <div class="col-md-6">
+            <h2 class="header-text">Recent Hospitalisation</h2>
+            <table style="width:98%">
+                <tr>
+                    <th>Visit Code</th>
+                    <th>Hospital Name</th>
+                    <th>Reasons of Hospitalisation</th>
+                    <th>Date of Hospitalisation</th>
+                </tr>
+                {% for key, values in childprehospitalizationInline.items %}
+                    <tr>
+                        <th rowspan={{ values|length|add:"1"}}>{{ key }}</th>
+                    </tr>
+                    {% for value in values %}
+                        <tr>
+                            {% if value.name_hospital_other %}
+                                <td>
+                                    {{ value.name_hospital }}:{{ value.name_hospital_other }}
+                                </td>
+                            {% else %}
+                                <td>
+                                    {{ value.name_hospital }}
+                                </td>
+                            {% endif %}
+                            <td>
+                                {{ value.reason_hospitalized.all | join:", " }},
+                                    {{ value.surgical_reason|default_if_none:"" }},
+                                    {{ value.name_hospital_other|default_if_none:"" }}
+                            </td>
+                            <td>
+                                {{ value.aprox_date }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+    {% if vaccinesreceived or vaccinesmissed or childprehospitalizationInline %}
+        <div class='clearfix'></div>
+    {% endif %}
+    {{ block.super }}
 {% endblock field_sets %}
 
 
