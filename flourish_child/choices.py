@@ -733,6 +733,7 @@ TESTING_REASONS = (
     ('pre-traveling_screening ', 'Pre-Traveling screening '),
     ('routine_testing ', 'Routine testing '),
     ('contact_tracing', 'Contact tracing'),
+    ('asymptomatic_testing', 'Asymptomatic Testing'),
     (OTHER, 'Other')
 )
 
@@ -762,6 +763,7 @@ VACCINATION_TYPE = (
     ('sinovac', 'Sinovac'),
     ('pfizer', 'Pfizer'),
     ('johnson_and_johnson', 'Johnson & Johnson '),
+    ('moderna', 'Moderna'),
     (OTHER, 'Other')
 )
 HEARING_SPECIALISTS = (
