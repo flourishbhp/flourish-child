@@ -27,6 +27,7 @@ from .child_physical_activity_admin import ChildPhysicalActivityAdmin
 from .child_preg_testing_admin import ChildPregTestingAdmin
 from .child_previous_hospitalization_admin import \
     ChildPreviousHospitalizationAdmin
+from .child_requisition_admin import ChildRequisitionAdmin
 from .child_socio_demographic_admin import ChildSocioDemographicAdmin
 from .child_tanner_staging_admin import ChildTannerStagingAdmin
 from .child_visit_admin import ChildVisitAdmin
@@ -37,9 +38,9 @@ from .infant_dev_screening_12_months_admin import InfantDevScreening12MonthsAdmi
 from .infant_dev_screening_18_months_admin import InfantDevScreening18MonthsAdmin
 from .infant_dev_screening_36_months_admin import InfantDevScreening36MonthsAdmin
 from .infant_dev_screening_3_months_admin import InfantDevScreening3MonthsAdmin
-from .infant_dev_screening_60_to_72_months_admin import InfantDevScreening60To72MonthsAdmin
+from .infant_dev_screening_60_months_admin import InfantDevScreening60MonthsAdmin
 from .infant_dev_screening_6_months_admin import InfantDevScreening6MonthsAdmin
+from .infant_dev_screening_72_months_admin import InfantDevScreening72MonthsAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
-from .child_requisition_admin import ChildRequisitionAdmin
