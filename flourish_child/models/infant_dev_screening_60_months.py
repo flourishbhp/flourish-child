@@ -6,7 +6,7 @@ from ..choices import YES_NO_DONT_KNOW, HEARING_SPECIALISTS, VISION_SPECIALISTS,
     COGNITIVE_SPECIALIST, MOTOR_SKILLS_SPECIALIST
 
 
-class InfantDevScreening60To72Months(ChildCrfModelMixin):
+class InfantDevScreening60Months(ChildCrfModelMixin):
     speak = models.CharField(
         verbose_name='Speaks in full sentences',
         choices=YES_NO_DONT_KNOW,
@@ -52,11 +52,12 @@ class InfantDevScreening60To72Months(ChildCrfModelMixin):
     )
 
     understand_commands = models.CharField(
-        verbose_name=('Understands multiple commands (e.g., ‘go to the kitchen and bring'
-                      ' me your plate’)'),
+        verbose_name='Understands multiple commands',
         choices=YES_NO_DONT_KNOW,
         max_length=15,
-        default=YES
+        default=YES,
+        help_text='e.g., go to the kitchen and bring me your plate'
+
     )
 
     cognitive_specialist = models.CharField(
@@ -103,5 +104,5 @@ class InfantDevScreening60To72Months(ChildCrfModelMixin):
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = 'Infant Developmental Screening for 5 To 6 Years'
-        verbose_name_plural = 'Infant Developmental Screening for 5 To 6 Years'
+        verbose_name = 'Infant Developmental Screening for Age 60 Months '
+        verbose_name_plural = 'Infant Developmental Screening for Age 60 Months'

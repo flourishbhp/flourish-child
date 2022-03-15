@@ -3,31 +3,30 @@ from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
-from ..forms import InfantDevScreening12MonthsForm
-from ..models import InfantDevScreening12Months
+from ..forms import InfantDevScreening72MonthsForm
+from ..models import InfantDevScreening72Months
 
 
-@admin.register(InfantDevScreening12Months, site=flourish_child_admin)
-class InfantDevScreening12MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-    form = InfantDevScreening12MonthsForm
+@admin.register(InfantDevScreening72Months, site=flourish_child_admin)
+class InfantDevScreening72MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+    form = InfantDevScreening72MonthsForm
 
     fieldsets = (
         (None, {
             'fields': (
                 'child_visit',
                 'report_datetime',
-                'hearing',
+                'speak',
                 'hearing_response',
-                'hearing_communication',
                 'hearing_specialist',
-                'eye_movement',
-                'familiar_obj',
+                'vision_problems',
                 'vision_specialist',
-                'cognitive_behavior',
-                'understands',
+                'interactive',
+                'understand_commands',
                 'cognitive_specialist',
-                'stands',
-                'picks_objects',
+                'motor_skills_hops',
+                'motor_skills_drawing',
+                'motor_skills_dress',
                 'motor_skills_specialist',
                 'caregiver_concerns',
             )
@@ -37,17 +36,16 @@ class InfantDevScreening12MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin)
     additional_instructions = ('Respond ‘Yes’ to any question where the caregiver says'
                                ' that the child CAN do the following')
 
-    radio_fields = {"hearing": admin.VERTICAL,
+    radio_fields = {"speak": admin.VERTICAL,
                     "hearing_response": admin.VERTICAL,
-                    "hearing_communication": admin.VERTICAL,
                     "hearing_specialist": admin.VERTICAL,
-                    "eye_movement": admin.VERTICAL,
-                    "familiar_obj": admin.VERTICAL,
+                    "vision_problems": admin.VERTICAL,
                     "vision_specialist": admin.VERTICAL,
-                    "cognitive_behavior": admin.VERTICAL,
+                    "interactive": admin.VERTICAL,
+                    "understand_commands": admin.VERTICAL,
                     "cognitive_specialist": admin.VERTICAL,
-                    "understands": admin.VERTICAL,
-                    "stands": admin.VERTICAL,
-                    "picks_objects": admin.VERTICAL,
+                    "motor_skills_hops": admin.VERTICAL,
+                    "motor_skills_drawing": admin.VERTICAL,
+                    "motor_skills_dress": admin.VERTICAL,
                     "motor_skills_specialist": admin.VERTICAL,
                     }

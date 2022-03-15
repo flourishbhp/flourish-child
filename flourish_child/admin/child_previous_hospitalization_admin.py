@@ -1,7 +1,7 @@
 from django.apps import apps as django_apps
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from edc_fieldsets import Insert
+from edc_fieldsets import Fieldlist
 from edc_model_admin import StackedInlineMixin
 from edc_model_admin import audit_fieldset_tuple
 
@@ -24,12 +24,13 @@ class ChildPreHospitalizationInlineAdmin(StackedInlineMixin, admin.StackedInline
                 'reason_hospitalized',
                 'surgical_reason',
                 'reason_hospitalized_other',
-                'aprox_date',)},
+                'aprox_date',)
+            },
          ], audit_fieldset_tuple)
 
     radio_fields = {
         'name_hospital': admin.VERTICAL,
-    }
+        }
 
     filter_horizontal = ['reason_hospitalized']
 
@@ -50,13 +51,14 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
                 'report_datetime',
                 'child_hospitalized',
                 'hospitalized_count',
-            )}
+                )
+            }
          ), audit_fieldset_tuple)
 
     radio_fields = {
         'child_hospitalized': admin.VERTICAL,
         'hos_last_visit': admin.VERTICAL,
-    }
+        }
 
     def get_key(self, request, obj=None):
         schedule_name = super().get_key(request=request, obj=obj)
@@ -71,16 +73,35 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
         return schedule_name
 
     conditional_fieldlists = {
-        'child_a_sec_qt_schedule1': Insert('hos_last_visit',
-                                           after='report_datetime'),
-        'child_a_quart_schedule1': Insert('hos_last_visit', after='report_datetime'),
-        'child_b_sec_qt_schedule1': Insert('hos_last_visit',
-                                           after='report_datetime'),
-        'child_b_quart_schedule1': Insert('hos_last_visit', after='report_datetime'),
-        'child_c_sec_qt_schedule1': Insert('hos_last_visit',
-                                           after='report_datetime'),
-        'child_c_quart_schedule1': Insert('hos_last_visit', after='report_datetime'),
-        'child_pool_schedule1': Insert('hos_last_visit', after='report_datetime'), }
+        'child_a_sec_qt_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
+                                              insert_fields=('hos_last_visit',),
+                                              insert_after=('report_datetime')
+                                              ),
+        'child_a_quart_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
+                                             insert_fields=('hos_last_visit',),
+                                             insert_after='report_datetime'
+                                             ),
+        'child_b_sec_qt_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
+                                              insert_fields=('hos_last_visit',),
+                                              insert_after='report_datetime'
+                                              ),
+        'child_b_quart_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
+                                             insert_fields=('hos_last_visit',),
+                                             insert_after='report_datetime'
+                                             ),
+        'child_c_sec_qt_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
+                                              insert_fields=('hos_last_visit',),
+                                              insert_after='report_datetime'
+                                              ),
+        'child_c_quart_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
+                                             insert_fields=('hos_last_visit',),
+                                             insert_after='report_datetime'
+                                             ),
+        'child_pool_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
+                                          insert_fields=('hos_last_visit',),
+                                          insert_after='report_datetime'
+                                          ),
+        }
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)
@@ -109,8 +130,9 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
 
-    def get_model_data_per_visit(self, subject_identifier=None,
-                                 child_visit=None):
+    def get_model_data_per_visit(self,
+            subject_identifier=None, child_visit=None
+            ):
         model_dict = {}
         for model_name in self.extra_context_models:
             data_dict = {}
@@ -125,6 +147,4 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
 
             model_dict.update({model_name: data_dict})
 
-        # import pdb;
-        # pdb.set_trace()
         return model_dict
