@@ -143,13 +143,13 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     @property
     def latest_consent_version(self):
         subject_identifier = self.subject_identifier.split('-')
-        subject_identifier.pop()
-        caregiver_subject_identifier = '-'.join(subject_identifier)
+        # subject_identifier.pop()
+        # caregiver_subject_identifier = '-'.join(subject_identifier)
 
         version = None
         try:
             consent = self.subject_consent_cls.objects.filter(
-                subject_identifier=caregiver_subject_identifier)
+                subject_identifier=self.subject_identifier)
         except self.subject_consent_cls.ObjectDoesNotExist:
             return None
         else:

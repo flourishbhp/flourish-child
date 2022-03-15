@@ -13,7 +13,9 @@ class InfantDevScreening6MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': [
+            'fields': (
+                'child_visit',
+                'report_datetime',
                 'hearing',
                 'hearing_response',
                 'hearing_specialist',
@@ -28,9 +30,12 @@ class InfantDevScreening6MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'motor_skills_tummy',
                 'motor_skills_specialist',
                 'caregiver_concerns',
-            ]
+            )
         }), audit_fieldset_tuple
     )
+
+    additional_instructions = ('Respond ‘Yes’ to any question where the caregiver says'
+                               ' that the child CAN do the following')
 
     radio_fields = {"hearing": admin.VERTICAL,
                     "hearing_response": admin.VERTICAL,
