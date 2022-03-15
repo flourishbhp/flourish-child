@@ -1,17 +1,19 @@
 from dateutil.relativedelta import relativedelta
 from edc_base.utils import get_utcnow
-from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT, NO
+from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT, NO, POS, MALE
 from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 from model_mommy.recipe import Recipe, seq
+
 from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
-    SubjectConsent
+    SubjectConsent, CaregiverPreviouslyEnrolled
+from flourish_child.models.birth_data import BirthData
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
-    ChildVisit, ChildBirth
+    ChildVisit, ChildBirth, InfantDevScreening36Months, InfantDevScreening3Months, \
+    InfantDevScreening12Months
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic
-from flourish_child.models.birth_data import BirthData
 
 fake = Faker()
 
@@ -19,7 +21,7 @@ childdummysubjectconsent = Recipe(
     ChildDummySubjectConsent,
     subject_identifier=None,
     version='1'
-)
+    )
 
 childassent = Recipe(
     ChildAssent,
@@ -32,7 +34,7 @@ childassent = Recipe(
     gender='M',
     hiv_testing=YES,
     remain_in_study=YES,
-)
+    )
 
 # TODO
 # Recipe for child birth
@@ -44,7 +46,7 @@ childbirth = Recipe(
     initials='AY',
     dob=get_utcnow(),
     gender='Male'
-)
+    )
 
 childdataset = Recipe(
     ChildDataset, )
@@ -75,7 +77,7 @@ subjectconsent = Recipe(
     identity_type='OMANG',
     is_dob_estimated='-',
     version='1'
-)
+    )
 
 childvisit = Recipe(
     ChildVisit,
@@ -85,7 +87,6 @@ childvisit = Recipe(
     study_status=ON_STUDY,
     survival_status=ALIVE,
     info_source=PARTICIPANT)
-
 
 childsociodemographic = Recipe(
     ChildSocioDemographic,
@@ -118,3 +119,49 @@ childphqdeprscreening = Recipe(
     self_harm='4',
     self_harm_thoughts=NO,
     suidice_attempt=NO)
+
+caregiverpreviouslyenrolled = Recipe(
+    CaregiverPreviouslyEnrolled,
+    report_datetime=get_utcnow(),
+    maternal_prev_enroll=YES,
+    current_hiv_status=POS,
+    last_test_date=get_utcnow().date(),
+    test_date=get_utcnow().date(),
+    is_date_estimated=NO,
+    sex=MALE,
+    relation_to_child='Mother', )
+
+infantdevscreening36months = Recipe(
+    InfantDevScreening36Months,
+    report_datetime=get_utcnow(),
+    speaking=YES,
+    hearing_specialist="blah blah",
+    vision=YES,
+    vision_specialist="blah blah",
+    play_with_people=YES,
+    play_with_toys=YES,
+    cognitive_specialist="blah blah",
+    runs_well=YES,
+    self_feed=YES,
+    motor_skills_specialist="blah blah",
+    caregiver_concerns="blah blah"
+    )
+
+infantdevscreening12months = Recipe(
+    InfantDevScreening12Months,
+    report_datetime=get_utcnow(),
+    hearing=YES,
+    hearing_response=YES,
+    hearing_communication=YES,
+    hearing_specialist="blah blah",
+    eye_movement=YES,
+    familiar_obj=YES,
+    vision_specialist="blah blah",
+    cognitive_behavior=YES,
+    understands=YES,
+    cognitive_specialist="blah blah",
+    stands=YES,
+    picks_objects=YES,
+    motor_skills_specialist="blah blah",
+    caregiver_concerns="blah blah"
+    )

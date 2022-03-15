@@ -34,6 +34,10 @@ class Covid19Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'other_vaccination_type',
                 'first_dose',
                 'second_dose',
+                'received_booster',
+                'booster_vac_type',
+                'other_booster_vac_type',
+                'booster_vac_date',
             ]}
          ), audit_fieldset_tuple)
 
@@ -47,6 +51,19 @@ class Covid19Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'close_contact': admin.VERTICAL,
         'fully_vaccinated': admin.VERTICAL,
         'vaccination_type': admin.VERTICAL,
+        'received_booster': admin.VERTICAL,
+        'booster_vac_type': admin.VERTICAL,
     }
 
     filter_horizontal = ('isolations_symptoms', 'symptoms_for_past_14days')
+
+    def add_view(self, request, form_url='', extra_context=None):
+        subject_identifier = self.get_appointment(request).subject_identifier
+
+        covid_crf = ChildCovid19.objects.filter(
+            child_visit__appointment__subject_identifier=subject_identifier) \
+            .order_by('-report_datetime')
+        if covid_crf:
+            extra_context = {'followup_question': f'Since the last FLOURISH visit on ',
+                             'followup_question_date': covid_crf.first().report_datetime}
+        return super().add_view(request, form_url='', extra_context=extra_context)

@@ -6,6 +6,7 @@ from django.db.models import ManyToManyField, ForeignKey, OneToOneField, ManyToO
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from edc_constants.constants import NEG, POS, YES
 import xlwt
 
 
@@ -29,15 +30,17 @@ class ExportActionMixin:
 
         field_names = [field.name for field in self.get_model_fields]
 
-        if queryset and self.is_assent(queryset[0]):
+        if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
+            field_names.insert(1, 'child_exposure_status')
 
         if queryset and getattr(queryset[0], 'child_visit', None):
             field_names.insert(0, 'subject_identifier')
             field_names.insert(1, 'new_maternal_study_subject_identifier')
             field_names.insert(2, 'old_study_maternal_identifier')
             field_names.insert(3, 'previous_study')
-            field_names.insert(4, 'visit_code')
+            field_names.insert(4, 'child_exposure_status')
+            field_names.insert(5, 'visit_code')
 
         for col_num in range(len(field_names)):
             ws.write(row_num, col_num, field_names[col_num], font_style)
@@ -47,20 +50,37 @@ class ExportActionMixin:
 
             # Add subject identifier and visit code
             if getattr(obj, 'child_visit', None):
+
                 subject_identifier = obj.child_visit.subject_identifier
-                screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
-                previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
-                study_maternal_identifier = self.study_maternal_identifier(screening_identifier=screening_identifier)
+                screening_identifier = self.screening_identifier(
+                    subject_identifier=subject_identifier[:-3])
+                previous_study = self.previous_bhp_study(
+                    screening_identifier=screening_identifier)
+                study_maternal_identifier = self.study_maternal_identifier(
+                    screening_identifier=screening_identifier)
+                child_exposure_status = self.child_hiv_exposure(study_maternal_identifier,
+                                                                subject_identifier)
+
                 data.append(subject_identifier)
                 data.append(subject_identifier[:-3])
                 data.append(study_maternal_identifier)
                 data.append(previous_study)
+                data.append(child_exposure_status)
                 data.append(obj.child_visit.visit_code)
-            elif self.is_assent(obj):
+
+            elif self.is_non_crf(obj):
                 subject_identifier = getattr(obj, 'subject_identifier')
-                screening_identifier = self.screening_identifier(subject_identifier=subject_identifier[:-3])
-                previous_study = self.previous_bhp_study(screening_identifier=screening_identifier)
+                screening_identifier = self.screening_identifier(
+                    subject_identifier=subject_identifier[:-3])
+                previous_study = self.previous_bhp_study(
+                    screening_identifier=screening_identifier)
+                study_maternal_identifier = self.study_maternal_identifier(
+                    screening_identifier=screening_identifier)
+                child_exposure_status = self.child_hiv_exposure(study_maternal_identifier,
+                                                                subject_identifier)
+
                 data.append(previous_study)
+                data.append(child_exposure_status)
 
             inline_objs = []
             for field in self.get_model_fields:
@@ -69,7 +89,7 @@ class ExportActionMixin:
                     field_value = ', '.join([obj.name for obj in key_manager.all()])
                     data.append(field_value)
                     continue
-                if isinstance(field, (ForeignKey, OneToOneField, )):
+                if isinstance(field, (ForeignKey, OneToOneField,)):
                     field_value = getattr(obj, field.name)
                     data.append(field_value.id)
                     continue
@@ -166,9 +186,55 @@ class ExportActionMixin:
             else:
                 return dataset_obj.study_maternal_identifier
 
-    def is_assent(self, obj):
-        assent_cls = django_apps.get_model('flourish_child.childassent')
-        return isinstance(obj, assent_cls)
+    def child_hiv_exposure(self, study_maternal_identifier=None, subject_identifier=None):
+
+        child_dataset_cls = django_apps.get_model('flourish_child.childdataset')
+
+        if study_maternal_identifier:
+            child_dataset_objs = child_dataset_cls.objects.filter(
+                study_maternal_identifier=study_maternal_identifier)
+
+            if child_dataset_objs:
+                if child_dataset_objs[0].infant_hiv_exposed in ['Exposed', 'exposed']:
+                    return 'HEU'
+                elif child_dataset_objs[0].infant_hiv_exposed in ['Unexposed', 'unexposed']:
+                    return 'HUU'
+        else:
+            rapid_test_cls = django_apps.get_model('flourish_caregiver.hivrapidtestcounseling')
+            maternal_hiv_status = None
+
+            try:
+                rapid_test_obj = rapid_test_cls.objects.get(
+                    maternal_visit__visit_code='1000M', maternal_visit__visit_code_sequence=0,
+                    maternal_visit__subject_identifier=subject_identifier[:-3],
+                    rapid_test_done=YES)
+            except rapid_test_cls.DoesNotExist:
+                antenatal_enrollment_cls = django_apps.get_model(
+                    'flourish_caregiver.antenatalenrollment')
+                try:
+                    antenatal_enrollment = antenatal_enrollment_cls.objects.get(
+                        subject_identifier=subject_identifier[:-3])
+                except antenatal_enrollment_cls.DoesNotExist:
+                    # To refactor to include new enrollees
+                    maternal_hiv_status = 'UNK'
+                else:
+                    maternal_hiv_status = antenatal_enrollment.enrollment_hiv_status
+            else:
+                maternal_hiv_status = rapid_test_obj.result
+
+            if maternal_hiv_status == POS:
+                return 'HEU'
+            elif maternal_hiv_status == NEG:
+                return 'HUU'
+            else:
+                return 'UNK'
+
+    def is_non_crf(self, obj):
+
+        if getattr(obj, 'subject_identifier'):
+            return True
+        else:
+            return False
 
     @property
     def get_model_fields(self):

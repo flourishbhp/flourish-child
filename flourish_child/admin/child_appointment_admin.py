@@ -1,6 +1,3 @@
-import pytz
-from edc_visit_schedule.fieldsets import visit_schedule_fieldset_tuple, visit_schedule_fields
-
 from django.conf import settings
 from django.contrib import admin
 from django.urls.base import reverse
@@ -13,6 +10,8 @@ from edc_model_admin import (
     ModelAdminFormAutoNumberMixin, ModelAdminRedirectOnDeleteMixin,
     ModelAdminAuditFieldsMixin, ModelAdminReadOnlyMixin,
     audit_fieldset_tuple)
+from edc_visit_schedule.fieldsets import visit_schedule_fieldset_tuple, visit_schedule_fields
+import pytz
 
 from ..admin_site import flourish_child_admin
 from ..forms import AppointmentForm
@@ -98,7 +97,7 @@ class AppointmentAdmin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirec
         ideal_start = app_obj.timepoint_datetime.astimezone(
                                       pytz.timezone('Africa/Gaborone'))
 
-        extra_context.update({'earliest_start': earliest_start.strftime("%Y-%m/%d, %H:%M:%S"),
+        extra_context.update({'earliest_start': earliest_start.strftime("%Y-%m-%d, %H:%M:%S"),
                               'latest_start': latest_start.strftime("%Y-%m-%d, %H:%M:%S"),
                               'ideal_start': ideal_start.strftime("%Y-%m-%d, %H:%M:%S"), })
 
