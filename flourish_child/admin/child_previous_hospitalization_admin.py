@@ -24,12 +24,15 @@ class ChildPreHospitalizationInlineAdmin(StackedInlineMixin, admin.StackedInline
                 'reason_hospitalized',
                 'surgical_reason',
                 'reason_hospitalized_other',
-                'aprox_date',)
+                'aprox_date',
+                'date_estimated'
+                )
             },
          ], audit_fieldset_tuple)
 
     radio_fields = {
         'name_hospital': admin.VERTICAL,
+        'date_estimated': admin.VERTICAL,
         }
 
     filter_horizontal = ['reason_hospitalized']
