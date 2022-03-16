@@ -50,7 +50,6 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             'citizen': YES
             }
 
-    @tag('screening')
     def test_food_security_quarter_schedule(self):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
@@ -119,7 +118,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='2002',
                 subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
+            report_datetime=get_utcnow() + relativedelta(days=44),
             reason=SCHEDULED)
 
         self.assertEqual(CrfMetadata.objects.get(
@@ -132,7 +131,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='2003',
                 subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
+            report_datetime=get_utcnow() + relativedelta(days=88),
             reason=SCHEDULED)
 
         self.assertEqual(CrfMetadata.objects.get(
@@ -145,7 +144,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='2004',
                 subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
+            report_datetime=get_utcnow() + relativedelta(days=132),
             reason=SCHEDULED)
 
         self.assertEqual(CrfMetadata.objects.get(
@@ -158,7 +157,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='2005',
                 subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
+            report_datetime=get_utcnow() + relativedelta(days=176),
             reason=SCHEDULED)
 
         self.assertEqual(CrfMetadata.objects.get(
@@ -171,7 +170,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='2006',
                 subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
+            report_datetime=get_utcnow() + relativedelta(days=220),
             reason=SCHEDULED)
 
         self.assertEqual(CrfMetadata.objects.get(
@@ -184,7 +183,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='2007',
                 subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
+            report_datetime=get_utcnow() + relativedelta(days=264),
             reason=SCHEDULED)
 
         self.assertEqual(CrfMetadata.objects.get(
@@ -197,7 +196,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             appointment=Appointment.objects.get(
                 visit_code='2008',
                 subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
+            report_datetime=get_utcnow() + relativedelta(days=308),
             reason=SCHEDULED)
 
         self.assertEqual(CrfMetadata.objects.get(
