@@ -33,6 +33,7 @@ class ChildPreviousHospitalization(ChildCrfModelMixin):
         choices=YES_NO,
         null=True)
 
+
     class Meta:
         app_label = 'flourish_child'
         verbose_name = 'Children/Adolescents Hospitalisation History'
@@ -74,8 +75,16 @@ class ChildPreHospitalizationInline(CrfInlineModelMixin, BaseUuidModel):
     aprox_date = models.DateField(
         verbose_name='What is the approximate Date of hospitalization?',
         validators=[date_not_future],
-        blank=True,
-        null=True)
+        null=True
+        )
+
+    date_estimated = models.CharField(
+        verbose_name='Is the date estimated',
+        choices=YES_NO,
+        null=True,
+        max_length=10
+        )
+
 
     class Meta:
         app_label = 'flourish_child'
