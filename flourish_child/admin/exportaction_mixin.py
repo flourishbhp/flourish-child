@@ -3,6 +3,7 @@ import uuid
 
 from django.apps import apps as django_apps
 from django.db.models import ManyToManyField, ForeignKey, OneToOneField, ManyToOneRel
+from django.db.models.fields.reverse_related import OneToOneRel
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -89,9 +90,11 @@ class ExportActionMixin:
                     field_value = ', '.join([obj.name for obj in key_manager.all()])
                     data.append(field_value)
                     continue
-                if isinstance(field, (ForeignKey, OneToOneField,)):
+                if isinstance(field, (ForeignKey, OneToOneField)):
                     field_value = getattr(obj, field.name)
                     data.append(field_value.id)
+                    continue
+                if isinstance(field, OneToOneRel):
                     continue
                 if isinstance(field, ManyToOneRel):
                     key_manager = getattr(obj, f'{field.name}_set')
