@@ -140,9 +140,13 @@ dmypy.json
 .pyre/
 .ide/
 ide/
-flourish_child/migrations/
-crypto_fields/
-/crypto_fields
-crypto_fields/user-aes-local.key
-crypto_fields/user-aes-restricted.key
-crypto_fields/user-aes-local.key
+
+# exclude migrations
+**/flourish_child/migrations/**
+
+# exclude all crypto keys
+**/crypto_fields/**
+
+# exclude all IDEs configs
+**/.idea/**
+**/.vscode/**
