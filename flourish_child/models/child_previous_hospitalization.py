@@ -6,9 +6,9 @@ from edc_base.model_validators import date_not_future
 from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
+from ..choices import HOSPITAL
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .list_models import ChildDiseases
-from ..choices import HOSPITAL
 
 
 class ChildPreviousHospitalization(ChildCrfModelMixin):
@@ -32,7 +32,6 @@ class ChildPreviousHospitalization(ChildCrfModelMixin):
         max_length=20,
         choices=YES_NO,
         null=True)
-
 
     class Meta:
         app_label = 'flourish_child'
@@ -58,7 +57,7 @@ class ChildPreHospitalizationInline(CrfInlineModelMixin, BaseUuidModel):
 
     reason_hospitalized = models.ManyToManyField(
         ChildDiseases,
-        verbose_name='What was the reason for hospitalization?', )
+        verbose_name='What was the reason for hospitalization?',)
 
     surgical_reason = models.CharField(
         verbose_name='If surgical reason please specify',
@@ -70,7 +69,7 @@ class ChildPreHospitalizationInline(CrfInlineModelMixin, BaseUuidModel):
         verbose_name='If Other, specify',
         blank=True,
         null=True,
-        max_length=30, )
+        max_length=30,)
 
     aprox_date = models.DateField(
         verbose_name='What is the approximate Date of hospitalization?',
@@ -82,9 +81,7 @@ class ChildPreHospitalizationInline(CrfInlineModelMixin, BaseUuidModel):
         verbose_name='Is the date estimated',
         choices=YES_NO,
         null=True,
-        max_length=10
-        )
-
+        max_length=10)
 
     class Meta:
         app_label = 'flourish_child'
