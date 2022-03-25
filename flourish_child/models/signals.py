@@ -1,6 +1,4 @@
-from edc_action_item.site_action_items import site_action_items
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-from flourish_child.models.child_birth import ChildBirth
 
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
@@ -8,11 +6,12 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
+from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
-
 from flourish_prn.models.child_death_report import ChildDeathReport
 
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
@@ -115,7 +114,7 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
             pass
         else:
             put_cohort_onschedule(instance.cohort, instance=instance,
-                                  base_appt_datetime=prev_enrolled.created)
+                                  base_appt_datetime=prev_enrolled.report_datetime)
 
         maternal_delivery_cls = django_apps.get_model(
             'flourish_caregiver.maternaldelivery')

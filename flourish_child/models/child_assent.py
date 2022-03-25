@@ -1,8 +1,9 @@
+from edc_action_item.model_mixins import ActionModelMixin
+
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.db import models
 from django_crypto_fields.fields import IdentityField
-from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import datetime_not_future
@@ -142,18 +143,14 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
 
     @property
     def latest_consent_version(self):
-        subject_identifier = self.subject_identifier.split('-')
-        subject_identifier.pop()
-        caregiver_subject_identifier = '-'.join(subject_identifier)
 
         version = None
-        try:
-            consent = self.subject_consent_cls.objects.filter(
-                subject_identifier=caregiver_subject_identifier)
-        except self.subject_consent_cls.ObjectDoesNotExist:
-            return None
-        else:
-            latest_consent = consent[0]
+
+        consents = self.subject_consent_cls.objects.filter(
+                subject_identifier=self.subject_identifier[:-3])
+
+        if consents:
+            latest_consent = consents[0]
             try:
                 consent_version_obj = self.consent_version_cls.objects.get(
                     screening_identifier=latest_consent.screening_identifier)

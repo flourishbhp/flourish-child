@@ -3,17 +3,19 @@ from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
-from ..forms import InfantDevScreening60To72MonthsForm
-from ..models import InfantDevScreening60To72Months
+from ..forms import InfantDevScreening60MonthsForm
+from ..models import InfantDevScreening60Months
 
 
-@admin.register(InfantDevScreening60To72Months, site=flourish_child_admin)
-class InfantDevScreening60To72MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-    form = InfantDevScreening60To72MonthsForm
+@admin.register(InfantDevScreening60Months, site=flourish_child_admin)
+class InfantDevScreening60MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+    form = InfantDevScreening60MonthsForm
 
     fieldsets = (
         (None, {
-            'fields': [
+            'fields': (
+                'child_visit',
+                'report_datetime',
                 'speak',
                 'hearing_response',
                 'hearing_specialist',
@@ -27,9 +29,12 @@ class InfantDevScreening60To72MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAd
                 'motor_skills_dress',
                 'motor_skills_specialist',
                 'caregiver_concerns',
-            ]
+            )
         }), audit_fieldset_tuple
     )
+
+    additional_instructions = ('Respond ‘Yes’ to any question where the caregiver says'
+                               ' that the child CAN do the following')
 
     radio_fields = {"speak": admin.VERTICAL,
                     "hearing_response": admin.VERTICAL,

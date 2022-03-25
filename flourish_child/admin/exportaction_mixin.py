@@ -39,8 +39,6 @@ class ExportActionMixin:
             field_names.insert(0, 'subject_identifier')
             field_names.insert(1, 'new_maternal_study_subject_identifier')
             field_names.insert(2, 'old_study_maternal_identifier')
-            field_names.insert(3, 'previous_study')
-            field_names.insert(4, 'child_exposure_status')
             field_names.insert(5, 'visit_code')
 
         for col_num in range(len(field_names)):
