@@ -7,7 +7,6 @@ from edc_form_validators import FormValidatorMixin
 from edc_lab.forms.modelform_mixins import RequisitionFormMixin
 
 from flourish_child.models.child_visit import ChildVisit
-from flourish_child_validations.form_validators import ChildRequisitionsFormValidations
 from .child_form_mixin import ChildModelFormMixin
 from ..models import ChildRequisition
 
@@ -18,7 +17,6 @@ class InlineSubjectModelFormMixin(FormValidatorMixin, forms.ModelForm):
 
 class ChildRequisitionForm(ChildModelFormMixin, RequisitionFormMixin,
                            FormValidatorMixin):
-    form_validator_cls = ChildRequisitionsFormValidations
 
     requisition_identifier = forms.CharField(
         label='Requisition identifier',
@@ -28,8 +26,6 @@ class ChildRequisitionForm(ChildModelFormMixin, RequisitionFormMixin,
         self.subject_identifier = self.cleaned_data.get(
             'child_visit').subject_identifier
         super().clean()
-
-        self.validate_specimen_drawn()
 
     def validate_requisition_datetime(self):
         requisition_datetime = self.cleaned_data.get('requisition_datetime')
