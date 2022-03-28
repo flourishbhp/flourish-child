@@ -13,15 +13,14 @@ from edc_lab.models import RequisitionModelMixin, RequisitionStatusMixin
 from edc_metadata.model_mixins.updates import UpdatesRequisitionMetadataModelMixin
 from edc_reference.model_mixins import RequisitionReferenceModelMixin
 from edc_search.model_mixins import SearchSlugManager
-
 from edc_visit_schedule.model_mixins import SubjectScheduleCrfModelMixin
 from edc_visit_tracking.managers import CrfModelManager as VisitTrackingCrfModelManager
 from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfModelMixin
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
 
-from ..choices import STUDY_SITES, REASON_NOT_DRAWN
 from .child_visit import ChildVisit
 from .model_mixins import SearchSlugModelMixin, ConsentVersionModelModelMixin
+from ..choices import STUDY_SITES, REASON_NOT_DRAWN
 
 
 class ChildRequisitionManager(VisitTrackingCrfModelManager, SearchSlugManager):
@@ -29,13 +28,12 @@ class ChildRequisitionManager(VisitTrackingCrfModelManager, SearchSlugManager):
 
 
 class ChildRequisition(
-        NonUniqueSubjectIdentifierFieldMixin, ConsentVersionModelModelMixin,
-        RequisitionModelMixin, RequisitionStatusMixin,
-        RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
-        SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
-        PreviousVisitModelMixin, RequisitionReferenceModelMixin,
-        UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin, BaseUuidModel):
-
+    NonUniqueSubjectIdentifierFieldMixin, ConsentVersionModelModelMixin,
+    RequisitionModelMixin, RequisitionStatusMixin,
+    RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
+    SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
+    PreviousVisitModelMixin, RequisitionReferenceModelMixin,
+    UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin, BaseUuidModel):
     lab_profile_name = 'flourish_child_lab_profile'
 
     child_visit = models.ForeignKey(ChildVisit, on_delete=PROTECT)
@@ -52,19 +50,23 @@ class ChildRequisition(
         decimal_places=2,
         help_text=(
             'If applicable, estimated volume of sample for this test/order. '
-            'This is the total volume if number of "tubes" above is greater than 1'))
+            'This is the total volume if number of "tubes" above is greater than 1'),
+        blank=True,
+        null=True)
 
     item_count = models.IntegerField(
         verbose_name='Total number of items',
         help_text=(
             'Number of tubes, samples, cards, etc being sent for this test/order only. '
-            'Determines number of labels to print'))
+            'Determines number of labels to print'),
+        blank=True,
+        null=True)
 
     priority = models.CharField(
         verbose_name='Priority',
         max_length=25,
         choices=PRIORITY,
-        default='normal',)
+        default='normal', )
 
     reason_not_drawn = models.CharField(
         verbose_name='If not drawn, please explain',
@@ -101,6 +103,7 @@ class ChildRequisition(
             'requisition_identifier',
             'human_readable_identifier', 'identifier_prefix'])
         return fields
+
 
     class Meta:
         app_label = 'flourish_child'
