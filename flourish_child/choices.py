@@ -730,8 +730,8 @@ YES_NO_COVID_FORM = (
 )
 
 TESTING_REASONS = (
-    ('pre-traveling_screening ', 'Pre-Traveling screening '),
-    ('routine_testing ', 'Routine testing '),
+    ('pre-traveling_screening ', 'Pre-Traveling screening'),
+    ('routine_testing ', 'Routine testing (experiencing symptoms)'),
     ('contact_tracing', 'Contact tracing'),
     ('asymptomatic_testing', 'Routine Testing(Asymptomatic)'),
     (OTHER, 'Other')

@@ -5,6 +5,8 @@ from django import forms
 from django.conf import settings
 from django.utils import timezone
 from edc_base.utils import convert_php_dateformat
+from edc_constants.constants import OTHER
+from edc_form_validators import FormValidator
 from edc_form_validators import FormValidatorMixin
 from edc_lab.forms.modelform_mixins import RequisitionFormMixin
 
@@ -13,13 +15,11 @@ from .child_form_mixin import ChildModelFormMixin
 
 
 class InlineSubjectModelFormMixin(FormValidatorMixin, forms.ModelForm):
-
     visit_model = ChildVisit
 
 
 class ChildRequisitionForm(ChildModelFormMixin, RequisitionFormMixin,
                            FormValidatorMixin):
-
     requisition_identifier = forms.CharField(
         label='Requisition identifier',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
@@ -27,6 +27,7 @@ class ChildRequisitionForm(ChildModelFormMixin, RequisitionFormMixin,
     def clean(self):
         self.subject_identifier = self.cleaned_data.get(
             'child_visit').subject_identifier
+        self.validate_requisition_datetime()
         super().clean()
 
     def validate_requisition_datetime(self):
@@ -40,11 +41,8 @@ class ChildRequisitionForm(ChildModelFormMixin, RequisitionFormMixin,
                     convert_php_dateformat(settings.SHORT_DATETIME_FORMAT))
                 raise forms.ValidationError({
                     'requisition_datetime':
-                    f'Invalid. Cannot be before date of visit {formatted}.'})
-
-    def validate_other_specify_field(self, form_validator=None):
-        form_validator.validate_other_specify(
-            field='reason_not_drawn', other_stored_value='other')
+                        f'Invalid. Cannot be before date of visit {formatted}.'
+                    })
 
     class Meta:
         model = ChildRequisition
