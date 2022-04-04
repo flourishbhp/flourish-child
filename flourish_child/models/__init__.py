@@ -50,6 +50,7 @@ from .infant_dev_screening_3_months import InfantDevScreening3Months
 from .infant_dev_screening_60_months import InfantDevScreening60Months
 from .infant_dev_screening_6_months import InfantDevScreening6Months
 from .infant_dev_screening_72_months import InfantDevScreening72Months
+from .infant_dev_screening_9_months import InfantDevScreening9Months
 from .infant_feeding import InfantFeeding
 from .infant_feeding_practices import InfantFeedingPractices
 from .list_models import *

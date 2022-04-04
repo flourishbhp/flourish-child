@@ -10,8 +10,8 @@ from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
     SubjectConsent, CaregiverPreviouslyEnrolled
 from flourish_child.models.birth_data import BirthData
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
-    ChildVisit, ChildBirth, InfantDevScreening36Months, InfantDevScreening3Months, \
-    InfantDevScreening12Months
+    ChildVisit, ChildBirth, InfantDevScreening36Months, InfantDevScreening12Months, \
+    InfantDevScreening18Months
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic
 
@@ -164,4 +164,18 @@ infantdevscreening12months = Recipe(
     picks_objects=YES,
     motor_skills_specialist="blah blah",
     caregiver_concerns="blah blah"
+    )
+
+infantdevscreening18months = Recipe(
+    InfantDevScreening18Months,
+    report_datetime=get_utcnow(),
+    speaking=YES,
+    speaking_specialist=YES,
+    vision=YES,
+    vision_specialist="blah blah",
+    cognitive_behavior=YES,
+    cognitive_specialist="blah blah",
+    walks=YES,
+    self_feed=YES,
+    caregiver_concerns="blah blah",
     )

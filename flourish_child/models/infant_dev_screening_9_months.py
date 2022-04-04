@@ -6,86 +6,94 @@ from ..choices import YES_NO_DONT_KNOW, HEARING_SPECIALISTS, VISION_SPECIALISTS,
     COGNITIVE_SPECIALIST, MOTOR_SKILLS_SPECIALIST
 
 
-class InfantDevScreening3Months(ChildCrfModelMixin):
-    hearing = models.CharField(
-        verbose_name='Startles to loud sounds',
+class InfantDevScreening9Months(ChildCrfModelMixin):
+    speaking = models.CharField(
+        verbose_name='Babbles (‘ma-ma’, ‘da-da’)',
         choices=YES_NO_DONT_KNOW,
         max_length=15,
         default=YES
-        )
+    )
 
-    hearing_specialist = models.CharField(
+    hearing = models.CharField(
+        verbose_name='Turns when called',
+        choices=YES_NO_DONT_KNOW,
+        max_length=15,
+        default=YES
+    )
+
+    speaking_specialist = models.CharField(
         verbose_name=('Referred to any of the following specialists for hearing/'
                       'communication'),
         choices=HEARING_SPECIALISTS,
         max_length=15,
-        default='No Referral'
-
-        )
+        default=''
+    )
 
     vision = models.CharField(
-        verbose_name='Follows face or close objects with eyes',
+        verbose_name='Eyes focus on far objects',
         choices=YES_NO_DONT_KNOW,
         max_length=15,
         default=YES
-
-        )
+    )
 
     vision_specialist = models.CharField(
         verbose_name=('Referred to any of the following specialists for Vision'
                       ' and adaptive'),
         choices=VISION_SPECIALISTS,
         max_length=30,
-        default='No Referral'
-        )
+        default=''
+    )
 
     cognitive_behavior = models.CharField(
-        verbose_name='Smiles at people',
+        verbose_name='Throws, bands toys/objects',
         choices=YES_NO_DONT_KNOW,
         max_length=15,
         default=YES
+    )
 
-        )
+    cognitive_behavior_reactions = models.CharField(
+        verbose_name='Reacts when caregiver leaves, calms when she/he returns',
+        choices=YES_NO_DONT_KNOW,
+        max_length=15,
+        default=YES
+    )
 
     cognitive_specialist = models.CharField(
         verbose_name=('Referred to any of the following specialists for'
                       ' Cognitive/Behavior'),
         choices=COGNITIVE_SPECIALIST,
         max_length=30,
-        default='No Referral'
-        )
+        default=''
+    )
 
-    motor_skills_head = models.CharField(
-        verbose_name='Holds head upright when held against shoulder',
+    sits = models.CharField(
+        verbose_name='Sits without support',
         choices=YES_NO_DONT_KNOW,
         max_length=15,
         default=YES
+    )
 
-        )
-
-    motor_skills_hands = models.CharField(
-        verbose_name='Hands are open most of the time',
+    moves_objects = models.CharField(
+        verbose_name='Moves object from hand to hand',
         choices=YES_NO_DONT_KNOW,
         max_length=15,
         default=YES
-
-        )
+    )
 
     motor_skills_specialist = models.CharField(
         verbose_name='Referred to any of the following specialists for Motor Skills',
         choices=MOTOR_SKILLS_SPECIALIST,
         max_length=30,
-        default='No Referral'
-        )
+        default=''
+    )
 
     caregiver_concerns = models.TextField(
         verbose_name='Caregiver concerns',
         null=True,
         blank=True
-        )
-
+    )
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = 'Infant Developmental Screening for 3 Months'
-        verbose_name_plural = 'Infant Developmental Screening for 3 Months'
+        verbose_name = 'Infant Developmental Screening for 9 Months'
+        verbose_name_plural = 'Infant Developmental Screening for 9 Months'
