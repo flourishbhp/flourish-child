@@ -7,8 +7,15 @@ from ..choices import YES_NO_DONT_KNOW, HEARING_SPECIALISTS, VISION_SPECIALISTS,
 
 
 class InfantDevScreening18Months(ChildCrfModelMixin):
-    speaking = models.CharField(
-        verbose_name='Child speaks in simple 3 word sentences ',
+    hearing = models.CharField(
+        verbose_name='Understands names of at least 2 common objects (e.g., cup) ',
+        choices=YES_NO_DONT_KNOW,
+        max_length=15,
+        default=YES
+    )
+
+    hearing_more = models.CharField(
+        verbose_name='Uses at least 3 words other than names ',
         choices=YES_NO_DONT_KNOW,
         max_length=15,
         default=YES
@@ -23,7 +30,7 @@ class InfantDevScreening18Months(ChildCrfModelMixin):
     )
 
     vision = models.CharField(
-        verbose_name='Sees small shapes clearly at a distance (across room)',
+        verbose_name='Looks at small things and pictures',
         choices=YES_NO_DONT_KNOW,
         max_length=15,
         default=YES
