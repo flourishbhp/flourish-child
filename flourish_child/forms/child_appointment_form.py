@@ -7,7 +7,7 @@ from edc_form_validators import FormValidatorMixin
 from ..models import Appointment
 
 
-class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormValidator,
+class AppointmentForm(AppointmentFormValidator, SiteModelFormMixin, FormValidatorMixin,
                       forms.ModelForm):
     """Note, the appointment is only changed, never added,
     through this form.
