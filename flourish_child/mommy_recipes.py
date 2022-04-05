@@ -169,7 +169,8 @@ infantdevscreening12months = Recipe(
 infantdevscreening18months = Recipe(
     InfantDevScreening18Months,
     report_datetime=get_utcnow(),
-    speaking=YES,
+    hearing=YES,
+    hearing_more=YES,
     speaking_specialist=YES,
     vision=YES,
     vision_specialist="blah blah",

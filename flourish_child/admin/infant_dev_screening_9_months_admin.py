@@ -42,6 +42,7 @@ class InfantDevScreening9MonthsAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     "vision_specialist": admin.VERTICAL,
                     "cognitive_behavior": admin.VERTICAL,
                     "cognitive_behavior_reactions": admin.VERTICAL,
+                    "cognitive_specialist": admin.VERTICAL,
                     "sits": admin.VERTICAL,
                     "moves_objects": admin.VERTICAL,
                     "motor_skills_specialist": admin.VERTICAL,
