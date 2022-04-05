@@ -16,6 +16,8 @@ class AppointmentForm(AppointmentFormValidator, SiteModelFormMixin, FormValidato
     appointment_model = 'flourish_child.appointment'
 
     def clean(self):
+        super().clean()
+
         cleaned_data = self.cleaned_data
 
         if cleaned_data.get('appt_datetime'):
@@ -37,8 +39,6 @@ class AppointmentForm(AppointmentFormValidator, SiteModelFormMixin, FormValidato
                 raise forms.ValidationError(
                     'The appointment datetime cannot be outside the window period, '
                     'please correct. See earliest, ideal and latest datetimes below.')
-        super().clean()
-        self.validate_appt_new_or_complete()
 
     def validate_appt_new_or_complete(self):
         """
