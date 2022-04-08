@@ -18,6 +18,7 @@ class ChildBirthAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'subject_identifier',
                 'report_datetime',
                 'first_name',
+                'last_name',
                 'initials',
                 'dob',
                 'gender']}
