@@ -64,7 +64,8 @@ class TestCohortADevScreening(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
+            screening_identifier=maternal_dataset_obj.screening_identifier,
+            )
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
