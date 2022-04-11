@@ -1,3 +1,5 @@
+from flourish_child.models.child_visit import ChildVisit
+
 from arrow.arrow import Arrow
 from django import forms
 from django.conf import settings
@@ -8,9 +10,8 @@ from edc_form_validators import FormValidator
 from edc_form_validators import FormValidatorMixin
 from edc_lab.forms.modelform_mixins import RequisitionFormMixin
 
-from flourish_child.models.child_visit import ChildVisit
-from .child_form_mixin import ChildModelFormMixin
 from ..models import ChildRequisition
+from .child_form_mixin import ChildModelFormMixin
 
 
 class InlineSubjectModelFormMixin(FormValidatorMixin, forms.ModelForm):
