@@ -27,6 +27,7 @@ class ChildBirthAdmin(ModelAdminMixin, admin.ModelAdmin):
     list_display = (
         'report_datetime',
         'first_name',
+        'last_name',
         'initials',
         'dob',
         'gender',
