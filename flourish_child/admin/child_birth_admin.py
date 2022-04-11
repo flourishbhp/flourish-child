@@ -24,17 +24,8 @@ class ChildBirthAdmin(ModelAdminMixin, admin.ModelAdmin):
                 'gender']}
          ), audit_fieldset_tuple)
 
-    list_display = (
-        'report_datetime',
-        'first_name',
-        'last_name',
-        'initials',
-        'dob',
-        'gender',
-    )
-
     search_fields = ['infant_visit__subject_identifier', ]
 
-    list_display = ('report_datetime', 'first_name')
+    list_display = ('report_datetime', 'first_name', 'last_data')
     list_filter = ('gender',)
     radio_fields = {'gender': admin.VERTICAL}
