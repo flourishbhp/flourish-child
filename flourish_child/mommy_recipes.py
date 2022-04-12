@@ -1,13 +1,14 @@
 from dateutil.relativedelta import relativedelta
 from edc_base.utils import get_utcnow
-from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT, NO, POS, MALE
+from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT, NO, POS, MALE, \
+    NOT_APPLICABLE
 from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 from model_mommy.recipe import Recipe, seq
 
 from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
-    SubjectConsent, CaregiverPreviouslyEnrolled
+    SubjectConsent, CaregiverPreviouslyEnrolled, ScreeningPregWomen, CaregiverChildConsent
 from flourish_child.models.birth_data import BirthData
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
     ChildVisit, ChildBirth, InfantDevScreening36Months, InfantDevScreening12Months, \
@@ -23,6 +24,12 @@ childdummysubjectconsent = Recipe(
     version='1'
     )
 
+screeningpregwomen = Recipe(
+    ScreeningPregWomen,
+    hiv_testing=YES,
+    subject_identifier=None,
+    breastfeed_intent=YES)
+
 childassent = Recipe(
     ChildAssent,
     subject_identifier=None,
@@ -36,9 +43,6 @@ childassent = Recipe(
     remain_in_study=YES,
     )
 
-# TODO
-# Recipe for child birth
-# throws an error: CaregiverChildConsent matching query does not exist.
 childbirth = Recipe(
     ChildBirth,
     report_datetime=get_utcnow(),
@@ -51,9 +55,6 @@ childbirth = Recipe(
 childdataset = Recipe(
     ChildDataset, )
 
-childbirth = Recipe(
-    ChildBirth)
-
 registeredsubject = Recipe(
     RegisteredSubject,
     subject_identifier=None)
@@ -61,6 +62,7 @@ registeredsubject = Recipe(
 screeningpriorbhpparticipants = Recipe(
     ScreeningPriorBhpParticipants,
     child_alive=YES,
+    subject_identifier=None,
     flourish_participation='interested')
 
 subjectconsent = Recipe(
@@ -95,6 +97,22 @@ childsociodemographic = Recipe(
 birthdata = Recipe(
     BirthData,
     congenital_anomalities=YES)
+
+caregiverchildconsent = Recipe(
+    CaregiverChildConsent,
+    first_name=fake.first_name,
+    last_name=fake.last_name,
+    subject_identifier=None,
+    gender='M',
+    child_test=YES,
+    child_dob=(get_utcnow() - relativedelta(years=3)).date(),
+    child_remain_in_study=YES,
+    child_preg_test=NOT_APPLICABLE,
+    child_knows_status=YES,
+    identity=seq('234513187'),
+    identity_type='birth_cert',
+    confirm_identity=seq('234513187')
+    )
 
 childgadanxietyscreening = Recipe(
     ChildGadAnxietyScreening,
