@@ -9,6 +9,14 @@ from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 from .constants import BREASTFEED_ONLY
 
+
+
+HIV_STATUS = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (UNKNOWN, 'Unknown')   
+)
+
 ALIVE_DEAD_UNKNOWN = (
     (ALIVE, 'Alive'),
     (DEAD, 'Dead'),
