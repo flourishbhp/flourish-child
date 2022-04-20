@@ -58,7 +58,7 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         blank=True,
     )
 
-    is_last_menstrual_period_date_estimated = models.CharField(
+    is_lmp_date_estimated = models.CharField(
         verbose_name="Is the Last Menstrual Period date estimated?",
         choices=YES_NO,
         max_length=3,

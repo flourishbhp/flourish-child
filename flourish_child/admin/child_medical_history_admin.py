@@ -40,7 +40,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         "med_history_changed": admin.VERTICAL,
         "current_hiv_status": admin.VERTICAL,
         "is_pregnant": admin.VERTICAL,
-        "is_last_menstrual_period_date_estimated": admin.VERTICAL,
+        "is_lmp_date_estimated": admin.VERTICAL,
         "pregnancy_test_result": admin.VERTICAL,
     }
 
@@ -81,7 +81,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             "med_history_changed",
             "is_pregnant",
             "last_menstrual_period",
-            "is_last_menstrual_period_date_estimated",
+            "is_lmp_date_estimated",
             "pregnancy_test_result",
             after="report_datetime",
         ),
