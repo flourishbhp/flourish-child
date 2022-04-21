@@ -3,6 +3,7 @@ import uuid
 
 from django.apps import apps as django_apps
 from django.db.models import ManyToManyField, ForeignKey, OneToOneField, ManyToOneRel
+from django.db.models.fields.reverse_related import OneToOneRel
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -38,8 +39,6 @@ class ExportActionMixin:
             field_names.insert(0, 'subject_identifier')
             field_names.insert(1, 'new_maternal_study_subject_identifier')
             field_names.insert(2, 'old_study_maternal_identifier')
-            field_names.insert(3, 'previous_study')
-            field_names.insert(4, 'child_exposure_status')
             field_names.insert(5, 'visit_code')
 
         for col_num in range(len(field_names)):
@@ -89,9 +88,11 @@ class ExportActionMixin:
                     field_value = ', '.join([obj.name for obj in key_manager.all()])
                     data.append(field_value)
                     continue
-                if isinstance(field, (ForeignKey, OneToOneField,)):
+                if isinstance(field, (ForeignKey, OneToOneField)):
                     field_value = getattr(obj, field.name)
                     data.append(field_value.id)
+                    continue
+                if isinstance(field, OneToOneRel):
                     continue
                 if isinstance(field, ManyToOneRel):
                     key_manager = getattr(obj, f'{field.name}_set')

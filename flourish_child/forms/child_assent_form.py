@@ -35,13 +35,22 @@ class ChildAssentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
     def get_caregiver_child_consent(self, subject_identifier=None):
         child_consent_cls = django_apps.get_model(
             'flourish_caregiver.caregiverchildconsent')
+
+        consents = child_consent_cls.objects.filter(
+            subject_identifier=subject_identifier)
+
+        return consents.latest('consent_datetime')
+
+    def get_latest_consent_version(self, screening_identifier=None):
+        consent_version_cls = django_apps.get_model(
+            'flourish_caregiver.flourishconsentversion')
+
         try:
-            consent_obj = child_consent_cls.objects.get(
-                subject_identifier=subject_identifier)
-        except child_consent_cls.DoesNotExist:
-            pass
-        else:
-            return consent_obj
+            consent_version_cls.objects.get(
+                screening_identifier=screening_identifier)
+        except consent_version_cls.DoesNotExist:
+            raise forms.ValidationError(
+                'Please complete the consent version form before proceeding.')
 
     def assent_initial_values(self, child_consent=None):
         initials = {}

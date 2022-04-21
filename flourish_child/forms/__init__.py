@@ -32,6 +32,7 @@ from .child_previous_hospitalisation_form import \
     ChildPreHospitalizationInlineForm
 from .child_previous_hospitalisation_form import \
     ChildPreviousHospitalizationForm
+from .child_requisition_form import ChildRequisitionForm
 from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_tanner_staging_form import ChildTannerStagingForm
 from .child_visit_form import ChildVisitForm
@@ -55,9 +56,10 @@ from .infant_dev_screening_12_months_form import InfantDevScreening12MonthsForm
 from .infant_dev_screening_18_months_form import InfantDevScreening18MonthsForm
 from .infant_dev_screening_36_months_form import InfantDevScreening36MonthsForm
 from .infant_dev_screening_3_months_form import InfantDevScreening3MonthsForm
-from .infant_dev_screening_60_to_72_months_form import InfantDevScreening60To72MonthsForm
+from .infant_dev_screening_60_months_form import InfantDevScreening60MonthsForm
 from .infant_dev_screening_6_months_form import InfantDevScreening6MonthsForm
+from .infant_dev_screening_72_months_form import InfantDevScreening72MonthsForm
+from .infant_dev_screening_9_months_form import InfantDevScreening9MonthsForm
 from .infant_feeding_form import InfantFeedingForm
 from .infant_feeding_practices_form import InfantFeedingPracticesForm
 from .offschedule_form import ChildOffScheduleForm
-from .child_requisition_form import ChildRequisitionForm

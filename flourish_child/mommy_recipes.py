@@ -1,17 +1,20 @@
 from dateutil.relativedelta import relativedelta
 from edc_base.utils import get_utcnow
-from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT, NO
+from edc_constants.constants import ALIVE, ON_STUDY, YES, PARTICIPANT, NO, POS, MALE, \
+    NOT_APPLICABLE
 from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 from model_mommy.recipe import Recipe, seq
+
 from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
-    SubjectConsent
+    SubjectConsent, CaregiverPreviouslyEnrolled, ScreeningPregWomen, CaregiverChildConsent
+from flourish_child.models.birth_data import BirthData
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
-    ChildVisit, ChildBirth
+    ChildVisit, ChildBirth, InfantDevScreening36Months, InfantDevScreening12Months, \
+    InfantDevScreening18Months
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic
-from flourish_child.models.birth_data import BirthData
 
 fake = Faker()
 
@@ -19,7 +22,13 @@ childdummysubjectconsent = Recipe(
     ChildDummySubjectConsent,
     subject_identifier=None,
     version='1'
-)
+    )
+
+screeningpregwomen = Recipe(
+    ScreeningPregWomen,
+    hiv_testing=YES,
+    subject_identifier=None,
+    breastfeed_intent=YES)
 
 childassent = Recipe(
     ChildAssent,
@@ -32,11 +41,8 @@ childassent = Recipe(
     gender='M',
     hiv_testing=YES,
     remain_in_study=YES,
-)
+    )
 
-# TODO
-# Recipe for child birth
-# throws an error: CaregiverChildConsent matching query does not exist.
 childbirth = Recipe(
     ChildBirth,
     report_datetime=get_utcnow(),
@@ -44,13 +50,10 @@ childbirth = Recipe(
     initials='AY',
     dob=get_utcnow(),
     gender='Male'
-)
+    )
 
 childdataset = Recipe(
     ChildDataset, )
-
-childbirth = Recipe(
-    ChildBirth)
 
 registeredsubject = Recipe(
     RegisteredSubject,
@@ -59,6 +62,7 @@ registeredsubject = Recipe(
 screeningpriorbhpparticipants = Recipe(
     ScreeningPriorBhpParticipants,
     child_alive=YES,
+    subject_identifier=None,
     flourish_participation='interested')
 
 subjectconsent = Recipe(
@@ -75,7 +79,7 @@ subjectconsent = Recipe(
     identity_type='OMANG',
     is_dob_estimated='-',
     version='1'
-)
+    )
 
 childvisit = Recipe(
     ChildVisit,
@@ -86,7 +90,6 @@ childvisit = Recipe(
     survival_status=ALIVE,
     info_source=PARTICIPANT)
 
-
 childsociodemographic = Recipe(
     ChildSocioDemographic,
     attend_school=YES)
@@ -94,6 +97,22 @@ childsociodemographic = Recipe(
 birthdata = Recipe(
     BirthData,
     congenital_anomalities=YES)
+
+caregiverchildconsent = Recipe(
+    CaregiverChildConsent,
+    first_name=fake.first_name,
+    last_name=fake.last_name,
+    subject_identifier=None,
+    gender='M',
+    child_test=YES,
+    child_dob=(get_utcnow() - relativedelta(years=3)).date(),
+    child_remain_in_study=YES,
+    child_preg_test=NOT_APPLICABLE,
+    child_knows_status=YES,
+    identity=seq('234513187'),
+    identity_type='birth_cert',
+    confirm_identity=seq('234513187')
+    )
 
 childgadanxietyscreening = Recipe(
     ChildGadAnxietyScreening,
@@ -118,3 +137,64 @@ childphqdeprscreening = Recipe(
     self_harm='4',
     self_harm_thoughts=NO,
     suidice_attempt=NO)
+
+caregiverpreviouslyenrolled = Recipe(
+    CaregiverPreviouslyEnrolled,
+    report_datetime=get_utcnow(),
+    maternal_prev_enroll=YES,
+    current_hiv_status=POS,
+    last_test_date=get_utcnow().date(),
+    test_date=get_utcnow().date(),
+    is_date_estimated=NO,
+    sex=MALE,
+    relation_to_child='Mother', )
+
+infantdevscreening36months = Recipe(
+    InfantDevScreening36Months,
+    report_datetime=get_utcnow(),
+    speaking=YES,
+    hearing_specialist="blah blah",
+    vision=YES,
+    vision_specialist="blah blah",
+    play_with_people=YES,
+    play_with_toys=YES,
+    cognitive_specialist="blah blah",
+    runs_well=YES,
+    self_feed=YES,
+    motor_skills_specialist="blah blah",
+    caregiver_concerns="blah blah"
+    )
+
+infantdevscreening12months = Recipe(
+    InfantDevScreening12Months,
+    report_datetime=get_utcnow(),
+    hearing=YES,
+    hearing_response=YES,
+    hearing_communication=YES,
+    hearing_specialist="blah blah",
+    eye_movement=YES,
+    familiar_obj=YES,
+    vision_specialist="blah blah",
+    cognitive_behavior=YES,
+    understands=YES,
+    cognitive_specialist="blah blah",
+    stands=YES,
+    picks_objects=YES,
+    motor_skills_specialist="blah blah",
+    caregiver_concerns="blah blah"
+    )
+
+infantdevscreening18months = Recipe(
+    InfantDevScreening18Months,
+    report_datetime=get_utcnow(),
+    hearing=YES,
+    hearing_more=YES,
+    speaking_specialist=YES,
+    vision=YES,
+    vision_specialist="blah blah",
+    cognitive_behavior=YES,
+    cognitive_specialist="blah blah",
+    walks=YES,
+    self_feed=YES,
+    caregiver_concerns="blah blah",
+    )

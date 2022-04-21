@@ -77,7 +77,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
 
     specify_mod_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(10), MaxValueValidator(60), ],
+        validators=[MinValueValidator(1), MaxValueValidator(60), ],
         help_text='minutes',
         blank=True,
         null=True)
@@ -111,7 +111,7 @@ class ChildPhysicalActivity(ChildCrfModelMixin):
 
     specify_walk_time_mins = models.PositiveIntegerField(
         verbose_name='Specify minutes per day',
-        validators=[MinValueValidator(10), MaxValueValidator(60), ],
+        validators=[MinValueValidator(1), MaxValueValidator(60), ],
         help_text='minutes',
         blank=True,
         null=True)

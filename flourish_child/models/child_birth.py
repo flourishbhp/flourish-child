@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 from django_crypto_fields.fields import EncryptedCharField
-from django_crypto_fields.fields import FirstnameField
+from django_crypto_fields.fields import FirstnameField, LastnameField
 from django_crypto_fields.mixins import CryptoMixin
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import datetime_not_future
@@ -25,6 +25,12 @@ class ChildBirth(UniqueSubjectIdentifierFieldMixin, SiteModelMixin,
     first_name = FirstnameField(
         max_length=25,
         verbose_name="Infant's first name",
+        help_text="If infant name is unknown or not yet determined, "
+                  "use Baby + birth order + mother's last name, e.g. 'Baby1Malane'")
+
+    last_name = LastnameField(
+        max_length=25,
+        verbose_name="Infant's last name",
         help_text="If infant name is unknown or not yet determined, "
                   "use Baby + birth order + mother's last name, e.g. 'Baby1Malane'")
 
