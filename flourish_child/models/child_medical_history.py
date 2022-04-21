@@ -70,6 +70,8 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         verbose_name="What is the result of the pregnancy test?",
         max_length=20,
         choices=POS_NEG,
+        blank=True,
+        null=True,
     )
 
 
