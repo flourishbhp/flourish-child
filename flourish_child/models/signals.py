@@ -1,6 +1,3 @@
-from edc_action_item.site_action_items import site_action_items
-from matplotlib import use
-from flourish_child.models.child_birth import ChildBirth
 from django.contrib.auth.models import User, Group
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
@@ -8,9 +5,14 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+
+from edc_data_manager.models import DataActionItem
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_action_item.site_action_items import site_action_items
+
+from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
@@ -22,7 +24,7 @@ from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
-from edc_data_manager.models import DataActionItem
+
 
 
 class CaregiverConsentError(Exception):
@@ -209,7 +211,7 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
 
 
 def notification(subject_identifier,
-                 subject, user_created, 
+                 subject, user_created,
                  group_names=('assignable users',)):
 
     user = User.objects.get(username=user_created)
