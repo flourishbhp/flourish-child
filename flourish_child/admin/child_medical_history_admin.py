@@ -25,10 +25,10 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 "fields": [
                     "child_visit",
                     "report_datetime",
+                    "current_hiv_status",
                     "chronic_since",
                     "child_chronic",
                     "child_chronic_other",
-                    "current_hiv_status",
                 ]
             },
         ),
@@ -40,7 +40,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         "med_history_changed": admin.VERTICAL,
         "current_hiv_status": admin.VERTICAL,
         "is_pregnant": admin.VERTICAL,
-        "is_last_menstrual_period_date_estimated": admin.VERTICAL,
+        "is_lmp_date_estimated": admin.VERTICAL,
         "pregnancy_test_result": admin.VERTICAL,
     }
 
@@ -78,12 +78,11 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ),
         "child_pool_schedule1": Insert("med_history_changed", after="report_datetime"),
         "female_above_12": Insert(
-            "med_history_changed",
             "is_pregnant",
             "last_menstrual_period",
-            "is_last_menstrual_period_date_estimated",
+            "is_lmp_date_estimated",
             "pregnancy_test_result",
-            after="report_datetime",
+            after="current_hiv_status",
         ),
     }
 
