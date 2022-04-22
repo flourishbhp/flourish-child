@@ -17,6 +17,7 @@ from edc_visit_schedule.model_mixins import SubjectScheduleCrfModelMixin
 from edc_visit_tracking.managers import CrfModelManager as VisitTrackingCrfModelManager
 from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfModelMixin
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
+from edc_senaite_interface.model_mixins import SenaiteRequisitionModelMixin
 
 from .child_visit import ChildVisit
 from .model_mixins import SearchSlugModelMixin, ConsentVersionModelModelMixin
@@ -33,7 +34,9 @@ class ChildRequisition(
     RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
     SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
     PreviousVisitModelMixin, RequisitionReferenceModelMixin,
-    UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin, BaseUuidModel):
+    UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
+    SenaiteRequisitionModelMixin, BaseUuidModel):
+
     lab_profile_name = 'flourish_child_lab_profile'
 
     child_visit = models.ForeignKey(ChildVisit, on_delete=PROTECT)
@@ -103,7 +106,6 @@ class ChildRequisition(
             'requisition_identifier',
             'human_readable_identifier', 'identifier_prefix'])
         return fields
-
 
     class Meta:
         app_label = 'flourish_child'
