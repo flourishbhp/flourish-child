@@ -1,10 +1,11 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
-from edc_constants.choices import YES_NO, POS_NEG
 from edc_base.model_validators import date_not_future
-from .list_models import ChronicConditions
-from .child_crf_model_mixin import ChildCrfModelMixin
+from edc_constants.choices import YES_NO, POS_NEG
+
 from ..choices import HIV_STATUS
+from .child_crf_model_mixin import ChildCrfModelMixin
+from .list_models import ChronicConditions
 
 
 class ChildMedicalHistory(ChildCrfModelMixin):
@@ -45,34 +46,34 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         blank=True,
     )
 
-    is_pregnant = models.CharField(
-        verbose_name="Is the participant pregnant?",
-        max_length=3,
-        choices=YES_NO,
-    )
-
-    last_menstrual_period = models.DateField(
-        verbose_name="Date of Last Menstrual Period (DD/MMM/YYYY)",
-        validators=[date_not_future],
-        null=True,
-        blank=True,
-    )
-
-    is_lmp_date_estimated = models.CharField(
-        verbose_name="Is the Last Menstrual Period date estimated?",
-        choices=YES_NO,
-        max_length=3,
-        blank=True,
-        null=True,
-    )
-
-    pregnancy_test_result = models.CharField(
-        verbose_name="What is the result of the pregnancy test?",
-        max_length=20,
-        choices=POS_NEG,
-        blank=True,
-        null=True,
-    )
+    # is_pregnant = models.CharField(
+        # verbose_name="Is the participant pregnant?",
+        # max_length=3,
+        # choices=YES_NO,
+    # )
+    #
+    # last_menstrual_period = models.DateField(
+        # verbose_name="Date of Last Menstrual Period (DD/MMM/YYYY)",
+        # validators=[date_not_future],
+        # null=True,
+        # blank=True,
+    # )
+    #
+    # is_lmp_date_estimated = models.CharField(
+        # verbose_name="Is the Last Menstrual Period date estimated?",
+        # choices=YES_NO,
+        # max_length=3,
+        # blank=True,
+        # null=True,
+    # )
+    #
+    # pregnancy_test_result = models.CharField(
+        # verbose_name="What is the result of the pregnancy test?",
+        # max_length=20,
+        # choices=POS_NEG,
+        # blank=True,
+        # null=True,
+    # )
 
 
 class Meta(ChildCrfModelMixin.Meta):
