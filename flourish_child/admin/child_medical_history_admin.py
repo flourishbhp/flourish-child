@@ -3,7 +3,6 @@ from edc_fieldsets.fieldlist import Insert
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import audit_fieldset_tuple
 
-
 from ..admin_site import flourish_child_admin
 from ..forms import ChildMedicalHistoryForm
 from ..models import ChildMedicalHistory
@@ -39,9 +38,9 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         "chronic_since": admin.VERTICAL,
         "med_history_changed": admin.VERTICAL,
         "current_hiv_status": admin.VERTICAL,
-        "is_pregnant": admin.VERTICAL,
-        "is_lmp_date_estimated": admin.VERTICAL,
-        "pregnancy_test_result": admin.VERTICAL,
+        # "is_pregnant": admin.VERTICAL,
+        # "is_lmp_date_estimated": admin.VERTICAL,
+        # "pregnancy_test_result": admin.VERTICAL,
     }
 
     filter_horizontal = ("child_chronic",)
@@ -77,13 +76,13 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             "med_history_changed", after="report_datetime"
         ),
         "child_pool_schedule1": Insert("med_history_changed", after="report_datetime"),
-        "female_above_12": Insert(
-            "is_pregnant",
-            "last_menstrual_period",
-            "is_lmp_date_estimated",
-            "pregnancy_test_result",
-            after="current_hiv_status",
-        ),
+        # "female_above_12": Insert(
+            # "is_pregnant",
+            # "last_menstrual_period",
+            # "is_lmp_date_estimated",
+            # "pregnancy_test_result",
+            # after="current_hiv_status",
+        # ),
     }
 
     def get_fieldsets(self, request, obj=None):
