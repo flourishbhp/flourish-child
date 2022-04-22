@@ -1,15 +1,18 @@
-from edc_action_item.site_action_items import site_action_items
-from flourish_child.models.child_birth import ChildBirth
-
+from django.contrib.auth.models import User, Group
 from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+
+from edc_data_manager.models import DataActionItem
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_action_item.site_action_items import site_action_items
+
+from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
@@ -21,6 +24,7 @@ from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
+
 
 
 class CaregiverConsentError(Exception):
@@ -198,6 +202,36 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
             caregiver_child_consent_obj.gender = instance.gender
             caregiver_child_consent_obj.child_dob = instance.dob
             caregiver_child_consent_obj.save()
+            notification(
+                subject_identifier=instance.subject_identifier,
+                user_created=instance.user_created,
+                subject="'Add name and DOB to the paper informed consent form'"
+
+            )
+
+
+def notification(subject_identifier,
+                 subject, user_created,
+                 group_names=('assignable users',)):
+
+    user = User.objects.get(username=user_created)
+
+    try:
+        user.groups.get(name__in=group_names)
+    except Group.DoesNotExist:
+        groups = Group.objects.filter(name__in=group_names)
+        for group in groups:
+            user.groups.add(group)
+        user.save()
+    finally:
+        DataActionItem.objects.create(
+            subject_identifier=subject_identifier,
+            user_created=user_created,
+            status=OPEN,
+            action_priority='high',
+            assigned=user.username,
+            subject=subject
+        )
 
 
 @receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
@@ -331,7 +365,8 @@ def child_take_off_study(sender, instance, raw, created, **kwargs):
                     onschedule_model=onschedule_model_obj._meta.label_lower,
                     name=onschedule_model_obj.schedule_name)
 
-                schedule.take_off_schedule(subject_identifier=instance.subject_identifier)
+                schedule.take_off_schedule(
+                    subject_identifier=instance.subject_identifier)
 
                 # remove care giver from child schedules also
                 # caregiver_subject_identifier = instance.subject_identifier[:-3]
