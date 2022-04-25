@@ -45,12 +45,20 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         blank=True,
     )
 
-    is_pregnant = models.CharField(
-        verbose_name="Is the participant pregnant?",
+    preg_test_performed = models.CharField(
+        verbose_name="Was a pregnancy test performed?",
         max_length=3,
         choices=YES_NO,
     )
 
+    pregnancy_test_result = models.CharField(
+        verbose_name="What is the result of the pregnancy test?",
+        max_length=20,
+        choices=POS_NEG,
+        blank=True,
+        null=True,
+    )
+    
     last_menstrual_period = models.DateField(
         verbose_name="Date of Last Menstrual Period (DD/MMM/YYYY)",
         validators=[date_not_future],
@@ -65,15 +73,6 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         blank=True,
         null=True,
     )
-
-    pregnancy_test_result = models.CharField(
-        verbose_name="What is the result of the pregnancy test?",
-        max_length=20,
-        choices=POS_NEG,
-        blank=True,
-        null=True,
-    )
-
 
 class Meta(ChildCrfModelMixin.Meta):
     app_label = "flourish_child"

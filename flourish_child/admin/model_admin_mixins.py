@@ -133,43 +133,17 @@ class ChildCrfModelAdminMixin(
 
     
     def get_key(self, request, obj=None):
-        pass
+
+        schedule_name = None
+        if self.get_previous_instance(request):
+            try:
+                model_obj = self.get_instance(request)
+            except ObjectDoesNotExist:
+                schedule_name = None
+            else:
+                schedule_name = model_obj.schedule_name
+        return schedule_name
     
-    def get_fieldsets_update(self, request, obj=None):
-        """Returns fieldsets after modifications declared in
-        "conditional" dictionaries.
-        """
-        fieldsets = super().get_fieldsets(request, obj=obj)
-        fieldsets = Fieldsets(fieldsets=fieldsets)
-        keys = self.get_keys(request, obj)
-        for key in keys:
-            fieldset = self.conditional_fieldsets.get(key)
-            if fieldset:
-                try:
-                    fieldset = tuple(fieldset)
-                except TypeError:
-                    fieldset = (fieldset,)
-                for f in fieldset:
-                    fieldsets.add_fieldset(fieldset=f)
-            fieldlist = self.conditional_fieldlists.get(key)
-            if fieldlist:
-                try:
-                    fieldsets.insert_fields(
-                        *fieldlist.insert_fields,
-                        insert_after=fieldlist.insert_after,
-                        section=fieldlist.section)
-                except AttributeError:
-                    pass
-                try:
-                    fieldsets.remove_fields(
-                        *fieldlist.remove_fields,
-                        section=fieldlist.section)
-                except AttributeError:
-                    pass
-        fieldsets = self.update_fieldset_for_form(
-            fieldsets, request)
-        fieldsets.move_to_end(self.fieldsets_move_to_end)
-        return fieldsets.fieldsets
 
     
     def get_is_female_and_above12(self, request, obj=None):
