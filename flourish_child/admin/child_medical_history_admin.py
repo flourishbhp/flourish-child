@@ -3,7 +3,11 @@ from edc_fieldsets.fieldlist import Insert
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import audit_fieldset_tuple
 from edc_fieldsets.fieldsets import Fieldsets
-
+from django.core.exceptions import ObjectDoesNotExist
+from django.apps import apps as django_apps
+from edc_fieldsets.fieldsets import Fieldsets
+from edc_base.utils import age
+from edc_constants.constants import FEMALE
 
 from ..admin_site import flourish_child_admin
 from ..forms import ChildMedicalHistoryForm
@@ -78,6 +82,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             "med_history_changed", after="report_datetime"
         ),
         "child_pool_schedule1": Insert("med_history_changed", after="report_datetime"),
+        
         "female_above_12": Insert(
             "preg_test_performed",
             "pregnancy_test_result",
@@ -87,12 +92,13 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         ),
     }
     
-    def get_fieldsets_update(self, request, obj=None):
+    def get_fieldsets(self, request, obj=None):
         """Returns fieldsets after modifications declared in
         "conditional" dictionaries.
         """
         fieldsets = super().get_fieldsets(request, obj=obj)
         fieldsets = Fieldsets(fieldsets=fieldsets)
+        
         keys = self.get_keys(request, obj)
         for key in keys:
             fieldset = self.conditional_fieldsets.get(key)
@@ -122,9 +128,45 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             fieldsets, request)
         fieldsets.move_to_end(self.fieldsets_move_to_end)
         return fieldsets.fieldsets
+    
+    def get_key(self, request, obj=None):
+        pass
 
-    def get_fieldsets(self, request, obj=None):
-        return self.get_fieldsets_update(request, obj)
+    
+    def get_keys(self, request, obj=None):
+        result = self.get_is_female_and_above12(request)
+
+        keys = []
+        if self.get_previous_instance(request):
+            try:
+                model_obj = self.get_instance(request)
+            except ObjectDoesNotExist:
+                pass
+            else:
+                schedule_name = model_obj.schedule_name
+                keys.append(schedule_name)
+
+        if result == 'female_above_12':
+            keys.append('female_above_12')
+        return keys   
+
+    def get_is_female_and_above12(self, request, obj=None):
+        subject_consent_cls = django_apps.get_model(
+            'flourish_child.childassent')
+        try:
+            consent_obj = subject_consent_cls.objects.get(
+                subject_identifier=request.GET.get('subject_identifier'))
+        except subject_consent_cls.DoesNotExist:
+            pass
+        else:
+            try:
+                visit_obj = self.visit_model.objects.get(
+                    id=request.GET.get('child_visit'))
+            except self.visit_model.DoesNotExist:
+                pass
+            else:
+                if age(consent_obj.dob, visit_obj.report_datetime).years >= 12 and consent_obj.gender == FEMALE:
+                    return 'female_above_12'
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)
