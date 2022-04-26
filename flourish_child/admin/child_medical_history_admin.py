@@ -85,8 +85,8 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         # ),
     }
 
-    def get_fieldsets(self, request, obj=None):
-        return self.get_fieldsets_update(request, obj)
+    # def get_fieldsets(self, request, obj=None):
+        # return self.get_fieldsets_update(request, obj)
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)
