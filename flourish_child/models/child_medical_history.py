@@ -1,10 +1,11 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
-from edc_constants.choices import YES_NO, POS_NEG
 from edc_base.model_validators import date_not_future
-from .list_models import ChronicConditions
-from .child_crf_model_mixin import ChildCrfModelMixin
+from edc_constants.choices import YES_NO, POS_NEG
+
 from ..choices import HIV_STATUS
+from .child_crf_model_mixin import ChildCrfModelMixin
+from .list_models import ChronicConditions
 
 
 class ChildMedicalHistory(ChildCrfModelMixin):

@@ -9,6 +9,7 @@ from edc_base.sites.admin import ModelAdminSiteMixin
 
 
 from edc_fieldsets import FieldsetsModelAdminMixin
+from edc_fieldsets.fieldsets import Fieldsets
 from edc_metadata import NextFormGetter
 from edc_model_admin import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,

@@ -30,7 +30,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 "fields": [
                     "child_visit",
                     "report_datetime",
-                    "current_hiv_status",
+                    # "current_hiv_status",
                     "chronic_since",
                     "child_chronic",
                     "child_chronic_other",
