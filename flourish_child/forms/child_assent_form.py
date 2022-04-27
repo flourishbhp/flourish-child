@@ -1,3 +1,4 @@
+from ast import arg
 from django import forms
 from django.apps import apps as django_apps
 from edc_base.sites import SiteModelFormMixin
@@ -23,8 +24,15 @@ class ChildAssentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         instance = getattr(self, 'instance', None)
+
+        subject_identifier = self.initial.get('subject_identifier', None) \
+            or instance.subject_identifier \
+            or args[0].get('subject_identifier', None) \
+            or self.cleaned_data.get('subject_identifier', None)
+
         child_consent = self.get_caregiver_child_consent(
-            subject_identifier=self.initial.get('subject_identifier', None))
+            subject_identifier=subject_identifier)
+
         if instance and instance.id:
             for key in self.fields.keys():
                 self.fields[key].disabled = True
