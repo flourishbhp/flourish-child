@@ -26,6 +26,7 @@ class ChildAssentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
 
         subject_identifier = self.initial.get('subject_identifier', None) \
             or instance.subject_identifier \
+            or args[0].get('subject_identifier', None) \
             or self.cleaned_data.get('subject_identifier', None)
 
         child_consent = self.get_caregiver_child_consent(
