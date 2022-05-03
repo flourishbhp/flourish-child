@@ -1,4 +1,3 @@
-from ast import arg
 from django import forms
 from django.apps import apps as django_apps
 from edc_base.sites import SiteModelFormMixin
