@@ -168,7 +168,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             else:
                 if age(consent_obj.dob, visit_obj.report_datetime).years >= 12 and \
                     consent_obj.gender == FEMALE  \
-                    and not visit_obj.schedule_name == 'child_c_enrol_schedule1':
+                    and 'quart' in visit_obj.schedule_name:
                     return 'female_above_12'
 
     def get_form(self, request, obj=None, *args, **kwargs):
