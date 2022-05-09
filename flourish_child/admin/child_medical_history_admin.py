@@ -140,6 +140,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         if self.get_previous_instance(request):
             try:
                 model_obj = self.get_instance(request)
+
             except ObjectDoesNotExist:
                 pass
             else:
@@ -165,7 +166,9 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             except self.visit_model.DoesNotExist:
                 pass
             else:
-                if age(consent_obj.dob, visit_obj.report_datetime).years >= 12 and consent_obj.gender == FEMALE:
+                if age(consent_obj.dob, visit_obj.report_datetime).years >= 12 and \
+                    consent_obj.gender == FEMALE  \
+                    and 'quart' in visit_obj.schedule_name:
                     return 'female_above_12'
 
     def get_form(self, request, obj=None, *args, **kwargs):
