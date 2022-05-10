@@ -100,7 +100,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             subject_identifier=dummy_consent.subject_identifier,
             schedule_name='child_a_quart_schedule1').count(), 1)
 
-        mommy.make_recipe(
+        child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
                 visit_code='2001',
@@ -111,7 +111,12 @@ class TestFoodSecurityQuarterSchedule(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='flourish_child.childfoodsecurityquestionnaire',
             subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2001').entry_status, NOT_REQUIRED)
+            visit_code='2001').entry_status, REQUIRED)
+
+        mommy.make_recipe(
+            'flourish_child.childfoodsecurityquestionnaire',
+            child_visit=child_visit
+        )
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -150,7 +155,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='flourish_child.childfoodsecurityquestionnaire',
             subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2004').entry_status, REQUIRED)
+            visit_code='2004').entry_status, NOT_REQUIRED)
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -163,7 +168,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='flourish_child.childfoodsecurityquestionnaire',
             subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2005').entry_status, NOT_REQUIRED)
+            visit_code='2005').entry_status, REQUIRED)
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -202,153 +207,12 @@ class TestFoodSecurityQuarterSchedule(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='flourish_child.childfoodsecurityquestionnaire',
             subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2008').entry_status, REQUIRED)
-
-    def test_food_security_3_years_2_months_quarter_schedule(self):
-        maternal_dataset_obj = mommy.make_recipe(
-            'flourish_caregiver.maternaldataset',
-            delivdt=get_utcnow() - relativedelta(years=3, months=2),
-            **self.maternal_dataset_options)
-
-        child_dataset = mommy.make_recipe(
-            'flourish_child.childdataset',
-            dob=get_utcnow() - relativedelta(years=3, months=2),
-            **self.child_dataset_options)
-
-        mommy.make_recipe(
-            'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
-
-        subject_consent = mommy.make_recipe(
-            'flourish_caregiver.subjectconsent',
-            screening_identifier=maternal_dataset_obj.screening_identifier,
-            breastfeed_intent=YES,
-            biological_caregiver=YES,
-            **self.options)
-
-        caregiver_child_consent = mommy.make_recipe(
-            'flourish_caregiver.caregiverchildconsent',
-            subject_consent=subject_consent,
-            study_child_identifier=child_dataset.study_child_identifier,
-            child_dob=maternal_dataset_obj.delivdt.date(), )
-
-        mommy.make_recipe(
-            'flourish_caregiver.caregiverpreviouslyenrolled',
-            subject_identifier=subject_consent.subject_identifier)
-
-        self.assertEqual(ChildDummySubjectConsent.objects.filter(
-            identity=caregiver_child_consent.identity).count(), 1)
-
-        dummy_consent = ChildDummySubjectConsent.objects.get(
-            subject_identifier=caregiver_child_consent.subject_identifier)
+            visit_code='2008').entry_status, NOT_REQUIRED)
 
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                visit_code='2000',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
-            reason=SCHEDULED)
-
-        self.assertEqual(OnScheduleChildCohortAQuarterly.objects.filter(
-            subject_identifier=dummy_consent.subject_identifier,
-            schedule_name='child_a_quart_schedule1').count(), 1)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2001',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childfoodsecurityquestionnaire',
-            subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2001').entry_status, NOT_REQUIRED)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2002',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=44),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childfoodsecurityquestionnaire',
-            subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2002').entry_status, NOT_REQUIRED)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2003',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=88),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childfoodsecurityquestionnaire',
-            subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2003').entry_status, NOT_REQUIRED)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2004',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=132),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childfoodsecurityquestionnaire',
-            subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2004').entry_status, REQUIRED)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2005',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=176),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childfoodsecurityquestionnaire',
-            subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2005').entry_status, NOT_REQUIRED)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2006',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=220),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childfoodsecurityquestionnaire',
-            subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2006').entry_status, NOT_REQUIRED)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2007',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=264),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childfoodsecurityquestionnaire',
-            subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2007').entry_status, NOT_REQUIRED)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2008',
+                visit_code='2009',
                 subject_identifier=caregiver_child_consent.subject_identifier),
             report_datetime=get_utcnow() + relativedelta(days=308),
             reason=SCHEDULED)
@@ -356,4 +220,4 @@ class TestFoodSecurityQuarterSchedule(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='flourish_child.childfoodsecurityquestionnaire',
             subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2008').entry_status, REQUIRED)
+            visit_code='2009').entry_status, REQUIRED)
