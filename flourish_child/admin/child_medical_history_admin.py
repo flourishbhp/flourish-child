@@ -30,7 +30,6 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 "fields": [
                     "child_visit",
                     "report_datetime",
-                    "current_hiv_status",
                     "chronic_since",
                     "child_chronic",
                     "child_chronic_other",
@@ -44,9 +43,9 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         "chronic_since": admin.VERTICAL,
         "med_history_changed": admin.VERTICAL,
         "current_hiv_status": admin.VERTICAL,
+        "is_lmp_date_estimated": admin.VERTICAL,
         "preg_test_performed": admin.VERTICAL,
         "pregnancy_test_result": admin.VERTICAL,
-        "is_lmp_date_estimated": admin.VERTICAL,
     }
 
     filter_horizontal = ("child_chronic",)
@@ -84,11 +83,12 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         "child_pool_schedule1": Insert("med_history_changed", after="report_datetime"),
         
         "female_above_12": Insert(
-            "preg_test_performed",
-            "pregnancy_test_result",
+            "current_hiv_status",
             "last_menstrual_period",
             "is_lmp_date_estimated",
-            after="current_hiv_status",
+            "preg_test_performed",
+            "pregnancy_test_result",
+            after="med_history_changed",
         ),
     }
     
@@ -168,7 +168,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             else:
                 if age(consent_obj.dob, visit_obj.report_datetime).years >= 12 and \
                     consent_obj.gender == FEMALE  \
-                    and 'quart' in visit_obj.schedule_name:
+                    and ('quart' in visit_obj.schedule_name or 'qt' in visit_obj.schedule_name):
                     return 'female_above_12'
 
     def get_form(self, request, obj=None, *args, **kwargs):
