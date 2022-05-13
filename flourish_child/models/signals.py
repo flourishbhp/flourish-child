@@ -22,7 +22,7 @@ from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
-from . import ClinicianNotesImage
+from .child_clinician_notes import ClinicianNotesImage
 from .child_assent import ChildAssent
 from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
