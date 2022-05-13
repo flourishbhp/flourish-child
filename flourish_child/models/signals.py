@@ -1,28 +1,35 @@
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+import os
+from datetime import datetime
 
+import PIL
+import pyminizip
+from PIL import Image
 from django.apps import apps as django_apps
+from django.conf import settings
 from django.contrib.auth.models import User, Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_data_manager.models import DataActionItem
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+
 from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
-
-from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
+from . import ClinicianNotesImage
 from .child_assent import ChildAssent
 from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
+from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 
 
 class CaregiverConsentError(Exception):
@@ -159,7 +166,8 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
 
         put_on_schedule(cohort, instance=instance,
                         subject_identifier=instance.subject_identifier,
-                        base_appt_datetime=instance.report_datetime.replace(microsecond=0))
+                        base_appt_datetime=instance.report_datetime.replace(
+                            microsecond=0))
 
 
 @receiver(post_save, weak=False, sender=ChildBirth,
@@ -208,10 +216,18 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
             )
 
 
-def notification(subject_identifier,
-                 subject, user_created,
-                 group_names=('assignable users',)):
+@receiver(post_save, weak=False, sender=ClinicianNotesImage,
+          dispatch_uid='clinician_notes_image_on_post_save')
+def clinician_notes_image_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw and created:
+        stamp_image(instance)
+        subject_identifier = instance.clinician_notes.subject_identifier
+        encrypt_files(instance, subject_identifier)
 
+
+def notification(subject_identifier,
+        subject, user_created,
+        group_names=('assignable users',)):
     user = User.objects.get(username=user_created)
 
     try:
@@ -282,7 +298,7 @@ def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None,
-                    base_appt_datetime=None):
+        base_appt_datetime=None):
     if instance:
         subject_identifier = subject_identifier or instance.subject_identifier
 
@@ -316,7 +332,7 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
 
 def trigger_action_item(obj, field, response, model_cls,
-                        action_name, subject_identifier, repeat=False):
+        action_name, subject_identifier, repeat=False):
     action_cls = site_action_items.get(
         model_cls.action_name)
     action_item_model_cls = action_cls.action_item_model_cls()
@@ -424,3 +440,59 @@ def consent_version(subject_identifier):
                 'Missing Consent Version form. Please complete '
                 'it before proceeding.')
         return consent_version_obj.version
+
+
+def stamp_image(instance):
+    filefield = instance.image
+    filename = filefield.name  # gets the "normal" file name as it was uploaded
+    storage = filefield.storage
+    path = storage.path(filename)
+    add_image_stamp(image_path=path)
+
+
+def add_image_stamp(image_path=None, position=(25, 25), resize=(600, 600)):
+    """
+    Superimpose image of a stamp over copy of the base image
+    @param image_path: dir to base image
+    @param position: pixels(w,h) to superimpose stamp at
+    """
+    base_image = Image.open(image_path)
+    stamp = Image.open('media/stamp/true-copy.png')
+    if resize:
+        stamp = stamp.resize(resize, PIL.Image.ANTIALIAS)
+
+    width, height = base_image.size
+    stamp_width, stamp_height = stamp.size
+
+    # Determine orientation of the base image before pasting stamp
+    if width < height:
+        pos_width = round(width / 2) - round(stamp_width / 2)
+        pos_height = height - stamp_height
+        position = (pos_width, pos_height)
+    elif width > height:
+        stamp = stamp.rotate(90)
+        pos_width = width - stamp_width
+        pos_height = round(height / 2) - round(stamp_height / 2)
+        position = (pos_width, pos_height)
+
+    # paste stamp over image
+    base_image.paste(stamp, position, mask=stamp)
+    base_image.save(image_path)
+
+
+def encrypt_files(instance, subject_identifier):
+    base_path = settings.MEDIA_ROOT
+    if instance.image:
+        upload_to = f'{instance.image.field.upload_to}'
+        timestamp = datetime.timestamp(get_utcnow())
+        zip_filename = f'{subject_identifier}_{timestamp}.zip'
+        with open('filekey.key', 'r') as filekey:
+            key = filekey.read().rstrip()
+        com_lvl = 8
+        pyminizip.compress(f'{instance.image.path}', None,
+                           f'{base_path}/{upload_to}{zip_filename}', key, com_lvl)
+    # remove unencrypted file
+    if os.path.exists(f'{instance.image.path}'):
+        os.remove(f'{instance.image.path}')
+    instance.image = f'{upload_to}{zip_filename}'
+    instance.save()
