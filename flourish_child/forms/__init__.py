@@ -23,6 +23,8 @@ from .child_hiv_rapid_test_counseling_form import \
 from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
+from .child_immunization_history_form import VaccinesReceivedInlineFormSet
+from .child_immunization_history_form import VaccinesMissedInlineFormSet
 from .child_medical_history_form import ChildMedicalHistoryForm
 from .child_phq_depression_screening_form import ChildPhqDepressionScreeningForm
 from .child_phq_referral_form import ChildPhqReferralForm
