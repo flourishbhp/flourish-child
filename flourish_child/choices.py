@@ -816,4 +816,10 @@ REASON_NOT_DRAWN = (
     (OTHER, 'Other'),
     (NOT_APPLICABLE, 'Not Applicable'))
 
+YES_NO_NA = (
+    (YES, YES),
+    (NO, NO),
+    (NOT_APPLICABLE, 'Not applicable'),
+)
+
 
