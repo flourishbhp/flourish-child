@@ -101,7 +101,7 @@ class VaccinesReceivedInlineFormSet(BaseInlineFormSet):
     model = VaccinesReceived
 
     def __init__(self, *args, **kwargs):
-        super(VaccinesReceivedInlineFormSet, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         subject_identifier = self.request.GET.get('subject_identifier', None)
         self.initial = []
         if subject_identifier:
@@ -128,7 +128,7 @@ class VaccinesMissedInlineFormSet(BaseInlineFormSet):
     model = VaccinesMissed
 
     def __init__(self, *args, **kwargs):
-        super(VaccinesMissedInlineFormSet, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         subject_identifier = self.request.GET.get('subject_identifier', None)
         self.initial = []
         if subject_identifier:

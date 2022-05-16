@@ -30,7 +30,7 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     )
 
     def get_formset(self, request, obj=None, **kwargs):
-        formset = super(VaccinesReceivedInlineAdmin, self).get_formset(request, obj, **kwargs)
+        formset = super().get_formset(request, obj, **kwargs)
         formset.request = request
         return formset
 
@@ -50,7 +50,7 @@ class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     )
 
     def get_formset(self, request, obj=None, **kwargs):
-        formset = super(VaccinesMissedInlineAdmin, self).get_formset(request, obj, **kwargs)
+        formset = super().get_formset(request, obj, **kwargs)
         formset.request = request
         return formset
 
