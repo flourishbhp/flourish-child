@@ -35,6 +35,10 @@ DEFAULT_STUDY_SITE = 40
 
 ALLOWED_HOSTS = []
 
+DEVICE_ID=20
+
+DEVICE_ROLE='Client'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -71,6 +75,7 @@ INSTALLED_APPS = [
     'flourish_child.apps.EdcTimepointAppConfig',
     'flourish_child.apps.EdcVisitTrackingAppConfig',
     'flourish_child.apps.EdcFacilityAppConfig',
+    'flourish_child.apps.EdcSenaiteInterfaceAppConfig',
     'flourish_visit_schedule.apps.AppConfig',
     'flourish_child.apps.AppConfig'
 ]

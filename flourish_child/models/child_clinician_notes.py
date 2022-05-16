@@ -2,10 +2,12 @@ from django.db import models
 from django.utils.html import mark_safe
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.utils import get_utcnow
+
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
 class ChildClinicianNotes(ChildCrfModelMixin):
+    crf_date_validator_cls = None
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
@@ -14,18 +16,17 @@ class ChildClinicianNotes(ChildCrfModelMixin):
 
 
 class ClinicianNotesImage(BaseUuidModel):
-
     clinician_notes = models.ForeignKey(
         ChildClinicianNotes,
         on_delete=models.PROTECT,
-        related_name='child_clinician_notes',)
+        related_name='child_clinician_notes', )
 
     image = models.ImageField(upload_to='child_notes/')
 
     user_uploaded = models.CharField(
         max_length=50,
         blank=True,
-        verbose_name='user uploaded',)
+        verbose_name='user uploaded', )
     datetime_captured = models.DateTimeField(
         default=get_utcnow)
 

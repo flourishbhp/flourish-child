@@ -1,7 +1,7 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_base.model_validators import date_not_future
-from edc_constants.choices import YES_NO, POS_NEG
+from edc_constants.choices import YES_NO, POS_NEG, YES_NO_NA
 
 from ..choices import HIV_STATUS
 from .child_crf_model_mixin import ChildCrfModelMixin
@@ -48,8 +48,8 @@ class ChildMedicalHistory(ChildCrfModelMixin):
 
     preg_test_performed = models.CharField(
         verbose_name="Was a pregnancy test performed?",
-        max_length=3,
-        choices=YES_NO,
+        max_length=17,
+        choices=YES_NO_NA,
     )
 
     pregnancy_test_result = models.CharField(
