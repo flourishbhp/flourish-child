@@ -6,7 +6,8 @@ from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
 
 from ..admin_site import flourish_child_admin
 from ..forms import (
-    ChildImmunizationHistoryForm, VaccinesReceivedForm, VaccinesMissedForm)
+    ChildImmunizationHistoryForm, VaccinesReceivedForm, VaccinesMissedForm,
+    VaccinesReceivedInlineFormSet,VaccinesMissedInlineFormSet)
 from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived
 from .model_admin_mixins import ChildCrfModelAdminMixin
 
@@ -14,7 +15,8 @@ from .model_admin_mixins import ChildCrfModelAdminMixin
 class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = VaccinesReceived
     form = VaccinesReceivedForm
-    extra = 1
+    formset = VaccinesReceivedInlineFormSet
+    # extra = 1
 
     fieldsets = (
         (None, {
@@ -27,11 +29,16 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
         }),
     )
 
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super(VaccinesReceivedInlineAdmin, self).get_formset(request, obj, **kwargs)
+        formset.request = request
+        return formset
+
 
 class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = VaccinesMissed
     form = VaccinesMissedForm
-    extra = 1
+    formset = VaccinesMissedInlineFormSet
 
     fieldsets = (
         (None, {
@@ -42,12 +49,17 @@ class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
         }), audit_fieldset_tuple
     )
 
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super(VaccinesMissedInlineAdmin, self).get_formset(request, obj, **kwargs)
+        formset.request = request
+        return formset
+
 
 @admin.register(ChildImmunizationHistory, site=flourish_child_admin)
 class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = ChildImmunizationHistoryForm
 
-    extra_context_models = ['vaccinesmissed', 'vaccinesreceived']
+    extra_context_models = ['vaccinesreceived', 'vaccinesmissed']
 
     fieldsets = (
         (None, {
