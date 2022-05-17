@@ -1,7 +1,6 @@
 import datetime
 import uuid
 import xlwt
-import pandas as pd
 from django.apps import apps as django_apps
 from django.http import HttpResponse
 from django.utils import timezone
@@ -15,7 +14,6 @@ from edc_base.sites.admin import ModelAdminSiteMixin
 
 from edc_base.utils import get_utcnow
 from edc_fieldsets import FieldsetsModelAdminMixin
-from edc_fieldsets.fieldsets import Fieldsets
 from edc_metadata import NextFormGetter
 from edc_model_admin import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
