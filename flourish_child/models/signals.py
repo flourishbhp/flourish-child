@@ -222,7 +222,6 @@ def clinician_notes_image_on_post_save(sender, instance, raw, created, **kwargs)
     if not raw and created:
         stamp_image(instance)
         subject_identifier = instance.clinician_notes.subject_identifier
-        encrypt_files(instance, subject_identifier)
 
 
 def notification(subject_identifier,
