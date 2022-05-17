@@ -64,7 +64,6 @@ class ExportRequisitionCsvMixin:
         return result_dict_obj
 
     def export_as_csv(self, request, queryset):
-        breakpoint()
 
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment; filename=%s.xls' % (
