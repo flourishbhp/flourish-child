@@ -14,11 +14,11 @@ import xlwt
 from ..admin_site import flourish_child_admin
 from ..forms import ChildRequisitionForm
 from ..models import ChildRequisition
-from .model_admin_mixins import ChildCrfModelAdminMixin
+from .model_admin_mixins import ChildCrfModelAdminMixin, ExportRequisitionCsvMixin
 
 
 @admin.register(ChildRequisition, site=flourish_child_admin)
-class ChildRequisitionAdmin(ChildCrfModelAdminMixin,
+class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
                                 RequisitionAdminMixin, admin.ModelAdmin):
 
     form = ChildRequisitionForm
