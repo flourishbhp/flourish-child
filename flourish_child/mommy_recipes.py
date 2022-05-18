@@ -12,7 +12,7 @@ from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
 from flourish_child.models.birth_data import BirthData
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
     ChildVisit, ChildBirth, InfantDevScreening36Months, InfantDevScreening12Months, \
-    InfantDevScreening18Months
+    InfantDevScreening18Months, ChildFoodSecurityQuestionnaire
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic
 
@@ -197,4 +197,9 @@ infantdevscreening18months = Recipe(
     walks=YES,
     self_feed=YES,
     caregiver_concerns="blah blah",
-    )
+)
+
+childfoodsecurityquestionnaire = Recipe(
+    ChildFoodSecurityQuestionnaire,
+    child_visit=None,
+)

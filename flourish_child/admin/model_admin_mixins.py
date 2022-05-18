@@ -1,4 +1,9 @@
+import datetime
+import uuid
+import xlwt
 from django.apps import apps as django_apps
+from django.http import HttpResponse
+from django.utils import timezone
 from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
@@ -7,9 +12,8 @@ from django.urls.exceptions import NoReverseMatch
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from edc_base.sites.admin import ModelAdminSiteMixin
 
-
+from edc_base.utils import get_utcnow
 from edc_fieldsets import FieldsetsModelAdminMixin
-from edc_fieldsets.fieldsets import Fieldsets
 from edc_metadata import NextFormGetter
 from edc_model_admin import (
     ModelAdminNextUrlRedirectMixin, ModelAdminFormInstructionsMixin,
@@ -37,6 +41,72 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
     empty_value_display = '-'
     next_form_getter_cls = NextFormGetter
 
+
+class ExportRequisitionCsvMixin:
+
+    def fix_date_format(self, obj_dict=None):
+        """Change all dates into a format for the export
+        and split the time into a separate value.
+
+        Format: m/d/y
+        """
+
+        result_dict_obj = {**obj_dict}
+        for key, value in obj_dict.items():
+            if isinstance(value, datetime.datetime):
+                value = timezone.make_naive(value)
+                time_value = value.time()
+                time_variable = key + '_time'
+                result_dict_obj[key] = value.date()
+                result_dict_obj[time_variable] = time_value
+        return result_dict_obj
+
+    def export_as_csv(self, request, queryset):
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=%s.xls' % (
+            self.get_export_filename())
+
+        wb = xlwt.Workbook(encoding='utf-8', style_compression=2)
+        ws = wb.add_sheet('%s')
+
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        font_style.num_format_str = 'YYYY/MM/DD h:mm:ss'
+
+        field_names = self.fix_date_format(queryset[0].__dict__)
+        field_names = [a for a in field_names.keys()]
+        field_names += ['panel_name']
+        field_names.remove('_state')
+
+        for col_num in range(len(field_names)):
+            ws.write(row_num, col_num, field_names[col_num], font_style)
+
+        field_names.remove('panel_name')
+        for obj in queryset:
+            obj_data = self.fix_date_format(obj.__dict__)
+            data = [obj_data[field] for field in field_names]
+            data += [obj.panel.name]
+
+            row_num += 1
+            for col_num in range(len(data)):
+                if isinstance(data[col_num], uuid.UUID):
+                    ws.write(row_num, col_num, str(data[col_num]))
+                elif isinstance(data[col_num], datetime.date):
+                    ws.write(row_num, col_num, data[col_num], xlwt.easyxf(
+                        num_format_str='YYYY/MM/DD'))
+                elif isinstance(data[col_num], datetime.time):
+                    ws.write(row_num, col_num, data[col_num], xlwt.easyxf(
+                        num_format_str='h:mm:ss'))
+                else:
+                    ws.write(row_num, col_num, data[col_num])
+        ws
+        wb.save(response)
+        return response
+
+    export_as_csv.short_description = "Export with panel name"
 
 class ChildCrfModelAdminMixin(
         VisitTrackingCrfModelAdminMixin, ModelAdminMixin,
