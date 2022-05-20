@@ -111,7 +111,7 @@ class VaccinesReceivedInlineFormSet(BaseInlineFormSet):
                 immunization_obj = ChildImmunizationHistory.objects.filter(
                     child_visit__subject_identifier=subject_identifier).earliest('report_datetime')
             except ChildImmunizationHistory.DoesNotExist:
-                pass
+                self.extra = 0
             else:
                 vaccines_received = immunization_obj.vaccinesreceived_set.all()
 
@@ -125,7 +125,7 @@ class VaccinesReceivedInlineFormSet(BaseInlineFormSet):
 
                     })
 
-        self.extra = len(self.initial) or 3
+                self.extra = len(self.initial) or 3
 
 
 class VaccinesMissedInlineFormSet(BaseInlineFormSet):
@@ -140,7 +140,7 @@ class VaccinesMissedInlineFormSet(BaseInlineFormSet):
                 immunization_obj = ChildImmunizationHistory.objects.filter(
                     child_visit__subject_identifier=subject_identifier).earliest('report_datetime')
             except ChildImmunizationHistory.DoesNotExist:
-                pass
+                self.extra = 0
             else:
                 vaccines_missed = immunization_obj.vaccinesmissed_set.all()
 
@@ -151,4 +151,4 @@ class VaccinesMissedInlineFormSet(BaseInlineFormSet):
                         'reason_missed_other': vaccine_missed.reason_missed_other
                     })
 
-        self.extra = len(self.initial)
+                self.extra = len(self.initial)
