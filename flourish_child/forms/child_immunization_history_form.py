@@ -1,3 +1,4 @@
+from os import chdir
 from django import forms
 from django.forms import BaseInlineFormSet
 
@@ -105,12 +106,15 @@ class VaccinesReceivedInlineFormSet(BaseInlineFormSet):
         subject_identifier = self.request.GET.get('subject_identifier', None)
         self.initial = []
         if subject_identifier:
-            immunization_obj = ChildImmunizationHistory.objects.filter(
-                child_visit__subject_identifier=subject_identifier).earliest('report_datetime')
+            
+            try:
+                immunization_obj = ChildImmunizationHistory.objects.filter(
+                    child_visit__subject_identifier=subject_identifier).earliest('report_datetime')
+            except ChildImmunizationHistory.DoesNotExist:
+                self.extra = 0
+            else:
+                vaccines_received = immunization_obj.vaccinesreceived_set.all()
 
-            vaccines_received = immunization_obj.vaccinesreceived_set.all()
-
-            if vaccines_received:
                 for vaccine_received in vaccines_received:
                     self.initial.append({
                         'received_vaccine_name': vaccine_received.received_vaccine_name,
@@ -120,8 +124,8 @@ class VaccinesReceivedInlineFormSet(BaseInlineFormSet):
                         'booster_dose_dt': vaccine_received.booster_dose_dt,
 
                     })
-
-        self.extra = len(self.initial) or 3
+            finally:
+                self.extra = len(self.initial)
 
 
 class VaccinesMissedInlineFormSet(BaseInlineFormSet):
@@ -132,16 +136,19 @@ class VaccinesMissedInlineFormSet(BaseInlineFormSet):
         subject_identifier = self.request.GET.get('subject_identifier', None)
         self.initial = []
         if subject_identifier:
-            immunization_obj = ChildImmunizationHistory.objects.filter(
-                child_visit__subject_identifier=subject_identifier).earliest('report_datetime')
+            try:
+                immunization_obj = ChildImmunizationHistory.objects.filter(
+                    child_visit__subject_identifier=subject_identifier).earliest('report_datetime')
+            except ChildImmunizationHistory.DoesNotExist:
+                pass
+            else:
+                vaccines_missed = immunization_obj.vaccinesmissed_set.all()
 
-            vaccines_missed = immunization_obj.vaccinesmissed_set.all()
-
-            for vaccine_missed in vaccines_missed:
-                self.initial.append({
-                    'missed_vaccine_name': vaccine_missed.missed_vaccine_name,
-                    'reason_missed': vaccine_missed.reason_missed,
-                    'reason_missed_other': vaccine_missed.reason_missed_other
-                })
-
-        self.extra = len(self.initial)
+                for vaccine_missed in vaccines_missed:
+                    self.initial.append({
+                        'missed_vaccine_name': vaccine_missed.missed_vaccine_name,
+                        'reason_missed': vaccine_missed.reason_missed,
+                        'reason_missed_other': vaccine_missed.reason_missed_other
+                    })
+            finally:
+                self.extra = len(self.initial)
