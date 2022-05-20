@@ -16,7 +16,6 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = VaccinesReceived
     form = VaccinesReceivedForm
     formset = VaccinesReceivedInlineFormSet
-    # extra = 1
 
     fieldsets = (
         (None, {
