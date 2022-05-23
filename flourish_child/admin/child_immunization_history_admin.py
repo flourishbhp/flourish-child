@@ -6,8 +6,7 @@ from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
 
 from ..admin_site import flourish_child_admin
 from ..forms import (
-    ChildImmunizationHistoryForm, VaccinesReceivedForm, VaccinesMissedForm,
-    VaccinesReceivedInlineFormSet,VaccinesMissedInlineFormSet)
+    ChildImmunizationHistoryForm, VaccinesReceivedForm, VaccinesMissedForm)
 from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived
 from .model_admin_mixins import ChildCrfModelAdminMixin
 
@@ -15,7 +14,7 @@ from .model_admin_mixins import ChildCrfModelAdminMixin
 class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = VaccinesReceived
     form = VaccinesReceivedForm
-    formset = VaccinesReceivedInlineFormSet
+    extra = 0
 
     fieldsets = (
         (None, {
@@ -37,7 +36,7 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
 class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = VaccinesMissed
     form = VaccinesMissedForm
-    formset = VaccinesMissedInlineFormSet
+    extra = 0
 
     fieldsets = (
         (None, {
