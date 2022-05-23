@@ -27,15 +27,7 @@ class ChildPregTesting(ChildCrfModelMixin):
         choices=POS_NEG,
         blank=True,
         null=True,)
-    
-    current_hiv_status = models.CharField(
-        verbose_name="What is the current HIV status of this child/adolescent?",
-        choices=HIV_STATUS,
-        max_length=15,
-        null=True,
-        blank=True,
-    )
-    
+
     last_menstrual_period = models.DateField(
         verbose_name="Date of Last Menstrual Period (DD/MMM/YYYY)",
         validators=[date_not_future],
