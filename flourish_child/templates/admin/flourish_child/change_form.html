@@ -12,7 +12,34 @@
 {% endblock %}
 
 {% block field_sets %}
+    {% if birthvaccines %}
+        <div class="col-md-6">
+            <h2 class="header-text">Received Birth Vaccines</h2>
+            <table style="width:98%">
+                <thead>
+                    <th>Visit Code</th>
+                    <th>Vaccines since delivery</th>
+                    <th>Date of vaccination</th>
+                </thead>
+                <tbody>
+                    {% for key, values in birthvaccines.items %}
+                        <tr>
+                            <th rowspan={{ values|length|add:"1"}}>{{ key }}</th>
+                        </tr>
+                            {% for value in values %}
+                                <tr>
+                                    <td>
+                                        {{ value.vaccination }}
+                                    </td>
+                                    <td>{{  value.vaccine_date }}</td>
+                                </tr>
+                            {% endfor %}
+                    {% endfor %}
 
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
     {% if vaccinesreceived %}
         <div class="col-md-6">
             <h2 class="header-text">Received Vaccines</h2>
