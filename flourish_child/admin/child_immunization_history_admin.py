@@ -3,11 +3,12 @@ from django.contrib import admin
 from edc_fieldsets.fieldlist import Fieldlist
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
+from flourish_child.models.birth_feeding_and_vaccine import BirthVaccines
 
 from ..admin_site import flourish_child_admin
 from ..forms import (
     ChildImmunizationHistoryForm, VaccinesReceivedForm, VaccinesMissedForm)
-from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived
+from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived, BirthFeedingVaccine, ChildVisit
 from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
@@ -57,7 +58,7 @@ class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
 class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = ChildImmunizationHistoryForm
 
-    extra_context_models = ['vaccinesreceived', 'vaccinesmissed']
+    extra_context_models = ['vaccinesreceived', 'vaccinesmissed', 'birthvaccines']
 
     fieldsets = (
         (None, {
@@ -126,14 +127,34 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         model_dict = {}
         for model_name in self.extra_context_models:
             data_dict = {}
-            model_cls = django_apps.get_model(f'flourish_child.{model_name}')
-            model_objs = model_cls.objects.filter(
-                child_immunization_history__child_visit__subject_identifier=subject_identifier).exclude(
-                child_immunization_history__child_visit=child_visit)
-            for model_obj in model_objs:
-                visit_code = model_obj.visit.visit_code
-                data_dict.setdefault(visit_code, [])
-                data_dict[visit_code].append(model_obj)
 
-            model_dict.update({model_name: data_dict})
+            if model_name == 'birthvaccines':
+
+                try:
+                    birth_feeding_obj = BirthFeedingVaccine.objects.filter(
+                        child_visit__subject_identifier=subject_identifier).earliest('report_datetime')
+
+                except BirthFeedingVaccine.DoesNotExist:
+                    pass
+                else:
+
+                    model_objs = birth_feeding_obj.birthvaccines_set.all()
+                    for model_obj in model_objs:
+                        visit_code = birth_feeding_obj.visit.visit_code
+                        data_dict.setdefault(visit_code, [])
+                        data_dict[visit_code].append(model_obj)
+                model_dict.update({model_name: data_dict})
+
+            else:
+
+                model_cls = django_apps.get_model(f'flourish_child.{model_name}')
+                model_objs = model_cls.objects.filter(
+                    child_immunization_history__child_visit__subject_identifier=subject_identifier).exclude(
+                    child_immunization_history__child_visit=child_visit)
+                for model_obj in model_objs:
+                    visit_code = model_obj.visit.visit_code
+                    data_dict.setdefault(visit_code, [])
+                    data_dict[visit_code].append(model_obj)
+
+                model_dict.update({model_name: data_dict})
         return model_dict
