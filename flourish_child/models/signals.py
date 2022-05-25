@@ -1,9 +1,10 @@
-import os
 from datetime import datetime
+from edc_action_item.site_action_items import site_action_items
+from flourish_child.models.child_birth import ChildBirth
+import os
 
-import PIL
-import pyminizip
 from PIL import Image
+import PIL
 from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib.auth.models import User, Group
@@ -12,24 +13,24 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-
-from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
-from .child_clinician_notes import ClinicianNotesImage
+
+import pyminizip
+
+from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from .child_assent import ChildAssent
+from .child_clinician_notes import ClinicianNotesImage
 from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
-from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 
 
 class CaregiverConsentError(Exception):
@@ -196,24 +197,22 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
         caregiver_child_consent_cls = django_apps.get_model(
             'flourish_caregiver.caregiverchildconsent')
 
-        try:
-            caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
-                subject_identifier=instance.subject_identifier,
-                version=consent_version(instance.subject_identifier))
-        except caregiver_child_consent_cls.DoesNotExist:
-            raise
-        else:
+        caregiver_child_consent_objs = caregiver_child_consent_cls.objects.filter(
+            subject_identifier=instance.subject_identifier)
+
+        for caregiver_child_consent_obj in caregiver_child_consent_objs:
             caregiver_child_consent_obj.first_name = instance.first_name
             caregiver_child_consent_obj.last_name = instance.last_name
             caregiver_child_consent_obj.gender = instance.gender
             caregiver_child_consent_obj.child_dob = instance.dob
             caregiver_child_consent_obj.save()
-            notification(
-                subject_identifier=instance.subject_identifier,
-                user_created=instance.user_created,
-                subject="'Add name and DOB to the paper informed consent form'"
 
-            )
+        notification(
+            subject_identifier=instance.subject_identifier,
+            user_created=instance.user_created,
+            subject="'Add name and DOB to the paper informed consent form'"
+
+        )
 
 
 @receiver(post_save, weak=False, sender=ClinicianNotesImage,
@@ -223,9 +222,7 @@ def clinician_notes_image_on_post_save(sender, instance, raw, created, **kwargs)
         stamp_image(instance)
 
 
-def notification(subject_identifier,
-        subject, user_created,
-        group_names=('assignable users',)):
+def notification(subject_identifier, subject, user_created, group_names=('assignable users',)):
     user = User.objects.get(username=user_created)
 
     try:
