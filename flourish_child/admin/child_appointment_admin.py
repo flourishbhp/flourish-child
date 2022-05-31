@@ -1,3 +1,5 @@
+from edc_visit_schedule.fieldsets import visit_schedule_fieldset_tuple, visit_schedule_fields
+
 from django.conf import settings
 from django.contrib import admin
 from django.urls.base import reverse
@@ -10,7 +12,6 @@ from edc_model_admin import (
     ModelAdminFormAutoNumberMixin, ModelAdminRedirectOnDeleteMixin,
     ModelAdminAuditFieldsMixin, ModelAdminReadOnlyMixin,
     audit_fieldset_tuple)
-from edc_visit_schedule.fieldsets import visit_schedule_fieldset_tuple, visit_schedule_fields
 import pytz
 
 from ..admin_site import flourish_child_admin
@@ -86,20 +87,23 @@ class AppointmentAdmin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirec
         extra_context = extra_context or {}
         app_obj = Appointment.objects.get(id=object_id)
 
-        earliest_start = (app_obj.timepoint_datetime -
-                          app_obj.visits.get(app_obj.visit_code).rlower).astimezone(
-                                      pytz.timezone('Africa/Gaborone'))
+        if app_obj.visit_code_sequence == 0:
 
-        latest_start = (app_obj.timepoint_datetime +
-                        app_obj.visits.get(app_obj.visit_code).rupper).astimezone(
-                                      pytz.timezone('Africa/Gaborone'))
+            earliest_start = (app_obj.timepoint_datetime -
+                              app_obj.visits.get(app_obj.visit_code).rlower).astimezone(
+                                          pytz.timezone('Africa/Gaborone'))
 
-        ideal_start = app_obj.timepoint_datetime.astimezone(
-                                      pytz.timezone('Africa/Gaborone'))
+            latest_start = (app_obj.timepoint_datetime +
+                            app_obj.visits.get(app_obj.visit_code).rupper).astimezone(
+                                          pytz.timezone('Africa/Gaborone'))
 
-        extra_context.update({'earliest_start': earliest_start.strftime("%Y-%m-%d, %H:%M:%S"),
-                              'latest_start': latest_start.strftime("%Y-%m-%d, %H:%M:%S"),
-                              'ideal_start': ideal_start.strftime("%Y-%m-%d, %H:%M:%S"), })
+            ideal_start = app_obj.timepoint_datetime.astimezone(
+                                          pytz.timezone('Africa/Gaborone'))
+
+            extra_context.update({
+                'earliest_start': earliest_start.strftime("%Y-%m-%d, %H:%M:%S"),
+                'latest_start': latest_start.strftime("%Y-%m-%d, %H:%M:%S"),
+                'ideal_start': ideal_start.strftime("%Y-%m-%d, %H:%M:%S"), })
 
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
@@ -109,22 +113,23 @@ class AppointmentAdmin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirec
         extra_context[
             'instructions'] = self.change_instructions or self.instructions
 
-        earliest_start = extra_context.get('earliest_start')
-        latest_start = extra_context.get('latest_start')
-        ideal_start = extra_context.get('ideal_start')
+        if extra_context.get('earliest_start'):
+            earliest_start = extra_context.get('earliest_start')
+            latest_start = extra_context.get('latest_start')
+            ideal_start = extra_context.get('ideal_start')
 
-        additional_instructions = mark_safe(
-            '<table style="background-color: #f8f8f8;padding:10px;margin-top:10px;width:60%;'
-            'border:0.5px solid #f0f0f0"><tr>'
-            f'<td colspan="3">Earliest Start: <b>{earliest_start}</b></td>'
-            f'<td colspan="3">Ideal Start: <b>{ideal_start}</b></td>'
-            f'<td colspan="3">Latest Start: <b>{latest_start}</b></td>'
-            '</table></tr> <BR>'
-            'To start or continue to edit FORMS for this subject, change the '
-            'appointment status below to "In Progress" and click SAVE. <BR>'
-            '<i>Note: You may only edit one appointment at a time. '
-            'Before you move to another appointment, change the appointment '
-            'status below to "Incomplete" or "Done".</i>')
+            additional_instructions = mark_safe(
+                '<table style="background-color: #f8f8f8;padding:10px;margin-top:10px;'
+                'width:60%;border:0.5px solid #f0f0f0"><tr>'
+                f'<td colspan="3">Earliest Start: <b>{earliest_start}</b></td>'
+                f'<td colspan="3">Ideal Start: <b>{ideal_start}</b></td>'
+                f'<td colspan="3">Latest Start: <b>{latest_start}</b></td>'
+                '</table></tr> <BR>'
+                'To start or continue to edit FORMS for this subject, change the '
+                'appointment status below to "In Progress" and click SAVE. <BR>'
+                '<i>Note: You may only edit one appointment at a time. '
+                'Before you move to another appointment, change the appointment '
+                'status below to "Incomplete" or "Done".</i>')
 
-        extra_context['additional_instructions'] = additional_instructions
+            extra_context['additional_instructions'] = additional_instructions
         return extra_context
