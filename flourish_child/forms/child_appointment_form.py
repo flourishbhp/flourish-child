@@ -1,8 +1,8 @@
-import pytz
 from django import forms
 from edc_appointment.form_validators import AppointmentFormValidator
 from edc_base.sites.forms import SiteModelFormMixin
 from edc_form_validators import FormValidatorMixin
+import pytz
 
 from ..models import Appointment
 
@@ -31,7 +31,8 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
                                 visit_definition.rupper).astimezone(
                 pytz.timezone('Africa/Gaborone'))
 
-            if (cleaned_data.get('appt_datetime') < earlist_appt_date.replace(
+            if (cleaned_data.get('visit_code_sequence') == 0
+                    and cleaned_data.get('appt_datetime') < earlist_appt_date.replace(
                     microsecond=0)
                     or (self.instance.visit_code != '2000'
                         and cleaned_data.get('appt_datetime') > latest_appt_date.replace(
@@ -46,7 +47,6 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
         validation functions.
         """
         pass
-
 
     class Meta:
         model = Appointment

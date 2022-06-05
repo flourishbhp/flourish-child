@@ -26,7 +26,18 @@ v2 = Consent(
     age_max=110,
     gender=[MALE, FEMALE])
 
+v2_1 = Consent(
+    'flourish_child.childdummysubjectconsent',
+    version='2.1',
+    start=edc_protocol.study_open_datetime,
+    end=edc_protocol.study_close_datetime,
+    age_min=30,
+    age_is_adult=30,
+    age_max=110,
+    gender=[MALE, FEMALE])
+
 site_consents.validator_cls = ConsentObjectValidator
 
 site_consents.register(v1)
 site_consents.register(v2)
+site_consents.register(v2_1)
