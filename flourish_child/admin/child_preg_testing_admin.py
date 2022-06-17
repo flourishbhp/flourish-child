@@ -24,7 +24,8 @@ class ChildPregTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             ]}
          ), audit_fieldset_tuple)
 
-    radio_fields = {'test_done': admin.VERTICAL,
+    radio_fields = {'menarche': admin.VERTICAL,
+                    'test_done': admin.VERTICAL,
                     'preg_test_result': admin.VERTICAL,
                     'is_lmp_date_estimated': admin.VERTICAL,}
 
@@ -43,6 +44,7 @@ class ChildPregTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     for schedule in schedule_names:
         conditional_fieldlists.update(
             {schedule: Insert(
+                'menarche',
                 'last_menstrual_period',
                 'is_lmp_date_estimated', after='report_datetime')})
 
