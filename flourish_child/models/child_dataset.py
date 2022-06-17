@@ -47,7 +47,8 @@ class ChildDataset(
 
     infant_azt_birth = models.CharField(
         verbose_name='Infant started AZT',
-        max_length=15)
+        max_length=15,
+        blank=True, null=True)
 
     infant_azt_days = models.IntegerField(
         verbose_name='Duration of infant AZT (days)',
@@ -63,7 +64,8 @@ class ChildDataset(
 
     infant_sdnvp_birth = models.CharField(
         verbose_name='Infant received sdNVP',
-        max_length=15)
+        max_length=15,
+        null=True)
 
     infant_hiv_exposed = models.CharField(
         verbose_name='Infant HIV exposure status',
