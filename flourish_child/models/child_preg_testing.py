@@ -15,11 +15,18 @@ class ChildPregTesting(ChildCrfModelMixin):
         verbose_name='Was a pregnancy test performed?',
         max_length=17,
         choices=YES_NO_NA)
+    
+    menarche = models.CharField(
+        verbose_name='Has the child reached menarche?',
+        max_length=5,
+        choices=YES_NO)
 
     test_date = models.DateField(
         verbose_name='Date of pregnancy test',
         default=get_utcnow,
-        validators=[date_not_future, date_not_before_study_start])
+        validators=[date_not_future, date_not_before_study_start],
+        blank=True,
+        null=True,)
 
     preg_test_result = models.CharField(
         verbose_name='What is the result of the pregnancy test?',
