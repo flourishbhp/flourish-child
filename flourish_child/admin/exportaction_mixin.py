@@ -111,7 +111,7 @@ class ExportActionMixin:
                 if not self.inline_header:
                     self.update_headers_inline(
                         inline_fields=inline_fields, field_names=field_names,
-                        ws=ws, row_num=row_num, font_style=font_style)
+                        ws=ws, row_num=0, font_style=font_style)
 
                 for inline_obj in inline_objs:
                     inline_data = []
