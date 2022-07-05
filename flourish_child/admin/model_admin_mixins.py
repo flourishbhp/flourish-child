@@ -1,18 +1,16 @@
 import datetime
 import uuid
-import xlwt
+
 from django.apps import apps as django_apps
-from django.http import HttpResponse
-from django.utils import timezone
 from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
+from django.utils import timezone
 from django_revision.modeladmin_mixin import ModelAdminRevisionMixin
 from edc_base.sites.admin import ModelAdminSiteMixin
-
-from edc_base.utils import get_utcnow
 from edc_fieldsets import FieldsetsModelAdminMixin
 from edc_metadata import NextFormGetter
 from edc_model_admin import (
@@ -23,6 +21,7 @@ from edc_model_admin import (
 from edc_visit_tracking.modeladmin_mixins import (
     CrfModelAdminMixin as VisitTrackingCrfModelAdminMixin)
 from simple_history.admin import SimpleHistoryAdmin
+import xlwt
 
 from .exportaction_mixin import ExportActionMixin
 
@@ -108,6 +107,7 @@ class ExportRequisitionCsvMixin:
 
     export_as_csv.short_description = "Export with panel name"
 
+
 class ChildCrfModelAdminMixin(
         VisitTrackingCrfModelAdminMixin, ModelAdminMixin,
         FieldsetsModelAdminMixin, FormAsJSONModelAdminMixin,
@@ -181,7 +181,6 @@ class ChildCrfModelAdminMixin(
             return None
         else:
             return appointment
-        
 
     def get_key(self, request, obj=None):
 
@@ -194,6 +193,3 @@ class ChildCrfModelAdminMixin(
             else:
                 schedule_name = model_obj.schedule_name
         return schedule_name
-    
-
-

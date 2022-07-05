@@ -5,10 +5,10 @@ from edc_fieldsets import Fieldlist
 from edc_model_admin import StackedInlineMixin
 from edc_model_admin import audit_fieldset_tuple
 
-from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import ChildPreviousHospitalizationForm, ChildPreHospitalizationInlineForm
 from ..models import ChildPreviousHospitalization, ChildPreHospitalizationInline
+from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 class ChildPreHospitalizationInlineAdmin(StackedInlineMixin, admin.StackedInline):
@@ -133,9 +133,8 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
 
-    def get_model_data_per_visit(self,
-            subject_identifier=None, child_visit=None
-            ):
+    def get_model_data_per_visit(self, subject_identifier=None, child_visit=None):
+
         model_dict = {}
         for model_name in self.extra_context_models:
             data_dict = {}
