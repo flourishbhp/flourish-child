@@ -64,7 +64,7 @@ class AcademicPerformanceForm(ChildModelFormMixin):
     def clean(self):
         previous_instance = getattr(self, "previous_instance", None)
         has_changed = self.compare_instance_fields(previous_instance)
-
+        
         academic_perf_changed = self.cleaned_data.get("academic_perf_changed")
         if academic_perf_changed:
             if academic_perf_changed == YES and not has_changed:
@@ -96,16 +96,20 @@ class AcademicPerformanceForm(ChildModelFormMixin):
             "child_visit",
             "academic_perf_changed",
         ]
+        
+        # self.data was replaced because clean_data already contain
+        # clean_data is alreadu populated when used under clean
+
         if prev_instance:
             other_values = self.model_to_dict(
                 prev_instance, exclude=exclude_fields)
             values = {
-                key: self.data.get(key) or "not_taking_subject"
+                key: self.cleaned_data.get(key,  "not_taking_subject")
                 for key in other_values.keys()
             }
-            if self.data.get("grade_points") == "":
+            if self.cleaned_data.get("grade_points") == "":
                 values["grade_points"] = None
-            values["education_level_other"] = self.data.get(
+            values["education_level_other"] = self.cleaned_data.get(
                 "education_level_other")
             if values.get("grade_points"):
                 values["grade_points"] = int(values.get("grade_points"))
