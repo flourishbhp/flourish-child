@@ -64,19 +64,19 @@ class AcademicPerformanceForm(ChildModelFormMixin):
     def clean(self):
         previous_instance = getattr(self, "previous_instance", None)
         has_changed = self.compare_instance_fields(previous_instance)
-        
+
         academic_perf_changed = self.cleaned_data.get("academic_perf_changed")
         if academic_perf_changed:
             if academic_perf_changed == YES and not has_changed:
                 message = {
-                    "academic_perf_changed": "Participant's academic performance  information has changed since"
+                    "academic_perf_changed": "Participant's academic performance information has not changed since"
                     " last visit. Please update the information on this form."
                 }
                 raise forms.ValidationError(message)
             elif academic_perf_changed == NO and has_changed:
                 message = {
-                    "academic_perf_changed": "Participant's academic performance information has not changed "
-                    "since last visit. Please don't make any changes to this form."
+                    "academic_perf_changed": "Participant's academic performance information has been changed in this CRF"
+                    "since last visit. The answer should be yes"
                 }
                 raise forms.ValidationError(message)
         cleaned_data = super().clean()
