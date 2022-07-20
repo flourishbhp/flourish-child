@@ -1,4 +1,3 @@
-from edc_visit_schedule.model_mixins import OnScheduleModelMixin as BaseOnScheduleModelMixin
 from django import forms
 from django.apps import apps as django_apps
 from django.db import models
@@ -6,6 +5,7 @@ from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import CurrentSiteManager
 from edc_identifier.managers import SubjectIdentifierManager
+from edc_visit_schedule.model_mixins import OnScheduleModelMixin as BaseOnScheduleModelMixin
 
 
 class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
@@ -68,6 +68,10 @@ class OnScheduleChildCohortAFU(OnScheduleModelMixin):
     pass
 
 
+class OnScheduleChildCohortAFUQuart(OnScheduleModelMixin):
+    pass
+
+
 class OnScheduleChildCohortABirth(OnScheduleModelMixin):
     pass
 
@@ -84,6 +88,10 @@ class OnScheduleChildCohortBFU(OnScheduleModelMixin):
     pass
 
 
+class OnScheduleChildCohortBFUQuart(OnScheduleModelMixin):
+    pass
+
+
 class OnScheduleChildCohortBQuarterly(OnScheduleModelMixin):
     pass
 
@@ -93,6 +101,10 @@ class OnScheduleChildCohortCEnrollment(OnScheduleModelMixin):
 
 
 class OnScheduleChildCohortCFU(OnScheduleModelMixin):
+    pass
+
+
+class OnScheduleChildCohortCFUQuart(OnScheduleModelMixin):
     pass
 
 
