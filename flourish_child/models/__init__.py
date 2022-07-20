@@ -57,6 +57,7 @@ from .list_models import *
 from .offschedule import ChildOffSchedule
 from .onschedule import OnScheduleChildCohortAEnrollment, \
     OnScheduleChildCohortABirth
+from .onschedule import OnScheduleChildCohortAFUQuart, OnScheduleChildCohortBFUQuart
 from .onschedule import OnScheduleChildCohortAQuarterly, \
     OnScheduleChildCohortBEnrollment
 from .onschedule import OnScheduleChildCohortASec, OnScheduleChildCohortBSec
@@ -65,6 +66,7 @@ from .onschedule import OnScheduleChildCohortASecQuart, \
 from .onschedule import OnScheduleChildCohortBFU, OnScheduleChildCohortCFU
 from .onschedule import OnScheduleChildCohortBQuarterly, \
     OnScheduleChildCohortCEnrollment
+from .onschedule import OnScheduleChildCohortCFUQuart
 from .onschedule import OnScheduleChildCohortCPool, \
     OnScheduleChildCohortCSecQuart
 from .onschedule import OnScheduleChildCohortCQuarterly

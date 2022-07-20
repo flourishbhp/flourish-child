@@ -1,0 +1,113 @@
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+
+from edc_appointment.constants import NEW_APPT
+
+from ..models import Appointment
+from ..models import OnScheduleChildCohortAFU, OnScheduleChildCohortBFU
+from ..models import OnScheduleChildCohortBFUQuart, OnScheduleChildCohortCFUQuart
+from ..models import OnScheduleChildCohortCFU, OnScheduleChildCohortAFUQuart
+
+
+class ChildFollowUpEnrolmentHelper(object):
+    """Class that puts participant into a followup schedule and reschedules
+     consecutive follow ups.
+
+    * Accepts an registered_subject of RegisteredSubject.
+    * is called in the dashboard view for subject.
+
+    """
+
+    def __init__(self, subject_identifier, onschedule_datetime=None, exception_cls=None):
+
+        self.subject_identifier = subject_identifier
+        self.onschedule_datetime = onschedule_datetime
+
+        self.cohort_dict = {'a': OnScheduleChildCohortAFU,
+                            'b': OnScheduleChildCohortBFU,
+                            'c': OnScheduleChildCohortCFU, }
+
+        self.cohort_quart_dict = {'a': OnScheduleChildCohortAFUQuart,
+                                  'b': OnScheduleChildCohortBFUQuart,
+                                  'c': OnScheduleChildCohortCFUQuart, }
+
+    def get_latest_completed_child_appointments(self, subject_identifier):
+        """ Get latest child appointment that was started/completed given the
+         subject identifier """
+
+        schedules = list(set(Appointment.objects.filter(
+            schedule_name__icontains='quart',
+            subject_identifier=subject_identifier).values_list('schedule_name', flat=True)))
+        latest_appts = []
+        for schedule in schedules:
+            latest = Appointment.objects.filter(
+                subject_identifier=subject_identifier,
+                schedule_name=schedule,
+                visit_code_sequence=0).exclude(
+                    appt_status=NEW_APPT).order_by('timepoint').last()
+            latest_appts.append(latest)
+        return latest_appts
+
+    def child_off_current_schedule(self, latest_appointment):
+
+        if latest_appointment:
+
+            _, old_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                        name=latest_appointment.schedule_name,
+                        onschedule_model=latest_appointment.schedule.onschedule_model)
+            old_schedule.take_off_schedule(
+                subject_identifier=latest_appointment.subject_identifier)
+
+            return latest_appointment.schedule_name
+
+    def put_on_child_fu_schedule(self, schedule_name, subject_identifier):
+        """ Take child offschedule for quarterly schedule and put them on the follow up
+         schedule and its consecutive quarterly calls. Children on Secondary Aims are not
+         considered.
+        """
+
+        vs = schedule_name.split('_')
+
+        if 'qt' in schedule_name:
+            schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('sec', 'fu'), vs[3]])
+            quart_schedule_name = '_'.join([vs[0], vs[1], vs[3].replace('qt', 'fu_qt'), vs[4]])
+        else:
+            schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('quart', 'fu'), vs[3]])
+            quart_schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('quart', 'fu_qt'), vs[3]])
+
+        onschedule_model_cls = self.cohort_dict.get(vs[1])
+        onschedule_quart_model_cls = self.cohort_quart_dict.get(vs[1])
+
+        _, new_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            name=schedule_name,
+            onschedule_model=onschedule_model_cls._meta.label_lower)
+
+        _, new_quart_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            name=quart_schedule_name,
+            onschedule_model=onschedule_quart_model_cls._meta.label_lower)
+
+        new_schedule.put_on_schedule(
+            subject_identifier=subject_identifier,
+            schedule_name=schedule_name)
+
+        new_quart_schedule.put_on_schedule(
+            subject_identifier=subject_identifier,
+            schedule_name=quart_schedule_name)
+
+        print("Going well..")
+
+    def activate_child_fu_schedule(self):
+
+        latest_child_appointments = self.get_latest_completed_child_appointments(
+            self.subject_identifier)
+
+        for latest_child_appt in latest_child_appointments:
+
+            if 'sec' not in latest_child_appt.schedule_name:
+
+                self.child_off_current_schedule(latest_child_appt)
+
+                self.put_on_child_fu_schedule(latest_child_appt.schedule_name,
+                                              latest_child_appt.subject_identifier)
+
+                print("Done!")
+
