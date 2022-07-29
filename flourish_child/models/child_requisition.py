@@ -29,13 +29,13 @@ class ChildRequisitionManager(VisitTrackingCrfModelManager, SearchSlugManager):
 
 
 class ChildRequisition(
-    NonUniqueSubjectIdentifierFieldMixin, ConsentVersionModelModelMixin,
-    RequisitionModelMixin, RequisitionStatusMixin,
-    RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
-    SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
-    PreviousVisitModelMixin, RequisitionReferenceModelMixin,
-    UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
-    SenaiteRequisitionModelMixin, BaseUuidModel):
+        NonUniqueSubjectIdentifierFieldMixin, ConsentVersionModelModelMixin,
+        RequisitionModelMixin, RequisitionStatusMixin,
+        RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
+        SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
+        PreviousVisitModelMixin, RequisitionReferenceModelMixin,
+        UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
+        SenaiteRequisitionModelMixin, BaseUuidModel):
 
     lab_profile_name = 'flourish_child_lab_profile'
 
@@ -98,6 +98,7 @@ class ChildRequisition(
             self.protocol_number = edc_protocol_app_config.protocol_number
         self.report_datetime = self.requisition_datetime
         self.subject_identifier = self.child_visit.subject_identifier
+        self.consent_model = 'flourish_caregiver.caregiverchildconsent'
         super().save(*args, **kwargs)
 
     def get_search_slug_fields(self):
@@ -106,6 +107,35 @@ class ChildRequisition(
             'requisition_identifier',
             'human_readable_identifier', 'identifier_prefix'])
         return fields
+
+    @property
+    def senaite_priority(self):
+        """Overrides senaite interface priority mapping.
+        """
+        priorities = {'normal': '3', 'urgent': '1'}
+        return priorities.get(self.priority)
+
+    @property
+    def dob(self):
+        """Overrides senaite interface dob.
+        """
+        return self.consent_obj.child_dob
+
+    @property
+    def initials(self):
+        """Overrides senaite interface participant initials.
+        """
+        first_name = self.consent_obj.first_name
+        last_name = self.consent_obj.last_name
+        initials = ''
+        if first_name and last_name:
+            if (len(first_name.split(' ')) > 1):
+                first = first_name.split(' ')[0]
+                middle = first_name.split(' ')[1]
+                initials = f'{first[:1]}{middle[:1]}{last_name[:1]}'
+            else:
+                initials = f'{first_name[:1]}{last_name[:1]}'
+        return initials
 
     class Meta:
         app_label = 'flourish_child'
