@@ -69,29 +69,18 @@ class ChildFollowUpEnrolmentHelper(object):
 
         if 'qt' in schedule_name:
             schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('sec', 'fu'), vs[3]])
-            quart_schedule_name = '_'.join([vs[0], vs[1], vs[3].replace('qt', 'fu_qt'), vs[4]])
         else:
             schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('quart', 'fu'), vs[3]])
-            quart_schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('quart', 'fu_qt'), vs[3]])
 
         onschedule_model_cls = self.cohort_dict.get(vs[1])
-        onschedule_quart_model_cls = self.cohort_quart_dict.get(vs[1])
 
         _, new_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             name=schedule_name,
             onschedule_model=onschedule_model_cls._meta.label_lower)
 
-        _, new_quart_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-            name=quart_schedule_name,
-            onschedule_model=onschedule_quart_model_cls._meta.label_lower)
-
         new_schedule.put_on_schedule(
             subject_identifier=subject_identifier,
             schedule_name=schedule_name)
-
-        new_quart_schedule.put_on_schedule(
-            subject_identifier=subject_identifier,
-            schedule_name=quart_schedule_name)
 
         print("Going well..")
 
