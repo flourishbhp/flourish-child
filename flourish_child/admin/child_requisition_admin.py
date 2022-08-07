@@ -1,15 +1,9 @@
-import datetime
-import uuid
-
 from django.contrib import admin
-from django.http import HttpResponse
-from django.utils import timezone
 from edc_lab.admin import RequisitionAdminMixin
-from edc_lab.admin import requisition_identifier_fields
-from edc_lab.admin import requisition_identifier_fieldset, requisition_verify_fields
+from edc_lab.admin import requisition_verify_fields
 from edc_lab.admin import requisition_verify_fieldset, requisition_status_fieldset
 from edc_model_admin import audit_fieldset_tuple
-import xlwt
+from edc_senaite_interface.admin import SenaiteRequisitionAdminMixin
 
 from ..admin_site import flourish_child_admin
 from ..forms import ChildRequisitionForm
@@ -17,9 +11,23 @@ from ..models import ChildRequisition
 from .model_admin_mixins import ChildCrfModelAdminMixin, ExportRequisitionCsvMixin
 
 
+requisition_identifier_fields = (
+    'requisition_identifier',
+    'identifier_prefix',
+    'primary_aliquot_identifier',
+    'sample_id',
+)
+
+requisition_identifier_fieldset = (
+    'Identifiers', {
+        'classes': ('collapse',),
+        'fields': (requisition_identifier_fields)})
+
+
 @admin.register(ChildRequisition, site=flourish_child_admin)
 class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
-                                RequisitionAdminMixin, admin.ModelAdmin):
+                            SenaiteRequisitionAdminMixin, RequisitionAdminMixin,
+                            admin.ModelAdmin):
 
     form = ChildRequisitionForm
     actions = ["export_as_csv"]
@@ -59,5 +67,5 @@ class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
 
     def get_readonly_fields(self, request, obj=None):
         return (super().get_readonly_fields(request, obj)
-                +requisition_identifier_fields
-                +requisition_verify_fields)
+                + requisition_identifier_fields
+                + requisition_verify_fields)
