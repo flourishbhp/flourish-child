@@ -1,13 +1,13 @@
-from edc_action_item.model_mixins import ActionModelMixin
-
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.db import models
 from django_crypto_fields.fields import IdentityField
+from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import datetime_not_future
 from edc_base.sites.site_model_mixin import SiteModelMixin
+from edc_base.utils import age, get_utcnow
 from edc_consent.field_mixins import (
     CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin,
     VerificationFieldsMixin)
@@ -160,9 +160,14 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                 version = consent_version_obj.version
             return version
 
+    @property
+    def child_age(self):
+        child_age = age(self.dob, get_utcnow())
+        return child_age.years
+
     def save(self, *args, **kwargs):
         eligibility_criteria = AssentEligibility(
-            self.remain_in_study, self.hiv_testing, self.preg_testing)
+            self.remain_in_study, self.hiv_testing, self.preg_testing, self.child_age)
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
         self.version = self.latest_consent_version
