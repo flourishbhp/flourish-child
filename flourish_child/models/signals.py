@@ -1,6 +1,5 @@
 from datetime import datetime
-from edc_action_item.site_action_items import site_action_items
-from flourish_child.models.child_birth import ChildBirth
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 import os
 
 from PIL import Image
@@ -13,15 +12,14 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_data_manager.models import DataActionItem
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
-
-import pyminizip
 
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from .child_assent import ChildAssent
@@ -33,6 +31,7 @@ from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
 
 
+# import pyminizip
 class CaregiverConsentError(Exception):
     pass
 
@@ -41,8 +40,8 @@ class CaregiverConsentError(Exception):
           dispatch_uid='child_socio_demographic_post_save')
 def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
     """
-    Update academic perfomance in the same visit without affecting any other forms beyond and after that
-    particular visit
+    Update academic perfomance in the same visit without affecting any other forms beyond and
+     after that particular visit
     """
 
     child_visit_id = instance.child_visit.id
@@ -152,14 +151,18 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
                         instance.subject_identifier,
                         repeat=True)
 
-    if not raw and created and instance.visit_code in ['2000', '2000D']:
+    if not raw and created and instance.visit_code in ['2000', '2000D', '3000']:
 
         if 'sec' in instance.schedule_name:
 
             cohort_list = instance.schedule_name.split('_')
 
             cohort = '_'.join(['cohort', cohort_list[1], 'sec_qt'])
+        elif 'fu' in instance.schedule_name:
 
+            cohort_list = instance.schedule_name.split('_')
+
+            cohort = '_'.join(['cohort', cohort_list[1], 'fu_qt'])
         else:
             cohort_list = instance.schedule_name.split('_')
 
@@ -293,7 +296,7 @@ def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None,
-        base_appt_datetime=None):
+                    base_appt_datetime=None):
     if instance:
         subject_identifier = subject_identifier or instance.subject_identifier
 
@@ -484,8 +487,8 @@ def encrypt_files(instance, subject_identifier):
         with open('filekey.key', 'r') as filekey:
             key = filekey.read().rstrip()
         com_lvl = 8
-        pyminizip.compress(f'{instance.image.path}', None,
-                           f'{base_path}/{upload_to}{zip_filename}', key, com_lvl)
+        # pyminizip.compress(f'{instance.image.path}', None,
+        #                    f'{base_path}/{upload_to}{zip_filename}', key, com_lvl)
     # remove unencrypted file
     if os.path.exists(f'{instance.image.path}'):
         os.remove(f'{instance.image.path}')
