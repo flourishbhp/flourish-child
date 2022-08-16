@@ -17,25 +17,26 @@ from edc_visit_schedule.model_mixins import SubjectScheduleCrfModelMixin
 from edc_visit_tracking.managers import CrfModelManager as VisitTrackingCrfModelManager
 from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfModelMixin
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
-from edc_senaite_interface.model_mixins import SenaiteRequisitionModelMixin
 
+from ..choices import STUDY_SITES, REASON_NOT_DRAWN
 from .child_visit import ChildVisit
 from .model_mixins import SearchSlugModelMixin, ConsentVersionModelModelMixin
-from ..choices import STUDY_SITES, REASON_NOT_DRAWN
 
 
+# from edc_senaite_interface.model_mixins import SenaiteRequisitionModelMixin
 class ChildRequisitionManager(VisitTrackingCrfModelManager, SearchSlugManager):
     pass
 
 
 class ChildRequisition(
-        NonUniqueSubjectIdentifierFieldMixin, ConsentVersionModelModelMixin,
-        RequisitionModelMixin, RequisitionStatusMixin,
-        RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
-        SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
-        PreviousVisitModelMixin, RequisitionReferenceModelMixin,
-        UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
-        SenaiteRequisitionModelMixin, BaseUuidModel):
+    NonUniqueSubjectIdentifierFieldMixin, ConsentVersionModelModelMixin,
+    RequisitionModelMixin, RequisitionStatusMixin,
+    RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
+    SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
+    PreviousVisitModelMixin, RequisitionReferenceModelMixin,
+    UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
+    # SenaiteRequisitionModelMixin,
+    BaseUuidModel):
 
     lab_profile_name = 'flourish_child_lab_profile'
 
@@ -69,7 +70,7 @@ class ChildRequisition(
         verbose_name='Priority',
         max_length=25,
         choices=PRIORITY,
-        default='normal', )
+        default='normal',)
 
     reason_not_drawn = models.CharField(
         verbose_name='If not drawn, please explain',
