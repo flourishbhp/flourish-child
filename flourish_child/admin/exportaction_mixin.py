@@ -30,7 +30,14 @@ class ExportActionMixin:
         font_style.font.bold = True
         font_style.num_format_str = 'YYYY/MM/DD h:mm:ss'
 
-        field_names = [field.name for field in self.get_model_fields]
+        field_names = []
+        for field in self.get_model_fields:
+            if isinstance(field, ManyToManyField):
+                choices = self.m2m_list_data(field.related_model)
+                for choice in choices:
+                    field_names.append(choice)
+                continue
+            field_names.append(field.name)
 
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
@@ -47,6 +54,7 @@ class ExportActionMixin:
 
         for obj in queryset:
             data = []
+            inline_field_names = []
 
             # Add subject identifier and visit code
             if getattr(obj, 'child_visit', None):
@@ -76,8 +84,8 @@ class ExportActionMixin:
                     screening_identifier=screening_identifier)
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
-                child_exposure_status = self.child_hiv_exposure(study_maternal_identifier,
-                                                                subject_identifier)
+                child_exposure_status = self.child_hiv_exposure(
+                    study_maternal_identifier, subject_identifier)
 
                 data.append(previous_study)
                 data.append(child_exposure_status)
@@ -86,9 +94,20 @@ class ExportActionMixin:
             for field in self.get_model_fields:
 
                 if isinstance(field, ManyToManyField):
+                    model_cls = field.related_model
+                    choices = self.m2m_list_data(model_cls=model_cls)
+                    m2m_values = []
                     key_manager = getattr(obj, field.name)
-                    field_value = ', '.join([obj.name for obj in key_manager.all()])
-                    data.append(field_value)
+                    for choice in choices:
+                        selected = 0
+                        try:
+                            key_manager.get(short_name=choice)
+                        except model_cls.DoesNotExist:
+                            pass
+                        else:
+                            selected = 1
+                        m2m_values.append(selected)
+                    data.extend(m2m_values)
                     continue
                 if isinstance(field, (ForeignKey, OneToOneField)):
                     field_value = getattr(obj, field.name)
@@ -98,33 +117,37 @@ class ExportActionMixin:
                     continue
                 if isinstance(field, ManyToOneRel):
                     key_manager = getattr(obj, f'{field.name}_set')
-                    inline_objs = key_manager.all()
+                    inline_values = key_manager.all()
+                    fields = field.related_model._meta.get_fields()
+                    inline_field_names.extend(
+                        [field.name for field in fields if not isinstance(
+                            field, (ForeignKey, OneToOneField,))])
+                    if inline_values:
+                        inline_objs.append(inline_values)
                 field_value = getattr(obj, field.name, '')
                 data.append(field_value)
 
             if inline_objs:
                 # Update header
-                inline_fields = inline_objs[0].__dict__
-                inline_fields = self.inline_exclude(field_names=inline_fields)
-                inline_fields = list(inline_fields.keys())
-
+                inline_field_names = self.inline_exclude(field_names=inline_field_names)
                 if not self.inline_header:
                     self.update_headers_inline(
-                        inline_fields=inline_fields, field_names=field_names,
+                        inline_fields=inline_field_names, field_names=field_names,
                         ws=ws, row_num=0, font_style=font_style)
 
-                for inline_obj in inline_objs:
-                    inline_data = []
-                    inline_data.extend(data)
-                    for field in inline_fields:
-                        field_value = getattr(inline_obj, field, '')
-                        inline_data.append(field_value)
-                    row_num += 1
-                    self.write_rows(data=inline_data, row_num=row_num, ws=ws)
+                for inline_qs in inline_objs:
+                    for inline_obj in inline_qs:
+                        inline_data = []
+                        inline_data.extend(data)
+                        for field in inline_field_names:
+                            field_value = getattr(inline_obj, field, '')
+                            inline_data.append(field_value)
+                        row_num += 1
+                        self.write_rows(data=inline_data, row_num=row_num, ws=ws)
+                obj_count += 1
             else:
                 row_num += 1
                 self.write_rows(data=data, row_num=row_num, ws=ws)
-            obj_count += 1
         wb.save(response)
         return response
 
@@ -141,9 +164,12 @@ class ExportActionMixin:
                 dt = data[col_num]
                 if dt.tzinfo is not None and dt.tzinfo.utcoffset(dt) is not None:
                     dt = timezone.make_naive(dt)
-                ws.write(row_num, col_num, dt, xlwt.easyxf(num_format_str='YYYY/MM/DD h:mm:ss'))
+                dt = dt.strftime('%Y/%m/%d')
+                ws.write(row_num, col_num, dt, xlwt.easyxf(
+                    num_format_str='YYYY/MM/DD'))
             elif isinstance(data[col_num], datetime.date):
-                ws.write(row_num, col_num, data[col_num], xlwt.easyxf(num_format_str='YYYY/MM/DD'))
+                ws.write(row_num, col_num, data[col_num], xlwt.easyxf(
+                    num_format_str='YYYY/MM/DD'))
             else:
                 ws.write(row_num, col_num, data[col_num])
 
@@ -243,11 +269,28 @@ class ExportActionMixin:
 
     @property
     def get_model_fields(self):
-        return self.model._meta.get_fields()
+        return [field for field in self.model._meta.get_fields()
+                if field.name not in self.exclude_fields]
 
-    def inline_exclude(self, field_names={}):
-        exclude = ['_state', 'revision', 'hostname_modified', 'hostname_created',
-                   'user_modified', 'user_created', 'device_created', 'device_modified']
-        for field in exclude:
-            del field_names[field]
-        return field_names
+    @property
+    def exclude_fields(self):
+        return ['created', '_state', 'hostname_created', 'hostname_modified',
+                'revision', 'device_created', 'device_modified', 'id', 'site_id',
+                'created_time', 'modified_time', 'report_datetime_time',
+                'registration_datetime_time', 'screening_datetime_time', 'modified',
+                'form_as_json', 'consent_model', 'randomization_datetime',
+                'registration_datetime', 'is_verified_datetime', 'first_name',
+                'last_name', 'initials', 'guardian_name', 'identity', 'infant_visit_id',
+                'maternal_visit_id', 'processed', 'processed_datetime', 'packed',
+                'packed_datetime', 'shipped', 'shipped_datetime', 'received_datetime',
+                'identifier_prefix', 'primary_aliquot_identifier', 'clinic_verified',
+                'clinic_verified_datetime', 'drawn_datetime', 'related_tracking_identifier',
+                'parent_tracking_identifier']
+
+    def inline_exclude(self, field_names=[]):
+        return [field_name for field_name in field_names
+                if field_name not in self.exclude_fields]
+
+    def m2m_list_data(self, model_cls=None):
+        qs = model_cls.objects.order_by('created').values_list('short_name', flat=True)
+        return list(qs)
