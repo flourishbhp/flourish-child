@@ -47,7 +47,7 @@ class TestFUVisitScheduleSetup(TestCase):
 
         }
 
-    def test_cohort_a_onschedule_consent_valid(self):
+    def test_cohort_a_onschedule_quart_consent_valid(self):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
             **self.maternal_dataset_options)
@@ -59,13 +59,15 @@ class TestFUVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier,)
+            screening_identifier=maternal_dataset_obj.screening_identifier,
+            study_maternal_identifier=maternal_dataset_obj.study_maternal_identifier)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
             screening_identifier=maternal_dataset_obj.screening_identifier,
             breastfeed_intent=YES,
             biological_caregiver=YES,
+            hiv_testing=YES,
             **self.options)
 
         caregiver_child_consent = mommy.make_recipe(
@@ -105,20 +107,92 @@ class TestFUVisitScheduleSetup(TestCase):
         schedule_enrol_helper.activate_child_fu_schedule()
 
         self.assertEqual(OnScheduleChildCohortAFU.objects.filter(
-            subject_identifier=subject_consent.subject_identifier,
+            subject_identifier=caregiver_child_consent.subject_identifier,
             schedule_name='child_a_fu_schedule1').count(), 1)
 
         mommy.make_recipe(
-            'flourish_caregiver.maternalvisit',
+            'flourish_child.childvisit',
             appointment=Appointment.objects.get(
                 visit_code='3000',
-                subject_identifier=subject_consent.subject_identifier),
+                subject_identifier=caregiver_child_consent.subject_identifier),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
 
         self.assertEqual(OnScheduleChildCohortAFUQuart.objects.filter(
-            subject_identifier=subject_consent.subject_identifier,
+            subject_identifier=caregiver_child_consent.subject_identifier,
             schedule_name='child_a_fu_qt_schedule1').count(), 1)
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
+
+    @tag('cfu1')
+    def test_cohort_a_onschedule_consent_valid(self):
+        maternal_dataset_obj = mommy.make_recipe(
+            'flourish_caregiver.maternaldataset',
+            **self.maternal_dataset_options)
+
+        child_dataset = mommy.make_recipe(
+            'flourish_child.childdataset',
+            dob=get_utcnow() - relativedelta(years=2, months=0),
+            **self.child_dataset_options)
+
+        mommy.make_recipe(
+            'flourish_caregiver.screeningpriorbhpparticipants',
+            screening_identifier=maternal_dataset_obj.screening_identifier,
+            study_maternal_identifier=maternal_dataset_obj.study_maternal_identifier)
+
+        subject_consent = mommy.make_recipe(
+            'flourish_caregiver.subjectconsent',
+            screening_identifier=maternal_dataset_obj.screening_identifier,
+            breastfeed_intent=YES,
+            biological_caregiver=YES,
+            hiv_testing=YES,
+            **self.options)
+
+        caregiver_child_consent = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            study_child_identifier=child_dataset.study_child_identifier,
+            child_dob=maternal_dataset_obj.delivdt.date(),)
+
+        mommy.make_recipe(
+            'flourish_caregiver.caregiverpreviouslyenrolled',
+            subject_identifier=subject_consent.subject_identifier)
+
+        self.assertEqual(ChildDummySubjectConsent.objects.filter(
+            identity=caregiver_child_consent.identity).count(), 1)
+
+        dummy_consent = ChildDummySubjectConsent.objects.get(
+            subject_identifier=caregiver_child_consent.subject_identifier)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        schedule_enrol_helper = ChildFollowUpEnrolmentHelper(
+            subject_identifier=caregiver_child_consent.subject_identifier)
+        schedule_enrol_helper.activate_child_fu_schedule()
+
+        self.assertEqual(OnScheduleChildCohortAFU.objects.filter(
+            subject_identifier=caregiver_child_consent.subject_identifier,
+            schedule_name='child_a_fu_schedule1').count(), 1)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='3000',
+                subject_identifier=caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(OnScheduleChildCohortAFUQuart.objects.filter(
+            subject_identifier=caregiver_child_consent.subject_identifier,
+            schedule_name='child_a_fu_qt_schedule1').count(), 1)
+
+        self.assertNotEqual(Appointment.objects.filter(
+            subject_identifier=dummy_consent.subject_identifier).count(), 0)
+
