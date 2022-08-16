@@ -195,4 +195,3 @@ class TestFUVisitScheduleSetup(TestCase):
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
-
