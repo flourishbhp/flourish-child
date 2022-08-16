@@ -1,6 +1,7 @@
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_caregiver.helper_classes.fu_onschedule_helper import FollowUpEnrolmentHelper
 
+from django.db.models import Q
 from edc_appointment.constants import NEW_APPT
 
 from ..models import Appointment
@@ -36,16 +37,12 @@ class ChildFollowUpEnrolmentHelper(object):
         """ Get latest child appointment that was started/completed given the
          subject identifier """
 
-        schedule = list(set(Appointment.objects.filter(
-            schedule_name__icontains='quart',
-            subject_identifier=subject_identifier).values_list('schedule_name', flat=True)))
+        appts = Appointment.objects.filter(~Q(appt_status=NEW_APPT) & ~Q(
+            schedule_name__icontains='sec'), subject_identifier=subject_identifier)
 
-        latest = Appointment.objects.filter(
-            subject_identifier=subject_identifier,
-            schedule_name__in=schedule,
-            visit_code_sequence=0).exclude(
-                appt_status=NEW_APPT).order_by('timepoint').last()
-        return latest
+        if appts:
+            latest = appts.order_by('timepoint').last()
+            return latest
 
     def child_off_current_schedule(self, latest_appointment):
 
@@ -67,7 +64,9 @@ class ChildFollowUpEnrolmentHelper(object):
 
         vs = schedule_name.split('_')
 
-        if 'qt' in schedule_name:
+        if 'enrol' in schedule_name:
+            schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('enrol', 'fu'), vs[3]])
+        elif 'qt' in schedule_name:
             schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('sec', 'fu'), vs[3]])
         else:
             schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('quart', 'fu'), vs[3]])

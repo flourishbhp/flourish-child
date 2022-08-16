@@ -297,10 +297,14 @@ def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None,
                     base_appt_datetime=None):
+
     if instance:
         subject_identifier = subject_identifier or instance.subject_identifier
 
         cohort_label_lower = ''.join(cohort.split('_'))
+
+        if 'fuqt' in cohort_label_lower:
+            cohort_label_lower = cohort_label_lower.replace('fuqt', 'fuquart')
 
         if 'enrol' in cohort:
             cohort_label_lower = cohort_label_lower.replace(
@@ -330,7 +334,8 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
 
 def trigger_action_item(obj, field, response, model_cls,
-        action_name, subject_identifier, repeat=False):
+                        action_name, subject_identifier, repeat=False):
+
     action_cls = site_action_items.get(
         model_cls.action_name)
     action_item_model_cls = action_cls.action_item_model_cls()
