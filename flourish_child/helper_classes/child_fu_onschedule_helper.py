@@ -69,6 +69,8 @@ class ChildFollowUpEnrolmentHelper(object):
             schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('enrol', 'fu'), vs[3]])
         elif 'qt' in schedule_name:
             schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('sec', 'fu'), vs[3]])
+        elif 'birth' in schedule_name:
+            schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('birth', 'fu'), vs[3]])
         else:
             schedule_name = '_'.join([vs[0], vs[1], vs[2].replace('quart', 'fu'), vs[3]])
 
