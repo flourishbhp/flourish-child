@@ -270,7 +270,8 @@ class ExportActionMixin:
     @property
     def get_model_fields(self):
         return [field for field in self.model._meta.get_fields()
-                if field.name not in self.exclude_fields]
+                if field.name not in self.exclude_fields
+                and not isinstance(field, OneToOneRel)]
 
     @property
     def exclude_fields(self):
@@ -289,7 +290,8 @@ class ExportActionMixin:
 
     def inline_exclude(self, field_names=[]):
         return [field_name for field_name in field_names
-                if field_name not in self.exclude_fields]
+                if field_name not in self.exclude_fields
+                and not isinstance(field_name, OneToOneRel)]
 
     def m2m_list_data(self, model_cls=None):
         qs = model_cls.objects.order_by('created').values_list('short_name', flat=True)
