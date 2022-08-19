@@ -1,3 +1,5 @@
+from edc_visit_schedule.models.subject_schedule_history import SubjectScheduleHistory
+
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
@@ -47,6 +49,7 @@ class TestFUVisitScheduleSetup(TestCase):
 
         }
 
+    @tag('cfu11')
     def test_cohort_a_onschedule_quart_consent_valid(self):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
@@ -125,7 +128,7 @@ class TestFUVisitScheduleSetup(TestCase):
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent.subject_identifier).count(), 0)
 
-    @tag('cfu1')
+    @tag('cfu22')
     def test_cohort_a_onschedule_consent_valid(self):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
