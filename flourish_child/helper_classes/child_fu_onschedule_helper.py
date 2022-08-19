@@ -103,7 +103,7 @@ class ChildFollowUpEnrolmentHelper(object):
         latest_child_appt = self.get_latest_completed_child_appointment(
             self.subject_identifier)
 
-        if 'sec' not in latest_child_appt.schedule_name:
+        if latest_child_appt and 'sec' not in latest_child_appt.schedule_name:
 
             self.child_off_current_schedule(latest_child_appt)
 
