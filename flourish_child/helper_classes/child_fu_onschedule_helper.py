@@ -1,9 +1,10 @@
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_caregiver.helper_classes.fu_onschedule_helper import FollowUpEnrolmentHelper
 
 from django.db.models import Q
 from edc_appointment.constants import NEW_APPT
 from edc_base.utils import get_utcnow
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+
 from ..models import Appointment
 from ..models import ChildOffSchedule
 from ..models import OnScheduleChildCohortAFU, OnScheduleChildCohortBFU
@@ -111,12 +112,12 @@ class ChildFollowUpEnrolmentHelper(object):
 
             print("Done!")
 
-        if self.update_mother:
+            if self.update_mother:
 
-            cohort = latest_child_appt.schedule_name.split('_')[1]
-            schedule_number = latest_child_appt.schedule_name[-1]
-            caregiver_pid = self.subject_identifier[:-3]
-            schedule_enrol_helper = FollowUpEnrolmentHelper(
-                        subject_identifier=caregiver_pid, cohort=cohort,
-                        schedule_number=schedule_number)
-            schedule_enrol_helper.activate_fu_schedule()
+                cohort = latest_child_appt.schedule_name.split('_')[1]
+                schedule_number = latest_child_appt.schedule_name[-1]
+                caregiver_pid = self.subject_identifier[:-3]
+                schedule_enrol_helper = FollowUpEnrolmentHelper(
+                            subject_identifier=caregiver_pid, cohort=cohort,
+                            schedule_number=schedule_number)
+                schedule_enrol_helper.activate_fu_schedule()
