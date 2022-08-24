@@ -66,13 +66,8 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
     def get_key(self, request, obj=None):
         schedule_name = super().get_key(request=request, obj=obj)
         if not schedule_name:
-            try:
-                model_obj = self.get_instance(request)
-
-            except ObjectDoesNotExist:
-                schedule_name = None
-            else:
-                schedule_name = model_obj.schedule_name
+            model_obj = self.get_instance(request)
+            schedule_name = model_obj.schedule_name if model_obj else None
         return schedule_name
 
     conditional_fieldlists = {

@@ -94,19 +94,7 @@ class ExportActionMixin:
             for field in self.get_model_fields:
 
                 if isinstance(field, ManyToManyField):
-                    model_cls = field.related_model
-                    choices = self.m2m_list_data(model_cls=model_cls)
-                    m2m_values = []
-                    key_manager = getattr(obj, field.name)
-                    for choice in choices:
-                        selected = 0
-                        try:
-                            key_manager.get(short_name=choice)
-                        except model_cls.DoesNotExist:
-                            pass
-                        else:
-                            selected = 1
-                        m2m_values.append(selected)
+                    m2m_values = self.get_m2m_values(obj, m2m_field=field)
                     data.extend(m2m_values)
                     continue
                 if isinstance(field, (ForeignKey, OneToOneField)):
@@ -119,9 +107,13 @@ class ExportActionMixin:
                     key_manager = getattr(obj, f'{field.name}_set')
                     inline_values = key_manager.all()
                     fields = field.related_model._meta.get_fields()
-                    inline_field_names.extend(
-                        [field.name for field in fields if not isinstance(
-                            field, (ForeignKey, OneToOneField,))])
+                    for field in fields:
+                        if not isinstance(field, (ForeignKey, OneToOneField, ManyToManyField, )):
+                            inline_field_names.append(field.name)
+                        if isinstance(field, ManyToManyField):
+                            choices = self.m2m_list_data(field.related_model)
+                            inline_field_names.extend(
+                                [choice for choice in choices])
                     if inline_values:
                         inline_objs.append(inline_values)
                 field_value = getattr(obj, field.name, '')
@@ -139,9 +131,12 @@ class ExportActionMixin:
                     for inline_obj in inline_qs:
                         inline_data = []
                         inline_data.extend(data)
-                        for field in inline_field_names:
-                            field_value = getattr(inline_obj, field, '')
-                            inline_data.append(field_value)
+                        for field in inline_obj._meta.get_fields():
+                            if field.name in inline_field_names:
+                                inline_data.append(getattr(inline_obj, field.name, ''))
+                            if isinstance(field, ManyToManyField):
+                                m2m_values = self.get_m2m_values(inline_obj, m2m_field=field)
+                                inline_data.extend(m2m_values)
                         row_num += 1
                         self.write_rows(data=inline_data, row_num=row_num, ws=ws)
                 obj_count += 1
@@ -270,8 +265,7 @@ class ExportActionMixin:
     @property
     def get_model_fields(self):
         return [field for field in self.model._meta.get_fields()
-                if field.name not in self.exclude_fields
-                and not isinstance(field, OneToOneRel)]
+                if field.name not in self.exclude_fields and not isinstance(field, OneToOneRel)]
 
     @property
     def exclude_fields(self):
@@ -290,9 +284,24 @@ class ExportActionMixin:
 
     def inline_exclude(self, field_names=[]):
         return [field_name for field_name in field_names
-                if field_name not in self.exclude_fields
-                and not isinstance(field_name, OneToOneRel)]
+                if field_name not in self.exclude_fields]
 
     def m2m_list_data(self, model_cls=None):
         qs = model_cls.objects.order_by('created').values_list('short_name', flat=True)
         return list(qs)
+
+    def get_m2m_values(self, model_obj, m2m_field=None):
+        m2m_values = []
+        model_cls = m2m_field.related_model
+        choices = self.m2m_list_data(model_cls=model_cls)
+        key_manager = getattr(model_obj, m2m_field.name)
+        for choice in choices:
+            selected = 0
+            try:
+                key_manager.get(short_name=choice)
+            except model_cls.DoesNotExist:
+                pass
+            else:
+                selected = 1
+            m2m_values.append(selected)
+        return m2m_values
