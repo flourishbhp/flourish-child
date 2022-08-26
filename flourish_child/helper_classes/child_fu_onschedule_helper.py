@@ -2,10 +2,11 @@ from flourish_caregiver.helper_classes.fu_onschedule_helper import FollowUpEnrol
 
 from django.db.models import Q
 from edc_appointment.constants import NEW_APPT
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_base.utils import get_utcnow
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 from ..models import Appointment
+from ..models import ChildOffSchedule
 from ..models import OnScheduleChildCohortAFU, OnScheduleChildCohortBFU
 from ..models import OnScheduleChildCohortBFUQuart, OnScheduleChildCohortCFUQuart
 from ..models import OnScheduleChildCohortCFU, OnScheduleChildCohortAFUQuart
@@ -39,7 +40,8 @@ class ChildFollowUpEnrolmentHelper(object):
          subject identifier """
 
         appts = Appointment.objects.filter(~Q(appt_status=NEW_APPT) & ~Q(
-            schedule_name__icontains='sec'), subject_identifier=subject_identifier)
+            schedule_name__icontains='sec'), subject_identifier=subject_identifier).exclude(
+                schedule_name__icontains='tb')
 
         if appts:
             latest = appts.order_by('timepoint').last()
@@ -49,13 +51,23 @@ class ChildFollowUpEnrolmentHelper(object):
 
         if latest_appointment:
 
-            _, old_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-                        name=latest_appointment.schedule_name,
-                        onschedule_model=latest_appointment.schedule.onschedule_model)
-            old_schedule.take_off_schedule(
-                subject_identifier=latest_appointment.subject_identifier)
+            quart_appt = Appointment.objects.filter(
+                subject_identifier=latest_appointment.subject_identifier,
+                schedule_name__icontains='quart').latest('-appt_datetime')
 
-            return latest_appointment.schedule_name
+            try:
+                offschedule_obj = ChildOffSchedule.objects.get(
+                    subject_identifier=quart_appt.subject_identifier,
+                    schedule_name=quart_appt.schedule_name)
+            except ChildOffSchedule.DoesNotExist:
+                ChildOffSchedule.objects.create(
+                    subject_identifier=quart_appt.subject_identifier,
+                    schedule_name=quart_appt.schedule_name,
+                    offschedule_datetime=get_utcnow())
+            else:
+                offschedule_obj.save()
+
+            return quart_appt.schedule_name
 
     def put_on_child_fu_schedule(self, schedule_name, subject_identifier):
         """ Take child offschedule for quarterly schedule and put them on the follow up

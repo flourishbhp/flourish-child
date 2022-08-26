@@ -370,8 +370,8 @@ def trigger_action_item(obj, field, response, model_cls,
             action_item.delete()
 
 
-@receiver(post_save, weak=False, sender=ChildOffSchedule,
-          dispatch_uid='child_off_schedule_on_post_save')
+@receiver(post_save, weak=False, sender=ChildOffStudy,
+          dispatch_uid='child_off_study_on_post_save')
 def child_take_off_study(sender, instance, raw, created, **kwargs):
     for visit_schedule in site_visit_schedules.visit_schedules.values():
         for schedule in visit_schedule.schedules.values():
@@ -390,6 +390,23 @@ def child_take_off_study(sender, instance, raw, created, **kwargs):
                 # onschedule_model_obj = get_caregiver_onschedule_model_obj(
                 # schedule,caregiver_subject_identifier)
                 # schedule.take_off_schedule(subject_identifier=caregiver_subject_identifier)
+
+
+@receiver(post_save, weak=False, sender=ChildOffSchedule,
+          dispatch_uid='child_off_schedule_on_post_save')
+def child_take_off_schedule(sender, instance, raw, created, **kwargs):
+    for visit_schedule in site_visit_schedules.visit_schedules.values():
+        for schedule in visit_schedule.schedules.values():
+            onschedule_model_obj = get_child_onschedule_model_obj(
+                schedule, instance.subject_identifier)
+            if (onschedule_model_obj
+                    and onschedule_model_obj.schedule_name == instance.schedule_name):
+                _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                    onschedule_model=onschedule_model_obj._meta.label_lower,
+                    name=instance.schedule_name)
+                schedule.take_off_schedule(
+                    subject_identifier=instance.subject_identifier,
+                    offschedule_datetime=instance.offschedule_datetime)
 
 
 def get_caregiver_onschedule_model_obj(schedule, subject_identifier):
