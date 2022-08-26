@@ -17,7 +17,7 @@ class ChildPregTesting(ChildCrfModelMixin):
         choices=YES_NO_NA)
     
     menarche = models.CharField(
-        verbose_name='Has the child reached menarche?',
+        verbose_name='Has the child experienced menarche?',
         max_length=5,
         choices=YES_NO)
 
