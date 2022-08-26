@@ -82,11 +82,14 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             'flourish_caregiver.caregiverpreviouslyenrolled',
             subject_identifier=subject_consent.subject_identifier)
 
-        self.assertEqual(ChildDummySubjectConsent.objects.filter(
-            identity=caregiver_child_consent.identity).count(), 1)
-
         dummy_consent = ChildDummySubjectConsent.objects.get(
             subject_identifier=caregiver_child_consent.subject_identifier)
+        
+        dummy_consent.dob = (get_utcnow() - relativedelta(days=1)).date()
+        dummy_consent.save_base(raw=True)
+        
+        self.assertEqual(ChildDummySubjectConsent.objects.filter(
+            identity=caregiver_child_consent.identity).count(), 1)
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -111,7 +114,7 @@ class TestFoodSecurityQuarterSchedule(TestCase):
         self.assertEqual(CrfMetadata.objects.get(
             model='flourish_child.childfoodsecurityquestionnaire',
             subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2001').entry_status, REQUIRED)
+            visit_code='2001').entry_status, NOT_REQUIRED)
 
         mommy.make_recipe(
             'flourish_child.childfoodsecurityquestionnaire',
