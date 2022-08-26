@@ -3,6 +3,7 @@ from flourish_caregiver.helper_classes.fu_onschedule_helper import FollowUpEnrol
 from django.db.models import Q
 from edc_appointment.constants import NEW_APPT
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 from ..models import Appointment
 from ..models import OnScheduleChildCohortAFU, OnScheduleChildCohortBFU
