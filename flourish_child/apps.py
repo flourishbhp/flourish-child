@@ -34,7 +34,7 @@ if settings.APP_NAME == 'flourish_child':
     from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
     from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
     from edc_constants.constants import FAILED_ELIGIBILITY
-    # from edc_senaite_interface.apps import AppConfig as BaseEdcSenaiteInterfaceAppConfig
+    from edc_senaite_interface.apps import AppConfig as BaseEdcSenaiteInterfaceAppConfig
 
     class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):
         configurations = [
@@ -105,25 +105,25 @@ if settings.APP_NAME == 'flourish_child':
             '5-day clinic': dict(days=[MO, TU, WE, TH, FR],
                                  slots=[100, 100, 100, 100, 100])}
 
-    # class EdcSenaiteInterfaceAppConfig(BaseEdcSenaiteInterfaceAppConfig):
-    #     host = "https://bhplims.bhp.org.bw"
-    #     client = "Testing"
-    #     courier = "ABRAHAM MAIGWA"
-    #     sample_type_match = {'humoral_immunogenicity': 'Serum',
-    #                          'sars_serum': 'Serum',
-    #                          'sars_cov2_pcr': 'Swab',
-    #                          'hematology': 'Whole Blood EDTA',
-    #                          'wb_cmi': 'Whole Blood EDTA',
-    #                          'urine_hcg': 'Urine'}
-    #     container_type_match = {'humoral_immunogenicity': 'Cryogenic vial',
-    #                             'sars_cov2_serology': 'Cryogenic vial',
-    #                             'sars_cov2_pcr': 'Cryogenic Vial',
-    #                             'hematology': 'EDTA Tube',
-    #                             'wb_cmi': 'EDTA Tube',
-    #                             'urine_hcg': 'Urine Cup'}
-    #     template_match = {'humoral_immunogenicity': 'Serum storage',
-    #                       'sars_serum': 'SARS-CoV-2 serology',
-    #                       'sars_cov2_pcr': 'SARS COV 2 PCR',
-    #                       'hematology': 'CBC',
-    #                       'wb_cmi': 'PBMC Whole Blood EDTA',
-    #                       'urine_hcg': 'Urine HCG'}
+    class EdcSenaiteInterfaceAppConfig(BaseEdcSenaiteInterfaceAppConfig):
+        host = "https://bhplims.bhp.org.bw"
+        client = "Testing"
+        courier = "ABRAHAM MAIGWA"
+        sample_type_match = {'humoral_immunogenicity': 'Serum',
+                             'sars_serum': 'Serum',
+                             'sars_cov2_pcr': 'Swab',
+                             'hematology': 'Whole Blood EDTA',
+                             'wb_cmi': 'Whole Blood EDTA',
+                             'urine_hcg': 'Urine'}
+        container_type_match = {'humoral_immunogenicity': 'Cryogenic vial',
+                                'sars_cov2_serology': 'Cryogenic vial',
+                                'sars_cov2_pcr': 'Cryogenic Vial',
+                                'hematology': 'EDTA Tube',
+                                'wb_cmi': 'EDTA Tube',
+                                'urine_hcg': 'Urine Cup'}
+        template_match = {'humoral_immunogenicity': 'Serum storage',
+                          'sars_serum': 'SARS-CoV-2 serology',
+                          'sars_cov2_pcr': 'SARS COV 2 PCR',
+                          'hematology': 'CBC',
+                          'wb_cmi': 'PBMC Whole Blood EDTA',
+                          'urine_hcg': 'Urine HCG'}

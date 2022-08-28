@@ -21,6 +21,8 @@ from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 
+import pyminizip
+
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
@@ -31,7 +33,6 @@ from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
 
 
-# import pyminizip
 class CaregiverConsentError(Exception):
     pass
 
@@ -209,7 +210,7 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
             caregiver_child_consent_obj.gender = instance.gender
             caregiver_child_consent_obj.child_dob = instance.dob
             caregiver_child_consent_obj.save()
-            
+
         notification(
             subject_identifier=instance.subject_identifier,
             user_created=instance.user_created,
@@ -509,8 +510,8 @@ def encrypt_files(instance, subject_identifier):
         with open('filekey.key', 'r') as filekey:
             key = filekey.read().rstrip()
         com_lvl = 8
-        # pyminizip.compress(f'{instance.image.path}', None,
-        #                    f'{base_path}/{upload_to}{zip_filename}', key, com_lvl)
+        pyminizip.compress(f'{instance.image.path}', None,
+                           f'{base_path}/{upload_to}{zip_filename}', key, com_lvl)
     # remove unencrypted file
     if os.path.exists(f'{instance.image.path}'):
         os.remove(f'{instance.image.path}')
