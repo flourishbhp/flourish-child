@@ -57,7 +57,8 @@ class ChildOffSchedule(OffScheduleModelMixin, BaseUuidModel):
                 raise ValidationError(
                     'Missing Consent Version form. Please complete '
                     'it before proceeding.')
-            return consent_version_obj.version
+
+            return consent_version_obj.child_version or consent_version_obj.version
 
     def save(self, *args, **kwargs):
         self.consent_version = self.get_consent_version()

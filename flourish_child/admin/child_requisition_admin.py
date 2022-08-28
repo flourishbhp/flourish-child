@@ -3,13 +3,12 @@ from edc_lab.admin import RequisitionAdminMixin
 from edc_lab.admin import requisition_verify_fields
 from edc_lab.admin import requisition_verify_fieldset, requisition_status_fieldset
 from edc_model_admin import audit_fieldset_tuple
-from edc_senaite_interface.admin import SenaiteRequisitionAdminMixin
+# from edc_senaite_interface.admin import SenaiteRequisitionAdminMixin
 
 from ..admin_site import flourish_child_admin
 from ..forms import ChildRequisitionForm
 from ..models import ChildRequisition
 from .model_admin_mixins import ChildCrfModelAdminMixin, ExportRequisitionCsvMixin
-
 
 requisition_identifier_fields = (
     'requisition_identifier',
@@ -26,7 +25,8 @@ requisition_identifier_fieldset = (
 
 @admin.register(ChildRequisition, site=flourish_child_admin)
 class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
-                            SenaiteRequisitionAdminMixin, RequisitionAdminMixin,
+                            # SenaiteRequisitionAdminMixin,
+                            RequisitionAdminMixin,
                             admin.ModelAdmin):
 
     form = ChildRequisitionForm
@@ -67,5 +67,5 @@ class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
 
     def get_readonly_fields(self, request, obj=None):
         return (super().get_readonly_fields(request, obj)
-                + requisition_identifier_fields
-                + requisition_verify_fields)
+                +requisition_identifier_fields
+                +requisition_verify_fields)

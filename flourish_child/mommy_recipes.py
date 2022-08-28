@@ -27,7 +27,6 @@ childdummysubjectconsent = Recipe(
 screeningpregwomen = Recipe(
     ScreeningPregWomen,
     hiv_testing=YES,
-    subject_identifier=None,
     breastfeed_intent=YES)
 
 childassent = Recipe(
@@ -62,7 +61,6 @@ registeredsubject = Recipe(
 screeningpriorbhpparticipants = Recipe(
     ScreeningPriorBhpParticipants,
     child_alive=YES,
-    subject_identifier=None,
     flourish_participation='interested')
 
 subjectconsent = Recipe(
@@ -102,7 +100,7 @@ caregiverchildconsent = Recipe(
     CaregiverChildConsent,
     first_name=fake.first_name,
     last_name=fake.last_name,
-    subject_identifier=None,
+    subject_identifier='',
     gender='M',
     child_test=YES,
     child_dob=(get_utcnow() - relativedelta(years=3)).date(),
