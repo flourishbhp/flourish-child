@@ -821,5 +821,3 @@ YES_NO_NA = (
     (NO, NO),
     (NOT_APPLICABLE, 'Not applicable'),
 )
-
-

@@ -209,7 +209,7 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
             caregiver_child_consent_obj.gender = instance.gender
             caregiver_child_consent_obj.child_dob = instance.dob
             caregiver_child_consent_obj.save()
-
+            
         notification(
             subject_identifier=instance.subject_identifier,
             user_created=instance.user_created,
