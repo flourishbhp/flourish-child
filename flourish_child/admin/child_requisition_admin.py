@@ -3,7 +3,7 @@ from edc_lab.admin import RequisitionAdminMixin
 from edc_lab.admin import requisition_verify_fields
 from edc_lab.admin import requisition_verify_fieldset, requisition_status_fieldset
 from edc_model_admin import audit_fieldset_tuple
-# from edc_senaite_interface.admin import SenaiteRequisitionAdminMixin
+from edc_senaite_interface.admin import SenaiteRequisitionAdminMixin
 
 from ..admin_site import flourish_child_admin
 from ..forms import ChildRequisitionForm
@@ -25,7 +25,7 @@ requisition_identifier_fieldset = (
 
 @admin.register(ChildRequisition, site=flourish_child_admin)
 class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
-                            # SenaiteRequisitionAdminMixin,
+                            SenaiteRequisitionAdminMixin,
                             RequisitionAdminMixin,
                             admin.ModelAdmin):
 

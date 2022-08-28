@@ -19,12 +19,13 @@ from edc_visit_tracking.managers import CrfModelManager as VisitTrackingCrfModel
 from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfModelMixin
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
 
+from edc_senaite_interface.model_mixins import SenaiteRequisitionModelMixin
+
 from ..choices import STUDY_SITES, REASON_NOT_DRAWN
 from .child_visit import ChildVisit
 from .model_mixins import SearchSlugModelMixin, ConsentVersionModelModelMixin
 
 
-# from edc_senaite_interface.model_mixins import SenaiteRequisitionModelMixin
 class ChildRequisitionManager(VisitTrackingCrfModelManager, SearchSlugManager):
     pass
 
@@ -36,8 +37,7 @@ class ChildRequisition(
     SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
     PreviousVisitModelMixin, RequisitionReferenceModelMixin,
     UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
-    # SenaiteRequisitionModelMixin,
-    BaseUuidModel):
+    SenaiteRequisitionModelMixin, BaseUuidModel):
 
     lab_profile_name = 'flourish_child_lab_profile'
 
