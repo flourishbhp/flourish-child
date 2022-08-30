@@ -1,8 +1,13 @@
+from django.apps import apps as django_apps
+from django.conf import settings
 from django.contrib import admin
+from django.urls.base import reverse
+from django.urls.exceptions import NoReverseMatch
 from edc_lab.admin import RequisitionAdminMixin
 from edc_lab.admin import requisition_verify_fields
 from edc_lab.admin import requisition_verify_fieldset, requisition_status_fieldset
-from edc_model_admin import audit_fieldset_tuple
+from edc_model_admin import audit_fieldset_tuple, ModelAdminNextUrlRedirectError
+
 from edc_senaite_interface.admin import SenaiteRequisitionAdminMixin
 
 from ..admin_site import flourish_child_admin
@@ -28,6 +33,24 @@ class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
                             SenaiteRequisitionAdminMixin,
                             RequisitionAdminMixin,
                             admin.ModelAdmin):
+
+    def redirect_url(self, request, obj, post_url_continue=None):
+        redirect_url = super().redirect_url(
+            request, obj, post_url_continue=post_url_continue)
+
+        if request.GET.dict().get('next'):
+            url_name = settings.DASHBOARD_URL_NAMES.get('child_dashboard_url')
+            attrs = request.GET.dict().get('next').split(',')[1:]
+            options = {k: request.GET.dict().get(k)
+                       for k in attrs if request.GET.dict().get(k)}
+
+            try:
+                redirect_url = reverse(url_name, kwargs=options)
+            except NoReverseMatch as e:
+                raise ModelAdminNextUrlRedirectError(
+                    f'{e}. Got url_name={url_name}, kwargs={options}.')
+
+        return redirect_url
 
     form = ChildRequisitionForm
     actions = ["export_as_csv"]
