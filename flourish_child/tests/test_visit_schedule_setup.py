@@ -72,7 +72,7 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -81,24 +81,33 @@ class TestVisitScheduleSetup(TestCase):
             biological_caregiver=YES,
             **self.options)
 
+        child_consent = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            child_dob=None,
+            first_name=None,
+            last_name=None)
+
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
-            subject_identifier=subject_consent.subject_identifier, )
+            subject_identifier=subject_consent.subject_identifier,)
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
-            subject_identifier=subject_consent.subject_identifier, )
+            subject_identifier=subject_consent.subject_identifier,)
 
         # TODO
         # Recipe ya child birth
         # throws an error: CaregiverChildConsent matching query does not exist.
         mommy.make_recipe(
             'flourish_child.childbirth',
+            subject_identifier=child_consent.subject_identifier,
+            dob=get_utcnow().date()
         )
 
         self.assertEqual(OnScheduleChildCohortABirth.objects.filter(
-            subject_identifier=subject_consent.subject_identifier,
-            schedule_name='a_birth1_schedule1').count(), 1)
+            subject_identifier=child_consent.subject_identifier,
+            schedule_name='child_a_birth_schedule1').count(), 1)
 
     @tag('cvs0')
     def test_cohort_a_onschedule_consent_valid(self):
@@ -113,7 +122,7 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -126,7 +135,7 @@ class TestVisitScheduleSetup(TestCase):
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
             study_child_identifier=child_dataset.study_child_identifier,
-            child_dob=maternal_dataset_obj.delivdt.date(), )
+            child_dob=maternal_dataset_obj.delivdt.date(),)
 
         mommy.make_recipe(
             'flourish_caregiver.caregiverpreviouslyenrolled',
@@ -180,7 +189,7 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -244,7 +253,7 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -257,7 +266,7 @@ class TestVisitScheduleSetup(TestCase):
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
             study_child_identifier=child_dataset.study_child_identifier,
-            child_dob=maternal_dataset_obj.delivdt.date(), )
+            child_dob=maternal_dataset_obj.delivdt.date(),)
 
         child_assent = mommy.make_recipe(
             'flourish_child.childassent',
@@ -319,7 +328,7 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -395,7 +404,7 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -408,7 +417,7 @@ class TestVisitScheduleSetup(TestCase):
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
             study_child_identifier=child_dataset.study_child_identifier,
-            child_dob=maternal_dataset_obj.delivdt.date(), )
+            child_dob=maternal_dataset_obj.delivdt.date(),)
 
         child_assent = mommy.make_recipe(
             'flourish_child.childassent',
@@ -478,7 +487,7 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier, )
+            screening_identifier=maternal_dataset_obj.screening_identifier,)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -491,13 +500,13 @@ class TestVisitScheduleSetup(TestCase):
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
             study_child_identifier=child_dataset.study_child_identifier,
-            child_dob=maternal_dataset_obj.delivdt.date(), )
+            child_dob=maternal_dataset_obj.delivdt.date(),)
 
         caregiver_child_consent_obj2 = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
             study_child_identifier=child_dataset.study_child_identifier,
-            child_dob=maternal_dataset_obj.delivdt.date(), )
+            child_dob=maternal_dataset_obj.delivdt.date(),)
 
         child_assent1 = mommy.make_recipe(
             'flourish_child.childassent',

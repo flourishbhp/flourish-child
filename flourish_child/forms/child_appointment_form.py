@@ -31,15 +31,15 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
                                 visit_definition.rupper).astimezone(
                 pytz.timezone('Africa/Gaborone'))
 
-            if (cleaned_data.get('visit_code_sequence') == 0
-                    and cleaned_data.get('appt_datetime') < earlist_appt_date.replace(
+            if self.instance.visit_code_sequence == 0:
+                if (cleaned_data.get('appt_datetime') < earlist_appt_date.replace(
                     microsecond=0)
                     or (self.instance.visit_code != '2000'
                         and cleaned_data.get('appt_datetime') > latest_appt_date.replace(
-                                microsecond=0))):
-                raise forms.ValidationError(
-                    'The appointment datetime cannot be outside the window period, '
-                    'please correct. See earliest, ideal and latest datetimes below.')
+                            microsecond=0))):
+                    raise forms.ValidationError(
+                        'The appointment datetime cannot be outside the window period, '
+                        'please correct. See earliest, ideal and latest datetimes below.')
 
     def validate_appt_new_or_complete(self):
         """
