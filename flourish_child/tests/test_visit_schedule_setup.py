@@ -42,15 +42,6 @@ class TestVisitScheduleSetup(TestCase):
             'study_maternal_identifier': '12345',
             'study_child_identifier': '1234'}
 
-        self.child_birth_options = {
-            'report_datetime': get_utcnow(),
-            'first_name': 'TR',
-            'initials': 'TT',
-            'dob': get_utcnow(),
-            'gender': MALE
-
-        }
-
     def year_3_age(self, year_3_years, year_3_months):
         """Returns the age at year 3.
         """
