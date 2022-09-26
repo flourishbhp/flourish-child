@@ -31,13 +31,13 @@ class ChildRequisitionManager(VisitTrackingCrfModelManager, SearchSlugManager):
 
 
 class ChildRequisition(
-    NonUniqueSubjectIdentifierFieldMixin, ConsentVersionModelModelMixin,
-    RequisitionModelMixin, RequisitionStatusMixin,
-    RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
-    SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
-    PreviousVisitModelMixin, RequisitionReferenceModelMixin,
-    UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
-    SenaiteRequisitionModelMixin, BaseUuidModel):
+        NonUniqueSubjectIdentifierFieldMixin, ConsentVersionModelModelMixin,
+        RequisitionModelMixin, RequisitionStatusMixin,
+        RequisitionIdentifierMixin, VisitTrackingCrfModelMixin,
+        SubjectScheduleCrfModelMixin, RequiresConsentFieldsModelMixin,
+        PreviousVisitModelMixin, RequisitionReferenceModelMixin,
+        UpdatesRequisitionMetadataModelMixin, SearchSlugModelMixin,
+        SenaiteRequisitionModelMixin, BaseUuidModel):
 
     lab_profile_name = 'flourish_child_lab_profile'
 
