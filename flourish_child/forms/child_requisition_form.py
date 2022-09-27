@@ -5,10 +5,9 @@ from django import forms
 from django.conf import settings
 from django.utils import timezone
 from edc_base.utils import convert_php_dateformat
-from edc_constants.constants import OTHER
-from edc_form_validators import FormValidator
 from edc_form_validators import FormValidatorMixin
 from edc_lab.forms.modelform_mixins import RequisitionFormMixin
+from edc_senaite_interface.forms import SenaiteRequisitionFormValidatorMixin
 
 from ..models import ChildRequisition
 from .child_form_mixin import ChildModelFormMixin
@@ -19,7 +18,9 @@ class InlineSubjectModelFormMixin(FormValidatorMixin, forms.ModelForm):
 
 
 class ChildRequisitionForm(ChildModelFormMixin, RequisitionFormMixin,
+                           SenaiteRequisitionFormValidatorMixin,
                            FormValidatorMixin):
+
     requisition_identifier = forms.CharField(
         label='Requisition identifier',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
