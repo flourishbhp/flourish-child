@@ -1,6 +1,5 @@
 from datetime import datetime
-from edc_action_item.site_action_items import site_action_items
-from flourish_child.models.child_birth import ChildBirth
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 import os
 
 from PIL import Image
@@ -13,10 +12,11 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
 from edc_data_manager.models import DataActionItem
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
@@ -214,7 +214,9 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
         notification(
             subject_identifier=instance.subject_identifier,
             user_created=instance.user_created,
-            subject="'Add name and DOB to the paper informed consent form'")
+            subject="'Add name and DOB to the paper informed consent form'"
+
+        )
 
 
 @receiver(post_save, weak=False, sender=ClinicianNotesImage,
@@ -227,26 +229,24 @@ def clinician_notes_image_on_post_save(sender, instance, raw, created, **kwargs)
 def notification(subject_identifier, subject, user_created, group_names=('assignable users',)):
 
     if user_created:
+        user = User.objects.get(username=user_created)
+
         try:
-            user = User.objects.get(username=user_created)
-        except User.DoesNotExist:
-            pass
-        else:
-            try:
-                user.groups.get(name__in=group_names)
-            except Group.DoesNotExist:
-                groups = Group.objects.filter(name__in=group_names)
-                for group in groups:
-                    user.groups.add(group)
-                user.save()
-            finally:
-                DataActionItem.objects.create(
-                    subject_identifier=subject_identifier,
-                    user_created=user_created,
-                    status=OPEN,
-                    action_priority='high',
-                    assigned=user.username,
-                    subject=subject)
+            user.groups.get(name__in=group_names)
+        except Group.DoesNotExist:
+            groups = Group.objects.filter(name__in=group_names)
+            for group in groups:
+                user.groups.add(group)
+            user.save()
+        finally:
+            DataActionItem.objects.create(
+                subject_identifier=subject_identifier,
+                user_created=user_created,
+                status=OPEN,
+                action_priority='high',
+                assigned=user.username,
+                subject=subject
+            )
 
 
 @receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
