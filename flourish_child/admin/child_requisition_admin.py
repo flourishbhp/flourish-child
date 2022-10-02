@@ -1,4 +1,3 @@
-from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib import admin
 from django.urls.base import reverse
@@ -19,7 +18,6 @@ requisition_identifier_fields = (
     'requisition_identifier',
     'identifier_prefix',
     'primary_aliquot_identifier',
-    'sample_id',
 )
 
 requisition_identifier_fieldset = (
@@ -53,7 +51,7 @@ class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
         return redirect_url
 
     form = ChildRequisitionForm
-    actions = ["export_as_csv"]
+    actions = ['export_as_csv']
     ordering = ('requisition_identifier',)
 
     fieldsets = (
@@ -71,6 +69,8 @@ class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
                 'item_count',
                 'estimated_volume',
                 'priority',
+                'exists_on_lis',
+                'sample_id',
                 'comments',
             )}),
         requisition_status_fieldset,
@@ -84,11 +84,14 @@ class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
         'item_type': admin.VERTICAL,
         'priority': admin.VERTICAL,
         'study_site': admin.VERTICAL,
+        'exists_on_lis': admin.VERTICAL,
     }
 
     list_display = ('child_visit', 'is_drawn', 'panel', 'estimated_volume',)
 
     def get_readonly_fields(self, request, obj=None):
-        return (super().get_readonly_fields(request, obj)
-                +requisition_identifier_fields
-                +requisition_verify_fields)
+        on_lis = getattr(obj, 'sample_id', None)
+        read_only = (super().get_readonly_fields(request, obj)
+                     + requisition_identifier_fields
+                     + requisition_verify_fields)
+        return read_only + ('exists_on_lis', 'sample_id', ) if on_lis else read_only

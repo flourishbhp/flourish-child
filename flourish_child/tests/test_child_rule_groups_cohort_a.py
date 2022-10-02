@@ -4,7 +4,7 @@ from edc_base.utils import get_utcnow
 from edc_constants.constants import YES, POS, NEG, MALE, NO
 from edc_facility.import_holidays import import_holidays
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
-from edc_metadata.models import CrfMetadata
+from edc_metadata.models import CrfMetadata, RequisitionMetadata
 from edc_visit_tracking.constants import SCHEDULED
 from flourish_caregiver.models import CaregiverChildConsent
 from model_mommy import mommy
@@ -13,7 +13,7 @@ from ..models import Appointment, ChildDummySubjectConsent, \
     OnScheduleChildCohortAQuarterly
 
 
-@tag('rulegroups')
+@tag('rga')
 class TestRuleGroups(TestCase):
 
     def setUp(self):
@@ -292,4 +292,35 @@ class TestRuleGroups(TestCase):
                 model='flourish_child.infantarvexposure',
                 subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
                 visit_code='2000D',
+                visit_code_sequence='0').entry_status, NOT_REQUIRED)
+
+    def test_dna_pcr_not_required_if_birth(self):
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=NEG,
+            subject_identifier=self.preg_subject_consent.subject_identifier,)
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier,)
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(),)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            RequisitionMetadata.objects.get(
+                model='flourish_child.childrequisition',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D',
+                panel_name='dna_pcr',
                 visit_code_sequence='0').entry_status, NOT_REQUIRED)
