@@ -242,10 +242,10 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             else:
                 schedule_name = model_obj.schedule_name
 
-        if 'child_a_quart' in schedule_name:
-            if self.is_preg_enroll_quart(model_obj):
-                return schedule_name
-            return None
+                if 'child_a_quart' in schedule_name:
+                    if self.is_preg_enroll_quart(model_obj):
+                        return schedule_name
+                    return None
 
         return schedule_name
 
