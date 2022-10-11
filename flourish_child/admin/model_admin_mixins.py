@@ -1,5 +1,4 @@
 import datetime
-import uuid
 
 from django.apps import apps as django_apps
 from django.conf import settings
@@ -22,6 +21,8 @@ from edc_visit_tracking.modeladmin_mixins import (
     CrfModelAdminMixin as VisitTrackingCrfModelAdminMixin)
 from simple_history.admin import SimpleHistoryAdmin
 import xlwt
+
+import uuid
 
 from .exportaction_mixin import ExportActionMixin
 
@@ -185,6 +186,7 @@ class ChildCrfModelAdminMixin(
     def get_key(self, request, obj=None):
 
         schedule_name = None
+
         if self.get_previous_instance(request):
             try:
                 model_obj = self.get_instance(request)

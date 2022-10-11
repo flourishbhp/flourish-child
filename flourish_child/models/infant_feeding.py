@@ -20,9 +20,10 @@ class InfantFeeding(ChildCrfModelMixin):
 
     """Quartely Phone call stem question"""
     infant_feeding_changed = models.CharField(
-        verbose_name=('Has any of your following infant feeding information changed?'),
+        verbose_name=('Since the last scheduled visit, has any of your '
+                      'following infant feeding information changed?'),
         choices=YES_NO,
-        max_length=20,
+        max_length=3,
         null=True)
 
     ever_breastfed = models.CharField(
@@ -55,6 +56,14 @@ class InfantFeeding(ChildCrfModelMixin):
         blank=True,
         null=True)
 
+    child_weaned = models.CharField(
+        verbose_name='Is the participant completely weaned from breast milk?',
+        max_length=3,
+        choices=YES_NO,
+        blank=True,
+        null=True,
+        help_text=('Atleast 72 hours without breast feeding, no intention to re-start'))
+
     dt_weaned = models.DateField(
         verbose_name=('If no longer breast feeding, please provide the date '
                       'of the participant weaned'),
@@ -78,6 +87,11 @@ class InfantFeeding(ChildCrfModelMixin):
         verbose_name='Has the infant taken formula?',
         max_length=10,
         choices=YES_NO_UNSURE)
+
+    formula_first_report = models.CharField(
+        verbose_name=('Is this the first reporting of infant formula use?'),
+        max_length=3,
+        choices=YES_NO)
 
     dt_formula_introduced = models.DateField(
         verbose_name='Date infant formula introduced',
