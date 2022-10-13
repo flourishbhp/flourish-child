@@ -54,8 +54,6 @@ class TestBRuleGroups(TestCase):
             breastfeed_intent=NOT_APPLICABLE,
             **self.options)
 
-        # breakpoint()
-
         caregiver_child_consent_obj = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
