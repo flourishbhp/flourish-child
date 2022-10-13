@@ -49,6 +49,9 @@ class ExportActionMixin:
             field_names.insert(2, 'old_study_maternal_identifier')
             field_names.insert(5, 'visit_code')
 
+        if queryset[0]._meta.label_lower == 'flourish_child.birthdata':
+            field_names.insert(6, 'infant_sex')
+
         for col_num in range(len(field_names)):
             ws.write(row_num, col_num, field_names[col_num], font_style)
 
@@ -90,6 +93,10 @@ class ExportActionMixin:
                 data.append(previous_study)
                 data.append(child_exposure_status)
 
+            if obj._meta.label_lower == 'flourish_child.birthdata':
+                infant_sex = self.infant_gender(subject_identifier)
+                data.append(infant_sex)
+
             inline_objs = []
             for field in self.get_model_fields:
 
@@ -108,7 +115,7 @@ class ExportActionMixin:
                     inline_values = key_manager.all()
                     fields = field.related_model._meta.get_fields()
                     for field in fields:
-                        if not isinstance(field, (ForeignKey, OneToOneField, ManyToManyField, )):
+                        if not isinstance(field, (ForeignKey, OneToOneField, ManyToManyField,)):
                             inline_field_names.append(field.name)
                         if isinstance(field, ManyToManyField):
                             choices = self.m2m_list_data(field.related_model)
@@ -254,6 +261,18 @@ class ExportActionMixin:
                 return 'HUU'
             else:
                 return 'UNK'
+
+    def infant_gender(self, subject_identifier=None):
+
+        child_consent_cls = django_apps.get_model('flourish_caregiver.caregiverchildconsent')
+
+        try:
+            child_consent_obj = child_consent_cls.objects.filter(
+                subject_identifier=subject_identifier,).latest('consent_datetime')
+        except child_consent_cls.DoesNotExist:
+            pass
+        else:
+            return child_consent_obj.gender
 
     def is_non_crf(self, obj):
 
