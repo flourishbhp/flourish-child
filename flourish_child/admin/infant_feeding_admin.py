@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.safestring import mark_safe
 from edc_fieldsets.fieldlist import Insert
 from edc_fieldsets.fieldsets import Fieldsets
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
@@ -248,6 +249,28 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     return None
 
         return schedule_name
+
+    def update_form_labels(self, request, form):
+
+        for form_label in self.custom_form_labels:
+            if form_label.field in form.base_fields:
+                instance = self.get_previous_instance(request)
+                appointment = self.get_previous_instance(request)
+                if form_label.previous_appointment and appointment:
+                    condition = form_label.callback(instance, appointment)
+                elif form_label.previous_instance and instance:
+                    condition = form_label.callback(instance, appointment)
+                else:
+                    condition = None
+                if condition:
+                    label = self.format_form_label(
+                        label=form_label.label or form.base_fields[
+                            form_label.field].label,
+                        instance=instance,
+                        appointment=appointment)
+                    form.base_fields[
+                        form_label.field].label = mark_safe(label)
+        return form
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)
