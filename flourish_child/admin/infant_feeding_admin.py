@@ -98,58 +98,58 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             field='infant_feeding_changed',
             label=('Since the last scheduled visit in {previous}, has any of '
                    'your infant feeding information changed?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='continuing_to_bf',
             label=('Since the last visit or quarterly phone call, did the participant '
                    'breast feed?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='freq_milk_rec',
             label=('Between the last visit or quarterly phone call and date of most recent '
                    'breastfeeding, how often did the participant receive breast milk for '
                    'feeding?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='rec_liquids',
             label=('Since the last visit or quarterly phone call, has the participant '
                    'received any liquids other than breast milk?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='took_formula',
             label=('Since the last visit or quarterly phone call, did the participant '
                    'take formula?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='taken_water',
             label=('Since the last visit or quarterly phone call, did the participant '
                    'take water?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='taken_juice',
             label=('Since the last visit or quarterly phone call, did the participant '
                    'take juice?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='taken_cows_milk',
             label=('Since the last visit or quarterly phone call, did the participant '
                    'take cow’s milk?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='taken_animal_milk',
             label=('Since the last visit or quarterly phone call, did the participant take '
                    'other animal milk?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='taken_salts',
             label=('Since the last visit or quarterly phone call, did the participant take '
                    'oral rehydration salts?'),
-            previous_appointment=True),
+            previous_instance=True),
         FormLabel(
             field='taken_solid_foods',
             label=('Since the last visit or quarterly phone call, has the participant '
                    'received any solid foods?'),
-            previous_appointment=True)
+            previous_instance=True)
 
     ]
 

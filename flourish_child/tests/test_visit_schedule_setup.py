@@ -55,7 +55,7 @@ class TestVisitScheduleSetup(TestCase):
     # TODO
     # throws an error: CaregiverChildConsent matching query does not exist.
 
-    @tag('bb')
+    @tag('bb1')
     def test_cohort_a_onschedule_birth_valid(self):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
