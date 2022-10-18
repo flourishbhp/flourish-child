@@ -1,9 +1,10 @@
 from datetime import datetime
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from flourish_child.models.child_birth import ChildBirth
 import os
 
 from PIL import Image
 import PIL
+from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib.auth.models import User, Group
@@ -12,18 +13,19 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS
+import pyminizip
+
+from edc_action_item.site_action_items import site_action_items
 from edc_data_manager.models import DataActionItem
-from flourish_child.models.child_birth import ChildBirth
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 
-import pyminizip
-
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
+from ..models import ChildPreviousHospitalization, ChildPreHospitalizationInline
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_continued_consent import ChildContinuedConsent
@@ -270,6 +272,27 @@ def child_preg_testing_on_post_save(sender, instance, raw, created, **kwargs):
                         ChildOffStudy, CHILDOFF_STUDY_ACTION,
                         instance.child_visit.appointment.subject_identifier,
                         repeat=True)
+
+
+@receiver(post_save, weak=False, sender=ChildPreHospitalizationInline,
+          dispatch_uid='child_prev_hospitalisation_on_post_save')
+def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kwargs):
+    """
+       If child hospitalization has occured within the past year, put action item for
+        completing INFORM instrument on redcap.
+    """
+
+    recent_year = get_utcnow() - relativedelta(years=1)
+
+    if instance.aprox_date > recent_year.date():
+
+        DataActionItem.objects.update_or_create(
+            subject='Complete INFROM CRF on REDCap',
+            subject_identifier=instance.subject_identifier,
+            assigned='clinic',
+            comment=('''Child was hospitalised within the past year,
+                        please complete INFORM CRF on REDCAP.''')
+            )
 
 
 @receiver(post_save, weak=False, sender=ChildContinuedConsent,

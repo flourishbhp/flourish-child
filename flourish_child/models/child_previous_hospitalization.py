@@ -12,6 +12,7 @@ from .list_models import ChildDiseases
 
 
 class ChildPreviousHospitalization(ChildCrfModelMixin):
+
     child_hospitalized = models.CharField(
         max_length=3,
         choices=YES_NO,
@@ -40,6 +41,7 @@ class ChildPreviousHospitalization(ChildCrfModelMixin):
 
 
 class ChildPreHospitalizationInline(CrfInlineModelMixin, BaseUuidModel):
+
     child_pre_hospitalization = models.ForeignKey(
         ChildPreviousHospitalization,
         on_delete=models.PROTECT)
