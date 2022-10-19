@@ -156,7 +156,8 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     schedules = ['child_a_sec_qt_schedule1', 'child_a_quart_schedule1',
                  'child_b_sec_qt_schedule1', 'child_b_quart_schedule1',
                  'child_c_sec_qt_schedule1', 'child_c_quart_schedule1',
-                 'child_pool_schedule1']
+                 'child_pool_schedule1', 'child_a_fu_schedule1', 'child_b_fu_schedule1',
+                 'child_c_fu_schedule1']
 
     enrol_schedules = ['child_a_enrol_schedule1',
                        'child_b_enrol_schedule1',
