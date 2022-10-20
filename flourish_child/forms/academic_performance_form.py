@@ -111,7 +111,7 @@ class AcademicPerformanceForm(ChildModelFormMixin):
                     "education_level": ("Participant's socio demographic information "
                                         "is missing. Kindly complete the form first.")
                 }
-        raise forms.ValidationError(message)
+            raise forms.ValidationError(message)
 
         cleaned_data = super().clean()
         return cleaned_data
