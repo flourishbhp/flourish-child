@@ -1,11 +1,12 @@
+from flourish_child.choices import HIGHEST_EDUCATION
 from itertools import chain
 
 from django import forms
 from django.apps import apps as django_apps
 from django.db.models import ManyToManyField
 from edc_constants.constants import NO, YES
+
 from flourish_child_validations.form_validators import AcademicPerformanceFormValidator
-from flourish_child.choices import HIGHEST_EDUCATION
 
 from ..models import AcademicPerformance
 from .child_form_mixin import ChildModelFormMixin
@@ -32,20 +33,28 @@ class AcademicPerformanceForm(ChildModelFormMixin):
         child_visit_id = initial.get(
             'child_visit', args[0]['child_visit'] if args else None)
 
+        try:
+            child_visit_obj = self.visit_model.objects.get(id=child_visit_id)
+        except self.visit_model.DoesNotExist:
+            child_visit_obj = None
+
         if not instance and previous_instance:
             for key in self.base_fields.keys():
                 if key not in ["child_visit", "report_datetime", "education_level"]:
                     initial[key] = getattr(previous_instance, key)
 
-        if child_visit_id:
+        if child_visit_obj:
+
+            child_education_level = self.child_social_education_level(
+                child_visit=child_visit_obj)
+
             # get the education_level from child socio demographics in the same visit
             # regard less of the previous education level of the previous instance
-            # check if child_visit_id not null to avoid exceptions
-            # then initialize education_level taken from child socio demographics in the same visit
-            initial['education_level'] = self.child_social_education_level(
-                child_visit_id=child_visit_id)
+            # check if child_visit_id not null to avoid exceptions then initialize
+            # education_level taken from child socio demographics in the same visit
+            initial['education_level'] = child_education_level
 
-        kwargs["initial"] = initial
+        kwargs['initial'] = initial
 
         super().__init__(*args, **kwargs)
 
@@ -53,32 +62,53 @@ class AcademicPerformanceForm(ChildModelFormMixin):
     def child_socio_demographic_cls(self):
         return django_apps.get_model(self.child_socio_demographic_model)
 
-    def child_social_education_level(self, child_visit_id):
+    def child_social_education_level(self, child_visit):
         """
         Get the child demographics from the same visit
         """
-        child_socio_demographic = self.child_socio_demographic_cls.objects.get(
-            child_visit_id=child_visit_id)
-        return child_socio_demographic.education_level
+
+        try:
+            child_socio_demographic = self.child_socio_demographic_cls.objects.filter(
+                report_datetime__lte=child_visit.report_datetime).latest('report_datetime')
+        except self.child_socio_demographic_cls.DoesNotExist:
+            return None
+        else:
+            return child_socio_demographic.education_level
 
     def clean(self):
-        previous_instance = getattr(self, "previous_instance", None)
+        previous_instance = getattr(self, 'previous_instance', None)
         has_changed = self.compare_instance_fields(previous_instance)
 
-        academic_perf_changed = self.cleaned_data.get("academic_perf_changed")
+        academic_perf_changed = self.cleaned_data.get('academic_perf_changed')
+
+        child_visit = self.cleaned_data.get('child_visit')
+
         if academic_perf_changed:
             if academic_perf_changed == YES and not has_changed:
                 message = {
-                    "academic_perf_changed": "Participant's academic performance information has not changed since"
-                    " last visit. Please update the information on this form."
+                    "academic_perf_changed": ("Participant's academic performance information "
+                                              "has not changed since last visit. Please update"
+                                              " the information on this form.")
                 }
                 raise forms.ValidationError(message)
             elif academic_perf_changed == NO and has_changed:
                 message = {
-                    "academic_perf_changed": "Participant's academic performance information has been changed in this CRF"
-                    "since last visit. The answer should be yes"
+                    "academic_perf_changed": ("Participant's academic performance information "
+                                              "has been changed in this CRF since last visit."
+                                              " The answer should be yes")
                 }
                 raise forms.ValidationError(message)
+
+        try:
+            self.child_socio_demographic_cls.objects.get(
+                child_visit=child_visit)
+        except self.child_socio_demographic_cls.DoesNotExist:
+            message = {
+                    "education_level": ("Participant's socio demographic information "
+                                        "is missing. Kindly complete the form first.")
+                }
+        raise forms.ValidationError(message)
+
         cleaned_data = super().clean()
         return cleaned_data
 
@@ -96,7 +126,7 @@ class AcademicPerformanceForm(ChildModelFormMixin):
             "child_visit",
             "academic_perf_changed",
         ]
-        
+
         # self.data was replaced because clean_data already contain
         # clean_data is alreadu populated when used under clean
 
@@ -104,7 +134,7 @@ class AcademicPerformanceForm(ChildModelFormMixin):
             other_values = self.model_to_dict(
                 prev_instance, exclude=exclude_fields)
             values = {
-                key: self.cleaned_data.get(key,  "not_taking_subject")
+                key: self.cleaned_data.get(key, "not_taking_subject")
                 for key in other_values.keys()
             }
             if self.cleaned_data.get("grade_points") == "":
