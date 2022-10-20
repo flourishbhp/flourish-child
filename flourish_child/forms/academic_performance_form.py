@@ -69,6 +69,7 @@ class AcademicPerformanceForm(ChildModelFormMixin):
 
         try:
             child_socio_demographic = self.child_socio_demographic_cls.objects.filter(
+                child_visit__subject_identifier=child_visit.subject_identifier,
                 report_datetime__lte=child_visit.report_datetime).latest('report_datetime')
         except self.child_socio_demographic_cls.DoesNotExist:
             return None
