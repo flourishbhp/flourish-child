@@ -9,12 +9,10 @@ from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 from .constants import BREASTFEED_ONLY
 
-
-
 HIV_STATUS = (
     (POS, 'Positive'),
     (NEG, 'Negative'),
-    (UNKNOWN, 'Unknown')   
+    (UNKNOWN, 'Unknown')
 )
 
 ALIVE_DEAD_UNKNOWN = (
@@ -523,6 +521,8 @@ REFERRED_TO = (
     ('a&e', 'A&E'),
     ('psychologist', 'Psychologist'),
     ('psychiatrist', 'Psychiatrist'),
+    ('receiving_emotional_care', 'Already receiving emotional care'),
+    ('declined', 'Declined'),
     (OTHER, 'Other'),
 )
 

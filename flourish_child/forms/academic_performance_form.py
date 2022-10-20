@@ -68,13 +68,16 @@ class AcademicPerformanceForm(ChildModelFormMixin):
         """
 
         try:
-            child_socio_demographic = self.child_socio_demographic_cls.objects.filter(
-                child_visit__subject_identifier=child_visit.subject_identifier,
-                report_datetime__lte=child_visit.report_datetime).latest('report_datetime')
+            child_socio_demographic = self.child_socio_demographic_cls.objects.get(
+                child_visit=child_visit)
         except self.child_socio_demographic_cls.DoesNotExist:
-            return None
-        else:
-            return child_socio_demographic.education_level
+            try:
+                child_socio_demographic = self.child_socio_demographic_cls.objects.filter(
+                    child_visit__subject_identifier=child_visit.subject_identifier,
+                    report_datetime__lte=child_visit.report_datetime).latest('report_datetime')
+            except self.child_socio_demographic_cls.DoesNotExist:
+                return None
+        return child_socio_demographic.education_level
 
     def clean(self):
         previous_instance = getattr(self, 'previous_instance', None)
