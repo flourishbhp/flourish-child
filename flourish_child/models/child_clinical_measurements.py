@@ -11,9 +11,10 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
     for all infant/child/adolescent. """
 
     child_weight_kg = models.DecimalField(
+        verbose_name="Infant/child/adolescent's weight? ",
         max_digits=5,
         decimal_places=2,
-        verbose_name="Infant/child/adolescent's weight? ",
+        validators=[MinValueValidator(5), MaxValueValidator(200), ],
         help_text="Measured in Kilograms (kg)")
 
     child_systolic_bp = models.IntegerField(
