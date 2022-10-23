@@ -41,14 +41,18 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             previous_appointment=True)
         ]
 
-    conditional_fieldlists = {
-        'child_a_sec_qt_schedule1': Insert('med_history_changed', after='report_datetime'),
-        'child_a_quart_schedule1': Insert('med_history_changed', after='report_datetime'),
-        'child_b_sec_qt_schedule1': Insert('med_history_changed', after='report_datetime'),
-        'child_b_quart_schedule1': Insert('med_history_changed', after='report_datetime'),
-        'child_c_sec_qt_schedule1': Insert('med_history_changed', after='report_datetime'),
-        'child_c_quart_schedule1': Insert('med_history_changed', after='report_datetime'),
-        'child_pool_schedule1': Insert('med_history_changed', after='report_datetime'), }
+    quartely_schedules = ['child_a_sec_qt_schedule1', 'child_a_quart_schedule1',
+                          'child_b_sec_qt_schedule1', 'child_b_quart_schedule1',
+                          'child_c_sec_qt_schedule1', 'child_c_quart_schedule1',
+                          'child_pool_schedule1', 'child_a_fu_schedule1',
+                          'child_b_fu_schedule1', 'child_c_fu_schedule1',
+                          'child_a_fu_qt_schedule1', 'child_b_fu_qt_schedule1',
+                          'child_c_fu_qt_schedule1']
+
+    conditional_fieldlists = {}
+    for schedule in quartely_schedules:
+        conditional_fieldlists.update(
+            {schedule: Insert('med_history_changed', after='report_datetime')})
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)

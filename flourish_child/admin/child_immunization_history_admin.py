@@ -1,9 +1,11 @@
+from flourish_child.models.birth_feeding_and_vaccine import BirthVaccines
+
 from django.apps import apps as django_apps
 from django.contrib import admin
+
 from edc_fieldsets.fieldlist import Fieldlist
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
-from flourish_child.models.birth_feeding_and_vaccine import BirthVaccines
 
 from ..admin_site import flourish_child_admin
 from ..forms import (
@@ -84,13 +86,15 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     ]
 
     quartely_schedules = ['child_a_quart_schedule1',
-                          'child_a_fu_quart_schedule1',
+                          'child_a_fu_qt_schedule1',
                           'child_a_sec_qt_schedule1', 'child_b_quart_schedule1',
-                          'child_b_fu_quart_schedule1',
+                          'child_b_fu_qt_schedule1',
                           'child_b_sec_qt_schedule1',
-                          'child_c_quart_schedule1',
+                          'child_c_qt_schedule1',
                           'child_c_fu_quart_schedule1',
-                          'child_c_sec_qt_schedule1', 'child_pool_schedule1', ]
+                          'child_c_sec_qt_schedule1', 'child_pool_schedule1',
+                          'child_a_fu_schedule1',
+                          'child_b_fu_schedule1', 'child_c_fu_schedule1']
 
     conditional_fieldlists = {}
 

@@ -70,36 +70,20 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
             schedule_name = model_obj.schedule_name if model_obj else None
         return schedule_name
 
-    conditional_fieldlists = {
-        'child_a_sec_qt_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
-                                              insert_fields=('hos_last_visit',),
-                                              insert_after=('report_datetime')
-                                              ),
-        'child_a_quart_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
-                                             insert_fields=('hos_last_visit',),
-                                             insert_after='report_datetime'
-                                             ),
-        'child_b_sec_qt_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
-                                              insert_fields=('hos_last_visit',),
-                                              insert_after='report_datetime'
-                                              ),
-        'child_b_quart_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
-                                             insert_fields=('hos_last_visit',),
-                                             insert_after='report_datetime'
-                                             ),
-        'child_c_sec_qt_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
-                                              insert_fields=('hos_last_visit',),
-                                              insert_after='report_datetime'
-                                              ),
-        'child_c_quart_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
-                                             insert_fields=('hos_last_visit',),
-                                             insert_after='report_datetime'
-                                             ),
-        'child_pool_schedule1': Fieldlist(remove_fields=('child_hospitalized',),
-                                          insert_fields=('hos_last_visit',),
-                                          insert_after='report_datetime'
-                                          ),
-        }
+    quartely_schedules = ['child_a_sec_qt_schedule1', 'child_a_quart_schedule1',
+                          'child_b_sec_qt_schedule1', 'child_b_quart_schedule1',
+                          'child_c_sec_qt_schedule1', 'child_c_quart_schedule1',
+                          'child_pool_schedule1', 'child_a_fu_schedule1',
+                          'child_b_fu_schedule1', 'child_c_fu_schedule1',
+                          'child_a_fu_qt_schedule1', 'child_b_fu_qt_schedule1',
+                          'child_c_fu_qt_schedule1']
+
+    conditional_fieldlists = {}
+    for schedule in quartely_schedules:
+        conditional_fieldlists.update(
+            {schedule: Fieldlist(remove_fields=('child_hospitalized',),
+                                 insert_fields=('hos_last_visit',),
+                                 insert_after=('report_datetime'))})
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)
