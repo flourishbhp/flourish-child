@@ -63,3 +63,4 @@ from .infant_dev_screening_9_months_form import InfantDevScreening9MonthsForm
 from .infant_feeding_form import InfantFeedingForm
 from .infant_feeding_practices_form import InfantFeedingPracticesForm
 from .offschedule_form import ChildOffScheduleForm
+from .tb_adol_assent_form import TbAdolAssentForm
