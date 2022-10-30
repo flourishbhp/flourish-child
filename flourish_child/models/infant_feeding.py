@@ -86,7 +86,9 @@ class InfantFeeding(ChildCrfModelMixin):
     took_formula = models.CharField(
         verbose_name='Has the infant taken formula?',
         max_length=10,
-        choices=YES_NO_UNSURE)
+        choices=YES_NO_UNSURE,
+        blank=True,
+        null=True)
 
     formula_first_report = models.CharField(
         verbose_name=('Is this the first reporting of infant formula use?'),
