@@ -7,7 +7,7 @@ from edc_constants.constants import NEG, POS, IND
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
-from .constants import BREASTFEED_ONLY
+from .constants import BREASTFEED_ONLY, PNTA
 
 HIV_STATUS = (
     (POS, 'Positive'),
