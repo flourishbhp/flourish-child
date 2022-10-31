@@ -25,5 +25,9 @@ class ChildCovidSymptomsAfter14Days(ListModelMixin, BaseUuidModel):
     pass
 
 
+class EmoSupportType(ListModelMixin, BaseUuidModel):
+    pass
+
+
 class SolidFoods(ListModelMixin, BaseUuidModel):
     pass
