@@ -45,3 +45,4 @@ from .infant_dev_screening_9_months_admin import InfantDevScreening9MonthsAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
+from .tb_adol_assent_admin import TbAdolAssentAdmin
