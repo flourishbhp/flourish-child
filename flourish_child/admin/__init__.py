@@ -46,4 +46,6 @@ from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
 from .tb_adol_assent_admin import TbAdolAssentAdmin
-
+from .adol_hiv_knowledge_admin import HivKnowledgeAdmin
+from .adol_clinical_measurements_admin import AdolescentClinicalMeasurementsAdmin
+from .adol_tb_knowledge_admin import TbKnowledgeAdmin

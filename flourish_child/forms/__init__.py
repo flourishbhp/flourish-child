@@ -66,3 +66,5 @@ from .offschedule_form import ChildOffScheduleForm
 from .tb_adol_assent_form import TbAdolAssentForm
 from .adol_clinical_measurements_form import AdolClinicalMeasurementsForm
 from .adol_hiv_knowledge_form import HivKnowledgeForm
+from .adol_covid19_screen_form import Covid19AdolForm
+from .adol_tb_presence_household_member_form import TbPresenceHouseholdMembersAdolForm
