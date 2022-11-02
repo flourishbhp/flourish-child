@@ -3,7 +3,6 @@ from django.db import models
 from ..choices import YES_NO_UNK_DWTA, \
     VISIT_NUMBER, HEALTH_CARE_CENTER, YES_NO_DN_PNTA, VISIT_REASON
 from .child_crf_model_mixin import ChildCrfModelMixin
-from .list_models import HealthCareCenter
 
 
 class TbRoutineScreenAdolescent(ChildCrfModelMixin):
@@ -14,9 +13,11 @@ class TbRoutineScreenAdolescent(ChildCrfModelMixin):
         help_text='if 0, end of CRF else continue'
     )
 
-    care_location = models.ManyToManyField(
-        HealthCareCenter,
+    care_location = models.CharField(
         verbose_name='For visit #1, where did you receive care at?',
+        max_length=100,
+        choices=HEALTH_CARE_CENTER,
+        help_text='if 0, end of CRF else continue'
     )
 
     other = models.TextField(

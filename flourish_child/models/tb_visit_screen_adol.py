@@ -1,11 +1,11 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-from .model_mixins import CrfModelMixin
-from ..choices import YES_NO_UNK_DWTA, COUGH_DURATION, YES_NO_DN_PNTA
+from .child_crf_model_mixin import ChildCrfModelMixin
+from ..choices import YES_NO_UNK_DWTA, YES_NO_DN_PNTA
 
 
-class TbVisitScreeningAdolecent(CrfModelMixin):
+class TbVisitScreeningAdolescent(ChildCrfModelMixin):
     have_cough = models.CharField(
         verbose_name='Do you currently have a cough?',
         choices=YES_NO_UNK_DWTA,
@@ -82,6 +82,6 @@ class TbVisitScreeningAdolecent(CrfModelMixin):
         max_length=30)
 
     class Meta:
-        app_label = 'flourish_caregiver'
+        app_label = 'flourish_child'
         verbose_name = 'TB Screen for adolescents'
         verbose_name_plural = 'TB Screen for adolescents'

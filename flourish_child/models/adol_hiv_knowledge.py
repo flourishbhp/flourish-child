@@ -1,5 +1,5 @@
 from django.db import models
-from edc_constants.choices import YES_NO
+
 
 from ..choices import YES_NO_PNTA, YES_NO_DN_PNTA, COMMUNITY_IMPACT, COMMUNITY_TREATMENT
 from .list_models import HIVKnowledgeMedium
