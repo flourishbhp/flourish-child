@@ -28,7 +28,8 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
         null=True)
 
     tb_referral = models.CharField(
-        verbose_name='Were you referred to a TB clinic in the last 12 months? ',
+        verbose_name='Since you had a household member diagnosed with TB,'
+                     ' were you seen by a health care worker for evaluation for TB?  ',
         max_length=30,
         choices=YES_NO_UNK_DWTA,
         null=True)
@@ -38,7 +39,9 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
                      'had cough for two weeks or more in the last 12 months? ',
         max_length=20,
         choices=YES_NO_UNK_DWTA,
-        null=True)
+        null=True,
+        help_text='If ‘Yes’, continue to Q6'
+                  'If ‘No’ ‘I do not know’ or ‘Prefer not to answer’, skip to Q8')
 
     cough_ind_rel = models.CharField(
         verbose_name='Please indicate the relationship of this individual or '
@@ -55,12 +58,13 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
         null=True)
 
     fever_signs = models.CharField(
-        verbose_name='Has any member of your household that was not diagnosed with TB had'
-                     ' unexplained fever concerning for tuberculosis in the last 12 '
-                     'months? ',
+        verbose_name='Has any member of your household had unexplained'
+                     ' fever concerning for tuberculosis in the last 12 months?',
         max_length=30,
         choices=YES_NO_UNK_DWTA,
-        null=True)
+        null=True,
+        help_text='If ‘Yes’, continue to Q9'
+                  ' If ‘No’ ‘I do not know’ or ‘Prefer not to answer’, skip to Q11')
 
     fever_ind_rel = models.CharField(
         verbose_name='Please indicate the relationship of this individual or '
