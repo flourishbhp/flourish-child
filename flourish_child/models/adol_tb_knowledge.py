@@ -3,10 +3,10 @@ from edc_constants.choices import YES_NO
 
 from ..choices import YES_NO_PNTA, YES_NO_DN_PNTA, COMMUNITY_TREATMENT, COMMUNITY_IMPACT
 from .list_models import TbKnowledgeMedium
-from .model_mixins import CrfModelMixin
+from .child_crf_model_mixin import ChildCrfModelMixin
 
 
-class TbKnowledgeAdol(CrfModelMixin):
+class TbKnowledgeAdol(ChildCrfModelMixin):
 
     tb_informed = models.CharField(
         verbose_name='Do you feel well-informed about tuberculosis (TB)',
@@ -95,5 +95,5 @@ class TbKnowledgeAdol(CrfModelMixin):
     )
 
     class Meta:
-        app_label = 'flourish_caregiver'
+        app_label = 'flourish_child'
         verbose_name = 'TB Knowledge'
