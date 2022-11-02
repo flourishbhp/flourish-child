@@ -29,6 +29,8 @@ class HivKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                  'weight_loss_knowledge',
                  'rash_knowledge',
                  'headache_knowledge',
+                 'vomiting_knowledge',
+                 'body_ache_knowledge',
                  'other_knowledge']
          }),
 
@@ -49,6 +51,8 @@ class HivKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'weight_loss_knowledge': admin.VERTICAL,
                     'rash_knowledge': admin.VERTICAL,
                     'headache_knowledge': admin.VERTICAL,
+                    'vomiting_knowledge': admin.VERTICAL,
+                    'body_ache_knowledge': admin.VERTICAL,
                     'hiv_utensils_transmit': admin.VERTICAL,
                     'hiv_air_transmit': admin.VERTICAL,
                     'hiv_sexual_transmit': admin.VERTICAL,
