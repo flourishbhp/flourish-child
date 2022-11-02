@@ -26,6 +26,7 @@ class ChildRequisitionForm(ChildModelFormMixin, RequisitionFormMixin,
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
     def clean(self):
+        self.visit_obj = self.cleaned_data.get('child_visit')
         self.subject_identifier = self.cleaned_data.get(
             'child_visit').subject_identifier
         self.validate_requisition_datetime()

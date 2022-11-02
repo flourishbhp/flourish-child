@@ -72,3 +72,11 @@ from .onschedule import OnScheduleChildCohortCPool, \
 from .onschedule import OnScheduleChildCohortCQuarterly
 from .onschedule import OnScheduleChildCohortCSec, OnScheduleChildCohortAFU
 from .signals import child_consent_on_post_save
+from .tb_adol_assent import TbAdolAssent
+from .adol_hiv_knowledge import HivKnowledge
+from .adol_clinical_measurements import AdolescentClinicalMeasurements
+from .adol_tb_routine_health_screen import TbRoutineScreenAdol
+from .adol_tb_knowledge import TbKnowledgeAdol
+from .tb_visit_screen_adol import TbVisitScreeningAdolescent
+from .adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
+from .adol_covid19_screen import Covid19Adol

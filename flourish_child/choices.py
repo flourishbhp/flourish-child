@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
-    NOT_APPLICABLE
+    NOT_APPLICABLE, DWTA
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
     ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
 from edc_constants.constants import NEG, POS, IND
@@ -873,4 +873,94 @@ YES_NO_NA = (
     (YES, YES),
     (NO, NO),
     (NOT_APPLICABLE, 'Not applicable'),
+)
+
+YES_NO_PNTA = (
+    (YES, YES),
+    (NO, NO),
+    (PNTA, _('Prefer not to answer')),
+)
+
+COMMUNITY_IMPACT = {
+    ('0', 'Not a problem'),
+    ('1', 'A little bit of a problem'),
+    ('2', 'It is not a little problem nor a big problem'),
+    ('3', 'Somewhat of a problem'),
+    ('4', 'A big problem'),
+    ('5', 'I dont know'),
+    ('6', 'Prefer to not answer')
+}
+
+COMMUNITY_TREATMENT = {
+    ('0', 'Treated weLl'),
+    ('1', 'Treated normally'),
+    ('2', 'Treated poorly'),
+    ('3', 'unknown'),
+    ('4', 'Other'),
+}
+
+VISIT_NUMBER = {
+    ('0', '0'),
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+    ('6', '6 or more')
+}
+
+HEALTH_CARE_CENTER = {
+    ('government_health_center', 'Government health center'),
+    ('private_clinic', 'Private clinic'),
+    ('both', 'Both government health center and private clinic'),
+    ('hospital', 'Hospital'),
+    ('school_health_clinic', 'school health clinic'),
+    ('other', 'Other')
+}
+
+TB_SYMPTOM = {
+    ('1', 'Respiratory illness (cough, runny nose, sore throat, etc)'),
+    ('2', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
+    ('3', 'Febrile illness (with fever)'),
+    ('4', 'Sexual reproductive health needs (contraceptives))'),
+    ('5', 'other')
+}
+
+YES_NO_UNK_DWTA = (
+    (YES, YES),
+    (NO, NO),
+    (UNKNOWN, 'Unknown'),
+    (DWTA, 'Prefer not to answer'),)
+
+
+EXTRA_PULMONARY_LOC = (
+    ('lymph_nodes', 'Lymph nodes'),
+    ('abdomen', 'Abdomen '),
+    ('bones', 'Bones '),
+    ('brain', 'Brain'),
+    (UNKNOWN, 'Unknown'),
+)
+
+
+TB_DRUGS_FREQ = (
+    ('4_drugs', '4 drugs'),
+    ('more_than_4', 'More than 4 drugs'),
+    (UNKNOWN, 'Unknown'),
+    (DWTA, 'Prefer not to answer'),
+)
+
+TB_TYPE = (
+    ('pulmonary', 'Pulmonary'),
+    ('extra_pulmonary', 'Extra-pulmonary'),
+    (UNKNOWN, 'Unknown'),
+    (DWTA, 'Prefer not to answer')
+)
+
+RELATION_TO_INDIVIDUAL = (
+    ('partner', 'Partner'),
+    ('child', 'Child'),
+    ('mother', 'Mother'),
+    ('father', 'Father'),
+    ('sibling', 'Sibling'),
+    (OTHER, 'Other'),
 )

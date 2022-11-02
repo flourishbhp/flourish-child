@@ -31,3 +31,15 @@ class EmoSupportType(ListModelMixin, BaseUuidModel):
 
 class SolidFoods(ListModelMixin, BaseUuidModel):
     pass
+
+
+class TbKnowledgeMedium(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class HIVKnowledgeMedium(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class HealthCareCenter(ListModelMixin, BaseUuidModel):
+    pass
