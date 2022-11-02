@@ -40,17 +40,25 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
                      " questions (cough, fever, weight loss, night sweats)?",
         choices=YES_NO_DN_PNTA,
         max_length=20,
-        help_text="f no/I do not know/prefer not to answer, "
-                  "CRF complete if no further visits, else repeat questions"
-                  " 2-8 for each healthcare visit reported in question 1 "
+        help_text='if yes continue to Q7 '
+                  'if no/I do not know/prefer not to answer, '
+                  'CRF complete if no further visits, else repeat questions'
+                  ' 2-8 for each healthcare visit reported in question 1 '
     )
 
     pos_screen = models.CharField(
-        verbose_name='Did you screen positive for the TB symptom screen?',
+        verbose_name='Did you screen positive for TB at this visit'
+                     ' (specify service if multiple services within same '
+                     'visit),  because you had cough, fever, weight loss, and/or night sweats?',
         max_length=20,
         null=True,
         blank=True,
-        choices=YES_NO_UNK_DWTA)
+        choices=YES_NO_UNK_DWTA,
+        help_text='If no/ I do not know /prefer not to answer,'
+                  ' CRF complete if no further visits, else repeat '
+                  'questions 2-8 for each healthcare visit reported in question 1 '
+
+    )
 
     diagnostic_referral = models.CharField(
         verbose_name='Were you referred for TB diagnostic evaluation?',
