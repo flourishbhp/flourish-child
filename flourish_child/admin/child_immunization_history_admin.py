@@ -1,5 +1,3 @@
-from flourish_child.models.birth_feeding_and_vaccine import BirthVaccines
-
 from django.apps import apps as django_apps
 from django.contrib import admin
 
