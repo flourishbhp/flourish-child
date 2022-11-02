@@ -81,7 +81,7 @@ class TbKnowledgeAdol(ChildCrfModelMixin):
 
     tb_community = models.CharField(
         verbose_name='How would you rate TB as a problem in your community?',
-        choice=COMMUNITY_IMPACT,
+        choices=COMMUNITY_IMPACT,
         max_length=60, )
 
     tb_community_treatment = models.CharField(

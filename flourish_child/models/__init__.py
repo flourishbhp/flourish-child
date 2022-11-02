@@ -78,5 +78,5 @@ from .adol_clinical_measurements import AdolescentClinicalMeasurements
 from .adol_tb_routine_health_screen import TbRoutineScreenAdolescent
 from .adol_tb_knowledge import TbKnowledgeAdol
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
-from .adol_tb_presence_household_member import TbPresenceHouseholdMembers
-from .adol_covid19_screen import Covid19
+from .adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
+from .adol_covid19_screen import Covid19Adol

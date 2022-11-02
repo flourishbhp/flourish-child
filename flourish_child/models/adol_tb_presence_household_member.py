@@ -5,7 +5,7 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 from ..choices import RELATION_TO_INDIVIDUAL, YES_NO_UNK_DWTA
 
 
-class TbPresenceHouseholdMembers(ChildCrfModelMixin):
+class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
     tb_diagnosed = models.CharField(
         verbose_name='Has any member of your household been diagnosed with '
                      'tuberculosis in the last 12 months?',

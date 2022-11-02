@@ -1,10 +1,10 @@
 from django.db import models
 
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import *
+from ..choices import YES_NO_COVID_FORM,YES_NO_DN_PNTA, POS_NEG_PENDING_UNKNOWN
 
 
-class Covid19(ChildCrfModelMixin):
+class Covid19Adol(ChildCrfModelMixin):
     test_for_covid = models.CharField(
         verbose_name='Have you been tested for COVID-19?',
         max_length=35,

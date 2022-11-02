@@ -92,6 +92,6 @@ class TbHistoryAdol(ChildCrfModelMixin):
         null=True)
 
     class Meta:
-        app_label = 'flourish_caregiver'
+        app_label = 'flourish_child'
         verbose_name = 'History of TB for Adolescents subject'
         verbose_name_plural = 'History of TB for Adolescents subject'
