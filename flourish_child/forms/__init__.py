@@ -64,3 +64,5 @@ from .infant_feeding_form import InfantFeedingForm
 from .infant_feeding_practices_form import InfantFeedingPracticesForm
 from .offschedule_form import ChildOffScheduleForm
 from .tb_adol_assent_form import TbAdolAssentForm
+from .adol_clinical_measurements_form import AdolClinicalMeasurementsForm
+from .adol_hiv_knowledge_form import HivKnowledgeForm
