@@ -1,12 +1,12 @@
 from django import forms
-# from flourish_form_validation.form_validators import TbPresenceHouseholdMembersFormValidator
-from ..models import TbPresenceHouseholdMembers
+# from flourish_form_validation.form_validators import TbPresenceHouseholdMembersAdolFormValidator
+from ..models import TbPresenceHouseholdMembersAdol
 from .child_form_mixin import ChildModelFormMixin
 
 
-class TbPresenceHouseholdMembersForm(ChildModelFormMixin):
-    # form_validator_cls = TbPresenceHouseholdMembersFormValidator
+class TbPresenceHouseholdMembersAdolForm(ChildModelFormMixin):
+    # form_validator_cls = TbPresenceHouseholdMembersAdolFormValidator
 
     class Meta:
-        model = TbPresenceHouseholdMembers
+        model = TbPresenceHouseholdMembersAdol
         fields = '__all__'

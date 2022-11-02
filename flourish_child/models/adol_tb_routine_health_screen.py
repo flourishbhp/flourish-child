@@ -5,7 +5,7 @@ from ..choices import YES_NO_UNK_DWTA, \
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
-class TbRoutineScreenAdolescent(ChildCrfModelMixin):
+class TbRoutineScreenAdol(ChildCrfModelMixin):
     tb_health_visits = models.CharField(
         verbose_name='How many health visits did you have in the last year?',
         max_length=20,
