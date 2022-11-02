@@ -12,13 +12,13 @@ class AdolescentClinicalMeasurementsAdmin(ChildCrfModelAdminMixin, admin.ModelAd
 
     form = AdolClinicalMeasurementsForm
 
-    list_display = ('maternal_visit', 'weight_kg', 'systolic_bp',
+    list_display = ('child_visit', 'weight_kg', 'systolic_bp',
                     'diastolic_bp')
 
     fieldsets = (
         (None, {
             'fields': [
-                'maternal_visit',
+                'child_visit',
                 'report_datetime',
                 'weight_kg',
                 'systolic_bp',
