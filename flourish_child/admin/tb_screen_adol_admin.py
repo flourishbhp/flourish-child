@@ -24,15 +24,16 @@ class TbVisitScreeningAdolescentAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin)
                 'night_sweats',
                 'weight_loss',
                 'cough_blood',
+                'enlarged_lymph_nodes',
                 'unexplained_fatigue'
             ]}
          ), audit_fieldset_tuple)
 
     radio_fields = {'have_cough': admin.VERTICAL,
-                    'have_fever': admin.VERTICAL,
+                    'fever': admin.VERTICAL,
                     'night_sweats': admin.VERTICAL,
                     'weight_loss': admin.VERTICAL,
                     'cough_blood': admin.VERTICAL,
-                    'enlarged_lymph': admin.VERTICAL,
+                    'enlarged_lymph_nodes': admin.VERTICAL,
                     'unexplained_fatigue': admin.VERTICAL,
-                    'tb_screened': admin.VERTICAL}
+                    }
