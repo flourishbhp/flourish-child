@@ -34,14 +34,23 @@ class HivKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                  'other_knowledge']
          }),
 
-        ('HIV Contraction Section', {
-            'fields': [
-                'hiv_utensils_transmit',
-                'hiv_air_transmit',
-                'hiv_sexual_transmit',
-                'hiv_treatable',
-                'hiv_curable']
-        }),
+        ('We will now move to the ways that a person can get HIV.'
+         ' For question, please answer as ‘yes’ or ‘no’ or ‘I '
+         'do not know’ or ‘prefer not to answer’.', {
+             'fields': [
+                 'hiv_utensils_transmit',
+                 'hiv_air_transmit',
+                 'hiv_sexual_transmit',
+                 'hiv_treatable',
+                 'hiv_curable']
+         }),
+
+        ('HIV Attitudes', {
+             'fields': [
+                 'hiv_community',
+                 'hiv_community_treatment',
+                 'hiv_community_treatment_other']
+         }),
         audit_fieldset_tuple)
 
     radio_fields = {'hiv_informed': admin.VERTICAL,
@@ -57,6 +66,8 @@ class HivKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'hiv_air_transmit': admin.VERTICAL,
                     'hiv_sexual_transmit': admin.VERTICAL,
                     'hiv_treatable': admin.VERTICAL,
-                    'hiv_curable': admin.VERTICAL, }
+                    'hiv_community': admin.VERTICAL,
+                    'hiv_community_treatment': admin.VERTICAL,
+                    }
 
     filter_horizontal = ('hiv_knowledge_medium',)

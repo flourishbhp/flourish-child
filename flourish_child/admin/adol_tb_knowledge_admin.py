@@ -33,13 +33,20 @@ class TbKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                  'body_ache_knowledge',
                  'other_knowledge']
          }),
-
-        ('TB Contraction Section', {
+        ('We will now move to the ways that a person can get TB.'
+         ' For question, please answer as ‘yes’ or ‘no’ or ‘I '
+         'do not know’ or ‘prefer not to answer’.', {
+             'fields': [
+                 'tb_utensils_transmit',
+                 'tb_air_transmit',
+                 'tb_treatable',
+                 'tb_curable']
+         }),
+        ('TB Attitudes', {
             'fields': [
-                'tb_utensils_transmit',
-                'tb_air_transmit',
-                'tb_treatable',
-                'tb_curable']
+                'tb_community',
+                'tb_community_treatment',
+                'tb_community_treatment_other', ]
         }),
         audit_fieldset_tuple)
 

@@ -53,6 +53,16 @@ class TbKnowledgeAdol(ChildCrfModelMixin):
         choices=YES_NO_DN_PNTA,
         max_length=30,)
 
+    vomiting_knowledge = models.CharField(
+        verbose_name='Vomiting',
+        choices=YES_NO_DN_PNTA,
+        max_length=30, )
+
+    body_ache_knowledge = models.CharField(
+        verbose_name='Body ache',
+        choices=YES_NO_DN_PNTA,
+        max_length=30, )
+
     other_knowledge = models.TextField(
         verbose_name='Other: (free text)',
         max_length=150,

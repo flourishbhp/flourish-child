@@ -49,3 +49,6 @@ from .tb_adol_assent_admin import TbAdolAssentAdmin
 from .adol_hiv_knowledge_admin import HivKnowledgeAdmin
 from .adol_clinical_measurements_admin import AdolescentClinicalMeasurementsAdmin
 from .adol_tb_knowledge_admin import TbKnowledgeAdmin
+from .adol_tb_history_admin import TbHistoryAdolAdmin
+from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
+from .adol_tb_presence_household_member_admin import TbPresenceHouseholdMembersAdolAdmin
