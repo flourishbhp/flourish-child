@@ -1,12 +1,15 @@
-from edc_constants.choices import YES_NO, POS_NEG_IND_UNKNOWN, YES_NO_UNKNOWN
-
-from .child_crf_model_mixin import ChildCrfModelMixin as CrfModelMixin
 from django.db import models
-from ..choices import *
+from edc_base.model_validators import date_not_future
+from edc_constants.choices import YES_NO, YES_NO_UNKNOWN
+
+from ..choices import TESTING_REASONS, POS_NEG_PENDING_UNKNOWN, ISOLATION_LOCATION
+from ..choices import YES_NO_COVID_FORM, YES_NO_PARTIALLY, VACCINATION_TYPE
+from .child_crf_model_mixin import ChildCrfModelMixin as CrfModelMixin
 from .list_models import ChildCovidSymptoms, ChildCovidSymptomsAfter14Days
 
 
 class ChildCovid19(CrfModelMixin):
+
     test_for_covid = models.CharField(
         verbose_name='Have you been tested for COVID-19?',
         max_length=35,
@@ -15,6 +18,7 @@ class ChildCovid19(CrfModelMixin):
 
     date_of_test = models.DateField(
         verbose_name='Date of the test',
+        validators=[date_not_future, ],
         null=True,
         blank=True)
 
@@ -65,7 +69,8 @@ class ChildCovid19(CrfModelMixin):
 
     isolations_symptoms = models.ManyToManyField(
         ChildCovidSymptoms,
-        verbose_name='Have you experienced any of the following signs and symptoms when on isolation',
+        verbose_name=('Have you experienced any of the following signs and symptoms when on '
+                      'isolation'),
         blank=True
     )
 
@@ -78,6 +83,7 @@ class ChildCovid19(CrfModelMixin):
 
     date_of_test_member = models.DateField(
         verbose_name='Date of the test for member of household',
+        validators=[date_not_future, ],
         null=True,
         blank=True
 
@@ -92,8 +98,8 @@ class ChildCovid19(CrfModelMixin):
     )
 
     close_contact = models.CharField(
-        verbose_name='Have you been in close contact with anyone outside of your household who tested positive for '
-                     'COVID-19',
+        verbose_name=('Have you been in close contact with anyone outside of your household '
+                      'who tested positive for COVID-19'),
         max_length=10,
         choices=YES_NO_UNKNOWN
     )
@@ -127,12 +133,14 @@ class ChildCovid19(CrfModelMixin):
 
     first_dose = models.DateField(
         verbose_name='Date of first vaccine dose',
+        validators=[date_not_future, ],
         null=True,
         blank=True
     )
 
     second_dose = models.DateField(
         verbose_name='Date of second vaccine dose',
+        validators=[date_not_future, ],
         null=True,
         blank=True
     )
@@ -162,6 +170,7 @@ class ChildCovid19(CrfModelMixin):
 
     booster_vac_date = models.DateField(
         verbose_name='Date of booster vaccine',
+        validators=[date_not_future, ],
         null=True,
         blank=True
     )
