@@ -80,3 +80,4 @@ from .adol_tb_knowledge import TbKnowledgeAdol
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
 from .adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
 from .adol_covid19_screen import Covid19Adol
+from .adol_tb_history import TbHistoryAdol

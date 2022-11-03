@@ -892,7 +892,7 @@ COMMUNITY_IMPACT = {
 }
 
 COMMUNITY_TREATMENT = {
-    ('0', 'Treated weLl'),
+    ('0', 'Treated well'),
     ('1', 'Treated normally'),
     ('2', 'Treated poorly'),
     ('3', 'unknown'),
@@ -932,15 +932,14 @@ YES_NO_UNK_DWTA = (
     (UNKNOWN, 'Unknown'),
     (DWTA, 'Prefer not to answer'),)
 
-
 EXTRA_PULMONARY_LOC = (
     ('lymph_nodes', 'Lymph nodes'),
     ('abdomen', 'Abdomen '),
     ('bones', 'Bones '),
     ('brain', 'Brain'),
     (UNKNOWN, 'Unknown'),
+    (OTHER, 'Other')
 )
-
 
 TB_DRUGS_FREQ = (
     ('4_drugs', '4 drugs'),
@@ -950,8 +949,9 @@ TB_DRUGS_FREQ = (
 )
 
 TB_TYPE = (
-    ('pulmonary', 'Pulmonary'),
-    ('extra_pulmonary', 'Extra-pulmonary'),
+    ('In_the_lungs', 'In the lungs'),
+    ('outside_the_lungs', 'Outside the lungs'),
+    ('both', 'Both in the lungs and outside the lungs'),
     (UNKNOWN, 'Unknown'),
     (DWTA, 'Prefer not to answer')
 )

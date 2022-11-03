@@ -19,6 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SITE_ID = 1
 
+# for test
+REVIEWER_SITE_ID = 2
+
 ETC_DIR = '/etc'
 
 APP_NAME = 'flourish_child'

@@ -8,7 +8,6 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 
 
 class TbHistoryAdol(ChildCrfModelMixin):
-
     prior_tb_infec = models.CharField(
         verbose_name='Do you have a prior history of TB infection?',
         choices=YES_NO_UNK_DWTA,
@@ -17,13 +16,6 @@ class TbHistoryAdol(ChildCrfModelMixin):
                    'who are infected by the bacterium, M. tuberculosis, but '
                    'have no TB symptoms. TB infection is diagnosed with a positive '
                    'tuberculin skin test (TST) or IGRA lab test. '))
-
-    prior_history = models.CharField(
-        verbose_name='Do you have prior history of a TB Contact?',
-        help_text='TB contact is defined as close contact with someone diagnosed',
-        choices=YES_NO,
-        max_length=3
-    )
 
     history_of_tbt = models.CharField(
         verbose_name=('Do you have a prior history of taking isoniazid for TB '
@@ -53,14 +45,19 @@ class TbHistoryAdol(ChildCrfModelMixin):
         max_length=30,
         blank=True,
         null=True,
-        help_text=('Pulmonary TB is disease in the lungs, whereas extra-pulmonary'
-                   ' TB is disease outside the lungs (ex: lymph nodes, abdomen, '
-                   'bones, brain)'))
+        help_text=('If outside the lungs or both in the lungs/outside the lungs,'
+                   ' continue to Q6 If in the lungs/ I do '
+                   'not know /prefer not to answer, continue to Q8'))
 
     extra_pulmonary_loc = models.CharField(
-        verbose_name='Where was the location of your extra-pulmonary TB?',
+        verbose_name='Where was the location of your TB?',
         choices=EXTRA_PULMONARY_LOC,
         max_length=40,
+        blank=True,
+        null=True)
+
+    other_loc = models.TextField(
+        verbose_name="If other, specify: (free text)",
         blank=True,
         null=True)
 
