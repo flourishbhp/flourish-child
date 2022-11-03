@@ -69,3 +69,4 @@ from .adol_hiv_knowledge_form import HivKnowledgeForm
 from .adol_covid19_screen_form import Covid19AdolForm
 from .adol_tb_presence_household_member_form import TbPresenceHouseholdMembersAdolForm
 from .adol_tb_history_form import TbHistoryAdolForm
+from .tb_screen_adol_form import TbVisitScreeningAdolescentForm
