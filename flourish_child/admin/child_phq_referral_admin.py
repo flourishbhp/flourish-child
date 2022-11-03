@@ -17,6 +17,7 @@ class ChildPhqReferralAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'fields': [
                 'child_visit',
                 'report_datetime',
+                'attended_referral',
                 'support_ref_decline_reason',
                 'support_ref_decline_reason_other',
                 'emo_support',
