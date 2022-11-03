@@ -52,7 +52,7 @@ list_data = {
         ('hypertensive_meds', 'Hypertensive medications'),
         ('prenatal_vitamins', 'Prenatal Vitamins')
     ],
-    'flourish_caregiver.emosupporttype': [
+    'flourish_child.emosupporttype': [
         ('adherence_counselling', 'Adherence counseling'),
         ('grief_counselling', 'Grief counseling'),
         ('chronic_illness_diagnosis', 'Dealing with diagnosis of chronic illness'),
