@@ -1,6 +1,5 @@
 from datetime import datetime
-from edc_action_item.site_action_items import site_action_items
-from flourish_child.models.child_birth import ChildBirth
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 import os
 
 from PIL import Image
@@ -14,10 +13,11 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW
 from edc_data_manager.models import DataActionItem
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
@@ -361,28 +361,6 @@ def trigger_action_item(obj, field, response, model_cls,
             action_item.delete()
 
 
-@receiver(post_save, weak=False, sender=ChildOffStudy,
-          dispatch_uid='child_off_study_on_post_save')
-def child_take_off_study(sender, instance, raw, created, **kwargs):
-    for visit_schedule in site_visit_schedules.visit_schedules.values():
-        for schedule in visit_schedule.schedules.values():
-            onschedule_model_obj = get_child_onschedule_model_obj(
-                schedule, instance.subject_identifier)
-            if onschedule_model_obj:
-                _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-                    onschedule_model=onschedule_model_obj._meta.label_lower,
-                    name=onschedule_model_obj.schedule_name)
-
-                schedule.take_off_schedule(
-                    subject_identifier=instance.subject_identifier)
-
-                # remove care giver from child schedules also
-                # caregiver_subject_identifier = instance.subject_identifier[:-3]
-                # onschedule_model_obj = get_caregiver_onschedule_model_obj(
-                # schedule,caregiver_subject_identifier)
-                # schedule.take_off_schedule(subject_identifier=caregiver_subject_identifier)
-
-
 @receiver(post_save, weak=False, sender=ChildOffSchedule,
           dispatch_uid='child_off_schedule_on_post_save')
 def child_take_off_schedule(sender, instance, raw, created, **kwargs):
@@ -397,7 +375,8 @@ def child_take_off_schedule(sender, instance, raw, created, **kwargs):
                     name=instance.schedule_name)
                 schedule.take_off_schedule(
                     subject_identifier=instance.subject_identifier,
-                    offschedule_datetime=instance.offschedule_datetime)
+                    offschedule_datetime=instance.offschedule_datetime,
+                    schedule_name=instance.schedule_name)
 
 
 def get_caregiver_onschedule_model_obj(schedule, subject_identifier):

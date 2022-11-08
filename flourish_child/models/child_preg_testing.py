@@ -40,14 +40,14 @@ class ChildPregTesting(ChildCrfModelMixin):
         null=True,)
 
     last_menstrual_period = models.DateField(
-        verbose_name="Date of Last Menstrual Period (DD/MMM/YYYY)",
+        verbose_name='Date of Last Menstrual Period (DD/MMM/YYYY)',
         validators=[date_not_future],
         null=True,
         blank=True,
     )
 
     is_lmp_date_estimated = models.CharField(
-        verbose_name="Is the Last Menstrual Period date estimated?",
+        verbose_name='Is the Last Menstrual Period date estimated?',
         choices=YES_NO,
         max_length=3,
         blank=True,
