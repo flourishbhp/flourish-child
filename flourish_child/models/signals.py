@@ -1,4 +1,5 @@
 from datetime import datetime
+from edc_action_item.site_action_items import site_action_items
 from flourish_child.models.child_birth import ChildBirth
 import os
 
@@ -14,24 +15,20 @@ from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_base.utils import age, get_utcnow
-from edc_constants.constants import OPEN, NEW, POS
-import pyminizip
-
-from edc_action_item.site_action_items import site_action_items
+from edc_constants.constants import OPEN, NEW
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-from flourish_prn.action_items import CHILDOFF_STUDY_ACTION, CHILD_DEATH_REPORT_ACTION
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 
+import pyminizip
+
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
-from ..models import ChildPreviousHospitalization, ChildPreHospitalizationInline
+from ..models import ChildPreHospitalizationInline
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
-from .child_continued_consent import ChildContinuedConsent
 from .child_dummy_consent import ChildDummySubjectConsent
-from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
-from .child_preg_testing import ChildPregTesting
 from .child_visit import ChildVisit
 
 
@@ -252,28 +249,6 @@ def notification(subject_identifier, subject, user_created, group_names=('assign
                     subject=subject)
 
 
-@receiver(post_save, weak=False, sender=ChildHIVRapidTestCounseling,
-          dispatch_uid='child_rapid_test_on_post_save')
-def child_rapid_test_on_post_save(sender, instance, raw, created, **kwargs):
-    """Take the participant offstudy if HIV result is positive.
-    """
-    trigger_action_item(instance, 'result', POS,
-                        ChildOffStudy, CHILDOFF_STUDY_ACTION,
-                        instance.child_visit.appointment.subject_identifier,
-                        repeat=True)
-
-
-@receiver(post_save, weak=False, sender=ChildPregTesting,
-          dispatch_uid='child_preg_testing_on_post_save')
-def child_preg_testing_on_post_save(sender, instance, raw, created, **kwargs):
-    """Take the participant offstudy if pregnancy test result is positive.
-    """
-    trigger_action_item(instance, 'preg_test_result', POS,
-                        ChildOffStudy, CHILDOFF_STUDY_ACTION,
-                        instance.child_visit.appointment.subject_identifier,
-                        repeat=True)
-
-
 @receiver(post_save, weak=False, sender=ChildPreHospitalizationInline,
           dispatch_uid='child_prev_hospitalisation_on_post_save')
 def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kwargs):
@@ -293,17 +268,6 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
             comment=('''Child was hospitalised within the past year,
                         please complete INFORM CRF on REDCAP.''')
             )
-
-
-@receiver(post_save, weak=False, sender=ChildContinuedConsent,
-          dispatch_uid='child_continued_consent_on_post_save')
-def child_continued_consent_on_post_save(sender, instance, raw, created, **kwargs):
-    """Take the participant offstudy if child ineligible on continued consent.
-    """
-    trigger_action_item(instance, 'is_eligible', False,
-                        ChildOffStudy, CHILDOFF_STUDY_ACTION,
-                        instance.subject_identifier,
-                        repeat=True)
 
 
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):

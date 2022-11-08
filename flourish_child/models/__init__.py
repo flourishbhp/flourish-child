@@ -1,4 +1,11 @@
 from .academic_performance import AcademicPerformance
+from .adol_clinical_measurements import AdolescentClinicalMeasurements
+from .adol_covid19_screen import Covid19Adol
+from .adol_hiv_knowledge import HivKnowledge
+from .adol_tb_history import TbHistoryAdol
+from .adol_tb_knowledge import TbKnowledgeAdol
+from .adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
+from .adol_tb_routine_health_screen import TbRoutineScreenAdol
 from .birth_data import BirthData
 from .birth_exam import BirthExam
 from .birth_feeding_and_vaccine import BirthFeedingVaccine, BirthVaccines
@@ -73,11 +80,5 @@ from .onschedule import OnScheduleChildCohortCQuarterly
 from .onschedule import OnScheduleChildCohortCSec, OnScheduleChildCohortAFU
 from .signals import child_consent_on_post_save
 from .tb_adol_assent import TbAdolAssent
-from .adol_hiv_knowledge import HivKnowledge
-from .adol_clinical_measurements import AdolescentClinicalMeasurements
-from .adol_tb_routine_health_screen import TbRoutineScreenAdol
-from .adol_tb_knowledge import TbKnowledgeAdol
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
-from .adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
-from .adol_covid19_screen import Covid19Adol
-from .adol_tb_history import TbHistoryAdol
+
