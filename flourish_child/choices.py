@@ -1,13 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
-    NOT_APPLICABLE
+    NOT_APPLICABLE, DWTA
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
     ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
 from edc_constants.constants import NEG, POS, IND
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
-from .constants import BREASTFEED_ONLY
+from .constants import BREASTFEED_ONLY, PNTA
 
 HIV_STATUS = (
     (POS, 'Positive'),
@@ -141,6 +141,59 @@ DIFFICULTY_LEVEL = (
     ('very_difficult', 'Very difficult'),
     ('extremely_difficult', 'Extremely difficult'),
 )
+
+YES_NO_DN_PNTA = (
+    (YES, YES),
+    (NO, NO),
+    ('dont_know', 'I do not know'),
+    (PNTA, _('Prefer not to answer')),
+)
+
+EMO_SUPPORT_DECLINE = (
+    ('not_yet_sought_clinic', 'I have not yet sought the clinic'),
+    ('could_not_get_clinic_booking',
+     'I went to the clinic but could not get a booking'),
+    ('partner_dnw_me_to_attend', 'My partner does not want me to attend'),
+    ('family_dnw_me_to_attend', 'My family does not want me to attend'),
+    ('no_longer_need_support', 'I felt I no longer need emotional support'),
+    ('work_constraints', 'Work constraints'),
+    ('no_transport_fare', 'I did not have transport fare'),
+    (OTHER, 'Other, specify'),)
+
+NO_EMO_SUPPORT_REASON = (
+    ('professional_not_around', 'Social worker/ Psychologist/ Psychiatrist not around'),
+    ('clinic_long_queue', 'Long queue at the clinic'),
+    ('told_idn_emo_support', 'I was told I don’t need emotional support'),
+    ('was_treated_well_at_facility',
+     'I was not treated well at the health facility and I had to leave'),
+    ('changed_mind', 'Changed mind and returned home'),
+    (OTHER, 'Other, specify'),)
+
+EMO_HEALTH_IMPROVED = (
+    ('difficult_to_tell', 'Difficult to tell because I am still receiving emotional support'),
+    ('mood_has_improved', 'My mood has improved'),
+    ('not_able_to_relax', 'I am now able to relax'),
+    ('relationship_with_other_improved',
+     'My relationship with other people/family members/partner has improved'),
+    ('able_to_manage_emotions', 'I am now able to manage my thoughts, feelings and emotions'),
+    ('accepted_medical_condition',
+     'I have accepted my medical condition and I have learnt to stay positive'),
+    ('accepted_loved_one_loss', 'I have now accepted the loss of my loved one'),
+    ('feeling_fine', 'Emotional support received and feeling fine now'),
+    ('no_longer_suicidal', 'I am no longer suicidal'),
+    ('defaulted', 'Gave up and defaulted (No difference)'),
+    (OTHER, 'Other, specify'))
+
+PERCEIVE_COUNSELOR = (
+    ('approachable', 'Approachable'),
+    ('respectful', 'Respectful'),
+    ('trustworthy', 'Trustworthy'),
+    ('patient', 'Patient'),
+    ('demeaning', 'Demeaning'),
+    ('judgmental', 'Judgmental'),
+    ('discriminatory', 'Discriminatory'),
+    (PNTA, _('Prefer not to answer')),
+    (OTHER, 'Other, specify'))
 
 ETHNICITY = (
     ('Black African', 'Black African'),
@@ -820,4 +873,94 @@ YES_NO_NA = (
     (YES, YES),
     (NO, NO),
     (NOT_APPLICABLE, 'Not applicable'),
+)
+
+YES_NO_PNTA = (
+    (YES, YES),
+    (NO, NO),
+    (PNTA, _('Prefer not to answer')),
+)
+
+COMMUNITY_IMPACT = {
+    ('0', 'Not a problem'),
+    ('1', 'A little bit of a problem'),
+    ('2', 'It is not a little problem nor a big problem'),
+    ('3', 'Somewhat of a problem'),
+    ('4', 'A big problem'),
+    ('5', 'I dont know'),
+    ('6', 'Prefer to not answer')
+}
+
+COMMUNITY_TREATMENT = {
+    ('0', 'Treated well'),
+    ('1', 'Treated normally'),
+    ('2', 'Treated poorly'),
+    ('3', 'unknown'),
+    ('4', 'Other'),
+}
+
+VISIT_NUMBER = {
+    ('0', '0'),
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('5', '5'),
+    ('6', '6 or more')
+}
+
+HEALTH_CARE_CENTER = {
+    ('government_health_center', 'Government health center'),
+    ('private_clinic', 'Private clinic'),
+    ('both', 'Both government health center and private clinic'),
+    ('hospital', 'Hospital'),
+    ('school_health_clinic', 'school health clinic'),
+    ('other', 'Other')
+}
+
+TB_SYMPTOM = {
+    ('1', 'Respiratory illness (cough, runny nose, sore throat, etc)'),
+    ('2', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
+    ('3', 'Febrile illness (with fever)'),
+    ('4', 'Sexual reproductive health needs (contraceptives))'),
+    ('5', 'other')
+}
+
+YES_NO_UNK_DWTA = (
+    (YES, YES),
+    (NO, NO),
+    (UNKNOWN, 'Unknown'),
+    (DWTA, 'Prefer not to answer'),)
+
+EXTRA_PULMONARY_LOC = (
+    ('lymph_nodes', 'Lymph nodes'),
+    ('abdomen', 'Abdomen '),
+    ('bones', 'Bones '),
+    ('brain', 'Brain'),
+    (UNKNOWN, 'Unknown'),
+    (OTHER, 'Other')
+)
+
+TB_DRUGS_FREQ = (
+    ('4_drugs', '4 drugs'),
+    ('more_than_4', 'More than 4 drugs'),
+    (UNKNOWN, 'Unknown'),
+    (DWTA, 'Prefer not to answer'),
+)
+
+TB_TYPE = (
+    ('In_the_lungs', 'In the lungs'),
+    ('outside_the_lungs', 'Outside the lungs'),
+    ('both', 'Both in the lungs and outside the lungs'),
+    (UNKNOWN, 'Unknown'),
+    (DWTA, 'Prefer not to answer')
+)
+
+RELATION_TO_INDIVIDUAL = (
+    ('partner', 'Partner'),
+    ('child', 'Child'),
+    ('mother', 'Mother'),
+    ('father', 'Father'),
+    ('sibling', 'Sibling'),
+    (OTHER, 'Other'),
 )

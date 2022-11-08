@@ -25,5 +25,21 @@ class ChildCovidSymptomsAfter14Days(ListModelMixin, BaseUuidModel):
     pass
 
 
+class EmoSupportType(ListModelMixin, BaseUuidModel):
+    pass
+
+
 class SolidFoods(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class TbKnowledgeMedium(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class HIVKnowledgeMedium(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class HealthCareCenter(ListModelMixin, BaseUuidModel):
     pass

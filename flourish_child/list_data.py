@@ -52,6 +52,16 @@ list_data = {
         ('hypertensive_meds', 'Hypertensive medications'),
         ('prenatal_vitamins', 'Prenatal Vitamins')
     ],
+    'flourish_child.emosupporttype': [
+        ('adherence_counselling', 'Adherence counseling'),
+        ('grief_counselling', 'Grief counseling'),
+        ('chronic_illness_diagnosis', 'Dealing with diagnosis of chronic illness'),
+        ('financial_advice', 'Financial advice'),
+        ('relationship_therapy', 'Relationship therapy (family, partner)'),
+        ('social_welfare_support', 'Social welfare support (food basket)'),
+        ('emo_trauma_therapy', 'Emotional Trauma therapy'),
+        (OTHER, 'Other, specify')
+    ],
     'flourish_child.wcsdxadult': [
         ('wmhist_asympt', 'Asymptomatic'),
         ('wmhist_lymphadeno', 'Persistent generalized lymphadeno'),

@@ -19,6 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SITE_ID = 1
 
+# for test
+REVIEWER_SITE_ID = 2
+
 ETC_DIR = '/etc'
 
 APP_NAME = 'flourish_child'
@@ -65,6 +68,7 @@ INSTALLED_APPS = [
     'edc_data_manager.apps.AppConfig',
     'edc_consent.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
+    'edc_model_admin.apps.AppConfig',
     'flourish_prn.apps.AppConfig',
     'flourish_reference.apps.AppConfig',
     'flourish_metadata_rules.apps.AppConfig',

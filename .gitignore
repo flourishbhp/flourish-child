@@ -145,7 +145,7 @@ ide/
 **/flourish_child/migrations/**
 
 # exclude all crypto keys
-**/crypto_fields/**
+crypto_fields/**
 
 # exclude all IDEs configs
 **/.idea/**

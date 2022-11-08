@@ -1,8 +1,9 @@
+from edc_action_item.model_mixins import ActionModelMixin
+
 from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 from django.db import models
 from django_crypto_fields.fields import IdentityField
-from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import datetime_not_future
