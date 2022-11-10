@@ -22,6 +22,7 @@ from .child_dummy_consent import ChildDummySubjectConsent
 from .child_food_security_questionnaire import ChildFoodSecurityQuestionnaire
 from .child_gad_anxiety_screening import ChildGadAnxietyScreening
 from .child_gad_referral import ChildGadReferral
+from .child_gad_referral_fu import ChildGadReferralFU
 from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesMissed
@@ -29,6 +30,7 @@ from .child_immunization_history import VaccinesReceived
 from .child_medical_history import ChildMedicalHistory
 from .child_phq_depression_screening import ChildPhqDepressionScreening
 from .child_phq_referral import ChildPhqReferral
+from .child_phq_referral_fu import ChildPhqReferralFU
 from .child_physical_activity import ChildPhysicalActivity
 from .child_preg_testing import ChildPregTesting
 from .child_previous_hospitalization import ChildPreviousHospitalization, \
