@@ -42,12 +42,12 @@ class TbAdolAssentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
         child_consent_cls = django_apps.get_model(
             'flourish_caregiver.caregiverchildconsent')
         try:
-            consents = child_consent_cls.objects.filter(
+            consent = child_consent_cls.objects.filter(
                 subject_identifier=subject_identifier).latest('consent_datetime')
         except child_consent_cls.DoesNotExist:
             return None
-
-        return consents.latest('consent_datetime')
+        else:
+            return consent
 
     def get_latest_consent_version(self, screening_identifier=None):
         consent_version_cls = django_apps.get_model(
@@ -62,7 +62,7 @@ class TbAdolAssentForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
 
     def assent_initial_values(self, child_consent=None):
         initials = {}
-        fields = ['screening_identifier', 'first_name', 'last_name', 'gender',
+        fields = ['screening_identifier', 'first_name', 'last_name',
                   'identity', 'identity_type', 'confirm_identity', 'dob']
         if child_consent:
             for field in fields:
