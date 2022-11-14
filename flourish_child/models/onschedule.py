@@ -139,3 +139,6 @@ class OnScheduleChildCohortCSecQuart(OnScheduleModelMixin):
 class OnScheduleChildCohortCSec(OnScheduleModelMixin):
     pass
 
+
+class OnScheduleChildTbAdolSchedule(OnScheduleModelMixin):
+    pass

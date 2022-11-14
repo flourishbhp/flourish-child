@@ -80,6 +80,7 @@ from .onschedule import OnScheduleChildCohortCPool, \
     OnScheduleChildCohortCSecQuart
 from .onschedule import OnScheduleChildCohortCQuarterly
 from .onschedule import OnScheduleChildCohortCSec, OnScheduleChildCohortAFU
+from .onschedule import OnScheduleChildTbAdolSchedule
 from .signals import child_consent_on_post_save
 from .tb_adol_assent import TbAdolAssent
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
