@@ -1,4 +1,3 @@
-from edc_action_item.model_mixins import ActionModelMixin
 
 from django.apps import apps as django_apps
 from django.db import models
@@ -12,19 +11,17 @@ from edc_consent.field_mixins import (
     CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin,
     VerificationFieldsMixin)
 from edc_consent.field_mixins import IdentityFieldsMixin, PersonalFieldsMixin
-from edc_consent.validators import eligible_if_yes
 from edc_constants.choices import YES_NO, YES_NO_DECLINED
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
 
-from ..action_items import CHILDASSENT_ACTION
 from ..choices import IDENTITY_TYPE
 from .eligibility import TbAdolAssentEligibility
 from .model_mixins import SearchSlugModelMixin
 
 
-class ChildAssentManager(SearchSlugManager, models.Manager):
+class TbAdolAssentManager(SearchSlugManager, models.Manager):
 
     def get_by_natural_key(self, subject_identifier):
         return self.get(
@@ -90,7 +87,7 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         editable=False)
     
     version = models.CharField(
-        max_length=1)
+        max_length=1, default=1)
     
     consent_reviewed = models.CharField(
         verbose_name='I have reviewed the consent with the participant',
@@ -139,7 +136,7 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         help_text='If declined, return copy with the consent',
     )
 
-    objects = ChildAssentManager()
+    objects = TbAdolAssentManager()
 
     history = HistoricalRecords()
 
