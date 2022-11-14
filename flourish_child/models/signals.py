@@ -1,9 +1,10 @@
-from datetime import datetime
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 import os
+from datetime import datetime
 
-from PIL import Image
 import PIL
+import pyminizip
+import pypdfium2 as pdfium
+from PIL import Image
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.conf import settings
@@ -17,19 +18,18 @@ from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW
 from edc_data_manager.models import DataActionItem
-from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
-from flourish_prn.models import ChildOffStudy
-from flourish_prn.models.child_death_report import ChildDeathReport
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
-import pyminizip
+from flourish_child.models.child_birth import ChildBirth
 from flourish_child.models.tb_adol_assent import TbAdolAssent
-from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
-from ..models import ChildPreHospitalizationInline
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
+from flourish_prn.models.child_death_report import ChildDeathReport
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
+from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
+from ..models import ChildPreHospitalizationInline
 
 
 class CaregiverConsentError(Exception):
@@ -295,8 +295,7 @@ def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None,
-                    base_appt_datetime=None):
-
+        base_appt_datetime=None):
     if instance:
         subject_identifier = subject_identifier or instance.subject_identifier
 
@@ -342,8 +341,7 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
 
 def trigger_action_item(obj, field, response, model_cls,
-                        action_name, subject_identifier, repeat=False):
-
+        action_name, subject_identifier, repeat=False):
     action_cls = site_action_items.get(
         model_cls.action_name)
     action_item_model_cls = action_cls.action_item_model_cls()
@@ -449,21 +447,45 @@ def consent_version(subject_identifier):
         return consent_version_obj.version
 
 
+def encrypt_files(instance, subject_identifier):
+    base_path = settings.MEDIA_ROOT
+    if instance.image:
+        upload_to = f'{instance.image.field.upload_to}'
+        timestamp = datetime.timestamp(get_utcnow())
+        zip_filename = f'{subject_identifier}_{timestamp}.zip'
+        with open('filekey.key', 'r') as filekey:
+            key = filekey.read().rstrip()
+        com_lvl = 8
+        pyminizip.compress(f'{instance.image.path}', None,
+                           f'{base_path}/{upload_to}{zip_filename}', key, com_lvl)
+    # remove unencrypted file
+    if os.path.exists(f'{instance.image.path}'):
+        os.remove(f'{instance.image.path}')
+    instance.image = f'{upload_to}{zip_filename}'
+    instance.save()
+
+
 def stamp_image(instance):
     filefield = instance.image
     filename = filefield.name  # gets the "normal" file name as it was uploaded
     storage = filefield.storage
     path = storage.path(filename)
-    add_image_stamp(image_path=path)
+    if '.pdf' not in path:
+        base_image = Image.open(path)
+        stamped_img = add_image_stamp(base_image=base_image)
+        stamped_img.save(path)
+    else:
+        print_pdf(path)
 
 
-def add_image_stamp(image_path=None, position=(25, 25), resize=(600, 600)):
+def add_image_stamp(base_image=None, position=(25, 25),
+        resize=(100, 100)):
     """
     Superimpose image of a stamp over copy of the base image
     @param image_path: dir to base image
+    @param dont_save: boolean for not saving the image just converting
     @param position: pixels(w,h) to superimpose stamp at
     """
-    base_image = Image.open(image_path)
     stamp = Image.open('media/stamp/true-copy.png')
     if resize:
         stamp = stamp.resize(resize, PIL.Image.ANTIALIAS)
@@ -484,22 +506,18 @@ def add_image_stamp(image_path=None, position=(25, 25), resize=(600, 600)):
 
     # paste stamp over image
     base_image.paste(stamp, position, mask=stamp)
-    base_image.save(image_path)
+    return base_image
 
 
-def encrypt_files(instance, subject_identifier):
-    base_path = settings.MEDIA_ROOT
-    if instance.image:
-        upload_to = f'{instance.image.field.upload_to}'
-        timestamp = datetime.timestamp(get_utcnow())
-        zip_filename = f'{subject_identifier}_{timestamp}.zip'
-        with open('filekey.key', 'r') as filekey:
-            key = filekey.read().rstrip()
-        com_lvl = 8
-        pyminizip.compress(f'{instance.image.path}', None,
-                           f'{base_path}/{upload_to}{zip_filename}', key, com_lvl)
-    # remove unencrypted file
-    if os.path.exists(f'{instance.image.path}'):
-        os.remove(f'{instance.image.path}')
-    instance.image = f'{upload_to}{zip_filename}'
-    instance.save()
+def print_pdf(filepath):
+    pdf = pdfium.PdfDocument(filepath)
+    page_indices = [i for i in range(len(pdf))]
+    renderer = pdf.render_to(
+        pdfium.BitmapConv.pil_image,
+        page_indices=page_indices,
+    )
+    stamped_pdf_images = []
+    for image, index in zip(renderer, page_indices):
+        stamped_pdf_images.append(add_image_stamp(base_image=image))
+    first_img = stamped_pdf_images[0]
+    first_img.save(filepath, save_all=True, append_images=stamped_pdf_images[1:])
