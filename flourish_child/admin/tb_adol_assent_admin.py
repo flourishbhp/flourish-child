@@ -32,8 +32,10 @@ class TbAdolAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
                 'is_literate',
                 'witness_name',
                 'dob',
-                'is_dob_estimated',
                 'citizen',
+                'identity',
+                'identity_type',
+                'confirm_identity',
                 'tb_testing')}),
         ('Review Questions', {
             'fields': (
