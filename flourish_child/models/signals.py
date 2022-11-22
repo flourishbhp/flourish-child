@@ -177,11 +177,12 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbAdolAssent,
           dispatch_uid='tb_adol_on_post_save')
 def tb_adol_assent_on_post_save(sender, instance, raw, created, **kwargs):
-
-    put_on_schedule('tb_adol', instance=instance,
-                        subject_identifier=instance.subject_identifier,
-                        base_appt_datetime=instance.consent_datetime.replace(
-                            microsecond=0))
+    
+    if instance.is_eligible:
+        put_on_schedule('tb_adol', instance=instance,
+                            subject_identifier=instance.subject_identifier,
+                            base_appt_datetime=instance.consent_datetime.replace(
+                                microsecond=0))
 
 @receiver(post_save, weak=False, sender=ChildBirth,
           dispatch_uid='child_visit_on_post_save')
