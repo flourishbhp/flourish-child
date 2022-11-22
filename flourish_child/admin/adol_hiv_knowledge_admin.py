@@ -14,6 +14,7 @@ class HivKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     fieldsets = (
         ('HIV Knowledge', {
             'fields': [
+                'child_visit',
                 'report_datetime',
                 'hiv_informed',
                 'hiv_knowledge_medium',
