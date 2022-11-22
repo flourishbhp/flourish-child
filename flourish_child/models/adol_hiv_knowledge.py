@@ -109,7 +109,9 @@ class HivKnowledge(ChildCrfModelMixin):
         max_length=60, )
 
     hiv_community_treatment_other = models.TextField(
-        verbose_name='Other (free text)'
+        verbose_name='Other (free text)',
+        blank=True,
+        null=True
     )
 
     class Meta:
