@@ -149,6 +149,16 @@ list_data = {
         ('food_fruitsvege', 'Other fruits and vegetables'),
         ('food_othersolid', 'Other solid foods'),
     ],
+    'flourish_child.hivknowledgemedium': [
+        ('family', 'Family'),
+        ('friends', 'Friends'),
+        ('neighbors', 'Neigbors'),
+        ('colleagues', 'Colleagues'),
+        ('medical_staff', 'Medical Staff'),
+        ('school', 'School'),
+        ('I_do_not_recall', 'I do not recall'),
+        (OTHER, 'Other')
+    ]
 }
 
 preload_data = PreloadData(
