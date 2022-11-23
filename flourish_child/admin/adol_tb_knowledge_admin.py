@@ -14,6 +14,7 @@ class TbKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': [
+                'child_visit',
                 'report_datetime',
                 'tb_informed',
                 'tb_knowledge_medium',
