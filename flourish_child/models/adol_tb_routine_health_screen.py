@@ -1,6 +1,6 @@
 from django.db import models
 
-from ..choices import YES_NO_UNK_DWTA, \
+from ..choices import YES_NO_UNK_PNTA, \
     VISIT_NUMBER, HEALTH_CARE_CENTER, YES_NO_DN_PNTA, VISIT_REASON
 from .child_crf_model_mixin import ChildCrfModelMixin
 
@@ -53,7 +53,7 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
         max_length=20,
         null=True,
         blank=True,
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         help_text='If no/ I do not know /prefer not to answer,'
                   ' CRF complete if no further visits, else repeat '
                   'questions 2-8 for each healthcare visit reported in question 1 '
@@ -65,7 +65,7 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
         max_length=20,
         null=True,
         blank=True,
-        choices=YES_NO_UNK_DWTA)
+        choices=YES_NO_UNK_PNTA)
 
     class Meta:
         app_label = 'flourish_child'

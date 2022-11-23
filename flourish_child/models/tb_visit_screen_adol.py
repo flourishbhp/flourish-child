@@ -2,7 +2,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import YES_NO_UNK_DWTA, YES_NO_DN_PNTA
+from ..choices import YES_NO_UNK_PNTA, YES_NO_DN_PNTA
 
 
 class TbVisitScreeningAdolescent(ChildCrfModelMixin):
