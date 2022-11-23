@@ -881,7 +881,7 @@ YES_NO_PNTA = (
     (PNTA, _('Prefer not to answer')),
 )
 
-COMMUNITY_IMPACT = {
+COMMUNITY_IMPACT = (
     ('0', 'Not a problem'),
     ('1', 'A little bit of a problem'),
     ('2', 'It is not a little problem nor a big problem'),
@@ -889,17 +889,17 @@ COMMUNITY_IMPACT = {
     ('4', 'A big problem'),
     ('5', 'I dont know'),
     ('6', 'Prefer to not answer')
-}
+)
 
-COMMUNITY_TREATMENT = {
+COMMUNITY_TREATMENT = (
     ('0', 'Treated well'),
     ('1', 'Treated normally'),
     ('2', 'Treated poorly'),
     ('3', 'unknown'),
     ('4', 'Other'),
-}
+)
 
-VISIT_NUMBER = {
+VISIT_NUMBER = (
     ('0', '0'),
     ('1', '1'),
     ('2', '2'),
@@ -907,24 +907,24 @@ VISIT_NUMBER = {
     ('4', '4'),
     ('5', '5'),
     ('6', '6 or more')
-}
+)
 
-HEALTH_CARE_CENTER = {
+HEALTH_CARE_CENTER = (
     ('government_health_center', 'Government health center'),
     ('private_clinic', 'Private clinic'),
     ('both', 'Both government health center and private clinic'),
     ('hospital', 'Hospital'),
     ('school_health_clinic', 'school health clinic'),
     ('other', 'Other')
-}
+)
 
-TB_SYMPTOM = {
+TB_SYMPTOM = (
     ('1', 'Respiratory illness (cough, runny nose, sore throat, etc)'),
     ('2', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
     ('3', 'Febrile illness (with fever)'),
     ('4', 'Sexual reproductive health needs (contraceptives))'),
     ('5', 'other')
-}
+)
 
 YES_NO_UNK_DWTA = (
     (YES, YES),
