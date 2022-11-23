@@ -882,21 +882,21 @@ YES_NO_PNTA = (
 )
 
 COMMUNITY_IMPACT = (
-    ('0', 'Not a problem'),
-    ('1', 'A little bit of a problem'),
-    ('2', 'It is not a little problem nor a big problem'),
-    ('3', 'Somewhat of a problem'),
-    ('4', 'A big problem'),
-    ('5', 'I dont know'),
-    ('6', 'Prefer to not answer')
+    ('not_a_problem', 'Not a problem'),
+    ('a_little_of_a_problem', 'A little bit of a problem'),
+    ('neither_little_or_big_problem', 'It is not a little problem nor a big problem'),
+    ('somehat_of_a_problem', 'Somewhat of a problem'),
+    ('a_big_problem', 'A big problem'),
+    (UNKNOWN, 'I dont know'),
+    (PNTA, 'Prefer to not answer')
 )
 
 COMMUNITY_TREATMENT = (
-    ('0', 'Treated well'),
-    ('1', 'Treated normally'),
-    ('2', 'Treated poorly'),
-    ('3', 'unknown'),
-    ('4', 'Other'),
+    ('treated_well', 'Treated well'),
+    ('treated_normally', 'Treated normally'),
+    ('treated_poorly', 'Treated poorly'),
+    (UNKNOWN, 'unknown'),
+    (OTHER, 'Other'),
 )
 
 VISIT_NUMBER = (
@@ -906,7 +906,7 @@ VISIT_NUMBER = (
     ('3', '3'),
     ('4', '4'),
     ('5', '5'),
-    ('6', '6 or more')
+    ('6_or_more', '6 or more')
 )
 
 HEALTH_CARE_CENTER = (
@@ -919,18 +919,18 @@ HEALTH_CARE_CENTER = (
 )
 
 TB_SYMPTOM = (
-    ('1', 'Respiratory illness (cough, runny nose, sore throat, etc)'),
-    ('2', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
-    ('3', 'Febrile illness (with fever)'),
-    ('4', 'Sexual reproductive health needs (contraceptives))'),
-    ('5', 'other')
+    ('respitory_illness', 'Respiratory illness (cough, runny nose, sore throat, etc)'),
+    ('gastrointestinal_illness', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
+    ('febrile_illness', 'Febrile illness (with fever)'),
+    ('sexual_reporductive_healthy_needs', 'Sexual reproductive health needs (contraceptives))'),
+    (OTHER, 'other')
 )
 
-YES_NO_UNK_DWTA = (
+YES_NO_UNK_PNTA = (
     (YES, YES),
     (NO, NO),
-    (UNKNOWN, 'Unknown'),
-    (DWTA, 'Prefer not to answer'),)
+    (UNKNOWN, 'I do not know'),
+    (PNTA, 'Prefer not to answer'),)
 
 EXTRA_PULMONARY_LOC = (
     ('lymph_nodes', 'Lymph nodes'),
@@ -945,7 +945,7 @@ TB_DRUGS_FREQ = (
     ('4_drugs', '4 drugs'),
     ('more_than_4', 'More than 4 drugs'),
     (UNKNOWN, 'Unknown'),
-    (DWTA, 'Prefer not to answer'),
+    (PNTA, 'Prefer not to answer'),
 )
 
 TB_TYPE = (
@@ -953,7 +953,7 @@ TB_TYPE = (
     ('outside_the_lungs', 'Outside the lungs'),
     ('both', 'Both in the lungs and outside the lungs'),
     (UNKNOWN, 'Unknown'),
-    (DWTA, 'Prefer not to answer')
+    (PNTA, 'Prefer not to answer')
 )
 
 RELATION_TO_INDIVIDUAL = (
@@ -964,3 +964,18 @@ RELATION_TO_INDIVIDUAL = (
     ('sibling', 'Sibling'),
     (OTHER, 'Other'),
 )
+
+
+TB_THERAPY_REASONS = (
+    (POS, 'Positive test for TB Infection'),
+    ('tb_contact', 'TB Contact'),
+    ('hiv_positive', 'Diagnosed with HIV'),
+    (UNKNOWN, 'Unknown'),
+    (OTHER, 'Other'),
+)
+
+TB_PRESCRIPTION_AGE = (
+    ('0_4', '0-4 years'),
+    ('5_9', '5-9 years'),
+    ('10_17', '10-17 years')
+) 
