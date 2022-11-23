@@ -19,47 +19,46 @@ class TbKnowledgeAdol(ChildCrfModelMixin):
 
     tb_knowledge_medium_other = models.TextField(
         verbose_name='If other, specify',
-        max_length=150,
         blank=True,
         null=True)
 
     fever_knowledge = models.CharField(
-        verbose_name='Fever',
+        verbose_name='Fever?',
         choices=YES_NO_DN_PNTA,
         max_length=30,)
 
     cough_knowledge = models.CharField(
-        verbose_name='Cough',
+        verbose_name='Cough?',
         choices=YES_NO_DN_PNTA,
         max_length=30,)
 
     night_sweats_knowledge = models.CharField(
-        verbose_name='Night Sweats',
+        verbose_name='Night Sweats?',
         choices=YES_NO_DN_PNTA,
         max_length=30,)
 
     weight_loss_knowledge = models.CharField(
-        verbose_name='Weight Loss',
+        verbose_name='Weight Loss?',
         choices=YES_NO_DN_PNTA,
         max_length=30,)
 
     rash_knowledge = models.CharField(
-        verbose_name='Rash',
+        verbose_name='Rash?',
         choices=YES_NO_DN_PNTA,
         max_length=30,)
 
     headache_knowledge = models.CharField(
-        verbose_name='Headache',
+        verbose_name='Headache?',
         choices=YES_NO_DN_PNTA,
         max_length=30,)
 
     vomiting_knowledge = models.CharField(
-        verbose_name='Vomiting',
+        verbose_name='Vomiting?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
     body_ache_knowledge = models.CharField(
-        verbose_name='Body ache',
+        verbose_name='Body aches?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
@@ -101,7 +100,15 @@ class TbKnowledgeAdol(ChildCrfModelMixin):
         max_length=60, )
 
     tb_community_treatment_other = models.TextField(
-        verbose_name='Other (free text)'
+        verbose_name='Other (free text)',
+        null=True,
+        blank=True
+    )
+    
+    contract_tb_other = models.TextField(
+        verbose_name='Other (free text)',
+        null=True,
+        blank=True
     )
 
     class Meta:
