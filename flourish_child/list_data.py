@@ -158,6 +158,16 @@ list_data = {
         ('school', 'School'),
         ('I_do_not_recall', 'I do not recall'),
         (OTHER, 'Other')
+    ],
+    'flourish_child.tbknowledgemedium': [
+        ('family', 'Family'),
+        ('friends', 'Friends'),
+        ('neighbors', 'Neigbors'),
+        ('colleagues', 'Colleagues'),
+        ('medical_staff', 'Medical Staff'),
+        ('school', 'School'),
+        ('I_do_not_recall', 'I do not recall'),
+        (OTHER, 'Other')
     ]
 }
 
