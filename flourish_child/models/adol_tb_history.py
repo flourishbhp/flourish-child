@@ -19,12 +19,10 @@ class TbHistoryAdol(ChildCrfModelMixin):
 
     history_of_tbt = models.CharField(
         verbose_name=('Do you have a prior history of taking TB '
-                      'preventative therapy (TPT)'),
+                      'preventative therapy (TPT)?'),
         choices=YES_NO_UNK_PNTA,
         help_text='This is generally a medication taken for several '
         'months to prevent TB disease, such as isoniazid.',
-        blank=True,
-        null=True,
         max_length=30)
     
     reason_for_therapy = models.CharField(
