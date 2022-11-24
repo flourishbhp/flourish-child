@@ -923,7 +923,7 @@ TB_SYMPTOM = (
     ('gastrointestinal_illness', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
     ('febrile_illness', 'Febrile illness (with fever)'),
     ('sexual_reporductive_healthy_needs', 'Sexual reproductive health needs (contraceptives))'),
-    (OTHER, 'other')
+    (OTHER, 'Other')
 )
 
 YES_NO_UNK_PNTA = (
