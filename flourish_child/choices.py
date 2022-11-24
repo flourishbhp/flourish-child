@@ -949,7 +949,7 @@ TB_DRUGS_FREQ = (
 )
 
 TB_TYPE = (
-    ('In_the_lungs', 'In the lungs'),
+    ('inside_the_lungs', 'In the lungs'),
     ('outside_the_lungs', 'Outside the lungs'),
     ('both', 'Both in the lungs and outside the lungs'),
     (UNKNOWN, 'Unknown'),
