@@ -20,6 +20,7 @@ class TbHistoryAdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'prior_tb_infec',
                 'history_of_tbt',
                 'reason_for_therapy',
+                'reason_for_therapy_other',
                 'therapy_prescribed_age',
                 'tbt_completed',
                 'prior_tb_history',

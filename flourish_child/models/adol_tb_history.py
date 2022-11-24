@@ -1,5 +1,6 @@
 from django.db import models
 from edc_constants.choices import YES_NO
+from edc_base.model_fields import OtherCharField
 
 from ..choices import (EXTRA_PULMONARY_LOC, TB_DRUGS_FREQ, TB_TYPE,
                        YES_NO_UNK_PNTA, TB_THERAPY_REASONS, TB_PRESCRIPTION_AGE)
@@ -32,6 +33,8 @@ class TbHistoryAdol(ChildCrfModelMixin):
         blank=True,
         null=True,
     )
+    
+    reason_for_therapy_other = OtherCharField()
     
     
     therapy_prescribed_age = models.CharField(
