@@ -1,8 +1,11 @@
 from django.db import models
 
 from ..choices import YES_NO_UNK_PNTA, \
-    VISIT_NUMBER, HEALTH_CARE_CENTER, YES_NO_DN_PNTA, VISIT_REASON
+    VISIT_NUMBER, HEALTH_CARE_CENTER, YES_NO_DN_PNTA, TB_SYMPTOM
 from .child_crf_model_mixin import ChildCrfModelMixin
+from .list_models import TbRoutineScreenAdolMedium
+from edc_base.model_fields import OtherCharField
+
 
 
 class TbRoutineScreenAdol(ChildCrfModelMixin):
@@ -13,25 +16,26 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
         help_text='if 0, end of CRF else continue'
     )
 
-    care_location = models.CharField(
+    care_location = models.ManyToManyField(TbRoutineScreenAdolMedium,
         verbose_name='For visit #1, where did you receive care at?',
-        max_length=100,
-        choices=HEALTH_CARE_CENTER,
-        help_text='if 0, end of CRF else continue'
+        help_text='if 0, end of CRF else continue',
+        blank=True
     )
 
-    other = models.TextField(
-        verbose_name='If ‘other’, specify: (free text)',
-        null=True,
-        blank=True,
+    care_location_other = OtherCharField(
+        verbose_name='If ‘other’, specify',
     )
 
     visit_reason = models.CharField(
         verbose_name='What was the primary reason for your health visit?',
-        max_length=30,
+        max_length=33,
         null=True,
         blank=True,
-        choices=VISIT_REASON
+        choices=TB_SYMPTOM
+    )
+    
+    visit_reason_other = OtherCharField(
+        verbose_name='If ‘other’, specify',
     )
 
     screening_questions = models.CharField(
@@ -39,6 +43,8 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
                      " were you screened for TB with the four screening"
                      " questions (cough, fever, weight loss, night sweats)?",
         choices=YES_NO_DN_PNTA,
+        null=True,
+        blank=True,
         max_length=20,
         help_text='if yes continue to Q7 '
                   'if no/I do not know/prefer not to answer, '
