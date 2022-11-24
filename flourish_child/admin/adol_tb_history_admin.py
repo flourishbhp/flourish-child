@@ -25,6 +25,7 @@ class TbHistoryAdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'prior_tb_history',
                 'tb_diagnosis_type',
                 'extra_pulmonary_loc',
+                'other_loc',
                 'prior_treatmnt_history',
                 'tb_drugs_freq',
                 'iv_meds_used',
