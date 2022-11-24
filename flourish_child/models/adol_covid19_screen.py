@@ -8,7 +8,7 @@ class Covid19Adol(ChildCrfModelMixin):
     test_for_covid = models.CharField(
         verbose_name='Have you been tested for COVID-19?',
         max_length=35,
-        choices=YES_NO_COVID_FORM,
+        choices=YES_NO_DN_PNTA,
     )
 
     receive_test_result = models.CharField(
@@ -30,4 +30,7 @@ class Covid19Adol(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
+        verbose_name = 'COVID-19'
+        verbose_name_plural = "COVID-19"
+
 
