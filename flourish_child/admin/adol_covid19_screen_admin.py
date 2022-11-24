@@ -16,6 +16,7 @@ class Covid19AdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         (None, {
             'fields': [
                 'child_visit',
+                'report_datetime',
                 'test_for_covid',
                 'receive_test_result',
                 'result_of_test',
