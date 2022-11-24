@@ -6,7 +6,7 @@ from ..choices import YES_NO_COVID_FORM,YES_NO_DN_PNTA, POS_NEG_PENDING_UNKNOWN
 
 class Covid19Adol(ChildCrfModelMixin):
     test_for_covid = models.CharField(
-        verbose_name='Have you been tested for COVID-19?',
+        verbose_name='You reported having symptoms of [cough] [fever]. Were you tested for COVID-19?',
         max_length=35,
         choices=YES_NO_DN_PNTA,
     )
