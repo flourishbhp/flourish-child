@@ -1,5 +1,6 @@
 from django.db import models
 from edc_constants.choices import YES_NO
+from edc_base.model_fields import OtherCharField
 
 from ..choices import YES_NO_PNTA, YES_NO_DN_PNTA, COMMUNITY_TREATMENT, COMMUNITY_IMPACT
 from .list_models import TbKnowledgeMedium
@@ -17,10 +18,8 @@ class TbKnowledgeAdol(ChildCrfModelMixin):
         TbKnowledgeMedium,
         verbose_name='Where did you first learn about TB? Did you learn about TB through')
 
-    tb_knowledge_medium_other = models.TextField(
-        verbose_name='If other, specify',
-        blank=True,
-        null=True)
+    tb_knowledge_medium_other = OtherCharField(
+        verbose_name='If other, specify',)
 
     fever_knowledge = models.CharField(
         verbose_name='Fever?',
@@ -99,16 +98,8 @@ class TbKnowledgeAdol(ChildCrfModelMixin):
         choices=COMMUNITY_TREATMENT,
         max_length=60, )
 
-    tb_community_treatment_other = models.TextField(
-        verbose_name='Other (free text)',
-        null=True,
-        blank=True
-    )
-    
-    contract_tb_other = models.TextField(
-        verbose_name='Other (free text)',
-        null=True,
-        blank=True
+    tb_community_treatment_other = OtherCharField(
+        verbose_name='If other, specify',
     )
 
     class Meta:
