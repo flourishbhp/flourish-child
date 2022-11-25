@@ -887,7 +887,7 @@ COMMUNITY_IMPACT = (
     ('neither_little_or_big_problem', 'It is not a little problem nor a big problem'),
     ('somehat_of_a_problem', 'Somewhat of a problem'),
     ('a_big_problem', 'A big problem'),
-    (UNKNOWN, 'I dont know'),
+    (UNKNOWN, 'I do not know'),
     (PNTA, 'Prefer to not answer')
 )
 
