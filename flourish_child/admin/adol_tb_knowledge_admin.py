@@ -2,14 +2,14 @@ from django.contrib import admin
 from edc_model_admin import audit_fieldset_tuple
 
 from ..admin_site import flourish_child_admin
-from ..forms import TbAdolAssentForm
+from ..forms import TbKnowledgeAdolForm
 from ..models import TbKnowledgeAdol
 from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 @admin.register(TbKnowledgeAdol, site=flourish_child_admin)
 class TbKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-    form = TbAdolAssentForm
+    form = TbKnowledgeAdolForm
 
     fieldsets = (
         (None, {
@@ -39,7 +39,6 @@ class TbKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
              'fields': [
                  'tb_utensils_transmit',
                  'tb_air_transmit',
-                 'contract_tb_other',
                  'tb_treatable',
                  'tb_curable']
          }),
