@@ -160,6 +160,13 @@ EMO_SUPPORT_DECLINE = (
     ('no_transport_fare', 'I did not have transport fare'),
     (OTHER, 'Other, specify'),)
 
+EMO_SUPPORT_PROVIDER = (
+    ('psychologist', 'Psychologist'),
+    ('hosp_social_worker', 'Hospital-based social worker'),
+    ('comm_social_worker', 'Community Social worker'),
+    ('psychiatrist', 'Psychiatrist'),
+    (PNTA, _('Prefer not to answer')),)
+
 NO_EMO_SUPPORT_REASON = (
     ('professional_not_around', 'Social worker/ Psychologist/ Psychiatrist not around'),
     ('clinic_long_queue', 'Long queue at the clinic'),
