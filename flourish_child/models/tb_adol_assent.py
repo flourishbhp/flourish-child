@@ -1,4 +1,3 @@
-from edc_action_item.model_mixins import ActionModelMixin
 
 from django.apps import apps as django_apps
 from django.db import models
@@ -12,19 +11,17 @@ from edc_consent.field_mixins import (
     CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin,
     VerificationFieldsMixin)
 from edc_consent.field_mixins import IdentityFieldsMixin, PersonalFieldsMixin
-from edc_consent.validators import eligible_if_yes
-from edc_constants.choices import YES_NO
+from edc_constants.choices import YES_NO, YES_NO_DECLINED
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
 
-from ..action_items import CHILDASSENT_ACTION
 from ..choices import IDENTITY_TYPE
-from .eligibility import AssentEligibility
+from .eligibility import TbAdolAssentEligibility
 from .model_mixins import SearchSlugModelMixin
 
 
-class ChildAssentManager(SearchSlugManager, models.Manager):
+class TbAdolAssentManager(SearchSlugManager, models.Manager):
 
     def get_by_natural_key(self, subject_identifier):
         return self.get(
@@ -33,12 +30,7 @@ class ChildAssentManager(SearchSlugManager, models.Manager):
 
 class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                    IdentityFieldsMixin, PersonalFieldsMixin, ReviewFieldsMixin,
-                   VulnerabilityFieldsMixin, CitizenFieldsMixin, SearchSlugModelMixin,
-                   ActionModelMixin, VerificationFieldsMixin, BaseUuidModel):
-
-    tracking_identifier_prefix = 'TA'
-
-    action_name = CHILDASSENT_ACTION
+                   VulnerabilityFieldsMixin, CitizenFieldsMixin, SearchSlugModelMixin, VerificationFieldsMixin, BaseUuidModel):
 
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
@@ -73,7 +65,7 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         help_text='If no, participant is not eligible.')
 
     samples_future_studies = models.CharField(
-        verbose_name=('18.    Use of Samples in Future Research: Do you give us permission '
+        verbose_name=('Use of Samples in Future Research: Do you give us permission '
                       'to use your blood samples for future studies? '),
         max_length=3,
         choices=YES_NO,)
@@ -93,8 +85,58 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     is_eligible = models.BooleanField(
         default=False,
         editable=False)
+    
+    version = models.CharField(
+        max_length=1, default=1)
+    
+    consent_reviewed = models.CharField(
+        verbose_name='I have reviewed the consent with the participant',
+        max_length=3,
+        choices=YES_NO,
+        null=True,
+        blank=False,
+        help_text='If no, participant is not eligible.')
 
-    objects = ChildAssentManager()
+    study_questions = models.CharField(
+        verbose_name=(
+            'I have answered all questions the participant had about the study'),
+        max_length=3,
+        choices=YES_NO,
+        null=True,
+        blank=False,
+        help_text='If no, participant is not eligible.')
+
+    assessment_score = models.CharField(
+        verbose_name=(
+            'I have asked the participant questions about this study and '
+            'the participant has demonstrated understanding'),
+        max_length=3,
+        choices=YES_NO,
+        null=True,
+        blank=False,
+        help_text='If no, participant is not eligible.')
+
+    consent_signature = models.CharField(
+        verbose_name=(
+            'I have verified that the participant has signed the consent form'),
+        max_length=3,
+        choices=YES_NO,
+        null=True,
+        blank=False,
+        help_text='If no, participant is not eligible.')
+
+    consent_copy = models.CharField(
+        verbose_name=(
+            'I have provided the participant with a copy of their '
+            'signed informed consent'),
+        max_length=20,
+        choices=YES_NO_DECLINED,
+        null=True,
+        blank=False,
+        help_text='If declined, return copy with the consent',
+    )
+
+    objects = TbAdolAssentManager()
 
     history = HistoricalRecords()
 
@@ -114,8 +156,15 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         return child_age.years
 
     def save(self, *args, **kwargs):
-        eligibility_criteria = AssentEligibility(
-            self.remain_in_study, self.hiv_testing, self.preg_testing, self.child_age)
+        eligibility_criteria = TbAdolAssentEligibility(
+            child_age=self.child_age,
+            citizen = self.citizen,
+            tb_testing = self.tb_testing,
+            consent_reviewed = self.consent_reviewed,
+            study_questions = self.study_questions,
+            assessment_score = self.assessment_score,
+            consent_signature = self.consent_signature,)
+        
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
         # if self.is_eligible and not self.subject_identifier:

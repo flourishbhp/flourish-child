@@ -27,6 +27,7 @@ class TbAdolAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
                 'first_name',
                 'last_name',
                 'initials',
+                'gender',
                 'language',
                 'is_literate',
                 'witness_name',
@@ -47,6 +48,7 @@ class TbAdolAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
         audit_fieldset_tuple)
 
     radio_fields = {
+        'gender': admin.VERTICAL,
         'assessment_score': admin.VERTICAL,
         'consent_copy': admin.VERTICAL,
         'consent_reviewed': admin.VERTICAL,

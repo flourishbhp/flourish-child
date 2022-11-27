@@ -1,13 +1,13 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from edc_constants.constants import NO
-
 from flourish_child_validations.form_validators import (
     ChildPreviousHospitalisationFormValidator,
     ChildPreHospitalisationInlineFormValidator)
-from .child_form_mixin import ChildModelFormMixin
+
 from ..models import (ChildPreviousHospitalization,
                       ChildPreHospitalizationInline)
+from .child_form_mixin import ChildModelFormMixin
 
 
 class ChildPreviousHospitalizationForm(ChildModelFormMixin, forms.ModelForm):
@@ -40,7 +40,6 @@ class ChildPreviousHospitalizationForm(ChildModelFormMixin, forms.ModelForm):
                                             'Adolescents Previous Hospital '
                                             'inline form')
 
-
     class Meta:
         model = ChildPreviousHospitalization
         fields = '__all__'
@@ -48,7 +47,6 @@ class ChildPreviousHospitalizationForm(ChildModelFormMixin, forms.ModelForm):
 
 class ChildPreHospitalizationInlineForm(ChildModelFormMixin):
     form_validator_cls = ChildPreHospitalisationInlineFormValidator
-
 
     class Meta:
         model = ChildPreHospitalizationInline
