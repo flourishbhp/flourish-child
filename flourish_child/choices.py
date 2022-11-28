@@ -895,7 +895,7 @@ COMMUNITY_TREATMENT = (
     ('treated_well', 'Treated well'),
     ('treated_normally', 'Treated normally'),
     ('treated_poorly', 'Treated poorly'),
-    (UNKNOWN, 'unknown'),
+    (UNKNOWN, 'I do not know'),
     (OTHER, 'Other'),
 )
 
@@ -979,3 +979,11 @@ TB_PRESCRIPTION_AGE = (
     ('5_9', '5-9 years'),
     ('10_17', '10-17 years')
 ) 
+
+TIMES_TESTED = (
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('more', 'More'),
+)
