@@ -22,7 +22,7 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
         null=True)
 
     tb_ind_other = OtherCharField(
-        verbose_name="if other, specify...",
+        verbose_name="if other, specify",
         max_length=35,
         blank=True,
         null=True)
@@ -127,5 +127,5 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'TB symptoms in household members at 2 months postpartum'
-        verbose_name_plural = 'TB symptoms in household members at 2 months postpartum'
+        verbose_name = 'Presence of TB symptoms in household members'
+        verbose_name_plural = 'Presene of TB symptoms in household members'
