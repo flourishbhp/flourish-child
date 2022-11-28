@@ -74,3 +74,4 @@ from .offschedule_form import ChildOffScheduleForm
 from .tb_adol_assent_form import TbAdolAssentForm
 from .tb_screen_adol_form import TbVisitScreeningAdolescentForm
 from .adol_tb_knowledge_form import TbKnowledgeAdolForm
+from .hiv_testing_adol_form import HIVTestingAdolForm

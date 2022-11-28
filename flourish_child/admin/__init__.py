@@ -56,3 +56,4 @@ from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
 from .tb_adol_assent_admin import TbAdolAssentAdmin
 from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
+from .hiv_testing_adol_admin import HivTestingAdmin
