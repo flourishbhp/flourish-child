@@ -32,6 +32,7 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
                      ' were you seen by a health care worker for evaluation for TB?  ',
         max_length=30,
         choices=YES_NO_UNK_PNTA,
+        blank=True,
         null=True)
 
     tb_in_house = models.CharField(
@@ -39,9 +40,7 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
                      'had cough for two weeks or more in the last 12 months? ',
         max_length=20,
         choices=YES_NO_UNK_PNTA,
-        null=True,
-        help_text='If ‘Yes’, continue to Q6'
-                  'If ‘No’ ‘I do not know’ or ‘Prefer not to answer’, skip to Q8')
+        null=True,)
 
     cough_ind_rel = models.CharField(
         verbose_name='Please indicate the relationship of this individual or '
