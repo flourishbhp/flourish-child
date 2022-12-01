@@ -29,6 +29,10 @@ class EmoSupportType(ListModelMixin, BaseUuidModel):
     pass
 
 
+class EmoHealthImproved(ListModelMixin, BaseUuidModel):
+    pass
+
+
 class SolidFoods(ListModelMixin, BaseUuidModel):
     pass
 

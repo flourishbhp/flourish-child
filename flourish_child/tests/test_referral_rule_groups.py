@@ -9,7 +9,7 @@ from edc_metadata.models import CrfMetadata
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
 
-from ..models import Appointment, ChildVisit
+from ..models import Appointment, ChildVisit, ChildDummySubjectConsent
 
 
 @tag('creff')
@@ -23,17 +23,23 @@ class TestVisitScheduleSetup(TestCase):
             'version': '1'}
 
         self.maternal_dataset_options = {
-            'delivdt': get_utcnow() - relativedelta(years=11, months=2),
+            'delivdt': get_utcnow() - relativedelta(years=2, months=0),
             'mom_enrolldate': get_utcnow(),
             'mom_hivstatus': 'HIV-infected',
             'study_maternal_identifier': '12345',
-            'protocol': 'Tshipidi'}
+            'protocol': 'Tshilo Dikotla'}
 
         self.child_dataset_options = {
-            'infant_hiv_exposed': 'Unexposed',
+            'infant_hiv_exposed': 'Exposed',
             'infant_enrolldate': get_utcnow(),
             'study_maternal_identifier': '12345',
             'study_child_identifier': '1234'}
+
+        self.child_dataset_options['infant_hiv_exposed'] = 'Unexposed'
+        self.maternal_dataset_options['protocol'] = 'Tshipidi'
+        self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(
+            years=11,
+            months=2)
 
         child_dataset = mommy.make_recipe(
             'flourish_child.childdataset',
@@ -62,7 +68,7 @@ class TestVisitScheduleSetup(TestCase):
             child_dob=maternal_dataset_obj.delivdt.date(),
             cohort=None)
 
-        mommy.make_recipe(
+        child_assent = mommy.make_recipe(
             'flourish_child.childassent',
             subject_identifier=caregiver_child_consent_obj.subject_identifier,
             first_name=caregiver_child_consent_obj.first_name,
@@ -77,6 +83,17 @@ class TestVisitScheduleSetup(TestCase):
             'flourish_caregiver.caregiverpreviouslyenrolled',
             subject_identifier=subject_consent.subject_identifier)
 
+        dummy_consent = ChildDummySubjectConsent.objects.get(
+            subject_identifier=child_assent.subject_identifier)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=dummy_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
     def year_3_age(self, year_3_years, year_3_months):
         """Returns the age at year 3.
         """
@@ -87,11 +104,12 @@ class TestVisitScheduleSetup(TestCase):
                                                       months=year_3_months)
         return child_dob
 
+    @tag('creff1')
     def test_phq9_referral_required(self):
 
         visit = ChildVisit.objects.get(visit_code='2000')
         mommy.make_recipe('flourish_child.childphqdeprscreening',
-                          maternal_visit=visit)
+                          child_visit=visit)
 
         self.assertEqual(
             CrfMetadata.objects.get(
