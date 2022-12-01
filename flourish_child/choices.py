@@ -915,7 +915,7 @@ HEALTH_CARE_CENTER = (
     ('both', 'Both government health center and private clinic'),
     ('hospital', 'Hospital'),
     ('school_health_clinic', 'school health clinic'),
-    ('other', 'Other')
+    (OTHER, 'Other')
 )
 
 TB_SYMPTOM = (
@@ -986,4 +986,11 @@ TIMES_TESTED = (
     ('3', '3'),
     ('4', '4'),
     ('more', 'More'),
+)
+
+POS_NEG_IND_IDK = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (IND, 'Indeterminate'),
+    (UNKNOWN, 'I do not know'),
 )
