@@ -117,14 +117,15 @@ class TestVisitScheduleSetup(TestCase):
                 subject_identifier=visit.subject_identifier,
                 visit_code='2000').entry_status, REQUIRED)
 
+    @tag('creff2')
     def test_phq9_referral_fu_required(self):
 
         visit = ChildVisit.objects.get(visit_code='2000')
         mommy.make_recipe('flourish_child.childphqdeprscreening',
-                          maternal_visit=visit)
+                          child_visit=visit)
 
         mommy.make_recipe('flourish_child.childphqreferral',
-                          maternal_visit=visit,
+                          child_visit=visit,
                           referred_to='receiving_emotional_care')
 
         self.assertEqual(
@@ -133,14 +134,15 @@ class TestVisitScheduleSetup(TestCase):
                 subject_identifier=visit.subject_identifier,
                 visit_code='2000').entry_status, REQUIRED)
 
+    @tag('creff3')
     def test_phq9_post_referral_required(self):
 
         visit = ChildVisit.objects.get(visit_code='2000')
         mommy.make_recipe('flourish_child.childphqdeprscreening',
-                          maternal_visit=visit)
+                          child_visit=visit)
 
         mommy.make_recipe('flourish_child.childphqreferral',
-                          maternal_visit=visit,
+                          child_visit=visit,
                           referred_to='psychiatrist')
 
         quart_visit = mommy.make_recipe(

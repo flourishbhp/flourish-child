@@ -8,6 +8,12 @@ class ChildPhqReferralFUForm(ChildModelFormMixin):
 
     form_validator_cls = ChildReferralFUFormValidator
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['emo_support_type'].label = ('4. What kind of emotional support are you '
+                                                 'receiving?')
+
     class Meta:
         model = ChildPhqReferralFU
         fields = '__all__'
