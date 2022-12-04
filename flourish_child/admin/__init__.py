@@ -20,6 +20,7 @@ from .child_dummy_consent_admin import ChildDummySubjectConsentAdmin
 from .child_food_security_questionnaire_admin import \
     ChildFoodSecurityQuestionnaireAdmin
 from .child_gad_anxiety_screening_admin import ChildGadAnxietyScreeningAdmin
+from .child_gad_post_referral_admin import ChildGadPostReferralAdmin
 from .child_gad_referral_admin import ChildGadReferralAdmin
 from .child_gad_referral_fu_admin import ChildGadReferralFUAdmin
 from .child_hiv_rapid_test_counseling_admin import \
@@ -28,6 +29,7 @@ from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
 from .child_medical_history_admin import ChildMedicalHistoryAdmin
 from .child_phq_depression_screening_admin import \
     ChildPhqDepressionScreeningAdmin
+from .child_phq_post_referral_admin import ChildPhqPostReferralAdmin
 from .child_phq_referral_admin import ChildPhqReferralAdmin
 from .child_phq_referral_fu_admin import ChildPhqReferralFUAdmin
 from .child_physical_activity_admin import ChildPhysicalActivityAdmin

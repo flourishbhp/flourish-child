@@ -160,6 +160,13 @@ EMO_SUPPORT_DECLINE = (
     ('no_transport_fare', 'I did not have transport fare'),
     (OTHER, 'Other, specify'),)
 
+EMO_SUPPORT_PROVIDER = (
+    ('psychologist', 'Psychologist'),
+    ('hosp_social_worker', 'Hospital-based social worker'),
+    ('comm_social_worker', 'Community Social worker'),
+    ('psychiatrist', 'Psychiatrist'),
+    (PNTA, _('Prefer not to answer')),)
+
 NO_EMO_SUPPORT_REASON = (
     ('professional_not_around', 'Social worker/ Psychologist/ Psychiatrist not around'),
     ('clinic_long_queue', 'Long queue at the clinic'),
@@ -168,21 +175,6 @@ NO_EMO_SUPPORT_REASON = (
      'I was not treated well at the health facility and I had to leave'),
     ('changed_mind', 'Changed mind and returned home'),
     (OTHER, 'Other, specify'),)
-
-EMO_HEALTH_IMPROVED = (
-    ('difficult_to_tell', 'Difficult to tell because I am still receiving emotional support'),
-    ('mood_has_improved', 'My mood has improved'),
-    ('not_able_to_relax', 'I am now able to relax'),
-    ('relationship_with_other_improved',
-     'My relationship with other people/family members/partner has improved'),
-    ('able_to_manage_emotions', 'I am now able to manage my thoughts, feelings and emotions'),
-    ('accepted_medical_condition',
-     'I have accepted my medical condition and I have learnt to stay positive'),
-    ('accepted_loved_one_loss', 'I have now accepted the loss of my loved one'),
-    ('feeling_fine', 'Emotional support received and feeling fine now'),
-    ('no_longer_suicidal', 'I am no longer suicidal'),
-    ('defaulted', 'Gave up and defaulted (No difference)'),
-    (OTHER, 'Other, specify'))
 
 PERCEIVE_COUNSELOR = (
     ('approachable', 'Approachable'),

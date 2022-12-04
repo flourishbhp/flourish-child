@@ -1,9 +1,9 @@
+from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_caregiver.helper_classes.fu_onschedule_helper import FollowUpEnrolmentHelper
 
 from django.db.models import Q
 from edc_appointment.constants import NEW_APPT
 from edc_base.utils import get_utcnow
-from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 from ..models import Appointment
 from ..models import ChildOffSchedule
