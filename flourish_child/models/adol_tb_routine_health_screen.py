@@ -26,7 +26,7 @@ class TbHealthVisitAdol(BaseUuidModel):
     tb_screenin = models.ForeignKey(TbRoutineScreenAdol, on_delete=models.DO_NOTHING)
 
     care_location = models.ManyToManyField(TbRoutineScreenAdolMedium,
-                                           verbose_name='For visit #1, where did you receive care at?',
+                                           verbose_name='Where did you receive care at?',
                                            help_text='if 0, end of CRF else continue',
                                            blank=True)
 
