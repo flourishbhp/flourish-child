@@ -44,12 +44,15 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
     conditional_fieldlists = {}
 
     def get_key(self, request, obj=None):
-        try:
-            appt_obj = self.get_instance(request)
-        except ObjectDoesNotExist:
-            return None
+        if obj:
+            return obj.child_visit.visit_code
         else:
-            return appt_obj.visit_code
+            try:
+                appt_obj = self.get_instance(request)
+            except ObjectDoesNotExist:
+                return None
+            else:
+                return appt_obj.visit_code
 
     conditional_fieldlists.update(
         {'1000':
