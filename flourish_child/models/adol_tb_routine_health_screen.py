@@ -5,7 +5,7 @@ from ..choices import YES_NO_UNK_PNTA, \
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .list_models import TbRoutineScreenAdolMedium
 from edc_base.model_fields import OtherCharField
-
+from edc_base.model_mixins import BaseUuidModel
 
 
 class TbRoutineScreenAdol(ChildCrfModelMixin):
@@ -16,11 +16,19 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
         help_text='if 0, end of CRF else continue'
     )
 
+    class Meta:
+        app_label = 'flourish_child'
+        verbose_name = 'Screen for TB at routine health encounters'
+        verbose_name_plural = 'Screen for TB at routine health encounters'
+
+
+class TbHealthVisitAdol(BaseUuidModel):
+    tb_screenin = models.ForeignKey(TbRoutineScreenAdol, on_delete=models.DO_NOTHING)
+
     care_location = models.ManyToManyField(TbRoutineScreenAdolMedium,
-        verbose_name='For visit #1, where did you receive care at?',
-        help_text='if 0, end of CRF else continue',
-        blank=True
-    )
+                                           verbose_name='For visit #1, where did you receive care at?',
+                                           help_text='if 0, end of CRF else continue',
+                                           blank=True)
 
     care_location_other = OtherCharField(
         verbose_name='If ‘other’, specify',
@@ -33,7 +41,7 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
         blank=True,
         choices=TB_SYMPTOM
     )
-    
+
     visit_reason_other = OtherCharField(
         verbose_name='If ‘other’, specify',
     )
@@ -75,5 +83,5 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'Screen for TB at routine health encounters'
-        verbose_name_plural = 'Screen for TB at routine health encounters'
+        verbose_name = 'TB Adol. Screening Healthy Visit'
+        verbose_name_plural = 'TB Adol. Screening Healthy Visits'

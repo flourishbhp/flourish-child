@@ -4,7 +4,7 @@ from .adol_covid19_screen_form import Covid19AdolForm
 from .adol_hiv_knowledge_form import HivKnowledgeForm
 from .adol_tb_history_form import TbHistoryAdolForm
 from .adol_tb_presence_household_member_form import TbPresenceHouseholdMembersAdolForm
-from .adol_tb_routine_health_screen_form import TbRoutineScreenAdolForm
+from .adol_tb_routine_health_screen_form import TbRoutineScreenAdolForm, TbHealthVisitAdolForm
 from .birth_data_form import BirthDataForm
 from .birth_exam_form import BirthExamForm
 from .birth_feeding_and_vaccine_form import BirthFeedingVaccineForm

@@ -173,16 +173,18 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
                         subject_identifier=instance.subject_identifier,
                         base_appt_datetime=instance.report_datetime.replace(
                             microsecond=0))
-        
+
+
 @receiver(post_save, weak=False, sender=TbAdolAssent,
           dispatch_uid='tb_adol_on_post_save')
 def tb_adol_assent_on_post_save(sender, instance, raw, created, **kwargs):
-    
+
     if instance.is_eligible:
         put_on_schedule('tb_adol', instance=instance,
-                            subject_identifier=instance.subject_identifier,
-                            base_appt_datetime=instance.consent_datetime.replace(
-                                microsecond=0))
+                        subject_identifier=instance.subject_identifier,
+                        base_appt_datetime=instance.consent_datetime.replace(
+                            microsecond=0))
+
 
 @receiver(post_save, weak=False, sender=ChildBirth,
           dispatch_uid='child_visit_on_post_save')
@@ -276,7 +278,7 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
             assigned='clinic',
             comment=('''Child was hospitalised within the past year,
                         please complete INFORM CRF on REDCAP.''')
-            )
+        )
 
 
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
@@ -322,19 +324,14 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
         if 'quarterly' in cohort:
             schedule_name = schedule_name.replace('quarterly', 'quart')
-            
+
         if 'tb_adol' in cohort:
             schedule_name = 'tb_adol_schedule'
             onschedule_model = 'flourish_child.onschedulechildtbadolschedule'
-            
 
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
-        
-   
-            
- 
-        
+
         schedule.put_on_schedule(
             subject_identifier=subject_identifier,
             onschedule_datetime=base_appt_datetime,
