@@ -14,7 +14,7 @@ class HivKnowledge(ChildCrfModelMixin):
 
     hiv_knowledge_medium = models.ManyToManyField(
         HIVKnowledgeMedium,
-        verbose_name='Where did you first learn about HIV? Did you learn about HIV through')
+        verbose_name='Where did you first learn about HIV?')
 
     hiv_knowledge_medium_other = models.TextField(
         verbose_name='If other, specify',
@@ -23,42 +23,42 @@ class HivKnowledge(ChildCrfModelMixin):
         null=True)
 
     fever_knowledge = models.CharField(
-        verbose_name='Fever',
+        verbose_name='Fever?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
     cough_knowledge = models.CharField(
-        verbose_name='Cough',
+        verbose_name='Cough?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
     night_sweats_knowledge = models.CharField(
-        verbose_name='Night Sweats',
+        verbose_name='Night Sweats?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
     weight_loss_knowledge = models.CharField(
-        verbose_name='Weight Loss',
+        verbose_name='Weight Loss?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
     rash_knowledge = models.CharField(
-        verbose_name='Rash',
+        verbose_name='Rash?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
     headache_knowledge = models.CharField(
-        verbose_name='Headache',
+        verbose_name='Headache?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
     vomiting_knowledge = models.CharField(
-        verbose_name='Vomiting',
+        verbose_name='Vomiting?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
     body_ache_knowledge = models.CharField(
-        verbose_name='Body ache',
+        verbose_name='Body ache?',
         choices=YES_NO_DN_PNTA,
         max_length=30, )
 
