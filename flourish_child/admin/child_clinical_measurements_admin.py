@@ -52,7 +52,7 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
             except ObjectDoesNotExist:
                 return None
             else:
-                return appt_obj.visit_code
+                return appt_obj.visit_code if appt_obj else None
 
     conditional_fieldlists.update(
         {'1000':
