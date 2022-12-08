@@ -59,7 +59,7 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
             try:
                 self.instance.get_previous_by_appt_datetime(
                                 subject_identifier=self.instance.subject_identifier,
-                                schedule_name=self.instance.schedule_name).childvisit
+                                visit_schedule_name=self.instance.visit_schedule_name).childvisit
             except ObjectDoesNotExist:
                 last_visit = self.appointment_model_cls.visit_model_cls().objects.filter(
                     appointment__subject_identifier=self.instance.subject_identifier,
@@ -83,7 +83,7 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
             try:
                 self.instance.get_previous_by_appt_datetime(
                                 subject_identifier=self.instance.subject_identifier,
-                                schedule_name=self.instance.schedule_name).childvisit
+                                visit_schedule_name=self.instance.visit_schedule_name).childvisit
             except ObjectDoesNotExist:
                 first_new_appt = self.appointment_model_cls.objects.filter(
                     subject_identifier=self.instance.subject_identifier,
