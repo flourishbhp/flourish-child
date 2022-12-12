@@ -41,7 +41,7 @@ class TbVisitScreeningAdolescent(ChildCrfModelMixin):
         max_length=30)
 
     weight_loss = models.CharField(
-        verbose_name='Have you been losing weight without trying to lose weight?',
+        verbose_name='Have you been losing weight without trying to lose weight for >= 2 weeks?',
         choices=YES_NO_DN_PNTA,
         null=True,
         max_length=30)

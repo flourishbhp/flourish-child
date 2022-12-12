@@ -13,14 +13,6 @@ class TbReferralAdolForm(forms.ModelForm):
         label='Subject Identifier',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
-    def clean(self):
-        self.infant_identifier = self.cleaned_data.get(
-            'subject_identifier')
-        self.subject_identifier = self.infant_identifier[:-3]
-        self.validate_against_consent_datetime(
-            self.cleaned_data.get('report_datetime'))
-        super().clean()
-
     class Meta:
         model = TbReferalAdol
         fields = '__all__'

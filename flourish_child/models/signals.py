@@ -8,28 +8,36 @@ from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib.auth.models import User, Group
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, FieldError
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
-from edc_constants.constants import OPEN, NEW
+from edc_constants.constants import OPEN, NEW, POS, NO, YES
 from edc_data_manager.models import DataActionItem
 from flourish_child.models.child_birth import ChildBirth
+from flourish_child.models.adol_tb_referral import TbReferalAdol
+from flourish_child.models.adol_covid19_screen import Covid19Adol
 from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
+from ..action_items import ADOLESCENT_REFERRAL_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 
 import pyminizip
 from flourish_child.models.tb_adol_assent import TbAdolAssent
+from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
+from flourish_child.models.adol_hiv_testing import HivTestingAdol
+from flourish_child.models.adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
+from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
+from ..action_items import TbAdoscentReferralAction
 
 
 class CaregiverConsentError(Exception):
@@ -139,6 +147,36 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
             put_on_schedule((instance.cohort + '_birth'), instance=instance,
                             base_appt_datetime=maternal_delivery_obj.created)
 
+@receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
+          dispatch_uid='adol_tb_visit_presence_on_post_save')
+def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
+    if instance.cough_duration == YES or instance.fever_duration == YES or \
+        instance.cough_blood == YES or instance.weight_loss == YES:
+        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+
+
+@receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
+          dispatch_uid='adol_tb_presence_on_post_save')
+def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
+    if instance.tb_referral == NO:
+        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+        
+
+@receiver(post_save, weak=False, sender=HivTestingAdol,
+          dispatch_uid='hiv_testing_on_post_save')
+def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
+    if instance.seen_by_healthcare == NO or instance.referred_for_treatment == NO:
+        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+        
+        
+@receiver(post_save, weak=False, sender=TbLabResultsAdol,
+          dispatch_uid='child_tb_lab_results_on_post_save')
+def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
+
+    if instance.quantiferon_result == POS:
+        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+
+    
 
 @receiver(post_save, weak=False, sender=ChildVisit,
           dispatch_uid='child_visit_on_post_save')
