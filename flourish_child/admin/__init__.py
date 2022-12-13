@@ -58,4 +58,3 @@ from .tb_adol_assent_admin import TbAdolAssentAdmin
 from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
 from .hiv_testing_adol_admin import HivTestingAdmin
 from .adol_tb_lab_results_admin import TbLabResultAdolAdmin
-from .adol_tb_referral_admin import TbReferralAdolAdmin

@@ -18,10 +18,8 @@ from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS, NO, YES
 from edc_data_manager.models import DataActionItem
 from flourish_child.models.child_birth import ChildBirth
-from flourish_child.models.adol_tb_referral import TbReferalAdol
 from flourish_child.models.adol_covid19_screen import Covid19Adol
 from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
-from ..action_items import ADOLESCENT_REFERRAL_ACTION
 from flourish_prn.models import ChildOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 
@@ -37,7 +35,7 @@ from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
-from ..action_items import TbAdoscentReferralAction
+from flourish_prn.action_items import TbAdoscentReferralAction, ADOLESCENT_REFERRAL_ACTION
 
 
 class CaregiverConsentError(Exception):
