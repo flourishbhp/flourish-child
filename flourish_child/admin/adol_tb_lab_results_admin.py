@@ -19,7 +19,8 @@ class TbLabResultAdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'fields': [
                 'child_visit',
                 'report_datetime',
-                'quantiferon_result']}
+                'quantiferon_result',
+                'quantiferon_date']}
          ), audit_fieldset_tuple)
     
     radio_fields = {

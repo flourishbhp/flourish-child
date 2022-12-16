@@ -559,6 +559,13 @@ POS_NEG_IND = (
     (IND, 'Indeterminate')
 )
 
+POS_NEG_IND_INVALID = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (IND, 'Indeterminate'),
+    ('invalid', 'Invalid')
+)
+
 REASONS_VACCINES_MISSED = (
     ('missed_sched_vaccine', 'Mother or Caregiver has not yet taken infant '
                              'to clinic for this scheduled vaccination'),
