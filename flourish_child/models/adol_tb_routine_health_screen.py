@@ -1,7 +1,8 @@
 from django.db import models
 
 from ..choices import YES_NO_UNK_PNTA, \
-    VISIT_NUMBER, HEALTH_CARE_CENTER, YES_NO_DN_PNTA, TB_SYMPTOM
+    VISIT_NUMBER, HEALTH_CARE_CENTER, YES_NO_DN_PNTA, TB_SYMPTOM, TB_DIAGONISTIC_TYPE, YES_NO_PENDING_UNK 
+    
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .list_models import TbRoutineScreenAdolMedium
 from edc_base.model_fields import OtherCharField
@@ -26,7 +27,7 @@ class TbHealthVisitAdol(BaseUuidModel):
     tb_screenin = models.ForeignKey(TbRoutineScreenAdol, on_delete=models.DO_NOTHING)
 
     care_location = models.ManyToManyField(TbRoutineScreenAdolMedium,
-                                           verbose_name='Where did you receive care at?',
+                                           verbose_name='Where did you receive care at this healthcare visit?',
                                            help_text='if 0, end of CRF else continue',
                                            blank=True)
 
@@ -75,11 +76,38 @@ class TbHealthVisitAdol(BaseUuidModel):
     )
 
     diagnostic_referral = models.CharField(
-        verbose_name='Were you referred for TB diagnostic evaluation?',
+        verbose_name='Were you referred for TB?',
         max_length=20,
         null=True,
         blank=True,
         choices=YES_NO_UNK_PNTA)
+    
+    
+    diagnostic_studies = models.CharField(
+        verbose_name='What diagnostic studies were performed?',
+        choices=TB_DIAGONISTIC_TYPE,
+        max_length=20,
+        null=True,
+        blank=True,
+    )
+    
+    diagnostic_studies_other = OtherCharField(
+        verbose_name='other, specify'
+    )
+    
+    tb_diagnostic = models.CharField(
+        verbose_name='Where any of the TB diagnostic studies positive?',
+        max_length=20,
+        choices=YES_NO_PENDING_UNK,
+        null=True,
+        blank=True,
+    )
+    
+    specify_tests = models.TextField(
+        verbose_name='Specify test and test results',
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         app_label = 'flourish_child'

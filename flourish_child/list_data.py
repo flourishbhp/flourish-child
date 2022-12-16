@@ -172,7 +172,6 @@ list_data = {
     'flourish_child.TbRoutineScreenAdolMedium': [
             ('government_health_center', 'Government health center'),
             ('private_clinic', 'Private clinic'),
-            ('both', 'Both government health center and private clinic'),
             ('hospital', 'Hospital'),
             ('school_health_clinic', 'school health clinic'),
             (OTHER, 'Other')

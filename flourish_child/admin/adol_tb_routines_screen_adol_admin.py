@@ -19,16 +19,22 @@ class TbHealthVisitAdolInline(StackedInlineMixin, admin.StackedInline):
               'visit_reason_other',
               'screening_questions',
               'pos_screen',
-              'diagnostic_referral')
-    
+              'diagnostic_referral',
+              'diagnostic_studies',
+              'diagnostic_studies_other',
+              'tb_diagnostic',
+              'specify_tests')
+
     radio_fields = {
         'visit_reason': admin.VERTICAL,
         'screening_questions': admin.VERTICAL,
         'pos_screen': admin.VERTICAL,
-        'diagnostic_referral': admin.VERTICAL
+        'diagnostic_referral': admin.VERTICAL,
+        'diagnostic_studies': admin.VERTICAL,
+        'tb_diagnostic': admin.VERTICAL,
 
     }
-    
+
     filter_horizontal = ('care_location',)
 
 
@@ -42,7 +48,6 @@ class TbRoutineScreenAdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_visit',
                 'report_datetime',
                 'tb_health_visits',
-
             ]}
          ), )
 
@@ -51,27 +56,3 @@ class TbRoutineScreenAdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     radio_fields = {
         'tb_health_visits': admin.VERTICAL,
     }
-    
-    
-    
-    # def save_formset(self, request, form, formset, change):
-        
-    #     tb_health_visits = form.cleaned_data.get('tb_health_visits', None)
-        
-    #     instances = formset.save(commit=False)
-        
-    #     if tb_health_visits:
-            
-    #         try:
-    #             tb_health_visits_count = int(tb_health_visits)
-    #         except ValueError:
-    #             formset.save()
-    #         else:
-    #             if tb_health_visits_count != len(instances):
-    #                 # self.message_user(request=request, message='Number of inlines specified is not equal to Q3')
-    #                 # raise ValidationError('Number of inlines specified is not equal to Q3')
-    #                 # form.
-    #                 # formset.save()
-    #                 return formset
-    #             else:
-    #                 return super().save_formset(request, form, formset, change)

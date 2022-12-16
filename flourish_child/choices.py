@@ -3,7 +3,7 @@ from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
     NOT_APPLICABLE, DWTA
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
     ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
-from edc_constants.constants import NEG, POS, IND
+from edc_constants.constants import NEG, POS, IND, PENDING
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
@@ -1008,4 +1008,20 @@ LOCATION_REFERRAL = (
     ('old_naledi', 'Old Naledi'),
     ('g_west', 'G-West'),
     ('sebele', 'Sebele')
+)
+
+TB_DIAGONISTIC_TYPE = (
+    ('sputum_sample', 'Sputum Sample'),
+    ('chest_xray', 'Chest Xray'),
+    ('gene_xpert', 'Gene Xpert'),
+    ('tst', 'TST'),
+    (None, 'None'),
+    (OTHER, 'Other')
+)
+
+YES_NO_PENDING_UNK = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    (PENDING, 'Pending'),
+    (UNKNOWN, 'Unknown'),
 )
