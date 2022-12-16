@@ -41,7 +41,8 @@ class HivKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
              'fields': [
                  'hiv_utensils_transmit',
                  'hiv_air_transmit',
-                 'hiv_sexual_transmit',
+                 'protected_sexual_transmit',
+                 'unprotected_sexual_transmit',
                  'hiv_treatable',
                  'hiv_curable']
          }),
@@ -65,7 +66,8 @@ class HivKnowledgeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'body_ache_knowledge': admin.VERTICAL,
                     'hiv_utensils_transmit': admin.VERTICAL,
                     'hiv_air_transmit': admin.VERTICAL,
-                    'hiv_sexual_transmit': admin.VERTICAL,
+                    'protected_sexual_transmit': admin.VERTICAL,
+                    'unprotected_sexual_transmit': admin.VERTICAL,
                     'hiv_treatable': admin.VERTICAL,
                     'hiv_community': admin.VERTICAL,
                     'hiv_community_treatment': admin.VERTICAL,
