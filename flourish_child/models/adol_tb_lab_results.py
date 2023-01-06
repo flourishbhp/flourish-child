@@ -16,6 +16,6 @@ class TbLabResultsAdol(ChildCrfModelMixin):
     
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'Lab Result'
-        verbose_name_plural = "Lab Result"
+        verbose_name = 'Quantiferon Result'
+        verbose_name_plural = "Quantiferon Result"
 

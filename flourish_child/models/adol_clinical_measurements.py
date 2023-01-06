@@ -34,4 +34,4 @@ class AdolescentClinicalMeasurements(ChildCrfModelMixin):
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = "Anthropometrics"
-        verbose_name_plural = "Subject Anthropometric Data"
+        verbose_name_plural = "Anthropometrics"

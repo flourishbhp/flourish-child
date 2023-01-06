@@ -19,8 +19,8 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'Screen for TB at routine health encounters'
-        verbose_name_plural = 'Screen for TB at routine health encounters'
+        verbose_name = 'TB screen during routine encounters'
+        verbose_name_plural = 'TB screen during routine encounters'
 
 
 class TbHealthVisitAdol(BaseUuidModel):

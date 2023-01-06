@@ -104,4 +104,5 @@ class TbKnowledgeAdol(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'TB Knowledge'
+        verbose_name = 'Knowledge and attitudes for TB'
+        verbose_name_plural = 'Knowledge and attitudes for TB'

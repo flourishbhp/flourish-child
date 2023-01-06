@@ -30,7 +30,7 @@ class Covid19Adol(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'COVID-19'
-        verbose_name_plural = "COVID-19"
+        verbose_name = 'Screen for COVID-19'
+        verbose_name_plural = "Screen for COVID-19"
 
 

@@ -68,4 +68,4 @@ class HivTestingAdol(ChildCrfModelMixin):
     class Meta:
         app_label = 'flourish_child'
         verbose_name = 'HIV History'
-        verbose_name_plural = 'HIV Testing'
+        verbose_name_plural = 'HIV History'

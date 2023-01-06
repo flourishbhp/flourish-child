@@ -126,5 +126,5 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'Presence of TB symptoms in household members'
-        verbose_name_plural = 'Presene of TB symptoms in household members'
+        verbose_name = 'TB symptoms in household members'
+        verbose_name_plural = 'TB symptoms in household members'

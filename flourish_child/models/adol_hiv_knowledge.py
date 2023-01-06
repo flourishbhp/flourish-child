@@ -121,5 +121,5 @@ class HivKnowledge(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'HIV Knowledge'
-        verbose_name_plural = "HIV Knowledge"
+        verbose_name = 'Knowledge and attitudes for HIV'
+        verbose_name_plural = 'Knowledge and attitudes for HIV'
