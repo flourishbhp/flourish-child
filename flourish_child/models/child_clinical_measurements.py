@@ -47,32 +47,86 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
     child_waist_circ = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        verbose_name='Infant/child/adolescent\'s waist circumference',
+        verbose_name='First Measurement Infant/child/adolescent\'s waist circumference',
         validators=[MinValueValidator(15), MaxValueValidator(200), ],
         null=True,
         blank=True,
         help_text='in cm e.g 20, should be between 15 and 200')
 
+    child_waist_circ_second = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        verbose_name='Second Measurement Infant/child/adolescent\'s waist circumference',
+        validators=[MinValueValidator(15), MaxValueValidator(200), ],
+        null=True,
+        blank=True,
+        help_text='in cm e.g 20, should be between 15 and 200')
+
+    child_waist_circ_third = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        verbose_name='Third Measurement Infant/child/adolescent\'s waist circumference',
+        validators=[MinValueValidator(15), MaxValueValidator(200), ],
+        null=True,
+        blank=True,
+        help_text='Third measurement: Required if first and second measurements differ by > 1 cm')
+
     child_hip_circ = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        verbose_name='Infant/child/adolescent\'s hip circumference',
+        verbose_name='First Measurement Infant/child/adolescent\'s hip circumference',
         validators=[MinValueValidator(15), MaxValueValidator(420), ],
         null=True,
         blank=True,
         help_text='in cm e.g 20, should be between 15 and 420')
 
+    child_hip_circ_second = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        verbose_name='Second Measurement Infant/child/adolescent\'s hip circumference',
+        validators=[MinValueValidator(15), MaxValueValidator(420), ],
+        null=True,
+        blank=True,
+        help_text='in cm e.g 20, should be between 15 and 420')
+
+    child_hip_circ_third = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        verbose_name='Third Measurement Infant/child/adolescent\'s hip circumference',
+        validators=[MinValueValidator(15), MaxValueValidator(420), ],
+        null=True,
+        blank=True,
+        help_text='Third measurement: Required if first and second measurements differ by > 1 cm')
+
     skin_folds_triceps = models.DecimalField(
-        verbose_name='Infant/child/adolescent skin folds measurement at triceps',
+        verbose_name='First Measurement Infant/child/adolescent skin folds measurement at triceps',
         max_digits=5,
         decimal_places=2,
         validators=[MinValueValidator(1), MaxValueValidator(45), ],
         blank=True,
         null=True,
         help_text='in mm e.g 2, should be between 1 and 45')
+
+    skin_folds_triceps_second = models.DecimalField(
+        verbose_name='Second Measurement Infant/child/adolescent skin folds measurement at triceps',
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        blank=True,
+        null=True,
+        help_text='in mm e.g 2, should be between 1 and 45')
+
+    skin_folds_triceps_third = models.DecimalField(
+        verbose_name='Third Measurement Infant/child/adolescent skin folds measurement at triceps',
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        blank=True,
+        null=True,
+        help_text='Third measurement: Required if first and second measurements differ by > 1 mm')
 
     skin_folds_subscapular = models.DecimalField(
-        verbose_name='Infant/child/adolescent skin folds measurement at subscapular',
+        verbose_name='First Measurement Infant/child/adolescent skin folds measurement at subscapular',
         max_digits=5,
         decimal_places=2,
         validators=[MinValueValidator(1), MaxValueValidator(45), ],
@@ -80,14 +134,50 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         null=True,
         help_text='in mm e.g 2, should be between 1 and 45')
 
+    skin_folds_subscapular_second = models.DecimalField(
+        verbose_name='Second Measurement Infant/child/adolescent skin folds measurement at subscapular',
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        blank=True,
+        null=True,
+        help_text='in mm e.g 2, should be between 1 and 45')
+
+    skin_folds_subscapular_third = models.DecimalField(
+        verbose_name='Third Measurement Infant/child/adolescent skin folds measurement at subscapular',
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        blank=True,
+        null=True,
+        help_text='Third measurement: Required if first and second measurements differ by > 1 mm')
+
     skin_folds_suprailiac = models.DecimalField(
-        verbose_name='Infant/child/adolescent skin folds measurement at suprailiac crest',
+        verbose_name='First Measurement Infant/child/adolescent skin folds measurement at suprailiac crest',
         max_digits=5,
         decimal_places=2,
         validators=[MinValueValidator(1), MaxValueValidator(55), ],
         blank=True,
         null=True,
         help_text='in mm e.g 2, should be between 1 and 55')
+
+    skin_folds_suprailiac_second = models.DecimalField(
+        verbose_name='Second Measurement Infant/child/adolescent skin folds measurement at suprailiac crest',
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(1), MaxValueValidator(55), ],
+        blank=True,
+        null=True,
+        help_text='in mm e.g 2, should be between 1 and 55')
+
+    skin_folds_suprailiac_third = models.DecimalField(
+        verbose_name='Third Measurement Infant/child/adolescent skin folds measurement at suprailiac crest',
+        max_digits=5,
+        decimal_places=2,
+        validators=[MinValueValidator(1), MaxValueValidator(55), ],
+        blank=True,
+        null=True,
+        help_text='Third measurement: Required if first and second measurements differ by > 1 mm')
 
     child_muac = models.DecimalField(
         verbose_name='Infant/child/adolescent MUAC measurement',
