@@ -173,15 +173,16 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
                         subject_identifier=instance.subject_identifier,
                         base_appt_datetime=instance.report_datetime.replace(
                             microsecond=0))
-        
+
+
 @receiver(post_save, weak=False, sender=TbAdolAssent,
           dispatch_uid='tb_adol_on_post_save')
 def tb_adol_assent_on_post_save(sender, instance, raw, created, **kwargs):
 
     put_on_schedule('tb_adol', instance=instance,
-                        subject_identifier=instance.subject_identifier,
-                        base_appt_datetime=instance.consent_datetime.replace(
-                            microsecond=0))
+                    subject_identifier=instance.subject_identifier,
+                    base_appt_datetime=instance.consent_datetime.replace(microsecond=0))
+
 
 @receiver(post_save, weak=False, sender=ChildBirth,
           dispatch_uid='child_visit_on_post_save')
@@ -295,7 +296,7 @@ def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None,
-        base_appt_datetime=None):
+                    base_appt_datetime=None):
     if instance:
         subject_identifier = subject_identifier or instance.subject_identifier
 
@@ -320,19 +321,14 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
         if 'quarterly' in cohort:
             schedule_name = schedule_name.replace('quarterly', 'quart')
-            
+
         if 'tb_adol' in cohort:
             schedule_name = 'tb_adol_schedule'
             onschedule_model = 'flourish_child.onschedulechildtbadolschedule'
-            
 
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
-        
-   
-            
- 
-        
+
         schedule.put_on_schedule(
             subject_identifier=subject_identifier,
             onschedule_datetime=base_appt_datetime,
@@ -341,7 +337,7 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
 
 def trigger_action_item(obj, field, response, model_cls,
-        action_name, subject_identifier, repeat=False):
+                        action_name, subject_identifier, repeat=False):
     action_cls = site_action_items.get(
         model_cls.action_name)
     action_item_model_cls = action_cls.action_item_model_cls()
@@ -478,8 +474,7 @@ def stamp_image(instance):
         print_pdf(path)
 
 
-def add_image_stamp(base_image=None, position=(25, 25),
-        resize=(100, 100)):
+def add_image_stamp(base_image=None, position=(25, 25), resize=(100, 100)):
     """
     Superimpose image of a stamp over copy of the base image
     @param image_path: dir to base image
