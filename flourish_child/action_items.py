@@ -20,7 +20,7 @@ class ChildAssentAction(Action):
     reference_model = 'flourish_child.childassent'
     admin_site_name = 'flourish_child_admin'
     priority = HIGH_PRIORITY
-    singleton = True
+#     singleton = True
 
 
 site_action_items.register(ChildContinuedConsentAction)
