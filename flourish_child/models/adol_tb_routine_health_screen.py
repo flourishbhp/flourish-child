@@ -76,12 +76,11 @@ class TbHealthVisitAdol(BaseUuidModel):
     )
 
     diagnostic_referral = models.CharField(
-        verbose_name='Were you referred for TB?',
+        verbose_name='Were you referred for TB diagnostic evaluation?',
         max_length=20,
         null=True,
         blank=True,
         choices=YES_NO_UNK_PNTA)
-    
     
     diagnostic_studies = models.CharField(
         verbose_name='What diagnostic studies were performed?',
