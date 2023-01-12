@@ -75,7 +75,7 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
             try:
                 caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
                     subject_identifier=instance.subject_identifier,
-                    subject_consent__version=instance.version)
+                    version=instance.version)
             except caregiver_child_consent_cls.DoesNotExist:
                 raise CaregiverConsentError('Associated caregiver consent on behalf of '
                                             'child for this participant not found')

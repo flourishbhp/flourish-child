@@ -112,7 +112,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             datetime_not_future])
 
     version = models.CharField(
-        max_length=1)
+        max_length=3)
 
     ineligibility = models.TextField(
         verbose_name="Reason not eligible",
@@ -158,7 +158,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             except self.consent_version_cls.DoesNotExist:
                 version = '1'
             else:
-                version = consent_version_obj.version
+                version = getattr(consent_version_obj, 'child_version', consent_version_obj.version)
             return version
 
     @property
