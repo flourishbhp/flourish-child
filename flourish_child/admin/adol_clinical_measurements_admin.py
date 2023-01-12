@@ -21,6 +21,7 @@ class AdolescentClinicalMeasurementsAdmin(ChildCrfModelAdminMixin, admin.ModelAd
                 'child_visit',
                 'report_datetime',
                 'weight_kg',
+                'height',
                 'systolic_bp',
                 'diastolic_bp',
             ]}

@@ -1,8 +1,9 @@
 from django.db import models
 from edc_constants.choices import YES_NO
+from edc_base.model_fields import OtherCharField
 
 from ..choices import (EXTRA_PULMONARY_LOC, TB_DRUGS_FREQ, TB_TYPE,
-                       YES_NO_UNK_DWTA)
+                       YES_NO_UNK_PNTA, TB_THERAPY_REASONS, TB_PRESCRIPTION_AGE)
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 
@@ -10,7 +11,7 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 class TbHistoryAdol(ChildCrfModelMixin):
     prior_tb_infec = models.CharField(
         verbose_name='Do you have a prior history of TB infection?',
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         max_length=30,
         help_text=('TB infection, known as latent TB, is defined as persons '
                    'who are infected by the bacterium, M. tuberculosis, but '
@@ -18,21 +19,43 @@ class TbHistoryAdol(ChildCrfModelMixin):
                    'tuberculin skin test (TST) or IGRA lab test. '))
 
     history_of_tbt = models.CharField(
-        verbose_name=('Do you have a prior history of taking isoniazid for TB '
-                      'preventative therapy (TPT)'),
-        choices=YES_NO_UNK_DWTA,
+        verbose_name=('Do you have a prior history of taking TB '
+                      'preventative therapy (TPT)?'),
+        choices=YES_NO_UNK_PNTA,
+        help_text='This is generally a medication taken for several '
+        'months to prevent TB disease, such as isoniazid.',
         max_length=30)
+    
+    reason_for_therapy = models.CharField(
+        verbose_name='What was the reason for taking TB preventative therapy (TPT)?',
+        choices=TB_THERAPY_REASONS,
+        max_length=12,
+        blank=True,
+        null=True,
+    )
+    
+    reason_for_therapy_other = OtherCharField()
+    
+    
+    therapy_prescribed_age = models.CharField(
+        verbose_name='How old were you when you were prescribed TB preventative therapy (TPT)?',
+        choices=TB_PRESCRIPTION_AGE,
+        max_length=10,
+        blank=True,
+        null=True,
+    )
+    
 
     tbt_completed = models.CharField(
         verbose_name='Did you complete your TB preventative therapy (TPT)?',
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         max_length=30,
         blank=True,
         null=True)
 
     prior_tb_history = models.CharField(
         verbose_name='Do you have a prior history of TB disease?',
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         max_length=30,
         help_text=('TB disease, known as active TB, is defined as persons who '
                    'are infected by the bacterium, M. tuberculosis, with TB '
@@ -45,9 +68,7 @@ class TbHistoryAdol(ChildCrfModelMixin):
         max_length=30,
         blank=True,
         null=True,
-        help_text=('If outside the lungs or both in the lungs/outside the lungs,'
-                   ' continue to Q6 If in the lungs/ I do '
-                   'not know /prefer not to answer, continue to Q8'))
+        help_text=("TB can occur in the lungs, outside the lungs (ex: lymph nodes, abdomen, bones, brain), or both inside and outside the lungs"))
 
     extra_pulmonary_loc = models.CharField(
         verbose_name='Where was the location of your TB?',
@@ -63,9 +84,11 @@ class TbHistoryAdol(ChildCrfModelMixin):
 
     prior_treatmnt_history = models.CharField(
         verbose_name='Do you have a prior history of taking TB treatment?',
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         max_length=30,
-        help_text='TB treatment generally requires 4 drugs for 6 months or longer.')
+        help_text='TB treatment generally requires 4 drugs for 6 months or longer.',
+        null=True,
+        blank=True)
 
     tb_drugs_freq = models.CharField(
         verbose_name='How many drugs did you take for TB treatment?',
@@ -76,19 +99,19 @@ class TbHistoryAdol(ChildCrfModelMixin):
 
     iv_meds_used = models.CharField(
         verbose_name='Did you take any intravenous (IV) medications during TB treatment?',
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         max_length=30,
         blank=True,
         null=True)
 
     tb_treatmnt_completed = models.CharField(
         verbose_name='Did you complete TB treatment? ',
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         max_length=30,
         blank=True,
         null=True)
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'History of TB for Adolescents subject'
-        verbose_name_plural = 'History of TB for Adolescents subject'
+        verbose_name = 'TB History'
+        verbose_name_plural = 'TB History'

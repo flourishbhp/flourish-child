@@ -4,7 +4,6 @@ CHILDCONTINUEDCONSENT_STUDY_ACTION = 'submit-childcontinuedconsent-study'
 
 CHILDASSENT_ACTION = 'submit-childassent'
 
-
 class ChildContinuedConsentAction(Action):
     name = CHILDCONTINUEDCONSENT_STUDY_ACTION
     display_name = 'Submit Child Continued Consent'
@@ -21,6 +20,7 @@ class ChildAssentAction(Action):
     admin_site_name = 'flourish_child_admin'
     priority = HIGH_PRIORITY
 #     singleton = True
+
 
 
 site_action_items.register(ChildContinuedConsentAction)

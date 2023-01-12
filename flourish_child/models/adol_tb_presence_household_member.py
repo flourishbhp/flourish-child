@@ -2,7 +2,7 @@ from django.db import models
 from edc_base.model_fields import OtherCharField
 
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import RELATION_TO_INDIVIDUAL, YES_NO_UNK_DWTA
+from ..choices import RELATION_TO_INDIVIDUAL, YES_NO_UNK_PNTA
 
 
 class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
@@ -10,7 +10,7 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
         verbose_name='Has any member of your household been diagnosed with '
                      'tuberculosis in the last 12 months?',
         max_length=30,
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         null=True)
 
     tb_ind_rel = models.CharField(
@@ -22,7 +22,7 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
         null=True)
 
     tb_ind_other = OtherCharField(
-        verbose_name="if other, specify...",
+        verbose_name="if other, specify",
         max_length=35,
         blank=True,
         null=True)
@@ -31,17 +31,16 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
         verbose_name='Since you had a household member diagnosed with TB,'
                      ' were you seen by a health care worker for evaluation for TB?  ',
         max_length=30,
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
+        blank=True,
         null=True)
 
     tb_in_house = models.CharField(
         verbose_name='Has any member of your household that was not diagnosed with TB '
                      'had cough for two weeks or more in the last 12 months? ',
         max_length=20,
-        choices=YES_NO_UNK_DWTA,
-        null=True,
-        help_text='If ‘Yes’, continue to Q6'
-                  'If ‘No’ ‘I do not know’ or ‘Prefer not to answer’, skip to Q8')
+        choices=YES_NO_UNK_PNTA,
+        null=True,)
 
     cough_ind_rel = models.CharField(
         verbose_name='Please indicate the relationship of this individual or '
@@ -61,7 +60,7 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
         verbose_name='Has any member of your household had unexplained'
                      ' fever concerning for tuberculosis in the last 12 months?',
         max_length=30,
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         null=True,
         help_text='If ‘Yes’, continue to Q9'
                   ' If ‘No’ ‘I do not know’ or ‘Prefer not to answer’, skip to Q11')
@@ -87,7 +86,7 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
                    'than two nights of waking up with their night clothing drenched due '
                    'to sweating with a need to change the night clothing. '),
         max_length=30,
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         null=True)
 
     sweat_ind_rel = models.CharField(
@@ -108,7 +107,7 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
         verbose_name='Has any member of your household that was not diagnosed with TB  '
                      'had unexplained weight loss in the last 12 months?',
         max_length=30,
-        choices=YES_NO_UNK_DWTA,
+        choices=YES_NO_UNK_PNTA,
         null=True)
 
     weight_ind_rel = models.CharField(
@@ -127,5 +126,5 @@ class TbPresenceHouseholdMembersAdol(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'TB symptoms in household members at 2 months postpartum'
-        verbose_name_plural = 'TB symptoms in household members at 2 months postpartum'
+        verbose_name = 'TB symptoms in household members'
+        verbose_name_plural = 'TB symptoms in household members'

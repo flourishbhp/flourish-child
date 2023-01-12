@@ -3,7 +3,7 @@ from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
     NOT_APPLICABLE, DWTA
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
     ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
-from edc_constants.constants import NEG, POS, IND
+from edc_constants.constants import NEG, POS, IND, PENDING
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
@@ -551,6 +551,13 @@ POS_NEG_IND = (
     (IND, 'Indeterminate')
 )
 
+POS_NEG_IND_INVALID = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (IND, 'Indeterminate'),
+    ('invalid', 'Invalid')
+)
+
 REASONS_VACCINES_MISSED = (
     ('missed_sched_vaccine', 'Mother or Caregiver has not yet taken infant '
                              'to clinic for this scheduled vaccination'),
@@ -873,56 +880,56 @@ YES_NO_PNTA = (
     (PNTA, _('Prefer not to answer')),
 )
 
-COMMUNITY_IMPACT = {
-    ('0', 'Not a problem'),
-    ('1', 'A little bit of a problem'),
-    ('2', 'It is not a little problem nor a big problem'),
-    ('3', 'Somewhat of a problem'),
-    ('4', 'A big problem'),
-    ('5', 'I dont know'),
-    ('6', 'Prefer to not answer')
-}
+COMMUNITY_IMPACT = (
+    ('not_a_problem', 'Not a problem'),
+    ('a_little_of_a_problem', 'A little bit of a problem'),
+    ('neither_little_or_big_problem', 'It is not a little problem nor a big problem'),
+    ('somehat_of_a_problem', 'Somewhat of a problem'),
+    ('a_big_problem', 'A big problem'),
+    (UNKNOWN, 'I do not know'),
+    (PNTA, 'Prefer to not answer')
+)
 
-COMMUNITY_TREATMENT = {
-    ('0', 'Treated well'),
-    ('1', 'Treated normally'),
-    ('2', 'Treated poorly'),
-    ('3', 'unknown'),
-    ('4', 'Other'),
-}
+COMMUNITY_TREATMENT = (
+    ('treated_well', 'Treated well'),
+    ('treated_normally', 'Treated normally'),
+    ('treated_poorly', 'Treated poorly'),
+    (UNKNOWN, 'I do not know'),
+    (OTHER, 'Other'),
+)
 
-VISIT_NUMBER = {
+VISIT_NUMBER = (
     ('0', '0'),
     ('1', '1'),
     ('2', '2'),
     ('3', '3'),
     ('4', '4'),
     ('5', '5'),
-    ('6', '6 or more')
-}
+    ('6_or_more', '6 or more')
+)
 
-HEALTH_CARE_CENTER = {
+HEALTH_CARE_CENTER = (
     ('government_health_center', 'Government health center'),
     ('private_clinic', 'Private clinic'),
     ('both', 'Both government health center and private clinic'),
     ('hospital', 'Hospital'),
     ('school_health_clinic', 'school health clinic'),
-    ('other', 'Other')
-}
+    (OTHER, 'Other')
+)
 
-TB_SYMPTOM = {
-    ('1', 'Respiratory illness (cough, runny nose, sore throat, etc)'),
-    ('2', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
-    ('3', 'Febrile illness (with fever)'),
-    ('4', 'Sexual reproductive health needs (contraceptives))'),
-    ('5', 'other')
-}
+TB_SYMPTOM = (
+    ('respitory_illness', 'Respiratory illness (cough, runny nose, sore throat, etc)'),
+    ('gastrointestinal_illness', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
+    ('febrile_illness', 'Febrile illness (with fever)'),
+    ('sexual_reporductive_healthy_needs', 'Sexual reproductive health needs (contraceptives))'),
+    (OTHER, 'Other')
+)
 
-YES_NO_UNK_DWTA = (
+YES_NO_UNK_PNTA = (
     (YES, YES),
     (NO, NO),
-    (UNKNOWN, 'Unknown'),
-    (DWTA, 'Prefer not to answer'),)
+    (UNKNOWN, 'I do not know'),
+    (PNTA, 'Prefer not to answer'),)
 
 EXTRA_PULMONARY_LOC = (
     ('lymph_nodes', 'Lymph nodes'),
@@ -937,15 +944,15 @@ TB_DRUGS_FREQ = (
     ('4_drugs', '4 drugs'),
     ('more_than_4', 'More than 4 drugs'),
     (UNKNOWN, 'Unknown'),
-    (DWTA, 'Prefer not to answer'),
+    (PNTA, 'Prefer not to answer'),
 )
 
 TB_TYPE = (
-    ('In_the_lungs', 'In the lungs'),
+    ('inside_the_lungs', 'In the lungs'),
     ('outside_the_lungs', 'Outside the lungs'),
     ('both', 'Both in the lungs and outside the lungs'),
     (UNKNOWN, 'Unknown'),
-    (DWTA, 'Prefer not to answer')
+    (PNTA, 'Prefer not to answer')
 )
 
 RELATION_TO_INDIVIDUAL = (
@@ -955,4 +962,65 @@ RELATION_TO_INDIVIDUAL = (
     ('father', 'Father'),
     ('sibling', 'Sibling'),
     (OTHER, 'Other'),
+)
+
+
+TB_THERAPY_REASONS = (
+    (POS, 'Positive test for TB Infection'),
+    ('tb_contact', 'TB Contact'),
+    ('hiv_positive', 'Diagnosed with HIV'),
+    (UNKNOWN, 'Unknown'),
+    (OTHER, 'Other'),
+)
+
+TB_PRESCRIPTION_AGE = (
+    ('0_4', '0-4 years'),
+    ('5_9', '5-9 years'),
+    ('10_17', '10-17 years')
+) 
+
+TIMES_TESTED = (
+    ('1', '1'),
+    ('2', '2'),
+    ('3', '3'),
+    ('4', '4'),
+    ('more', 'More'),
+)
+
+POS_NEG_IND_IDK = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (IND, 'Indeterminate'),
+    (UNKNOWN, 'I do not know'),
+)
+
+LOCATION_REFERRAL = (
+    ('bontleng', 'Bontleng'),
+    ('julia_molefe', 'Julia Molefe'),
+    ('phase_2','Phase 2'),
+    ('bh1', 'BH1'),
+    ('bh2', 'BH2'),
+    ('bh3', 'BH3'),
+    ('nkoyaphiri', 'Nokoyaphiri'),
+    ('mogoditshane', 'Mogoditshane'),
+    ('lesirane', 'Lesirane'),
+    ('old_naledi', 'Old Naledi'),
+    ('g_west', 'G-West'),
+    ('sebele', 'Sebele')
+)
+
+TB_DIAGONISTIC_TYPE = (
+    ('sputum_sample', 'Sputum Sample'),
+    ('chest_xray', 'Chest Xray'),
+    ('gene_xpert', 'Gene Xpert'),
+    ('tst', 'TST'),
+    (None, 'None'),
+    (OTHER, 'Other')
+)
+
+YES_NO_PENDING_UNK = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    (PENDING, 'Pending'),
+    (UNKNOWN, 'Unknown'),
 )
