@@ -11,10 +11,12 @@ from edc_consent.field_mixins import (
     CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin,
     VerificationFieldsMixin)
 from edc_consent.field_mixins import IdentityFieldsMixin, PersonalFieldsMixin
-from edc_constants.choices import YES_NO, YES_NO_DECLINED
+from edc_constants.choices import YES_NO, YES_NO_DECLINED, GENDER
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
+from edc_base.model_fields import IsDateEstimatedField
+
 
 from ..choices import IDENTITY_TYPE
 from .eligibility import TbAdolAssentEligibility
@@ -57,6 +59,13 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         help_text='Retype the identity number',
         null=True,
         blank=True)
+    
+    gender = models.CharField(
+        verbose_name="Gender",
+        choices=GENDER,
+        max_length=1,
+        null=True,
+        blank=False)
 
     tb_testing = models.CharField(
         max_length=3,
@@ -135,6 +144,11 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         blank=False,
         help_text='If declined, return copy with the consent',
     )
+    
+    is_dob_estimated = IsDateEstimatedField(
+        verbose_name="Is the adolescent date of birth estimated?",
+        null=True,
+        blank=True)
 
     objects = TbAdolAssentManager()
 

@@ -36,4 +36,6 @@ class TbVisitScreeningAdolescentAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin)
                     'cough_blood': admin.VERTICAL,
                     'enlarged_lymph_nodes': admin.VERTICAL,
                     'unexplained_fatigue': admin.VERTICAL,
+                    'fever_duration': admin.VERTICAL,
+                    'cough_duration': admin.VERTICAL,
                     }
