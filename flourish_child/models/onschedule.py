@@ -43,7 +43,6 @@ class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
 
     @property
     def latest_consent_obj_version(self):
-
         child_consent_cls = django_apps.get_model(
             'flourish_child.childdummysubjectconsent')
 

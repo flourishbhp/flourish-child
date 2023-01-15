@@ -4,6 +4,8 @@ from .adol_hiv_knowledge_admin import HivKnowledgeAdmin
 from .adol_tb_history_admin import TbHistoryAdolAdmin
 from .adol_tb_knowledge_admin import TbKnowledgeAdmin
 from .adol_tb_presence_household_member_admin import TbPresenceHouseholdMembersAdolAdmin
+from .adol_tb_routines_screen_adol_admin import TbRoutineScreenAdolAdmin
+from .adol_covid19_screen_admin import Covid19AdolAdmin
 from .birth_data_admin import BirthDataAdmin
 from .birth_exam_admin import BirthExamAdmin
 from .birth_feeding_and_vaccine_admin import BirthFeedingVaccineAdmin
@@ -56,4 +58,5 @@ from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
 from .tb_adol_assent_admin import TbAdolAssentAdmin
 from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
-
+from .hiv_testing_adol_admin import HivTestingAdmin
+from .adol_tb_lab_results_admin import TbLabResultAdolAdmin

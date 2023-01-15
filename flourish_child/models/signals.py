@@ -16,20 +16,30 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
-from edc_constants.constants import OPEN, NEW
+from edc_constants.constants import OPEN, NEW, POS, NO, YES
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from flourish_child.models.child_birth import ChildBirth
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
+from flourish_prn.models.child_death_report import ChildDeathReport
 
 from flourish_child.models.child_birth import ChildBirth
 from flourish_child.models.tb_adol_assent import TbAdolAssent
 from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models.child_death_report import ChildDeathReport
+from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
+from flourish_child.models.adol_hiv_testing import HivTestingAdol
+from flourish_child.models.adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
+from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
+from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
+from ..models import ChildPreHospitalizationInline
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
+from flourish_prn.action_items import TbAdoscentReferralAction
 
 
 class CaregiverConsentError(Exception):
@@ -75,7 +85,7 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
             try:
                 caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
                     subject_identifier=instance.subject_identifier,
-                    subject_consent__version=instance.version)
+                    version=instance.version)
             except caregiver_child_consent_cls.DoesNotExist:
                 raise CaregiverConsentError('Associated caregiver consent on behalf of '
                                             'child for this participant not found')
@@ -139,6 +149,36 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
             put_on_schedule((instance.cohort + '_birth'), instance=instance,
                             base_appt_datetime=maternal_delivery_obj.created)
 
+@receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
+          dispatch_uid='adol_tb_visit_presence_on_post_save')
+def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
+    if instance.cough_duration == YES or instance.fever_duration == YES or \
+        instance.cough_blood == YES or instance.weight_loss == YES:
+        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+
+
+@receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
+          dispatch_uid='adol_tb_presence_on_post_save')
+def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
+    if instance.tb_referral == NO:
+        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+        
+
+@receiver(post_save, weak=False, sender=HivTestingAdol,
+          dispatch_uid='hiv_testing_on_post_save')
+def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
+    if instance.seen_by_healthcare == NO or instance.referred_for_treatment == NO:
+        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+        
+        
+@receiver(post_save, weak=False, sender=TbLabResultsAdol,
+          dispatch_uid='child_tb_lab_results_on_post_save')
+def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
+
+    if instance.quantiferon_result == POS:
+        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+
+    
 
 @receiver(post_save, weak=False, sender=ChildVisit,
           dispatch_uid='child_visit_on_post_save')
@@ -173,15 +213,18 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
                         subject_identifier=instance.subject_identifier,
                         base_appt_datetime=instance.report_datetime.replace(
                             microsecond=0))
-        
+
+
 @receiver(post_save, weak=False, sender=TbAdolAssent,
           dispatch_uid='tb_adol_on_post_save')
 def tb_adol_assent_on_post_save(sender, instance, raw, created, **kwargs):
 
-    put_on_schedule('tb_adol', instance=instance,
+    if instance.is_eligible:
+        put_on_schedule('tb_adol', instance=instance,
                         subject_identifier=instance.subject_identifier,
                         base_appt_datetime=instance.consent_datetime.replace(
                             microsecond=0))
+
 
 @receiver(post_save, weak=False, sender=ChildBirth,
           dispatch_uid='child_visit_on_post_save')
@@ -275,7 +318,7 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
             assigned='clinic',
             comment=('''Child was hospitalised within the past year,
                         please complete INFORM CRF on REDCAP.''')
-            )
+        )
 
 
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
@@ -295,7 +338,7 @@ def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
 
 
 def put_on_schedule(cohort, instance=None, subject_identifier=None,
-        base_appt_datetime=None):
+                    base_appt_datetime=None):
     if instance:
         subject_identifier = subject_identifier or instance.subject_identifier
 
@@ -320,19 +363,14 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
         if 'quarterly' in cohort:
             schedule_name = schedule_name.replace('quarterly', 'quart')
-            
+
         if 'tb_adol' in cohort:
             schedule_name = 'tb_adol_schedule'
             onschedule_model = 'flourish_child.onschedulechildtbadolschedule'
-            
 
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
-        
-   
-            
- 
-        
+
         schedule.put_on_schedule(
             subject_identifier=subject_identifier,
             onschedule_datetime=base_appt_datetime,
@@ -341,7 +379,7 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
 
 
 def trigger_action_item(obj, field, response, model_cls,
-        action_name, subject_identifier, repeat=False):
+                        action_name, subject_identifier, repeat=False):
     action_cls = site_action_items.get(
         model_cls.action_name)
     action_item_model_cls = action_cls.action_item_model_cls()
@@ -478,8 +516,7 @@ def stamp_image(instance):
         print_pdf(path)
 
 
-def add_image_stamp(base_image=None, position=(25, 25),
-        resize=(100, 100)):
+def add_image_stamp(base_image=None, position=(25, 25), resize=(100, 100)):
     """
     Superimpose image of a stamp over copy of the base image
     @param image_path: dir to base image

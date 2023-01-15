@@ -28,14 +28,45 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
                 'child_systolic_bp',
                 'child_diastolic_bp',
                 'child_height',
-                'child_waist_circ',
-                'child_hip_circ',
-                'skin_folds_triceps',
-                'skin_folds_subscapular',
-                'skin_folds_suprailiac',
                 'child_muac'
+            ]},
+         ),
+        ("Child Waist Circumference", {
+            'fields': [
+                'child_waist_circ',
+                'child_waist_circ_second',
+                'child_waist_circ_third',
             ]}
-         ), audit_fieldset_tuple)
+         ),
+        ("Child Hip Circumference", {
+            'fields': [
+                'child_hip_circ',
+                'child_hip_circ_second',
+                'child_hip_circ_third',
+            ]}
+         ),
+        ("Skin Folds Triceps", {
+            'fields': [
+                'skin_folds_triceps',
+                'skin_folds_triceps_second',
+                'skin_folds_triceps_third',
+            ]}
+         ),
+        ("Skin Folds Subscapular", {
+            'fields': [
+                'skin_folds_subscapular',
+                'skin_folds_subscapular_second',
+                'skin_folds_subscapular_third',
+            ]}
+         ),
+        ("Skin Folds Suprailiac", {
+            'fields': [
+                'skin_folds_suprailiac',
+                'skin_folds_suprailiac_second',
+                'skin_folds_suprailiac_third',
+            ]}
+         ),
+        audit_fieldset_tuple)
 
     radio_fields = {
         'is_child_preg': admin.VERTICAL, }
@@ -51,6 +82,12 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
 
     conditional_fieldlists.update(
         {'1000':
-         Remove('skin_folds_triceps',
-                'skin_folds_subscapular',
-                'skin_folds_suprailiac'), })
+             Remove('skin_folds_triceps',
+                    'skin_folds_triceps_second',
+                    'skin_folds_triceps_third',
+                    'skin_folds_subscapular',
+                    'skin_folds_subscapular_second',
+                    'skin_folds_subscapular_third',
+                    'skin_folds_suprailiac',
+                    'skin_folds_suprailiac_second',
+                    'skin_folds_suprailiac_third')})

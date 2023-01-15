@@ -112,7 +112,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             datetime_not_future])
 
     version = models.CharField(
-        max_length=1)
+        max_length=3)
 
     ineligibility = models.TextField(
         verbose_name="Reason not eligible",
@@ -158,7 +158,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             except self.consent_version_cls.DoesNotExist:
                 version = '1'
             else:
-                version = consent_version_obj.version
+                version = getattr(consent_version_obj, 'child_version', consent_version_obj.version)
             return version
 
     @property
@@ -200,7 +200,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         app_label = 'flourish_child'
         verbose_name = 'Child Assent for Participation'
         verbose_name_plural = 'Child Assent for Participation'
-        unique_together = (('screening_identifier', 'subject_identifier'),
+        unique_together = (('subject_identifier', 'version'),
                            ('subject_identifier', 'screening_identifier', 'version'),
-                           ('first_name', 'last_name', 'identity'),
-                           ('first_name', 'dob', 'initials'))
+                           ('first_name', 'last_name', 'identity', 'version'),
+                           ('first_name', 'dob', 'initials', 'version'))

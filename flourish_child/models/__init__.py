@@ -5,7 +5,7 @@ from .adol_hiv_knowledge import HivKnowledge
 from .adol_tb_history import TbHistoryAdol
 from .adol_tb_knowledge import TbKnowledgeAdol
 from .adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
-from .adol_tb_routine_health_screen import TbRoutineScreenAdol
+from .adol_tb_routine_health_screen import TbRoutineScreenAdol, TbHealthVisitAdol
 from .birth_data import BirthData
 from .birth_exam import BirthExam
 from .birth_feeding_and_vaccine import BirthFeedingVaccine, BirthVaccines
@@ -86,3 +86,5 @@ from .onschedule import OnScheduleChildTbAdolSchedule
 from .signals import child_consent_on_post_save
 from .tb_adol_assent import TbAdolAssent
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
+from .adol_hiv_testing import HivTestingAdol
+from .adol_tb_lab_results import TbLabResultsAdol

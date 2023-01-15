@@ -15,8 +15,16 @@ class Covid19AdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': [
+                'child_visit',
+                'report_datetime',
                 'test_for_covid',
                 'receive_test_result',
                 'result_of_test',
             ]}
          ), audit_fieldset_tuple)
+    
+    radio_fields = {
+        'test_for_covid': admin.VERTICAL,
+        'receive_test_result': admin.VERTICAL,
+        'result_of_test': admin.VERTICAL
+    }

@@ -10,34 +10,28 @@ class AdolescentClinicalMeasurements(ChildCrfModelMixin):
     weight_kg = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        blank=True,
-        null=True,
-        verbose_name='Adolescent\'s weight? ',
+        verbose_name='Weight(kg)? ',
         validators=[MinValueValidator(20), MaxValueValidator(100), ],
         help_text='Measured in Kilograms (kg)')
 
     height = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        verbose_name='Adolescent\'s height? ',
+        verbose_name='Height(cm)? ',
         validators=[MinValueValidator(120), MaxValueValidator(200), ],
-        null=True,
-        blank=True,
-        help_text='Measured in Centimeters (cm)')
+        help_text='Measured in Centimeters(cm)')
 
     systolic_bp = models.IntegerField(
-        verbose_name='Adolescent\'s systolic blood pressure?',
+        verbose_name='Systolic blood pressure(BP)?',
         validators=[MinValueValidator(50), MaxValueValidator(200), ],
-        null=True,
-        blank=True)
+        help_text='Should be between 50 and 200',)
 
     diastolic_bp = models.IntegerField(
-        verbose_name='Adolescent\'s diastolic blood pressure?',
-        help_text='in hg e.g. 80, normal values are between 60 and 80.',
-        null=True,
-        blank=True)
+        verbose_name='Diastolic blood pressure(BP)?',
+        help_text='Should be between 40 and 120',
+        validators=[MinValueValidator(40), MaxValueValidator(120), ],)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = "Subject Anthropometric Data"
-        verbose_name_plural = "Subject Anthropometric Data"
+        verbose_name = "Anthropometrics"
+        verbose_name_plural = "Anthropometrics"
