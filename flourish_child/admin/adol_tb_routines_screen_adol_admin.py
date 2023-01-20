@@ -12,7 +12,7 @@ class TbHealthVisitAdolInline(StackedInlineMixin, admin.StackedInline):
     model = TbHealthVisitAdol
     form = TbHealthVisitAdolForm
     extra = 0
-
+    
     fields = ('care_location',
               'care_location_other',
               'visit_reason',
@@ -50,7 +50,7 @@ class TbRoutineScreenAdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'tb_health_visits',
             ]}
          ), )
-
+    
     inlines = [TbHealthVisitAdolInline, ]
 
     radio_fields = {
