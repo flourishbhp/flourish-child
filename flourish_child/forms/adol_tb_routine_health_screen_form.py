@@ -1,7 +1,8 @@
 from django import forms
-from django.core.exceptions import ValidationError
+from django.forms import ValidationError
 # from flourish_form_validation.form_validators import TbRoutineScreenAdolescentFormValidator
 from ..models import TbRoutineScreenAdol, TbHealthVisitAdol
+from edc_form_validators import FormValidatorMixin
 from .child_form_mixin import ChildModelFormMixin, InlineChildModelFormMixin
 from flourish_child_validations.form_validators import TbScreeningDuringEncountersFormValidator
 
@@ -33,6 +34,10 @@ class TbRoutineScreenAdolForm(ChildModelFormMixin):
 
 class TbHealthVisitAdolForm(InlineChildModelFormMixin):
     form_validator_cls = TbScreeningDuringEncountersFormValidator    
+    
+    def has_changed(self):
+        return True
+    
     class Meta:
         model = TbHealthVisitAdol
         fields = '__all__'
