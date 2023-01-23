@@ -16,7 +16,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
-from edc_constants.constants import OPEN, NEW, POS, NO, YES
+from edc_constants.constants import OPEN, NEW, POS, NO, YES, NEG, IND, UNKNOWN
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_child.models.child_birth import ChildBirth
@@ -152,9 +152,16 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
           dispatch_uid='adol_tb_visit_presence_on_post_save')
 def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
+    
     if instance.cough_duration == YES or instance.fever_duration == YES or \
-        instance.cough_blood == YES or instance.weight_loss == YES:
+        instance.night_sweats == YES or instance.weight_loss == YES:
         TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+    
+    elif instance.cough_duration == NO or instance.fever_duration == NO \
+        or instance.night_sweats == NO or instance.weight_loss == NO:
+            put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
+                                  schedule_name='tb_adol_schedule')
+    
 
 
 @receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
@@ -162,6 +169,9 @@ def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwar
 def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
     if instance.tb_referral == NO:
         TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+    elif instance.tb_referral == YES:
+        put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
+                                  schedule_name='tb_adol_schedule')
         
 
 @receiver(post_save, weak=False, sender=HivTestingAdol,
@@ -170,6 +180,10 @@ def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
     if instance.seen_by_healthcare == NO or instance.referred_for_treatment == NO:
         TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
         
+    if instance.last_result in [NEG, IND, UNKNOWN] or instance.referred_for_treatment == NO:
+        put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
+                                  schedule_name='tb_adol_schedule')
+        
         
 @receiver(post_save, weak=False, sender=TbLabResultsAdol,
           dispatch_uid='child_tb_lab_results_on_post_save')
@@ -177,6 +191,10 @@ def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
 
     if instance.quantiferon_result == POS:
         TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+    elif instance.quantiferon_result == NEG:
+         put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
+                                  schedule_name='tb_adol_schedule')
+        
 
     
 
@@ -559,3 +577,21 @@ def print_pdf(filepath):
         stamped_pdf_images.append(add_image_stamp(base_image=image, resize=(300, 300)))
     first_img = stamped_pdf_images[0]
     first_img.save(filepath, save_all=True, append_images=stamped_pdf_images[1:])
+
+
+def put_child_offschedule(subject_identifier, schedule_name):
+    
+    if not (subject_identifier or  schedule_name):
+        raise Exception("Subject identifier or schedule name cannot be empty")
+    
+    try:
+        offschedule_obj = ChildOffSchedule.objects.get(
+            subject_identifier=subject_identifier,
+            schedule_name = schedule_name)
+    except ChildOffSchedule.DoesNotExist:
+        ChildOffSchedule.objects.create(
+            subject_identifier=subject_identifier,
+            schedule_name=schedule_name,
+            offschedule_datetime=get_utcnow())
+    else:
+        offschedule_obj.save()
