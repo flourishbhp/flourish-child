@@ -29,7 +29,7 @@ class TbHealthVisitAdol(BaseUuidModel):
     care_location = models.ManyToManyField(TbRoutineScreenAdolMedium,
                                            verbose_name='Where did you receive care at this healthcare visit?',
                                            help_text='if 0, end of CRF else continue',
-                                           blank=True)
+                                           blank=False)
 
     care_location_other = OtherCharField(
         verbose_name='If ‘other’, specify',
