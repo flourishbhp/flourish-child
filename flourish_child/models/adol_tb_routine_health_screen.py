@@ -52,8 +52,6 @@ class TbHealthVisitAdol(BaseUuidModel):
                      " were you screened for TB with the four screening"
                      " questions (cough, fever, weight loss, night sweats)?",
         choices=YES_NO_DN_PNTA,
-        null=True,
-        blank=True,
         max_length=20,
         help_text='if yes continue to Q7 '
                   'if no/I do not know/prefer not to answer, '
