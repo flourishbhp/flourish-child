@@ -53,24 +53,6 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         blank=True,
         help_text='in cm e.g 20, should be between 15 and 200')
 
-    child_waist_circ_second = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        verbose_name='Second Measurement Infant/child/adolescent\'s waist circumference',
-        validators=[MinValueValidator(15), MaxValueValidator(200), ],
-        null=True,
-        blank=True,
-        help_text='in cm e.g 20, should be between 15 and 200')
-
-    child_waist_circ_third = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        verbose_name='Third Measurement Infant/child/adolescent\'s waist circumference',
-        validators=[MinValueValidator(15), MaxValueValidator(200), ],
-        null=True,
-        blank=True,
-        help_text='Third measurement: Required if first and second measurements differ by > 1 cm')
-
     child_hip_circ = models.DecimalField(
         max_digits=5,
         decimal_places=2,
@@ -79,24 +61,6 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         null=True,
         blank=True,
         help_text='in cm e.g 20, should be between 15 and 420')
-
-    child_hip_circ_second = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        verbose_name='Second Measurement Infant/child/adolescent\'s hip circumference',
-        validators=[MinValueValidator(15), MaxValueValidator(420), ],
-        null=True,
-        blank=True,
-        help_text='in cm e.g 20, should be between 15 and 420')
-
-    child_hip_circ_third = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        verbose_name='Third Measurement Infant/child/adolescent\'s hip circumference',
-        validators=[MinValueValidator(15), MaxValueValidator(420), ],
-        null=True,
-        blank=True,
-        help_text='Third measurement: Required if first and second measurements differ by > 1 cm')
 
     skin_folds_triceps = models.DecimalField(
         verbose_name='First Measurement Infant/child/adolescent skin folds measurement at triceps',
