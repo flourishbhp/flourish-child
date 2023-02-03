@@ -227,7 +227,8 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
         try:
             Appointment.objects.get(subject_identifier=appt.subject_identifier,
-                                    visit_code='2000D')
+                                    visit_code='2000D',
+                                    visit_code_sequence=0)
         except Appointment.DoesNotExist:
             return False
         else:
