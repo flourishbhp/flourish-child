@@ -31,18 +31,10 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
                 'child_muac'
             ]},
          ),
-        ("Child Waist Circumference", {
+        ("Child Waist and Hip Circumference", {
             'fields': [
                 'child_waist_circ',
-                'child_waist_circ_second',
-                'child_waist_circ_third',
-            ]}
-         ),
-        ("Child Hip Circumference", {
-            'fields': [
                 'child_hip_circ',
-                'child_hip_circ_second',
-                'child_hip_circ_third',
             ]}
          ),
         ("Skin Folds Triceps", {
