@@ -23,10 +23,7 @@ from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
 from flourish_prn.models.child_death_report import ChildDeathReport
 
-from flourish_child.models.child_birth import ChildBirth
 from flourish_child.models.tb_adol_assent import TbAdolAssent
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
-from flourish_prn.models.child_death_report import ChildDeathReport
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
@@ -39,6 +36,7 @@ from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
+from ..helper_classes import ChildFollowUpBookingHelper
 from flourish_prn.action_items import TbAdoscentReferralAction
 
 
@@ -149,19 +147,19 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
             put_on_schedule((instance.cohort + '_birth'), instance=instance,
                             base_appt_datetime=maternal_delivery_obj.created)
 
+
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
           dispatch_uid='adol_tb_visit_presence_on_post_save')
 def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
-    
-    if instance.cough_duration == YES or instance.fever_duration == YES or \
-        instance.night_sweats == YES or instance.weight_loss == YES:
+
+    if (instance.cough_duration == YES or instance.fever_duration == YES or
+            instance.night_sweats == YES or instance.weight_loss == YES):
         TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
-    
-    elif instance.cough_duration == NO or instance.fever_duration == NO \
-        or instance.night_sweats == NO or instance.weight_loss == NO:
+
+    elif (instance.cough_duration == NO or instance.fever_duration == NO or
+          instance.night_sweats == NO or instance.weight_loss == NO):
             put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
                                   schedule_name='tb_adol_schedule')
-    
 
 
 @receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
@@ -171,20 +169,20 @@ def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
         TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
     elif instance.tb_referral == YES:
         put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
-                                  schedule_name='tb_adol_schedule')
-        
+                              schedule_name='tb_adol_schedule')
+
 
 @receiver(post_save, weak=False, sender=HivTestingAdol,
           dispatch_uid='hiv_testing_on_post_save')
 def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
     if instance.seen_by_healthcare == NO or instance.referred_for_treatment == NO:
         TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
-        
+
     if instance.last_result in [NEG, IND, UNKNOWN] or instance.referred_for_treatment == NO:
         put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
-                                  schedule_name='tb_adol_schedule')
-        
-        
+                              schedule_name='tb_adol_schedule')
+
+
 @receiver(post_save, weak=False, sender=TbLabResultsAdol,
           dispatch_uid='child_tb_lab_results_on_post_save')
 def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
@@ -192,11 +190,10 @@ def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
     if instance.quantiferon_result == POS:
         TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
     elif instance.quantiferon_result == NEG:
-         put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
-                                  schedule_name='tb_adol_schedule')
-        
+        put_child_offschedule(
+            subject_identifier=instance.child_visit.subject_identifier,
+            schedule_name='tb_adol_schedule')
 
-    
 
 @receiver(post_save, weak=False, sender=ChildVisit,
           dispatch_uid='child_visit_on_post_save')
@@ -254,6 +251,7 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
         maternal_delivery_cls = django_apps.get_model(
             'flourish_caregiver.maternaldelivery')
 
+        base_appt_datetime = None
         try:
             maternal_delivery_obj = maternal_delivery_cls.objects.get(
                 subject_identifier=instance.subject_identifier[:-3])
@@ -261,11 +259,12 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
             pass
         else:
             if maternal_delivery_obj.live_infants_to_register == 1:
+                base_appt_datetime = maternal_delivery_obj.delivery_datetime.replace(
+                    microsecond=0)
                 put_on_schedule(
                     'child_cohort_a_birth', instance=instance,
                     subject_identifier=instance.subject_identifier,
-                    base_appt_datetime=maternal_delivery_obj.delivery_datetime.replace(
-                        microsecond=0))
+                    base_appt_datetime=base_appt_datetime)
 
         caregiver_child_consent_cls = django_apps.get_model(
             'flourish_caregiver.caregiverchildconsent')
@@ -284,6 +283,11 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
             subject_identifier=instance.subject_identifier,
             user_created=instance.user_created,
             subject="'Add name and DOB to the paper informed consent form'")
+
+        # book participant for followup
+        booking_helper = ChildFollowUpBookingHelper()
+        booking_dt = base_appt_datetime + relativedelta(years=1)
+        booking_helper.schedule_fu_booking(instance.subject_identifier, booking_dt)
 
 
 @receiver(post_save, weak=False, sender=ClinicianNotesImage,
@@ -368,6 +372,7 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
         if 'enrol' in cohort:
             cohort_label_lower = cohort_label_lower.replace(
                 'enrol', 'enrollment')
+
         elif 'sec' in cohort:
             cohort_label_lower = cohort_label_lower.replace('qt', 'quart')
 
@@ -394,6 +399,12 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
             onschedule_datetime=base_appt_datetime,
             schedule_name=schedule_name,
             base_appt_datetime=base_appt_datetime)
+
+        if 'enrol' in cohort and 'sec' not in cohort:
+            # book participant for followup
+            booking_helper = ChildFollowUpBookingHelper()
+            booking_dt = base_appt_datetime + relativedelta(years=1)
+            booking_helper.schedule_fu_booking(subject_identifier, booking_dt)
 
 
 def trigger_action_item(obj, field, response, model_cls,
@@ -580,14 +591,13 @@ def print_pdf(filepath):
 
 
 def put_child_offschedule(subject_identifier, schedule_name):
-    
-    if not (subject_identifier or  schedule_name):
+    if not (subject_identifier or schedule_name):
         raise Exception("Subject identifier or schedule name cannot be empty")
-    
+
     try:
         offschedule_obj = ChildOffSchedule.objects.get(
             subject_identifier=subject_identifier,
-            schedule_name = schedule_name)
+            schedule_name=schedule_name)
     except ChildOffSchedule.DoesNotExist:
         ChildOffSchedule.objects.create(
             subject_identifier=subject_identifier,
