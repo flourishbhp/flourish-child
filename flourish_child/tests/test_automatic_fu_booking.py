@@ -12,7 +12,7 @@ from ..models import (ChildDummySubjectConsent, OnScheduleChildCohortAEnrollment
 
 
 @tag('booking')
-class TestCohortADevScreening(TestCase):
+class TestFuBooking(TestCase):
 
     def setUp(self):
         import_holidays()
