@@ -1,6 +1,6 @@
 from django.contrib import admin
 from edc_model_admin import TabularInlineMixin
-from edc_odk.admin import StampImageActionMixin
+from edc_odk.admin import ODKActionMixin
 
 from ..admin_site import flourish_child_admin
 from ..forms import ChildClinicianNotesForm, ClinicianNotesImageForm
@@ -26,7 +26,7 @@ class ClinicianNotesImageInline(TabularInlineMixin, admin.TabularInline):
 
 
 @admin.register(ChildClinicianNotes, site=flourish_child_admin)
-class ClinicianNotesAdmin(StampImageActionMixin, ChildCrfModelAdminMixin,
+class ClinicianNotesAdmin(ODKActionMixin, ChildCrfModelAdminMixin,
                           admin.ModelAdmin):
 
     form = ChildClinicianNotesForm
@@ -37,5 +37,8 @@ class ClinicianNotesAdmin(StampImageActionMixin, ChildCrfModelAdminMixin,
                 'child_visit',
             ]}
          ), )
+
+    list_display = ('child_visit', 'created', 'verified_by', 'is_verified',)
+
 
     inlines = [ClinicianNotesImageInline]
