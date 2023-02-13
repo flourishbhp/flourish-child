@@ -13,9 +13,10 @@ class ChildTannerStagingForm(ChildModelFormMixin, forms.ModelForm):
         initial = kwargs.pop('initial', {})
         subject_identifier = initial.get('subject_identifier')
         if subject_identifier:
+            child_assents = ChildAssent.objects.filter(
+                subject_identifier=subject_identifier)
             try:
-                assent = ChildAssent.objects.get(
-                    subject_identifier=subject_identifier)
+                assent = child_assents.latest('consent_datetime')
             except ChildAssent.DoesNotExist:
                 pass
             else:
