@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import configparser
 import os
 import sys
 
@@ -22,7 +23,9 @@ SITE_ID = 1
 # for test
 REVIEWER_SITE_ID = 2
 
-ETC_DIR = '/etc'
+APP_NAME = 'flourish'
+
+ETC_DIR = os.path.join('/etc/', APP_NAME)
 
 APP_NAME = 'flourish_child'
 
@@ -120,13 +123,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'flourish_child.wsgi.application'
 
+mysql_config = configparser.ConfigParser()
+mysql_config.read(os.path.join(ETC_DIR, 'mysql.conf'))
+
+HOST = mysql_config['mysql']['host']
+DB_USER = mysql_config['mysql']['user']
+DB_PASSWORD = mysql_config['mysql']['password']
+DB_NAME = mysql_config['mysql']['database']
+PORT = mysql_config['mysql']['port']
+
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': HOST,  # Or an IP Address that your DB is hosted on
+        'PORT': PORT,
     }
 }
 
@@ -170,6 +186,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 DASHBOARD_URL_NAMES = {}
+
+BASE_FORMAT = ''
 
 if 'test' in sys.argv:
 

@@ -40,5 +40,4 @@ class ClinicianNotesAdmin(ODKActionMixin, ChildCrfModelAdminMixin,
 
     list_display = ('child_visit', 'created', 'verified_by', 'is_verified',)
 
-
     inlines = [ClinicianNotesImageInline]

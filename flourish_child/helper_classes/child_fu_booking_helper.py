@@ -86,7 +86,7 @@ class ChildFollowUpBookingHelper(object):
         return max_possible > fu_notes.count(), fu_notes
 
     def create_booking(self, subject_identifier, booking_date):
-        self.participant_note_cls.objects.create(
+        self.participant_note_cls.objects.get_or_create(
             subject_identifier=subject_identifier,
             date=booking_date.date(),
             title='Follow Up Schedule')

@@ -91,7 +91,8 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                 if caregiver_child_consent_obj.is_eligible:
                     try:
                         dummy_consent_obj = ChildDummySubjectConsent.objects.get(
-                            subject_identifier=instance.subject_identifier)
+                            subject_identifier=instance.subject_identifier,
+                            version=instance.version)
                     except ChildDummySubjectConsent.DoesNotExist:
                         ChildDummySubjectConsent.objects.create(
                             subject_identifier=instance.subject_identifier,
