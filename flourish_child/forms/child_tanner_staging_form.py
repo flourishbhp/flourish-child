@@ -24,8 +24,14 @@ class ChildTannerStagingForm(ChildModelFormMixin, forms.ModelForm):
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
 
-        prev_instance = ChildTannerStaging.objects.filter(
-            child_visit__appointment__subject_identifier=subject_identifier).order_by('-report_datetime').first()
+        prev_instance = None
+        try:
+            prev_instance = ChildTannerStaging.objects.get(
+                child_visit__appointment__subject_identifier=subject_identifier,
+                child_visit__visit_code=2000
+            )
+        except ChildTannerStaging.DoesNotExist:
+            pass
 
         if prev_instance:
             self.initial['manarche_dt_avail'] = prev_instance.manarche_dt_avail
