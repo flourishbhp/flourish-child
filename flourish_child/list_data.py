@@ -192,6 +192,15 @@ list_data = {
             ('hospital', 'Hospital'),
             ('school_health_clinic', 'school health clinic'),
             (OTHER, 'Other')
+    ],
+    'flourish_child.staffmember': [
+        ('samuel', 'Samuel'),
+        ('gosego', 'Gosego'),
+        ('martha', 'Martha'),
+        ('boitshepo', 'Boitshepo'),
+        ('gaontebale', 'Gaontebale'),
+        ('olebogeng', 'Olebogeng'),
+        ('pearl', 'Pearl')
     ]
 }
 

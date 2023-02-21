@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
-    NOT_APPLICABLE, DWTA
+    NOT_APPLICABLE, DWTA, NEVER
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
     ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
 from edc_constants.constants import NEG, POS, IND, PENDING
@@ -24,6 +24,12 @@ ALIVE_DEAD_UNKNOWN = (
 ANSWERER = (
     ('caregiver', 'Caregiver'),
     ('child_adolescent', 'Child/Adolescent'),
+)
+
+BRIEF2_SCALE = (
+    ('never', 'Never'),
+    ('sometimes', 'Sometimes'),
+    ('often', 'Often'),
 )
 
 CARDIOVASCULAR_DISORDER = (
@@ -556,6 +562,14 @@ POS_NEG_IND_INVALID = (
     (NEG, 'Negative'),
     (IND, 'Indeterminate'),
     ('invalid', 'Invalid')
+)
+
+REASONS_PENNCNB_INCOMPLETE = (
+    ('software_errors', 'Software/Application errors'),
+    ('restless_child', 'Child was restless'),
+    ('lack_of_understanding', 'Child could not understand the program'),
+    ('no_private_space', 'No private space to complete'),
+    (OTHER, 'Other, specify'),
 )
 
 REASONS_VACCINES_MISSED = (

@@ -6,6 +6,8 @@ from .adol_tb_knowledge_admin import TbKnowledgeAdmin
 from .adol_tb_presence_household_member_admin import TbPresenceHouseholdMembersAdolAdmin
 from .adol_tb_routines_screen_adol_admin import TbRoutineScreenAdolAdmin
 from .adol_covid19_screen_admin import Covid19AdolAdmin
+from .brief_2_self_reported_admin import Brief2SelfReportedAdmin
+from .brief_2_parent_admin import Brief2ParentAdmin
 from .birth_data_admin import BirthDataAdmin
 from .birth_exam_admin import BirthExamAdmin
 from .birth_feeding_and_vaccine_admin import BirthFeedingVaccineAdmin
@@ -29,6 +31,7 @@ from .child_hiv_rapid_test_counseling_admin import \
     ChildHIVRapidTestCounselingAdmin
 from .child_immunization_history_admin import ChildImmunizationHistoryAdmin
 from .child_medical_history_admin import ChildMedicalHistoryAdmin
+from .child_penn_cnb_admin import ChildPennCNBAdmin
 from .child_phq_depression_screening_admin import \
     ChildPhqDepressionScreeningAdmin
 from .child_phq_post_referral_admin import ChildPhqPostReferralAdmin

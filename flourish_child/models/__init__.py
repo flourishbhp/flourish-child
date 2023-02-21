@@ -9,6 +9,8 @@ from .adol_tb_routine_health_screen import TbRoutineScreenAdol, TbHealthVisitAdo
 from .birth_data import BirthData
 from .birth_exam import BirthExam
 from .birth_feeding_and_vaccine import BirthFeedingVaccine, BirthVaccines
+from .brief_2_parent import Brief2Parent
+from .brief_2_self_reported import Brief2SelfReported
 from .child_appointment import Appointment
 from .child_assent import ChildAssent
 from .child_birth import ChildBirth
@@ -29,6 +31,7 @@ from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesMissed
 from .child_immunization_history import VaccinesReceived
 from .child_medical_history import ChildMedicalHistory
+from .child_penn_cnb import ChildPennCNB
 from .child_phq_depression_screening import ChildPhqDepressionScreening
 from .child_phq_post_referral import ChildPhqPostReferral
 from .child_phq_referral import ChildPhqReferral
