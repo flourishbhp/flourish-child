@@ -2,12 +2,14 @@ from django.db import models
 from django.utils.html import mark_safe
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.utils import get_utcnow
+from edc_consent.field_mixins import VerificationFieldsMixin
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
-class ChildClinicianNotes(ChildCrfModelMixin):
+class ChildClinicianNotes(VerificationFieldsMixin, ChildCrfModelMixin):
     crf_date_validator_cls = None
+
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'

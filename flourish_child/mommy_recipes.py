@@ -42,8 +42,7 @@ childassent = Recipe(
     last_name=fake.last_name,
     gender='M',
     hiv_testing=YES,
-    remain_in_study=YES,
-    )
+    remain_in_study=YES)
 
 childbirth = Recipe(
     ChildBirth,
