@@ -28,7 +28,7 @@ class ChildTannerStagingForm(ChildModelFormMixin, forms.ModelForm):
         try:
             prev_instance = ChildTannerStaging.objects.get(
                 child_visit__appointment__subject_identifier=subject_identifier,
-                child_visit__visit_code=2000
+                child_visit__visit_code='2000'
             )
         except ChildTannerStaging.DoesNotExist:
             pass
