@@ -15,6 +15,7 @@ from .child_appointment_admin import AppointmentAdmin
 from .child_assent_admin import ChildAssentAdmin
 from .child_birth_admin import ChildBirthAdmin
 from .child_birth_weight_length_screening_admin import ChildBirthScreeningAdmin
+from .child_cbcl_admin import ChildCBCLAdmin
 from .child_clinical_measurements_admin import ChildClinicalMeasurementsAdmin
 from .child_clinician_notes_admin import ClinicianNotesAdmin
 from .child_continued_consent_admin import ChildContinuedConsentAdmin

@@ -62,6 +62,12 @@ CARDIOVASCULAR_DISORDER = (
     (OTHER, 'Other cardiovascular malformation, specify'),
 )
 
+CBCL_SCALE = (
+    ('not_true', 'Not True (as far you know)'),
+    ('somewhat', 'Somewhat or Sometimes True'),
+    ('very_true', 'Very True or Often True'),
+)
+
 CHILD_AGE_VACCINE_GIVEN = (
     ('at_birth', 'At Birth'),
     ('after_birth', 'After Birth'),

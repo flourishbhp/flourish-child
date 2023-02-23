@@ -15,6 +15,7 @@ from .child_appointment_form import AppointmentForm
 from .child_assent_form import ChildAssentForm
 from .child_birth_form import ChildBirthForm
 from .child_birth_weight_length_screening_form import ChildBirthScreeningForm
+from .child_cbcl_form import ChildCBCLForm
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
 from .child_clinician_notes_form import ClinicianNotesImageForm, \
     ChildClinicianNotesForm
