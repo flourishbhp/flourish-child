@@ -552,6 +552,16 @@ OVERALL_MARKS = (
     ('I_do_not_know_right_now', 'I do not know right now'),
 )
 
+PENNCNB_INVALID = (
+    ('child_ill', 'Child was ill'),
+    ('sensory_handicap', 'Child has a sensory handicap'),
+    ('motor_handicap', 'Child has a motor handicap'),
+    ('uncooperative', 'Child was uncooperative'),
+    ('misunderstood_directions', 'Child did not understand directions'),
+    ('unavailable_resources', 'Equipment/room was not available'),
+    (OTHER, 'Other, specify'),
+)
+
 PHYS_ACTIVITY_TIME = (
     ('specify_hrs_mins', 'Hours and minutes per day (specify)'),
     (DONT_KNOW, 'Don\'t know/Not sure')
