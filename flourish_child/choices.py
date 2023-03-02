@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
-    NOT_APPLICABLE, DWTA
+    NOT_APPLICABLE, DWTA, NEVER
 from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
     ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
 from edc_constants.constants import NEG, POS, IND, PENDING
@@ -24,6 +24,12 @@ ALIVE_DEAD_UNKNOWN = (
 ANSWERER = (
     ('caregiver', 'Caregiver'),
     ('child_adolescent', 'Child/Adolescent'),
+)
+
+BRIEF2_SCALE = (
+    ('never', 'Never'),
+    ('sometimes', 'Sometimes'),
+    ('often', 'Often'),
 )
 
 CARDIOVASCULAR_DISORDER = (
@@ -54,6 +60,12 @@ CARDIOVASCULAR_DISORDER = (
     ('Patent ductous arteriosus (persisting >6 weeks of age)',
      'Patent ductous arteriosus (persisting >6 weeks of age)'),
     (OTHER, 'Other cardiovascular malformation, specify'),
+)
+
+CBCL_SCALE = (
+    ('not_true', 'Not True (as far you know)'),
+    ('somewhat', 'Somewhat or Sometimes True'),
+    ('very_true', 'Very True or Often True'),
 )
 
 CHILD_AGE_VACCINE_GIVEN = (
@@ -540,6 +552,16 @@ OVERALL_MARKS = (
     ('I_do_not_know_right_now', 'I do not know right now'),
 )
 
+PENNCNB_INVALID = (
+    ('child_ill', 'Child was ill'),
+    ('sensory_handicap', 'Child has a sensory handicap'),
+    ('motor_handicap', 'Child has a motor handicap'),
+    ('uncooperative', 'Child was uncooperative'),
+    ('misunderstood_directions', 'Child did not understand directions'),
+    ('unavailable_resources', 'Equipment/room was not available'),
+    (OTHER, 'Other, specify'),
+)
+
 PHYS_ACTIVITY_TIME = (
     ('specify_hrs_mins', 'Hours and minutes per day (specify)'),
     (DONT_KNOW, 'Don\'t know/Not sure')
@@ -556,6 +578,14 @@ POS_NEG_IND_INVALID = (
     (NEG, 'Negative'),
     (IND, 'Indeterminate'),
     ('invalid', 'Invalid')
+)
+
+REASONS_PENNCNB_INCOMPLETE = (
+    ('software_errors', 'Software/Application errors'),
+    ('restless_child', 'Child was restless'),
+    ('lack_of_understanding', 'Child could not understand the program'),
+    ('no_private_space', 'No private space to complete'),
+    (OTHER, 'Other, specify'),
 )
 
 REASONS_VACCINES_MISSED = (

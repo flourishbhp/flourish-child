@@ -5,6 +5,8 @@ from .adol_hiv_knowledge_form import HivKnowledgeForm
 from .adol_tb_history_form import TbHistoryAdolForm
 from .adol_tb_presence_household_member_form import TbPresenceHouseholdMembersAdolForm
 from .adol_tb_routine_health_screen_form import TbRoutineScreenAdolForm, TbHealthVisitAdolForm
+from .brief_2_parent_form import Brief2ParentForm
+from .brief_2_self_reported_form import Brief2SelfReportedForm
 from .birth_data_form import BirthDataForm
 from .birth_exam_form import BirthExamForm
 from .birth_feeding_and_vaccine_form import BirthFeedingVaccineForm
@@ -13,6 +15,7 @@ from .child_appointment_form import AppointmentForm
 from .child_assent_form import ChildAssentForm
 from .child_birth_form import ChildBirthForm
 from .child_birth_weight_length_screening_form import ChildBirthScreeningForm
+from .child_cbcl_form import ChildCBCLForm
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
 from .child_clinician_notes_form import ClinicianNotesImageForm, \
     ChildClinicianNotesForm
@@ -32,6 +35,7 @@ from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
 from .child_medical_history_form import ChildMedicalHistoryForm
+from .child_penn_cnb_form import ChildPennCNBForm
 from .child_phq_depression_screening_form import ChildPhqDepressionScreeningForm
 from .child_phq_post_referral_form import ChildPhqPostReferralForm
 from .child_phq_referral_form import ChildPhqReferralForm

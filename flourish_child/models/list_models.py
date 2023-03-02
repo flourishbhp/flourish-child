@@ -48,5 +48,10 @@ class HIVKnowledgeMedium(ListModelMixin, BaseUuidModel):
 class HealthCareCenter(ListModelMixin, BaseUuidModel):
     pass
 
+
 class TbRoutineScreenAdolMedium(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class StaffMember(ListModelMixin, BaseUuidModel):
     pass
