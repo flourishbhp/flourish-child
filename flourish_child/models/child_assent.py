@@ -171,9 +171,13 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             self.remain_in_study, self.hiv_testing, self.preg_testing, self.child_age)
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
-        self.version = self.latest_consent_version
+        
+        if self.version:
+            self.version = self.latest_consent_version
+
         if self.is_eligible and not self.subject_identifier:
                 self.subject_identifier = self.update_subject_identifier
+                
         super().save(*args, **kwargs)
 
     @property
