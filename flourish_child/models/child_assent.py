@@ -172,7 +172,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
         
-        if self.version:
+        if not self.version:
             self.version = self.latest_consent_version
 
         if self.is_eligible and not self.subject_identifier:
