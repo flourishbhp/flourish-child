@@ -79,7 +79,7 @@ class HivKnowledge(ChildCrfModelMixin):
         max_length=25, )
 
     protected_sexual_transmit = models.CharField(
-        verbose_name='Can a person get HIV when having unprotected sex with another person?',
+        verbose_name='Can a person get HIV when having protected sex with another person?',
         choices=YES_NO_DN_PNTA,
         max_length=25, )
 
