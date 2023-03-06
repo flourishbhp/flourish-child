@@ -28,7 +28,7 @@ class ChildImmunizationHistory(ChildCrfModelMixin):
     rec_add_immunization = models.CharField(
         verbose_name=('Since the last scheduled visit, have you received any '
                       'additional immunizations?'),
-        choices=YES_NO,
+        choices=YES_NO_UNKNOWN,
         max_length=20,
         null=True)
 
