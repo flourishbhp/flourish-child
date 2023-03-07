@@ -15,7 +15,10 @@ from .child_appointment import Appointment
 from .child_assent import ChildAssent
 from .child_birth import ChildBirth
 from .child_birth_weight_length_screening import ChildBirthScreening
-from .child_cbcl import ChildCBCL
+from .child_cbcl_section1 import ChildCBCLSection1
+from .child_cbcl_section2 import ChildCBCLSection2
+from .child_cbcl_section3 import ChildCBCLSection3
+from .child_cbcl_section4 import ChildCBCLSection4
 from .child_clinical_measurements import ChildClinicalMeasurements
 from .child_clinician_notes import ChildClinicianNotes, ClinicianNotesImage
 from .child_continued_consent import ChildContinuedConsent
