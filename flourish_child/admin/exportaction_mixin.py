@@ -42,16 +42,16 @@ class ExportActionMixin:
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
             field_names.insert(1, 'child_exposure_status')
-            field_names.insert(2, 'child_dob')
+
 
         if queryset and getattr(queryset[0], 'child_visit', None):
             field_names.insert(0, 'subject_identifier')
             field_names.insert(1, 'new_maternal_study_subject_identifier')
             field_names.insert(2, 'old_study_maternal_identifier')
-            field_names.insert(6, 'visit_code')
+            field_names.insert(5, 'visit_code')
 
         if queryset[0]._meta.label_lower == 'flourish_child.birthdata':
-            field_names.insert(5, 'infant_sex')
+            field_names.insert(4, 'infant_sex')
 
         for col_num in range(len(field_names)):
             ws.write(row_num, col_num, field_names[col_num], font_style)
@@ -72,14 +72,12 @@ class ExportActionMixin:
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(study_maternal_identifier,
                                                                 subject_identifier)
-                infant_dob = self.infant_dob(subject_identifier)
 
                 data.append(subject_identifier)
                 data.append(subject_identifier[:-3])
                 data.append(study_maternal_identifier)
                 data.append(previous_study)
                 data.append(child_exposure_status)
-                data.append(infant_dob)
                 data.append(obj.child_visit.visit_code)
 
             elif self.is_non_crf(obj):
@@ -92,15 +90,14 @@ class ExportActionMixin:
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(
                     study_maternal_identifier, subject_identifier)
-                infant_dob = self.infant_dob(subject_identifier)
 
                 data.append(previous_study)
                 data.append(child_exposure_status)
-                data.append(infant_dob)
+
 
             if obj._meta.label_lower == 'flourish_child.birthdata':
                 infant_sex = self.infant_gender(subject_identifier)
-                data.append(infant_sex)
+                data.insert(4, infant_sex)
 
             inline_objs = []
             for field in self.get_model_fields:
@@ -279,17 +276,6 @@ class ExportActionMixin:
         else:
             return child_consent_obj.gender
 
-    def infant_dob(self, subject_identifier=None):
-
-        child_consent_cls = django_apps.get_model('flourish_caregiver.caregiverchildconsent')
-
-        try:
-            child_consent_obj = child_consent_cls.objects.filter(
-                subject_identifier=subject_identifier,).latest('consent_datetime')
-        except child_consent_cls.DoesNotExist:
-            pass
-        else:
-            return child_consent_obj.child_dob
 
     def is_non_crf(self, obj):
 
