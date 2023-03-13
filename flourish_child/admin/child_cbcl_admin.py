@@ -2,15 +2,15 @@ from django.contrib import admin
 from edc_model_admin import audit_fieldset_tuple
 
 from ..admin_site import flourish_child_admin
-from ..forms import ChildCBCLForm
-from ..models import ChildCBCL
+from ..forms import ChildCBCLSection1Form, ChildCBCLSection2Form, ChildCBCLSection3Form, ChildCBCLSection4Form
+from ..models import ChildCBCLSection1, ChildCBCLSection2, ChildCBCLSection3, ChildCBCLSection4
 from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
-@admin.register(ChildCBCL, site=flourish_child_admin)
-class ChildCBCLAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+@admin.register(ChildCBCLSection1, site=flourish_child_admin)
+class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
-    form = ChildCBCLForm
+    form = ChildCBCLSection1Form
 
     fieldsets = (
         (None, {
@@ -50,6 +50,51 @@ class ChildCBCLAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'fearful',
                 'fearful_desc',
                 'fears_school',
+                ]}, ),
+        audit_fieldset_tuple)
+
+    radio_fields = {'acts_young': admin.VERTICAL,
+                    'unapproved_alc_intake': admin.VERTICAL,
+                    'argues_alot': admin.VERTICAL,
+                    'fails_to_finish': admin.VERTICAL,
+                    'enjoys_little': admin.VERTICAL,
+                    'bowel_incontinence': admin.VERTICAL,
+                    'bragging': admin.VERTICAL,
+                    'attention_deficit': admin.VERTICAL,
+                    'obssessive': admin.VERTICAL,
+                    'hyperactive': admin.VERTICAL,
+                    'too_dependent': admin.VERTICAL,
+                    'feels_lonely': admin.VERTICAL,
+                    'confused': admin.VERTICAL,
+                    'cries_alot': admin.VERTICAL,
+                    'animal_cruelty': admin.VERTICAL,
+                    'bullies_other': admin.VERTICAL,
+                    'daydreams': admin.VERTICAL,
+                    'self_harms': admin.VERTICAL,
+                    'demands_attention': admin.VERTICAL,
+                    'destroys_belongings': admin.VERTICAL,
+                    'destroys_othr_things': admin.VERTICAL,
+                    'disobedient_home': admin.VERTICAL,
+                    'disobedient_school': admin.VERTICAL,
+                    'eating_problems': admin.VERTICAL,
+                    'unfitting': admin.VERTICAL,
+                    'unremorseful': admin.VERTICAL,
+                    'easily_jealous': admin.VERTICAL,
+                    'breaks_rules': admin.VERTICAL,
+                    'fearful': admin.VERTICAL,
+                    'fears_school': admin.VERTICAL, }
+
+
+@admin.register(ChildCBCLSection2, site=flourish_child_admin)
+class ChildCBCLSection2Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+
+    form = ChildCBCLSection2Form
+
+    fieldsets = (
+        (None, {
+            'fields': [
+                'child_visit',
+                'report_datetime',
                 'fear_harmful_thoughts',
                 'fear_of_perfection',
                 'feels_unloved',
@@ -77,8 +122,45 @@ class ChildCBCLAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'overeating',
                 'overtired_noreason',
                 'overweight', ]}, ),
+        audit_fieldset_tuple)
+
+    radio_fields = {'fear_harmful_thoughts': admin.VERTICAL,
+                    'fear_of_perfection': admin.VERTICAL,
+                    'feels_unloved': admin.VERTICAL,
+                    'feels_paranoia': admin.VERTICAL,
+                    'feels_worthless': admin.VERTICAL,
+                    'accident_prone': admin.VERTICAL,
+                    'fights_involvement': admin.VERTICAL,
+                    'teased_alot': admin.VERTICAL,
+                    'trouble_friends': admin.VERTICAL,
+                    'auditory_hallucination': admin.VERTICAL,
+                    'impulsive': admin.VERTICAL,
+                    'loner': admin.VERTICAL,
+                    'cheating': admin.VERTICAL,
+                    'bites_nails': admin.VERTICAL,
+                    'nervousness': admin.VERTICAL,
+                    'nervous_moments': admin.VERTICAL,
+                    'nightmares': admin.VERTICAL,
+                    'disliked_by_othrs': admin.VERTICAL,
+                    'constipated': admin.VERTICAL,
+                    'anxiousness': admin.VERTICAL,
+                    'feels_dizzy': admin.VERTICAL,
+                    'feels_guity': admin.VERTICAL,
+                    'overeating': admin.VERTICAL,
+                    'overtired_noreason': admin.VERTICAL,
+                    'overweight': admin.VERTICAL, }
+
+
+@admin.register(ChildCBCLSection3, site=flourish_child_admin)
+class ChildCBCLSection3Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+
+    form = ChildCBCLSection3Form
+
+    fieldsets = (
         ('Physical Problems without known medical cause:', {
             'fields': [
+                'child_visit',
+                'report_datetime',
                 'body_aches',
                 'headaches',
                 'nauseous',
@@ -116,7 +198,50 @@ class ChildCBCLAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'sleeps_more_desc',
                 'inattentive',
                 'speech_prob',
-                'speech_prob_desc',
+                'speech_prob_desc', ]}, ),
+        audit_fieldset_tuple)
+
+    radio_fields = {'body_aches': admin.VERTICAL,
+                    'headaches': admin.VERTICAL,
+                    'nauseous': admin.VERTICAL,
+                    'eye_prob': admin.VERTICAL,
+                    'skin_prob': admin.VERTICAL,
+                    'stomach_aches': admin.VERTICAL,
+                    'vomiting': admin.VERTICAL,
+                    'attacks_physical': admin.VERTICAL,
+                    'body_picking': admin.VERTICAL,
+                    'sexparts_public_play': admin.VERTICAL,
+                    'sexparts_play': admin.VERTICAL,
+                    'poor_schoolwork': admin.VERTICAL,
+                    'clumsy': admin.VERTICAL,
+                    'prefers_older_kids': admin.VERTICAL,
+                    'prefers_young_kids': admin.VERTICAL,
+                    'refuses_to_talk': admin.VERTICAL,
+                    'compulsions': admin.VERTICAL,
+                    'home_runaway': admin.VERTICAL,
+                    'screams_alot': admin.VERTICAL,
+                    'secretive': admin.VERTICAL,
+                    'sight_hallucinations': admin.VERTICAL,
+                    'self_conscious': admin.VERTICAL,
+                    'sets_fires': admin.VERTICAL,
+                    'sexual_prob': admin.VERTICAL,
+                    'showing_off': admin.VERTICAL,
+                    'too_shy': admin.VERTICAL,
+                    'sleeps_less': admin.VERTICAL,
+                    'sleeps_more': admin.VERTICAL,
+                    'inattentive': admin.VERTICAL,
+                    'speech_prob': admin.VERTICAL, }
+
+
+@admin.register(ChildCBCLSection4, site=flourish_child_admin)
+class ChildCBCLSection4Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+
+    form = ChildCBCLSection4Form
+    fieldsets = (
+        (None, {
+            'fields': [
+                'child_visit',
+                'report_datetime',
                 'stares_blankly',
                 'steals_at_home',
                 'steals_elsewhere',
@@ -159,92 +284,7 @@ class ChildCBCLAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'other_problems', ]}, ),
         audit_fieldset_tuple)
 
-    radio_fields = {'acts_young': admin.VERTICAL,
-                    'unapproved_alc_intake': admin.VERTICAL,
-                    'argues_alot': admin.VERTICAL,
-                    'fails_to_finish': admin.VERTICAL,
-                    'enjoys_little': admin.VERTICAL,
-                    'bowel_incontinence': admin.VERTICAL,
-                    'bragging': admin.VERTICAL,
-                    'attention_deficit': admin.VERTICAL,
-                    'obssessive': admin.VERTICAL,
-                    'hyperactive': admin.VERTICAL,
-                    'too_dependent': admin.VERTICAL,
-                    'feels_lonely': admin.VERTICAL,
-                    'confused': admin.VERTICAL,
-                    'cries_alot': admin.VERTICAL,
-                    'animal_cruelty': admin.VERTICAL,
-                    'bullies_other': admin.VERTICAL,
-                    'daydreams': admin.VERTICAL,
-                    'self_harms': admin.VERTICAL,
-                    'demands_attention': admin.VERTICAL,
-                    'destroys_belongings': admin.VERTICAL,
-                    'destroys_othr_things': admin.VERTICAL,
-                    'disobedient_home': admin.VERTICAL,
-                    'disobedient_school': admin.VERTICAL,
-                    'eating_problems': admin.VERTICAL,
-                    'unfitting': admin.VERTICAL,
-                    'unremorseful': admin.VERTICAL,
-                    'easily_jealous': admin.VERTICAL,
-                    'breaks_rules': admin.VERTICAL,
-                    'fearful': admin.VERTICAL,
-                    'fears_school': admin.VERTICAL,
-                    'fear_harmful_thoughts': admin.VERTICAL,
-                    'fear_of_perfection': admin.VERTICAL,
-                    'feels_unloved': admin.VERTICAL,
-                    'feels_paranoia': admin.VERTICAL,
-                    'feels_worthless': admin.VERTICAL,
-                    'accident_prone': admin.VERTICAL,
-                    'fights_involvement': admin.VERTICAL,
-                    'teased_alot': admin.VERTICAL,
-                    'trouble_friends': admin.VERTICAL,
-                    'auditory_hallucination': admin.VERTICAL,
-                    'impulsive': admin.VERTICAL,
-                    'loner': admin.VERTICAL,
-                    'cheating': admin.VERTICAL,
-                    'bites_nails': admin.VERTICAL,
-                    'nervousness': admin.VERTICAL,
-                    'nervous_moments': admin.VERTICAL,
-                    'nightmares': admin.VERTICAL,
-                    'disliked_by_othrs': admin.VERTICAL,
-                    'constipated': admin.VERTICAL,
-                    'anxiousness': admin.VERTICAL,
-                    'feels_dizzy': admin.VERTICAL,
-                    'feels_guity': admin.VERTICAL,
-                    'overeating': admin.VERTICAL,
-                    'overtired_noreason': admin.VERTICAL,
-                    'overweight': admin.VERTICAL,
-                    'body_aches': admin.VERTICAL,
-                    'headaches': admin.VERTICAL,
-                    'nauseous': admin.VERTICAL,
-                    'eye_prob': admin.VERTICAL,
-                    'skin_prob': admin.VERTICAL,
-                    'stomach_aches': admin.VERTICAL,
-                    'vomiting': admin.VERTICAL,
-                    'attacks_physical': admin.VERTICAL,
-                    'body_picking': admin.VERTICAL,
-                    'sexparts_public_play': admin.VERTICAL,
-                    'sexparts_play': admin.VERTICAL,
-                    'poor_schoolwork': admin.VERTICAL,
-                    'clumsy': admin.VERTICAL,
-                    'prefers_older_kids': admin.VERTICAL,
-                    'prefers_young_kids': admin.VERTICAL,
-                    'refuses_to_talk': admin.VERTICAL,
-                    'compulsions': admin.VERTICAL,
-                    'home_runaway': admin.VERTICAL,
-                    'screams_alot': admin.VERTICAL,
-                    'secretive': admin.VERTICAL,
-                    'sight_hallucinations': admin.VERTICAL,
-                    'self_conscious': admin.VERTICAL,
-                    'sets_fires': admin.VERTICAL,
-                    'sexual_prob': admin.VERTICAL,
-                    'showing_off': admin.VERTICAL,
-                    'too_shy': admin.VERTICAL,
-                    'sleeps_less': admin.VERTICAL,
-                    'sleeps_more': admin.VERTICAL,
-                    'inattentive': admin.VERTICAL,
-                    'speech_prob': admin.VERTICAL,
-                    'stares_blankly': admin.VERTICAL,
+    radio_fields = {'stares_blankly': admin.VERTICAL,
                     'steals_at_home': admin.VERTICAL,
                     'steals_elsewhere': admin.VERTICAL,
                     'hoarding': admin.VERTICAL,
