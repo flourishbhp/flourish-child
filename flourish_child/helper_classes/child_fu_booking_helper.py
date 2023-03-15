@@ -86,16 +86,25 @@ class ChildFollowUpBookingHelper(object):
         return max_possible > fu_notes.count(), fu_notes
 
     def create_booking(self, subject_identifier, booking_date):
-        self.participant_note_cls.objects.get_or_create(
+        participant_notes = self.participant_note_cls.objects.filter(
             subject_identifier=subject_identifier,
-            title='Follow Up Schedule',
-            defaults={'date': booking_date.date()})
+            title='Follow Up Schedule').exists()
+        if not participant_notes:
+            self.participant_note_cls.objects.create(
+                subject_identifier=subject_identifier,
+                title='Follow Up Schedule',
+                date=booking_date.date())
 
     def remove_booking(self, subject_identifier, booking_date):
-        self.participant_note_cls.objects.get(
-            subject_identifier=subject_identifier,
-            date=booking_date.date(),
-            title='Follow Up Schedule').delete()
+        try:
+            booking = self.participant_note_cls.objects.get(
+                subject_identifier=subject_identifier,
+                date=booking_date.date(),
+                title='Follow Up Schedule')
+        except self.participant_note_cls.DoesNotExist:
+            pass
+        else:
+            booking.delete()
 
     def assign_priority(self, subject_identifier, scheduled_sidx, booking_dt):
         priorities = {}
