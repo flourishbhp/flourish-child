@@ -1,7 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
 from edc_base import get_utcnow
-from edc_constants.constants import MALE, YES, NOT_APPLICABLE, NEG
+from edc_constants.constants import MALE, YES, NOT_APPLICABLE, NEG, FEMALE
 from edc_facility.import_holidays import import_holidays
 from model_mommy import mommy
 from flourish_calendar.models import ParticipantNote
@@ -75,6 +75,7 @@ class TestFuBooking(TestCase):
         self.caregiver_child_consent = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
+            gender=MALE,
             study_child_identifier=child_dataset.study_child_identifier,
             child_dob=maternal_dataset_obj.delivdt.date(), )
 
@@ -110,6 +111,7 @@ class TestFuBooking(TestCase):
             'flourish_caregiver.subjectconsent',
             screening_identifier=screening_preg.screening_identifier,
             breastfeed_intent=YES,
+            gender=FEMALE,
             **self.options)
 
         preg_caregiver_child_consent_obj = mommy.make_recipe(
@@ -138,7 +140,8 @@ class TestFuBooking(TestCase):
         mommy.make_recipe(
             'flourish_child.childbirth',
             subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
-            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+            dob=(get_utcnow() - relativedelta(days=1)).date(),
+            gender=MALE)
 
         self.assertEqual(OnScheduleChildCohortABirth.objects.filter(
             subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
@@ -181,6 +184,7 @@ class TestFuBooking(TestCase):
         caregiver_child_consent = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
+            gender=MALE,
             study_child_identifier=child_dataset_obj.study_child_identifier,
             child_dob=maternal_dataset_obj.delivdt.date(), )
 
@@ -241,6 +245,7 @@ class TestFuBooking(TestCase):
         caregiver_child_consent_obj = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
+            gender=MALE,
             study_child_identifier=child_dataset.study_child_identifier,
             child_dob=maternal_dataset_obj.delivdt.date(),)
 
