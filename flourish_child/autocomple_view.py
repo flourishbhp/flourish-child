@@ -6,6 +6,12 @@ from .models import VaccinesReceived
 
 
 def get_received_dates(request, vaccine):
+    """ Query vaccines received to retrieve vaccination date(s) for a participant's
+        selected vaccine and return the JSON response for the dates.
+        @param request:  request object
+        @param vaccine: selected vaccine name
+        @return: JSON response object with the corresponding vaccine dates.
+    """
     subject_identifier = None
     referrer = request.META.get('HTTP_REFERER')
     if referrer:
