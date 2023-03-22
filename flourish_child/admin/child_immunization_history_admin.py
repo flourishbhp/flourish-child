@@ -33,6 +33,10 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
         formset.request = request
         return formset
 
+    class Media:
+        js = ('flourish_child/js/jquery.min.js',
+              'flourish_child/js/autocomplete_vaccines.js', )
+
 
 class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
     model = VaccinesMissed
@@ -56,6 +60,7 @@ class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
 
 @admin.register(ChildImmunizationHistory, site=flourish_child_admin)
 class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+
     form = ChildImmunizationHistoryForm
 
     extra_context_models = ['vaccinesreceived', 'vaccinesmissed', 'birthvaccines']
