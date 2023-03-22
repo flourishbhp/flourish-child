@@ -85,8 +85,8 @@ $(document).ready(function () {
 	    		first_dose_field.value = details['first_dose_dt'];
 	    		first_dose_field.readOnly = true;
 	    		// Remove the calendar picker once readonly is set for the field.
-	    		let calendar_item = document.querySelector('.field-first_dose_dt .datetimeshortcuts');
-	    		calendar_item.style.cssText = 'display:none';
+//	    		let calendar_item = document.querySelector('.field-first_dose_dt .datetimeshortcuts');
+//	    		calendar_item.style.cssText = 'display:none';
 	    	}
 	    	// Second dose date
 	    	if (details.hasOwnProperty('second_dose_dt') && details['second_dose_dt'] !== null) {
@@ -111,11 +111,16 @@ $(document).ready(function () {
     				'id_vaccinesreceived_set-'+index+'-first_dose_dt');
     		first_dose_field.value = '';
     		first_dose_field.readOnly = false;
+    		// Reset for the calendar picker.
+//    		let calendar_item = document.querySelector('.field-first_dose_dt .datetimeshortcuts');
+//    		calendar_item.style.cssText = 'display:block';
+
     		// Second dose date
     		let second_dose_field = document.getElementById(
     				'id_vaccinesreceived_set-'+index+'-second_dose_dt');
     		second_dose_field.value = '';
     		second_dose_field.readOnly = false;
+
     		// Third dose date
     		let third_dose_field = document.getElementById(
     				'id_vaccinesreceived_set-'+index+'-third_dose_dt');
