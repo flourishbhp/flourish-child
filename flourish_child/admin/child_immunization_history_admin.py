@@ -161,7 +161,7 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     child_immunization_history__child_visit__subject_identifier=subject_identifier).exclude(
                     child_immunization_history__child_visit=child_visit)
                 for model_obj in model_objs:
-                    visit_code = model_obj.visit.visit_code
+                    visit_code = model_obj.child_immunization_history.visit_code
                     data_dict.setdefault(visit_code, [])
                     data_dict[visit_code].append(model_obj)
 
