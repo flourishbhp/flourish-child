@@ -79,9 +79,22 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
         null=True,
         blank=True)
 
+    booster_2nd_dose_dt = models.DateField(
+        verbose_name="2nd Booster Dose Date Given",
+        validators=[
+            date_not_future, ],
+        null=True,
+        blank=True)
+
+    booster_3rd_dose_dt = models.DateField(
+        verbose_name="3rd Booster Dose Date Given",
+        validators=[
+            date_not_future, ],
+        null=True,
+        blank=True)
+
     def natural_key(self):
-        return (
-                   self.received_vaccine_name,) + self.child_immunization_history.natural_key()
+        return (self.received_vaccine_name,) + self.child_immunization_history.natural_key()
 
     class Meta:
         app_label = 'flourish_child'
@@ -96,7 +109,11 @@ class VaccinesReceived(CrfInlineModelMixin, BaseUuidModel):
             ('received_vaccine_name', 'child_immunization_history',
              'third_dose_dt'),
             ('received_vaccine_name', 'child_immunization_history',
-             'booster_dose_dt'))
+             'booster_dose_dt'),
+            ('received_vaccine_name', 'child_immunization_history',
+             'booster_2nd_dose_dt'),
+            ('received_vaccine_name', 'child_immunization_history',
+             'booster_3rd_dose_dt'))
 
 
 class VaccinesMissed(CrfInlineModelMixin, BaseUuidModel):
@@ -124,8 +141,7 @@ class VaccinesMissed(CrfInlineModelMixin, BaseUuidModel):
     reason_missed_other = OtherCharField()
 
     def natural_key(self):
-        return (
-                   self.missed_vaccine_name,) + self.child_immunization_history.natural_key()
+        return (self.missed_vaccine_name,) + self.child_immunization_history.natural_key()
 
     class Meta:
         app_label = 'flourish_child'

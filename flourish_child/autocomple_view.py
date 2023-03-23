@@ -26,6 +26,8 @@ def get_received_dates(request, vaccine):
     except VaccinesReceived.DoesNotExist:
         pass
     else:
-        data_dict = model_to_dict(data, fields=['first_dose_dt', 'second_dose_dt', 'third_dose_dt'])
+        data_dict = model_to_dict(
+            data, fields=['first_dose_dt', 'second_dose_dt', 'third_dose_dt',
+                          'booster_dose_dt', 'booster_2nd_dose_dt', 'booster_3rd_dose_dt'])
         return JsonResponse(data_dict)
     return JsonResponse(data)
