@@ -35,5 +35,17 @@ class Appointment(AppointmentModelMixin, SiteModelMixin, BaseUuidModel):
 
     natural_key.dependencies = ['sites.Site']
 
+    @property
+    def next_by_timepoint(self):
+        """Returns the previous appointment or None of all appointments
+        for this subject for visit_code_sequence=0.
+        """
+        return self.__class__.objects.filter(
+            subject_identifier=self.subject_identifier,
+            timepoint__gt=self.timepoint,
+            visit_code_sequence=0,
+            schedule_name=self.schedule_name
+        ).order_by('timepoint').first()
+
     class Meta(AppointmentModelMixin.Meta):
         pass
