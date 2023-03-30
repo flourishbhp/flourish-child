@@ -1,8 +1,10 @@
 from django import forms
+from django.apps import apps as django_apps
 from django.core.exceptions import ObjectDoesNotExist
 from edc_appointment.constants import NEW_APPT, IN_PROGRESS_APPT
 from edc_appointment.form_validators import AppointmentFormValidator
 from edc_base.sites.forms import SiteModelFormMixin
+from edc_constants.constants import OPEN
 from edc_form_validators import FormValidatorMixin
 import pytz
 
@@ -16,6 +18,10 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
     """
 
     appointment_model = 'flourish_child.appointment'
+
+    @property
+    def data_action_item_cls(self):
+        return django_apps.get_model('edc_data_manager.dataactionitem')
 
     def clean(self):
         super().clean()
@@ -42,6 +48,7 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
                     raise forms.ValidationError(
                         'The appointment datetime cannot be outside the window period, '
                         'please correct. See earliest, ideal and latest datetimes below.')
+        self.validate_complete_cbcl_crfs()
 
     def validate_appt_new_or_complete(self):
         """
@@ -98,6 +105,44 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
                         f'Update appointment for {first_new_appt.visit_code} first.')
             except AttributeError:
                 pass
+
+    def validate_complete_cbcl_crfs(self):
+        appointment = self.instance
+        cbcl_crfs = ['childcbclsection1', 'childcbclsection2',
+                     'childcbclsection3', 'childcbclsection4']
+
+        cbcl_objs = []
+
+        for cbcl_form in cbcl_crfs:
+            model_cls = django_apps.get_model(f'flourish_child.{cbcl_form}')
+            try:
+                model_obj = model_cls.objects.get(child_visit__appointment=appointment)
+            except model_cls.DoesNotExist:
+                continue
+            else:
+                cbcl_objs.append(model_obj)
+
+        if cbcl_objs and len(cbcl_objs) < 4:
+            subject_identifier = appointment.subject_identifier
+            visit_code = appointment.visit_code
+            self.create_data_action_item(
+                visit_code=visit_code, subject_identifier=subject_identifier)
+
+    def create_data_action_item(self, visit_code=None, subject_identifier=None):
+
+        defaults = {
+            'assigned': 'clinic',
+            'comment': (f'The CBCL CRFs are not all completed at visit {visit_code} for '
+                        f'participant {subject_identifier}, Please complete all the forms.'),
+            'action_priority': 'high',
+            'status': OPEN
+        }
+
+        self.data_action_item_cls.objects.update_or_create(
+            subject_identifier=subject_identifier,
+            subject=(f'Please complete all the CBCL CRFs at visit {visit_code} for PID '
+                     f'{subject_identifier}.'),
+            defaults=defaults, )
 
     class Meta:
         model = Appointment

@@ -801,6 +801,12 @@ YES_NO_UNCERTAIN = (
     ('2', 'Uncertain'),
 )
 
+YES_NO_NOT_ASKED = (
+    (YES, YES),
+    (NO, NO),
+    ('did_not_ask_child', 'Did not ask the child/adolescent'),
+)
+
 BF_ESTIMATED = (
     ('gen_est', 'Yes - General estimation'),
     ('used_infant_dob', 'Yes - Used infant date of birth'),
