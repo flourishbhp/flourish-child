@@ -64,5 +64,4 @@ from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
 from .tb_adol_assent_admin import TbAdolAssentAdmin
-from .tb_adol_off_study_admin import TBAdolOffStudyAdmin
 from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
