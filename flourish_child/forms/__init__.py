@@ -82,5 +82,4 @@ from .infant_feeding_form import InfantFeedingForm
 from .infant_feeding_practices_form import InfantFeedingPracticesForm
 from .offschedule_form import ChildOffScheduleForm
 from .tb_adol_assent_form import TbAdolAssentForm
-from .tb_adol_off_study_form import TBAdolOffStudyForm
 from .tb_screen_adol_form import TbVisitScreeningAdolescentForm

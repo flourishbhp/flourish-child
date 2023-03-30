@@ -20,7 +20,7 @@ from edc_constants.constants import OPEN, NEW, POS, NO, YES, NEG, IND, UNKNOWN
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION
 from flourish_prn.models.child_death_report import ChildDeathReport
 
 from flourish_child.models.tb_adol_assent import TbAdolAssent
@@ -29,10 +29,7 @@ from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_presence_household_member import \
     TbPresenceHouseholdMembersAdol
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
-from .tb_adol_off_study import TBAdolOffStudy
-from ..action_items import TB_ADOL_STUDY_ACTION
-from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
-from ..models import ChildPreHospitalizationInline
+from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
@@ -204,15 +201,6 @@ def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
                             repeat=True)
-
-
-@receiver(post_save, weak=False, sender=TBAdolOffStudy,
-          dispatch_uid='tb_adol_off_study_on_post_save')
-def tb_adol_off_study_on_post_save(sender, instance, raw, created, **kwargs):
-    if not raw:
-        put_child_offschedule(
-            subject_identifier=instance.subject_identifier,
-            schedule_name='tb_adol_schedule')
 
 
 @receiver(post_save, weak=False, sender=ChildVisit,

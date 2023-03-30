@@ -8,10 +8,8 @@ from edc_visit_schedule.models import SubjectScheduleHistory
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
 
-from flourish_child.models import Appointment, ChildDummySubjectConsent, \
-    OnScheduleChildTbAdolSchedule
-from flourish_child.models.tb_adol_off_study import TBAdolOffStudy
-from flourish_child.tests.subject_helper_class import SubjectHelperClass
+from flourish_child.models import Appointment
+from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 from django.apps import apps as django_apps
 
 

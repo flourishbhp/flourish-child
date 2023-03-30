@@ -21,7 +21,7 @@ from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
     TbLabResultsAdol, TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic
-from .models.tb_adol_off_study import TBAdolOffStudy
+from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 
 fake = Faker()
 
