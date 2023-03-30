@@ -55,3 +55,7 @@ class TbRoutineScreenAdolMedium(ListModelMixin, BaseUuidModel):
 
 class StaffMember(ListModelMixin, BaseUuidModel):
     pass
+
+
+class TbDiagnostics(ListModelMixin, BaseUuidModel):
+    pass
