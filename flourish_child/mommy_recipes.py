@@ -9,15 +9,19 @@ from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
-    SubjectConsent, CaregiverPreviouslyEnrolled, ScreeningPregWomen, CaregiverChildConsent
+    SubjectConsent, CaregiverPreviouslyEnrolled, ScreeningPregWomen, \
+    CaregiverChildConsent, TbAdolConsent
 from flourish_child.models.birth_data import BirthData
 from model_mommy.recipe import Recipe, seq
 
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
-    ChildVisit, ChildBirth, InfantDevScreening36Months, InfantDevScreening12Months, \
-    InfantDevScreening18Months, ChildFoodSecurityQuestionnaire
+    ChildVisit, ChildBirth, HivTestingAdol, InfantDevScreening36Months, \
+    InfantDevScreening12Months, \
+    InfantDevScreening18Months, ChildFoodSecurityQuestionnaire, TbAdolAssent, \
+    TbLabResultsAdol, TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic
+from .models.tb_adol_off_study import TBAdolOffStudy
 
 fake = Faker()
 
@@ -25,7 +29,7 @@ childdummysubjectconsent = Recipe(
     ChildDummySubjectConsent,
     subject_identifier=None,
     version='1'
-    )
+)
 
 screeningpregwomen = Recipe(
     ScreeningPregWomen,
@@ -51,10 +55,10 @@ childbirth = Recipe(
     initials='AY',
     dob=get_utcnow(),
     gender='Male'
-    )
+)
 
 childdataset = Recipe(
-    ChildDataset,)
+    ChildDataset, )
 
 registeredsubject = Recipe(
     RegisteredSubject,
@@ -79,7 +83,7 @@ subjectconsent = Recipe(
     identity_type='OMANG',
     is_dob_estimated='-',
     version='1'
-    )
+)
 
 childvisit = Recipe(
     ChildVisit,
@@ -112,7 +116,7 @@ caregiverchildconsent = Recipe(
     identity=seq('234513187'),
     identity_type='birth_cert',
     confirm_identity=seq('234513187')
-    )
+)
 
 childgadanxietyscreening = Recipe(
     ChildGadAnxietyScreening,
@@ -122,7 +126,7 @@ childgadanxietyscreening = Recipe(
     trouble_relaxing='0',
     restlessness='1',
     easily_annoyed='2',
-    fearful='3',)
+    fearful='3', )
 
 childphqdeprscreening = Recipe(
     ChildPhqDepressionScreening,
@@ -147,7 +151,7 @@ caregiverpreviouslyenrolled = Recipe(
     test_date=get_utcnow().date(),
     is_date_estimated=NO,
     sex=MALE,
-    relation_to_child='Mother',)
+    relation_to_child='Mother', )
 
 infantdevscreening36months = Recipe(
     InfantDevScreening36Months,
@@ -163,7 +167,7 @@ infantdevscreening36months = Recipe(
     self_feed=YES,
     motor_skills_specialist="blah blah",
     caregiver_concerns="blah blah"
-    )
+)
 
 infantdevscreening12months = Recipe(
     InfantDevScreening12Months,
@@ -182,7 +186,7 @@ infantdevscreening12months = Recipe(
     picks_objects=YES,
     motor_skills_specialist="blah blah",
     caregiver_concerns="blah blah"
-    )
+)
 
 infantdevscreening18months = Recipe(
     InfantDevScreening18Months,
@@ -205,7 +209,31 @@ childfoodsecurityquestionnaire = Recipe(
 )
 
 childphqreferral = Recipe(
-    ChildPhqReferral,)
+    ChildPhqReferral, )
 
 childphqreferralfu = Recipe(
     ChildPhqReferralFU)
+
+adoltblabresults = Recipe(
+    TbLabResultsAdol)
+
+tbadoloffstudy = Recipe(
+    TBAdolOffStudy)
+
+tbadolassent = Recipe(
+    TbAdolAssent, )
+
+tbvisitscreening = Recipe(
+    TbVisitScreeningAdolescent, )
+
+tbadolcaregiverconsent = Recipe(
+    TbAdolConsent, )
+
+hivtestingadol = Recipe(
+    HivTestingAdol, )
+
+tbpresencehouseholdmembersadol = Recipe(
+    TbPresenceHouseholdMembersAdol, )
+
+tbvisitscreeningadolescent = Recipe(
+    TbVisitScreeningAdolescent, )
