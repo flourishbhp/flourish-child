@@ -26,8 +26,11 @@ from flourish_prn.models.child_death_report import ChildDeathReport
 from flourish_child.models.tb_adol_assent import TbAdolAssent
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
-from flourish_child.models.adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
+from flourish_child.models.adol_tb_presence_household_member import \
+    TbPresenceHouseholdMembersAdol
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
+from .tb_adol_off_study import TBAdolOffStudy
+from ..action_items import TB_ADOL_STUDY_ACTION
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
 from .child_assent import ChildAssent
@@ -48,8 +51,8 @@ class CaregiverConsentError(Exception):
           dispatch_uid='child_socio_demographic_post_save')
 def child_socio_demographic_post_save(sender, instance, raw, created, **kwargs):
     """
-    Update academic perfomance in the same visit without affecting any other forms beyond and
-     after that particular visit
+    Update academic perfomance in the same visit without affecting any other forms
+    beyond and after that particular visit
     """
 
     child_visit_id = instance.child_visit.id
@@ -112,7 +115,8 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                         else:
                             dummy_consent_obj.save()
 
-                        caregiver_child_consent_obj.subject_identifier = instance.subject_identifier
+                        caregiver_child_consent_obj.subject_identifier = \
+                            instance.subject_identifier
                         caregiver_child_consent_obj.save(
                             update_fields=['subject_identifier', 'modified',
                                            'user_modified'])
@@ -152,47 +156,62 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
           dispatch_uid='adol_tb_visit_presence_on_post_save')
 def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
-
     if (instance.cough_duration == YES or instance.fever_duration == YES or
             instance.night_sweats == YES or instance.weight_loss == YES):
-        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+        TbAdoscentReferralAction(
+            subject_identifier=instance.child_visit.subject_identifier)
 
     elif (instance.cough_duration == NO or instance.fever_duration == NO or
           instance.night_sweats == NO or instance.weight_loss == NO):
-            put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
-                                  schedule_name='tb_adol_schedule')
+        trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
+                            instance.child_visit.subject_identifier,
+                            repeat=True)
 
 
 @receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
           dispatch_uid='adol_tb_presence_on_post_save')
 def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
     if instance.tb_referral == NO:
-        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+        TbAdoscentReferralAction(
+            subject_identifier=instance.child_visit.subject_identifier)
     elif instance.tb_referral == YES:
-        put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
-                              schedule_name='tb_adol_schedule')
+        trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
+                            instance.child_visit.subject_identifier,
+                            repeat=True)
 
 
 @receiver(post_save, weak=False, sender=HivTestingAdol,
           dispatch_uid='hiv_testing_on_post_save')
 def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
     if instance.seen_by_healthcare == NO or instance.referred_for_treatment == NO:
-        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+        TbAdoscentReferralAction(
+            subject_identifier=instance.child_visit.subject_identifier)
 
-    if instance.last_result in [NEG, IND, UNKNOWN] or instance.referred_for_treatment == NO:
-        put_child_offschedule(subject_identifier=instance.child_visit.subject_identifier,
-                              schedule_name='tb_adol_schedule')
+    if instance.last_result in [NEG, IND,
+                                UNKNOWN] or instance.referred_for_treatment == NO:
+        trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
+                            instance.child_visit.subject_identifier,
+                            repeat=True)
 
 
 @receiver(post_save, weak=False, sender=TbLabResultsAdol,
           dispatch_uid='child_tb_lab_results_on_post_save')
 def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.quantiferon_result == POS:
-        TbAdoscentReferralAction(subject_identifier=instance.child_visit.subject_identifier)
+        TbAdoscentReferralAction(
+            subject_identifier=instance.child_visit.subject_identifier)
     elif instance.quantiferon_result == NEG:
+        trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
+                            instance.child_visit.subject_identifier,
+                            repeat=True)
+
+
+@receiver(post_save, weak=False, sender=TBAdolOffStudy,
+          dispatch_uid='tb_adol_off_study_on_post_save')
+def tb_adol_off_study_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw:
         put_child_offschedule(
-            subject_identifier=instance.child_visit.subject_identifier,
+            subject_identifier=instance.subject_identifier,
             schedule_name='tb_adol_schedule')
 
 
@@ -202,11 +221,10 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
     """
     - Put subject on quarterly schedule at enrollment visit.
     """
-
-    trigger_action_item(instance, 'survival_status', 'dead',
-                        ChildDeathReport, CHILD_DEATH_REPORT_ACTION,
-                        instance.subject_identifier,
-                        repeat=True)
+    if getattr(instance, 'survival_status') == 'dead':
+        trigger_action_item(ChildDeathReport, CHILD_DEATH_REPORT_ACTION,
+                            instance.subject_identifier,
+                            repeat=True)
 
     if not raw and created and instance.visit_code in ['2000', '2000D', '3000']:
 
@@ -234,7 +252,6 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbAdolAssent,
           dispatch_uid='tb_adol_on_post_save')
 def tb_adol_assent_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.is_eligible:
         put_on_schedule('tb_adol', instance=instance,
                         subject_identifier=instance.subject_identifier,
@@ -298,8 +315,8 @@ def clinician_notes_image_on_post_save(sender, instance, raw, created, **kwargs)
         stamp_image(instance)
 
 
-def notification(subject_identifier, subject, user_created, group_names=('assignable users',)):
-
+def notification(subject_identifier, subject, user_created,
+                 group_names=('assignable users',)):
     if user_created:
         try:
             user = User.objects.get(username=user_created)
@@ -334,7 +351,6 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
     recent_year = get_utcnow() - relativedelta(years=1)
 
     if instance.aprox_date > recent_year.date():
-
         DataActionItem.objects.update_or_create(
             subject='Complete INFROM CRF on REDCap',
             subject_identifier=instance.subject_identifier,
@@ -408,30 +424,28 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
             booking_helper.schedule_fu_booking(subject_identifier, booking_dt)
 
 
-def trigger_action_item(obj, field, response, model_cls,
-                        action_name, subject_identifier, repeat=False):
+def trigger_action_item(model_cls, action_name, subject_identifier, repeat=False):
     action_cls = site_action_items.get(
         model_cls.action_name)
     action_item_model_cls = action_cls.action_item_model_cls()
 
-    if getattr(obj, field) == response:
+    try:
+        model_cls.objects.get(subject_identifier=subject_identifier)
+    except model_cls.DoesNotExist:
+        trigger = True
+    else:
+        trigger = repeat
+    if trigger:
         try:
-            model_cls.objects.get(subject_identifier=subject_identifier)
-        except model_cls.DoesNotExist:
-            trigger = True
+            action_item_obj = action_item_model_cls.objects.get(
+                subject_identifier=subject_identifier,
+                action_type__name=action_name)
+        except action_item_model_cls.DoesNotExist:
+            action_cls = site_action_items.get(action_name)
+            action_cls(subject_identifier=subject_identifier)
         else:
-            trigger = repeat
-        if trigger:
-            try:
-                action_item_obj = action_item_model_cls.objects.get(
-                    subject_identifier=subject_identifier,
-                    action_type__name=action_name)
-            except action_item_model_cls.DoesNotExist:
-                action_cls = site_action_items.get(action_name)
-                action_cls(subject_identifier=subject_identifier)
-            else:
-                action_item_obj.status = OPEN
-                action_item_obj.save()
+            action_item_obj.status = OPEN
+            action_item_obj.save()
     else:
         try:
             action_item = action_item_model_cls.objects.get(
