@@ -141,3 +141,7 @@ class OnScheduleChildCohortCSec(OnScheduleModelMixin):
 
 class OnScheduleChildTbAdolSchedule(OnScheduleModelMixin):
     pass
+
+
+class OnScheduleTbAdolFollowupSchedule(OnScheduleModelMixin):
+    pass

@@ -89,6 +89,12 @@ from .onschedule import OnScheduleChildCohortCPool, \
     OnScheduleChildCohortCSecQuart
 from .onschedule import OnScheduleChildCohortCQuarterly
 from .onschedule import OnScheduleChildTbAdolSchedule
+from .onschedule import OnScheduleTbAdolFollowupSchedule
 from .signals import child_consent_on_post_save
 from .tb_adol_assent import TbAdolAssent
+from .tb_engagement import TbAdolEngagement
+from .tb_int_transcription import TbAdolInterviewTranscription
+from .tb_int_translation import TbAdolInterviewTranslation
+from .tb_interview import TbAdolInterview
+from .tb_referral_outcomes import TbAdolReferralOutcomes
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
