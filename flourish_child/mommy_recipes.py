@@ -14,11 +14,13 @@ from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
 from flourish_child.models.birth_data import BirthData
 from model_mommy.recipe import Recipe, seq
 
+from flourish_prn.models import TbReferalAdol
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
     ChildVisit, ChildBirth, HivTestingAdol, InfantDevScreening36Months, \
     InfantDevScreening12Months, \
     InfantDevScreening18Months, ChildFoodSecurityQuestionnaire, TbAdolAssent, \
-    TbLabResultsAdol, TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent
+    TbAdolEngagement, TbAdolInterview, TbLabResultsAdol, TbPresenceHouseholdMembersAdol, \
+    TbVisitScreeningAdolescent
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic
 from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
@@ -237,3 +239,12 @@ tbpresencehouseholdmembersadol = Recipe(
 
 tbvisitscreeningadolescent = Recipe(
     TbVisitScreeningAdolescent, )
+
+tbadolreferral = Recipe(
+    TbReferalAdol)
+
+tbadolinterview = Recipe(
+    TbAdolInterview, )
+
+tbadolengagement = Recipe(
+    TbAdolEngagement)
