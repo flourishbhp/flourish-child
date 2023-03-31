@@ -72,6 +72,7 @@ from .infant_dev_screening_9_months import InfantDevScreening9Months
 from .infant_feeding import InfantFeeding
 from .infant_feeding_practices import InfantFeedingPractices
 from .list_models import *
+from .model_mixins import intv_users_mixin
 from .offschedule import ChildOffSchedule
 from .onschedule import OnScheduleChildCohortABirth, OnScheduleChildCohortAEnrollment
 from .onschedule import OnScheduleChildCohortAFU, OnScheduleChildCohortCSec
