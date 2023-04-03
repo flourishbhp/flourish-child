@@ -1098,3 +1098,8 @@ DECLINE_REASON = (
     ('cant_physically_attend', 'Not able to physically come to clinic'),
     ('not_interested', 'Not interested in participating'),
     (OTHER, 'Other (Specify)'),)
+
+YES_NO_NOT_ELIGIBLE = (
+    (YES, YES),
+    (NO, NO),
+    ('not_eligible', 'Not eligible'),)
