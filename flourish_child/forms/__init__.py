@@ -82,3 +82,4 @@ from .tb_screen_adol_form import TbVisitScreeningAdolescentForm
 from .adol_tb_knowledge_form import TbKnowledgeAdolForm
 from .hiv_testing_adol_form import HIVTestingAdolForm
 from .ado_tb_lab_results_form import TbLabResultsAdolForm
+from .adol_tb_referral_form import TbReferralAdolForm

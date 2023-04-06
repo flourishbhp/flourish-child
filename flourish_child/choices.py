@@ -1054,3 +1054,18 @@ YES_NO_PENDING_UNK = (
     (PENDING, 'Pending'),
     (UNKNOWN, 'Unknown'),
 )
+
+LOCATION_REFERRAL = (
+    ('bontleng', 'Bontleng'),
+    ('julia_molefe', 'Julia Molefe'),
+    ('phase_2','Phase 2'),
+    ('bh1', 'BH1'),
+    ('bh2', 'BH2'),
+    ('bh3', 'BH3'),
+    ('nkoyaphiri', 'Nokoyaphiri'),
+    ('mogoditshane', 'Mogoditshane'),
+    ('lesirane', 'Lesirane'),
+    ('old_naledi', 'Old Naledi'),
+    ('g_west', 'G-West'),
+    ('sebele', 'Sebele')
+)
