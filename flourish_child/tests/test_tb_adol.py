@@ -6,7 +6,7 @@ from edc_base import get_utcnow
 from edc_constants.constants import NEG, NEW, NO, NOT_APPLICABLE, YES
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
-from edc_metadata.models import CrfMetadata
+from edc_metadata.models import CrfMetadata, RequisitionMetadata
 from edc_visit_schedule.models import SubjectScheduleHistory
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
@@ -372,3 +372,26 @@ class TestTBAdol(TestCase):
             model='flourish_child.tbadolinterview',
             subject_identifier=self.child_subject_identifier,
             visit_code='2200A').entry_status, REQUIRED)
+
+    @tag('tb-requisition')
+    def test_requisitions_not_required(self):
+        """Asserts that lithium_heparin requisitions are not required for the 2200A
+        visit"""
+
+        mommy.make_recipe(
+            'flourish_prn.tbadolreferral',
+            subject_identifier=self.child_subject_identifier, )
+
+        self.child_visit = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2200A',
+                subject_identifier=self.child_subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(RequisitionMetadata.objects.filter(
+            model='flourish_child.childrequisition',
+            panel_name='lithium_heparin',
+            subject_identifier=self.child_subject_identifier,
+            visit_code='2200A').count(), 0)
