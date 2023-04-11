@@ -1062,17 +1062,44 @@ YES_NO_PENDING_UNK = (
     (UNKNOWN, 'Unknown'),
 )
 
-LOCATION_REFERRAL = (
+INTERVIEW_LOCATIONS = (
+    ('FLOURISH_clinic', 'FLOURISH clinic'),
+    ('BHP_site', 'BHP site'),
+    ('part_home', 'Participant home'),
+    (OTHER, 'Other'))
+
+INTERVIEW_LANGUAGE = (
+    ('setswana', 'Setswana'),
+    ('english', 'English'),
+    ('both', 'Both'))
+
+EVAL_LOCATION = (
     ('bontleng', 'Bontleng'),
     ('julia_molefe', 'Julia Molefe'),
-    ('phase_2','Phase 2'),
-    ('bh1', 'BH1'),
-    ('bh2', 'BH2'),
-    ('bh3', 'BH3'),
-    ('nkoyaphiri', 'Nokoyaphiri'),
-    ('mogoditshane', 'Mogoditshane'),
+    ('phase_2', 'Phase 2'),
+    ('BH1', 'BH1'),
+    ('BH2', 'BH2'),
+    ('BH3', 'BH3'),
+    ('nkoyaphiri', 'Nkoyaphiri'),
     ('lesirane', 'Lesirane'),
+    ('mogoditshane', 'Mogoditshane'),
     ('old_naledi', 'Old Naledi'),
     ('g_west', 'G-West'),
-    ('sebele', 'Sebele')
+    ('sebele', 'Sebele'),
+    (OTHER, 'Other, specify')
 )
+
+YES_NO_UNABLE_DET = (
+    (YES, YES),
+    (NO, NO),
+    ('unable_to_determine', 'Unable to determine'),)
+
+DECLINE_REASON = (
+    ('cant_physically_attend', 'Not able to physically come to clinic'),
+    ('not_interested', 'Not interested in participating'),
+    (OTHER, 'Other (Specify)'),)
+
+YES_NO_NOT_ELIGIBLE = (
+    (YES, YES),
+    (NO, NO),
+    ('not_eligible', 'Not eligible'),)
