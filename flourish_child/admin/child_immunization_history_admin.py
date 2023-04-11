@@ -24,7 +24,9 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
                 'first_dose_dt',
                 'second_dose_dt',
                 'third_dose_dt',
-                'booster_dose_dt')
+                'booster_dose_dt',
+                'booster_2nd_dose_dt',
+                'booster_3rd_dose_dt')
         }),
     )
 
@@ -32,6 +34,10 @@ class VaccinesReceivedInlineAdmin(TabularInlineMixin, admin.TabularInline):
         formset = super().get_formset(request, obj, **kwargs)
         formset.request = request
         return formset
+
+    class Media:
+        js = ('flourish_child/js/jquery.min.js',
+              'flourish_child/js/autocomplete_vaccines.js', )
 
 
 class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
@@ -56,6 +62,7 @@ class VaccinesMissedInlineAdmin(TabularInlineMixin, admin.TabularInline):
 
 @admin.register(ChildImmunizationHistory, site=flourish_child_admin)
 class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+
     form = ChildImmunizationHistoryForm
 
     extra_context_models = ['vaccinesreceived', 'vaccinesmissed', 'birthvaccines']
@@ -154,7 +161,7 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     child_immunization_history__child_visit__subject_identifier=subject_identifier).exclude(
                     child_immunization_history__child_visit=child_visit)
                 for model_obj in model_objs:
-                    visit_code = model_obj.visit.visit_code
+                    visit_code = model_obj.child_immunization_history.visit_code
                     data_dict.setdefault(visit_code, [])
                     data_dict[visit_code].append(model_obj)
 

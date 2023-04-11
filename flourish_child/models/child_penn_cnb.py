@@ -7,7 +7,7 @@ from edc_protocol.validators import date_not_before_study_start
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .list_models import StaffMember
-from ..choices import REASONS_PENNCNB_INCOMPLETE, PENNCNB_INVALID
+from ..choices import REASONS_PENNCNB_INCOMPLETE, PENNCNB_INVALID, YES_NO_NOT_ASKED
 
 
 class ChildPennCNB(ChildCrfModelMixin):
@@ -43,19 +43,17 @@ class ChildPennCNB(ChildCrfModelMixin):
 
     reason_other = OtherCharField()
 
-    results_validity = models.CharField(
-        verbose_name='In your opinion, are the results of the PennCNB considered valid?',
-        choices=YES_NO,
-        max_length=3)
-
-    reason_invalid = models.CharField(
-        verbose_name='Indicate the primary reason why this test may be invalid',
+    testing_impacted = models.CharField(
+        verbose_name='Did any of the following impact the testing session',
         choices=PENNCNB_INVALID,
-        max_length=30,
-        null=True,
-        blank=True)
+        max_length=30)
 
-    invalid_other = OtherCharField()
+    impact_other = OtherCharField()
+
+    claim_experience = models.CharField(
+        verbose_name='Does the child claim to have experience using a computer?',
+        choices=YES_NO_NOT_ASKED,
+        max_length=30)
 
     comments = models.TextField(
         verbose_name=('Please provide any additional comments you would like to add '

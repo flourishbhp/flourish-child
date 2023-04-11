@@ -1,11 +1,10 @@
 from django.utils.translation import ugettext_lazy as _
-from edc_constants.constants import ALIVE, DEAD, UNKNOWN, PARTICIPANT, \
-    NOT_APPLICABLE, DWTA, NEVER
-from edc_constants.constants import FAILED_ELIGIBILITY, YES, NO, OTHER, \
-    ON_STUDY, OFF_STUDY, DONT_KNOW, MALE, FEMALE
-from edc_constants.constants import NEG, POS, IND, PENDING
-from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
-from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
+from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
+from edc_constants.constants import DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, NO, \
+    OFF_STUDY, ON_STUDY, OTHER, YES
+from edc_constants.constants import IND, NEG, PENDING, POS
+from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, MISSED_VISIT
+from edc_visit_tracking.constants import LOST_VISIT, SCHEDULED, UNSCHEDULED
 
 from .constants import BREASTFEED_ONLY, PNTA
 
@@ -343,7 +342,8 @@ IMMUNIZATIONS = (
     ('inactivated_polio_vaccine', 'Inactivated-Polio Vaccine'),
     ('measles', 'Measles'),
     ('pentavalent',
-     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
+     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B '
+     'Vaccine)'),
     ('diptheria_tetanus', 'Diptheria and Tetanus'),
     ('hpv_vaccine', 'HPV Vaccine'),
     ('measles_rubella', 'Measles and Rubella')
@@ -361,7 +361,8 @@ INFANT_VACCINATIONS = (
     ('Rotavirus', 'Rotavirus'),
     ('Measles', 'Measles'),
     ('Pentavalent',
-     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B Vaccine)'),
+     'Pentavalent Vaccine (Contains DPT, Hepatitis B and Haemophilus Influenza B '
+     'Vaccine)'),
     ('diphtheria_tetanus', 'Diphtheria and Tetanus')
 )
 
@@ -801,6 +802,12 @@ YES_NO_UNCERTAIN = (
     ('2', 'Uncertain'),
 )
 
+YES_NO_NOT_ASKED = (
+    (YES, YES),
+    (NO, NO),
+    ('did_not_ask_child', 'Did not ask the child/adolescent'),
+)
+
 BF_ESTIMATED = (
     ('gen_est', 'Yes - General estimation'),
     ('used_infant_dob', 'Yes - Used infant date of birth'),
@@ -951,7 +958,8 @@ TB_SYMPTOM = (
     ('respitory_illness', 'Respiratory illness (cough, runny nose, sore throat, etc)'),
     ('gastrointestinal_illness', 'Gastrointestinal illness (vomiting, diarrhea, etc)'),
     ('febrile_illness', 'Febrile illness (with fever)'),
-    ('sexual_reporductive_healthy_needs', 'Sexual reproductive health needs (contraceptives))'),
+    ('sexual_reporductive_healthy_needs',
+     'Sexual reproductive health needs (contraceptives))'),
     (OTHER, 'Other')
 )
 
@@ -994,7 +1002,6 @@ RELATION_TO_INDIVIDUAL = (
     (OTHER, 'Other'),
 )
 
-
 TB_THERAPY_REASONS = (
     (POS, 'Positive test for TB Infection'),
     ('tb_contact', 'TB Contact'),
@@ -1007,7 +1014,7 @@ TB_PRESCRIPTION_AGE = (
     ('0_4', '0-4 years'),
     ('5_9', '5-9 years'),
     ('10_17', '10-17 years')
-) 
+)
 
 TIMES_TESTED = (
     ('1', '1'),
@@ -1027,7 +1034,7 @@ POS_NEG_IND_IDK = (
 LOCATION_REFERRAL = (
     ('bontleng', 'Bontleng'),
     ('julia_molefe', 'Julia Molefe'),
-    ('phase_2','Phase 2'),
+    ('phase_2', 'Phase 2'),
     ('bh1', 'BH1'),
     ('bh2', 'BH2'),
     ('bh3', 'BH3'),
@@ -1054,3 +1061,45 @@ YES_NO_PENDING_UNK = (
     (PENDING, 'Pending'),
     (UNKNOWN, 'Unknown'),
 )
+
+INTERVIEW_LOCATIONS = (
+    ('FLOURISH_clinic', 'FLOURISH clinic'),
+    ('BHP_site', 'BHP site'),
+    ('part_home', 'Participant home'),
+    (OTHER, 'Other'))
+
+INTERVIEW_LANGUAGE = (
+    ('setswana', 'Setswana'),
+    ('english', 'English'),
+    ('both', 'Both'))
+
+EVAL_LOCATION = (
+    ('bontleng', 'Bontleng'),
+    ('julia_molefe', 'Julia Molefe'),
+    ('phase_2', 'Phase 2'),
+    ('BH1', 'BH1'),
+    ('BH2', 'BH2'),
+    ('BH3', 'BH3'),
+    ('nkoyaphiri', 'Nkoyaphiri'),
+    ('lesirane', 'Lesirane'),
+    ('mogoditshane', 'Mogoditshane'),
+    ('old_naledi', 'Old Naledi'),
+    ('g_west', 'G-West'),
+    ('sebele', 'Sebele'),
+    (OTHER, 'Other, specify')
+)
+
+YES_NO_UNABLE_DET = (
+    (YES, YES),
+    (NO, NO),
+    ('unable_to_determine', 'Unable to determine'),)
+
+DECLINE_REASON = (
+    ('cant_physically_attend', 'Not able to physically come to clinic'),
+    ('not_interested', 'Not interested in participating'),
+    (OTHER, 'Other (Specify)'),)
+
+YES_NO_NOT_ELIGIBLE = (
+    (YES, YES),
+    (NO, NO),
+    ('not_eligible', 'Not eligible'),)

@@ -1,8 +1,11 @@
 from edc_action_item import Action, site_action_items, HIGH_PRIORITY
 
+from flourish_prn.action_items import ChildOffStudyAction
+
 CHILDCONTINUEDCONSENT_STUDY_ACTION = 'submit-childcontinuedconsent-study'
 
 CHILDASSENT_ACTION = 'submit-childassent'
+
 
 class ChildContinuedConsentAction(Action):
     name = CHILDCONTINUEDCONSENT_STUDY_ACTION
@@ -19,8 +22,9 @@ class ChildAssentAction(Action):
     reference_model = 'flourish_child.childassent'
     admin_site_name = 'flourish_child_admin'
     priority = HIGH_PRIORITY
-#     singleton = True
 
+
+#     singleton = True
 
 
 site_action_items.register(ChildContinuedConsentAction)
