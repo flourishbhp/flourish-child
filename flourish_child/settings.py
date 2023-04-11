@@ -123,26 +123,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'flourish_child.wsgi.application'
 
-mysql_config = configparser.ConfigParser()
-mysql_config.read(os.path.join(ETC_DIR, 'mysql.conf'))
-
-HOST = mysql_config['mysql']['host']
-DB_USER = mysql_config['mysql']['user']
-DB_PASSWORD = mysql_config['mysql']['password']
-DB_NAME = mysql_config['mysql']['database']
-PORT = mysql_config['mysql']['port']
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': DB_NAME,
-        'USER': DB_USER,
-        'PASSWORD': DB_PASSWORD,
-        'HOST': HOST,  # Or an IP Address that your DB is hosted on
-        'PORT': PORT,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
