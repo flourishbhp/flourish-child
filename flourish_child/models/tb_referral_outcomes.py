@@ -5,7 +5,7 @@ from edc_constants.choices import YES_NO
 
 from .list_models import TbDiagnostics
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import EVAL_LOCATION, YES_NO_UNABLE_DET
+from ..choices import EVAL_LOCATION, YES_NO_UNABLE_DET, CLINIC_NON_VISIT_REASONS
 
 
 class TbAdolReferralOutcomes(ChildCrfModelMixin):
@@ -14,6 +14,16 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
         verbose_name='Did participant go to a referral clinic for TB evaluation?',
         max_length=3,
         choices=YES_NO)
+
+    reason_not_going = models.CharField(
+        verbose_name='Reason for not going to a referral clinic',
+        choices=CLINIC_NON_VISIT_REASONS,
+        max_length=50,
+        null=True,
+        blank=True
+    )
+
+    reason_not_going_other = OtherCharField()
 
     tb_eval_comments = models.TextField(
         verbose_name='Comments',
