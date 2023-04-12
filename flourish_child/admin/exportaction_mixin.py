@@ -8,10 +8,17 @@ from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import NEG, POS, YES
+from edc_base.utils import age
 import xlwt
 
 
 class ExportActionMixin:
+
+    tb_adol_assent_model = 'flourish_child.tbadolassent'
+
+    @property
+    def tb_adol_assent_cls(self):
+        return django_apps.get_model(self.tb_adol_assent_model)
 
     def export_as_csv(self, request, queryset):
 
@@ -39,19 +46,30 @@ class ExportActionMixin:
                 continue
             field_names.append(field.name)
 
+        is_tb_adol_model = 'tb' in queryset[0]._meta.label_lower and \
+            'adol' in queryset[0]._meta.label_lower
+
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
             field_names.insert(1, 'child_exposure_status')
-
+            if is_tb_adol_model:
+                field_names.insert(2, 'tb_enrollment')
 
         if queryset and getattr(queryset[0], 'child_visit', None):
             field_names.insert(0, 'subject_identifier')
             field_names.insert(1, 'new_maternal_study_subject_identifier')
             field_names.insert(2, 'old_study_maternal_identifier')
-            field_names.insert(5, 'visit_code')
+
+            if is_tb_adol_model:
+                field_names.insert(6, 'visit_code')
+            else:
+                field_names.insert(5, 'visit_code')
 
         if queryset[0]._meta.label_lower == 'flourish_child.birthdata':
-            field_names.insert(4, 'infant_sex')
+            if is_tb_adol_model:
+                field_names.insert(5, 'infant_sex')
+            else:
+                field_names.insert(4, 'infant_sex')
 
         for col_num in range(len(field_names)):
             ws.write(row_num, col_num, field_names[col_num], font_style)
@@ -73,11 +91,15 @@ class ExportActionMixin:
                 child_exposure_status = self.child_hiv_exposure(study_maternal_identifier,
                                                                 subject_identifier)
 
+                tb_age = self.tb_age_at_enrollment(subject_identifier)
+
                 data.append(subject_identifier)
                 data.append(subject_identifier[:-3])
                 data.append(study_maternal_identifier)
                 data.append(previous_study)
                 data.append(child_exposure_status)
+                if is_tb_adol_model:
+                    data.append(tb_age)
                 data.append(obj.child_visit.visit_code)
 
             elif self.is_non_crf(obj):
@@ -91,13 +113,16 @@ class ExportActionMixin:
                 child_exposure_status = self.child_hiv_exposure(
                     study_maternal_identifier, subject_identifier)
 
+                tb_age = self.tb_age_at_enrollment(subject_identifier)
+
                 data.append(previous_study)
                 data.append(child_exposure_status)
-
+                if is_tb_adol_model:
+                    data.append(tb_age)
 
             if obj._meta.label_lower == 'flourish_child.birthdata':
                 infant_sex = self.infant_gender(subject_identifier)
-                data.insert(4, infant_sex)
+                data.append(infant_sex)
 
             inline_objs = []
             for field in self.get_model_fields:
@@ -130,7 +155,8 @@ class ExportActionMixin:
 
             if inline_objs:
                 # Update header
-                inline_field_names = self.inline_exclude(field_names=inline_field_names)
+                inline_field_names = self.inline_exclude(
+                    field_names=inline_field_names)
                 if not self.inline_header:
                     self.update_headers_inline(
                         inline_fields=inline_field_names, field_names=field_names,
@@ -142,12 +168,15 @@ class ExportActionMixin:
                         inline_data.extend(data)
                         for field in inline_obj._meta.get_fields():
                             if field.name in inline_field_names:
-                                inline_data.append(getattr(inline_obj, field.name, ''))
+                                inline_data.append(
+                                    getattr(inline_obj, field.name, ''))
                             if isinstance(field, ManyToManyField):
-                                m2m_values = self.get_m2m_values(inline_obj, m2m_field=field)
+                                m2m_values = self.get_m2m_values(
+                                    inline_obj, m2m_field=field)
                                 inline_data.extend(m2m_values)
                         row_num += 1
-                        self.write_rows(data=inline_data, row_num=row_num, ws=ws)
+                        self.write_rows(data=inline_data,
+                                        row_num=row_num, ws=ws)
                 obj_count += 1
             else:
                 row_num += 1
@@ -193,14 +222,17 @@ class ExportActionMixin:
     def screening_identifier(self, subject_identifier=None):
         """Returns a screening identifier.
         """
-        consent_cls = django_apps.get_model('flourish_caregiver.subjectconsent')
-        consent = consent_cls.objects.filter(subject_identifier=subject_identifier)
+        consent_cls = django_apps.get_model(
+            'flourish_caregiver.subjectconsent')
+        consent = consent_cls.objects.filter(
+            subject_identifier=subject_identifier)
         if consent:
             return consent.last().screening_identifier
         return None
 
     def previous_bhp_study(self, screening_identifier=None):
-        dataset_cls = django_apps.get_model('flourish_caregiver.maternaldataset')
+        dataset_cls = django_apps.get_model(
+            'flourish_caregiver.maternaldataset')
         if screening_identifier:
             try:
                 dataset_obj = dataset_cls.objects.get(
@@ -211,7 +243,8 @@ class ExportActionMixin:
                 return dataset_obj.protocol
 
     def study_maternal_identifier(self, screening_identifier=None):
-        dataset_cls = django_apps.get_model('flourish_caregiver.maternaldataset')
+        dataset_cls = django_apps.get_model(
+            'flourish_caregiver.maternaldataset')
         if screening_identifier:
             try:
                 dataset_obj = dataset_cls.objects.get(
@@ -223,7 +256,8 @@ class ExportActionMixin:
 
     def child_hiv_exposure(self, study_maternal_identifier=None, subject_identifier=None):
 
-        child_dataset_cls = django_apps.get_model('flourish_child.childdataset')
+        child_dataset_cls = django_apps.get_model(
+            'flourish_child.childdataset')
 
         if study_maternal_identifier:
             child_dataset_objs = child_dataset_cls.objects.filter(
@@ -235,7 +269,8 @@ class ExportActionMixin:
                 elif child_dataset_objs[0].infant_hiv_exposed in ['Unexposed', 'unexposed']:
                     return 'HUU'
         else:
-            rapid_test_cls = django_apps.get_model('flourish_caregiver.hivrapidtestcounseling')
+            rapid_test_cls = django_apps.get_model(
+                'flourish_caregiver.hivrapidtestcounseling')
             maternal_hiv_status = None
 
             try:
@@ -266,7 +301,8 @@ class ExportActionMixin:
 
     def infant_gender(self, subject_identifier=None):
 
-        child_consent_cls = django_apps.get_model('flourish_caregiver.caregiverchildconsent')
+        child_consent_cls = django_apps.get_model(
+            'flourish_caregiver.caregiverchildconsent')
 
         try:
             child_consent_obj = child_consent_cls.objects.filter(
@@ -276,6 +312,20 @@ class ExportActionMixin:
         else:
             return child_consent_obj.gender
 
+    def tb_age_at_enrollment(self, subject_identifier=None):
+
+        tb_adol_assent_cls = django_apps.get_model(
+            'flourish_child.tbadolassent')
+
+        try:
+            tb_assent_obj = tb_adol_assent_cls.objects.get(
+                subject_identifier=subject_identifier,)
+
+        except tb_adol_assent_cls.DoesNotExist:
+            pass
+        else:
+            return age(tb_assent_obj.dob,
+                       tb_assent_obj.consent_datetime).years
 
     def is_non_crf(self, obj):
 
@@ -309,7 +359,8 @@ class ExportActionMixin:
                 if field_name not in self.exclude_fields]
 
     def m2m_list_data(self, model_cls=None):
-        qs = model_cls.objects.order_by('created').values_list('short_name', flat=True)
+        qs = model_cls.objects.order_by(
+            'created').values_list('short_name', flat=True)
         return list(qs)
 
     def get_m2m_values(self, model_obj, m2m_field=None):
