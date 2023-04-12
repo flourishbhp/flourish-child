@@ -122,7 +122,11 @@ class ExportActionMixin:
 
             if obj._meta.label_lower == 'flourish_child.birthdata':
                 infant_sex = self.infant_gender(subject_identifier)
-                data.append(infant_sex)
+                
+                if is_tb_adol_model:
+                    data.append(infant_sex)
+                else:
+                     data.insert(4, infant_sex)
 
             inline_objs = []
             for field in self.get_model_fields:
