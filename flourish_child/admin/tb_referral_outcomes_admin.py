@@ -17,6 +17,8 @@ class TbReferralOutcomesAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_visit',
                 'report_datetime',
                 'tb_eval',
+                'reason_not_going',
+                'reason_not_going_other',
                 'tb_eval_location',
                 'tb_eval_location_other',
                 'tb_eval_comments',
@@ -33,6 +35,7 @@ class TbReferralOutcomesAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     radio_fields = {
         'tb_eval': admin.VERTICAL,
+        'reason_not_going': admin.VERTICAL,
         'tb_eval_location': admin.VERTICAL,
         'tb_diagnostic_perf': admin.VERTICAL,
         'tb_diagnose_pos': admin.VERTICAL,
