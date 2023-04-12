@@ -3,7 +3,7 @@ from django.apps import apps as django_apps
 from django.test import tag, TestCase
 from edc_action_item import site_action_items
 from edc_base import get_utcnow
-from edc_constants.constants import NEG, NEW, NO, NOT_APPLICABLE, YES
+from edc_constants.constants import NEG, NEW, NO, NOT_APPLICABLE, YES, POS
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
@@ -372,3 +372,53 @@ class TestTBAdol(TestCase):
             model='flourish_child.tbadolinterview',
             subject_identifier=self.child_subject_identifier,
             visit_code='2200A').entry_status, REQUIRED)
+    
+
+
+    @tag('tb-referral')
+    def test_tb_visit_screening_trigger_tb_referral(self):
+
+        mommy.make_recipe(
+            'flourish_child.tbvisitscreening',
+            cough_duration = YES,
+            child_visit = self.child_visit)
+        
+        result = CrfMetadata.objects.get(
+            subject_identifier = self.child_subject_identifier,
+            visit_code = '2100A',
+            model='flourish_child.tbreferaladol')
+        
+        self.assertEqual(result.entry_status, REQUIRED)
+
+            
+            
+    @tag('tb-referral')
+    def test_tb_presence_trigger_tb_referral(self):
+                        
+        mommy.make_recipe(
+             'flourish_child.tbpresencehouseholdmembersadol',
+            tb_referral = NO,
+            child_visit = self.child_visit)
+        
+        result = CrfMetadata.objects.get(
+            subject_identifier = self.child_subject_identifier,
+            visit_code = '2100A',
+            model='flourish_child.tbreferaladol')
+        
+        self.assertEqual(result.entry_status, REQUIRED)
+            
+    @tag('tb-referral')
+    def test_tb_lab_results_trigger_tb_referral(self):
+                        
+        mommy.make_recipe(
+            'flourish_child.adoltblabresults',
+            quantiferon_result = POS,
+            child_visit = self.child_visit)
+        
+        result = CrfMetadata.objects.get(
+            subject_identifier = self.child_subject_identifier,
+            visit_code = '2100A',
+            model='flourish_child.tbreferaladol')
+        
+        self.assertEqual(result.entry_status, REQUIRED)
+    
