@@ -99,3 +99,6 @@ from .tb_int_translation import TbAdolInterviewTranslation
 from .tb_interview import TbAdolInterview
 from .tb_referral_outcomes import TbAdolReferralOutcomes
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
+from .adol_hiv_testing import HivTestingAdol
+from .adol_tb_lab_results import TbLabResultsAdol
+from .adol_tb_referral import TbReferalAdol

@@ -37,7 +37,6 @@ from .child_visit import ChildVisit
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
 from ..helper_classes import ChildFollowUpBookingHelper
-from flourish_prn.action_items import TbAdoscentReferralAction
 
 
 class CaregiverConsentError(Exception):
@@ -153,13 +152,9 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
           dispatch_uid='adol_tb_visit_presence_on_post_save')
 def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
-    if (instance.cough_duration == YES or instance.fever_duration == YES or
-            instance.night_sweats == YES or instance.weight_loss == YES):
-        TbAdoscentReferralAction(
-            subject_identifier=instance.child_visit.subject_identifier)
 
-    elif (instance.cough_duration == NO or instance.fever_duration == NO or
-          instance.night_sweats == NO or instance.weight_loss == NO):
+    if (instance.cough_duration == NO or instance.fever_duration == NO or
+            instance.night_sweats == NO or instance.weight_loss == NO):
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
                             repeat=True)
@@ -168,10 +163,8 @@ def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwar
 @receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
           dispatch_uid='adol_tb_presence_on_post_save')
 def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
-    if instance.tb_referral == NO:
-        TbAdoscentReferralAction(
-            subject_identifier=instance.child_visit.subject_identifier)
-    elif instance.tb_referral == YES:
+
+    if instance.tb_referral == YES:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
                             repeat=True)
@@ -180,9 +173,6 @@ def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=HivTestingAdol,
           dispatch_uid='hiv_testing_on_post_save')
 def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
-    if instance.seen_by_healthcare == NO or instance.referred_for_treatment == NO:
-        TbAdoscentReferralAction(
-            subject_identifier=instance.child_visit.subject_identifier)
 
     if instance.last_result in [NEG, IND,
                                 UNKNOWN] or instance.referred_for_treatment == NO:
@@ -194,10 +184,8 @@ def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbLabResultsAdol,
           dispatch_uid='child_tb_lab_results_on_post_save')
 def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
-    if instance.quantiferon_result == POS:
-        TbAdoscentReferralAction(
-            subject_identifier=instance.child_visit.subject_identifier)
-    elif instance.quantiferon_result == NEG:
+
+    if instance.quantiferon_result == NEG:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
                             repeat=True)
@@ -293,7 +281,8 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
         # book participant for followup
         booking_helper = ChildFollowUpBookingHelper()
         booking_dt = base_appt_datetime + relativedelta(years=1)
-        booking_helper.schedule_fu_booking(instance.subject_identifier, booking_dt)
+        booking_helper.schedule_fu_booking(
+            instance.subject_identifier, booking_dt)
 
 
 @receiver(post_save, weak=False, sender=ClinicianNotesImage,
@@ -590,7 +579,8 @@ def print_pdf(filepath):
     for image, index in zip(renderer, page_indices):
         stamped_pdf_images.append(add_image_stamp(base_image=image))
     first_img = stamped_pdf_images[0]
-    first_img.save(filepath, save_all=True, append_images=stamped_pdf_images[1:])
+    first_img.save(filepath, save_all=True,
+                   append_images=stamped_pdf_images[1:])
 
 
 def put_child_offschedule(subject_identifier, schedule_name):
