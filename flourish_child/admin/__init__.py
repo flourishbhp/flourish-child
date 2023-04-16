@@ -70,3 +70,6 @@ from .tb_int_translation_admin import TbInterviewTranslationAdmin
 from .tb_interview_admin import TbInterviewAdmin
 from .tb_referral_outcomes_admin import TbReferralOutcomesAdmin
 from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
+from .hiv_testing_adol_admin import HivTestingAdmin
+from .adol_tb_lab_results_admin import TbLabResultAdolAdmin
+from .adol_tb_referral_admin import TbReferralAdolAdmin
