@@ -1043,7 +1043,8 @@ LOCATION_REFERRAL = (
     ('lesirane', 'Lesirane'),
     ('old_naledi', 'Old Naledi'),
     ('g_west', 'G-West'),
-    ('sebele', 'Sebele')
+    ('sebele', 'Sebele'),
+    (OTHER, 'Other')
 )
 
 TB_DIAGONISTIC_TYPE = (
