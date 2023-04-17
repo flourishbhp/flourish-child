@@ -201,7 +201,17 @@ list_data = {
         ('gaontebale', 'Gaontebale'),
         ('olebogeng', 'Olebogeng'),
         ('pearl', 'Pearl')
-    ]
+    ],
+
+    'flourish_child.tbdiagnostics': [
+        ('sputum', 'Sputum sample'),
+        ('chest_xray', 'Chest XRay'),
+        ('gene_xpert', 'Gene Xpert'),
+        ('tst_mantoux', 'TST/Mantoux'),
+        ('covid_19_test', 'COVID-19 test'),
+        (OTHER, 'Other, specify')
+    ],
+
 }
 
 preload_data = PreloadData(
