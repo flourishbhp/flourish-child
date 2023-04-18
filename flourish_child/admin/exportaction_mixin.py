@@ -46,8 +46,7 @@ class ExportActionMixin:
                 continue
             field_names.append(field.name)
 
-        is_tb_adol_model = 'tb' in queryset[0]._meta.label_lower and \
-            'adol' in queryset[0]._meta.label_lower
+        is_tb_adol_model = 'adol' in queryset[0]._meta.label_lower
 
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
@@ -122,11 +121,11 @@ class ExportActionMixin:
 
             if obj._meta.label_lower == 'flourish_child.birthdata':
                 infant_sex = self.infant_gender(subject_identifier)
-                
+
                 if is_tb_adol_model:
                     data.append(infant_sex)
                 else:
-                     data.insert(4, infant_sex)
+                    data.insert(4, infant_sex)
 
             inline_objs = []
             for field in self.get_model_fields:
