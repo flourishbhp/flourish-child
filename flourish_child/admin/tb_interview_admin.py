@@ -18,6 +18,7 @@ class TbInterviewAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'interview_location',
                 'interview_location_other',
+                'caregiver_present',
                 'interview_duration',
                 'interview_file',
                 'interview_language',
