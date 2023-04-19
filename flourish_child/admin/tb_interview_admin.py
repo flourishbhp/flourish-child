@@ -27,4 +27,5 @@ class TbInterviewAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
          ), audit_fieldset_tuple)
 
     radio_fields = {'interview_location': admin.VERTICAL,
-                    'interview_language': admin.VERTICAL, }
+                    'interview_language': admin.VERTICAL,
+                    'caregiver_present': admin.VERTICAL, }
