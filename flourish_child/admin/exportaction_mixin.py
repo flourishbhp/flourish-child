@@ -46,7 +46,7 @@ class ExportActionMixin:
                 continue
             field_names.append(field.name)
 
-        is_tb_adol_model = 'adol' in queryset[0]._meta.label_lower
+        is_tb_adol_model = 'tb' in queryset[0].child_visit.schedule_name
 
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
