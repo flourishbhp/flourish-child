@@ -355,7 +355,7 @@ class ExportActionMixin:
                 'packed_datetime', 'shipped', 'shipped_datetime', 'received_datetime',
                 'identifier_prefix', 'primary_aliquot_identifier', 'clinic_verified',
                 'clinic_verified_datetime', 'drawn_datetime', 'related_tracking_identifier',
-                'parent_tracking_identifier']
+                'parent_tracking_identifier', 'interview_translation', 'interview_transcription']
 
     def inline_exclude(self, field_names=[]):
         return [field_name for field_name in field_names
