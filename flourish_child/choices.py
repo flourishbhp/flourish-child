@@ -558,7 +558,7 @@ PENNCNB_INVALID = (
     ('sensory_handicap', 'Child has a sensory handicap'),
     ('motor_handicap', 'Child has a motor handicap'),
     ('uncooperative', 'Child was uncooperative'),
-    ('misunderstood_directions', 'Child did not understand directions'),
+    ('misunderstood_instructions', 'Child did not understand instructions'),
     ('unavailable_resources', 'Equipment/room was not available'),
     (OTHER, 'Other, specify'),
 )
@@ -1043,7 +1043,8 @@ LOCATION_REFERRAL = (
     ('lesirane', 'Lesirane'),
     ('old_naledi', 'Old Naledi'),
     ('g_west', 'G-West'),
-    ('sebele', 'Sebele')
+    ('sebele', 'Sebele'),
+    (OTHER, 'Other')
 )
 
 TB_DIAGONISTIC_TYPE = (
