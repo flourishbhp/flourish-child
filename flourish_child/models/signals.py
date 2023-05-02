@@ -17,6 +17,7 @@ from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS, NO, YES, NEG, IND, UNKNOWN
+from edc_appointment.constants import COMPLETE_APPT
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_child.models.child_birth import ChildBirth
@@ -28,6 +29,7 @@ from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_presence_household_member import \
     TbPresenceHouseholdMembersAdol
+from flourish_child.models.child_appointment import Appointment as ChildAppointment
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
 from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 from .child_assent import ChildAssent
@@ -117,6 +119,16 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                             update_fields=['subject_identifier', 'modified',
                                            'user_modified'])
 
+
+@receiver(post_save, weak=False, sender=ChildAppointment)
+def child_appointment_on_post_save(sender, instance, raw, created, **kwargs):
+    
+    if 'tb_adol_followup_schedule' == instance.schedule_name and\
+        instance.appt_status == COMPLETE_APPT:
+        
+        trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
+                            instance.child_visit.subject_identifier,
+                            repeat=True)
 
 @receiver(post_save, weak=False, sender=ChildDummySubjectConsent,
           dispatch_uid='child_consent_on_post_save')
