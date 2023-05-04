@@ -46,7 +46,8 @@ class ExportActionMixin:
                 continue
             field_names.append(field.name)
 
-        is_tb_adol_model = 'tb' in queryset[0].child_visit.schedule_name
+        is_tb_adol_model = 'tb' in queryset[0].child_visit.schedule_name if hasattr(
+            queryset[0], 'child_visit') else False
 
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
@@ -78,7 +79,7 @@ class ExportActionMixin:
             inline_field_names = []
 
             # Add subject identifier and visit code
-            if getattr(obj, 'child_visit', None):
+            if hasattr(obj, 'child_visit'):
 
                 subject_identifier = obj.child_visit.subject_identifier
                 screening_identifier = self.screening_identifier(
