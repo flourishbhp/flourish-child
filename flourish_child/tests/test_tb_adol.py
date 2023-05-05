@@ -1,14 +1,16 @@
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.test import tag, TestCase
+from django.forms import model_to_dict
 from edc_action_item import site_action_items
 from edc_base import get_utcnow
-from edc_constants.constants import NEG, NEW, NO, NOT_APPLICABLE, YES, POS
+from edc_constants.constants import NEG, NEW, NO, NOT_APPLICABLE, YES, POS, IND
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
 from edc_visit_schedule.models import SubjectScheduleHistory
-from edc_visit_tracking.constants import SCHEDULED
+from edc_appointment.creators import UnscheduledAppointmentCreator
+from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED
 from model_mommy import mommy
 
 from flourish_child.models import Appointment, OnScheduleTbAdolFollowupSchedule
@@ -123,10 +125,23 @@ class TestTBAdol(TestCase):
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
 
+        self.unschedule_appointment = Appointment.objects.get(
+            visit_code='2100A',
+            subject_identifier=self.child_subject_identifier)
+        self.unschedule_appointment.id = None
+        self.unschedule_appointment.visit_code_sequence = 1
+        self.unschedule_appointment.save()
+
+        self.unscheduled_child_visit = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=self.unschedule_appointment,
+            report_datetime=get_utcnow(),
+            reason=UNSCHEDULED)
+
     def test_create_off_study_action_lab_result(self):
 
         mommy.make_recipe(
-            'flourish_child.adoltblabresults',
+            'flourish_child.tblabresultsadol',
             quantiferon_result=NEG,
             child_visit=self.child_visit, )
         action_cls = site_action_items.get(TBAdolOffStudy.action_name)
@@ -427,7 +442,7 @@ class TestTBAdol(TestCase):
     @tag('tb-referral')
     def test_tb_lab_results_trigger_tb_referral(self):
         mommy.make_recipe(
-            'flourish_child.adoltblabresults',
+            'flourish_child.tblabresultsadol',
             quantiferon_result=POS,
             child_visit=self.child_visit)
 
@@ -437,3 +452,63 @@ class TestTBAdol(TestCase):
             model='flourish_child.tbreferaladol')
 
         self.assertEqual(result.entry_status, REQUIRED)
+
+    @tag('tb-lab-results')
+    def test_indeterminate_tb_lab_results_required(self):
+        """TB Lab Results indeterminate on visit 2100A.0 
+        Should be required on visit 2100A.1
+        """
+        mommy.make_recipe(
+            'flourish_child.tblabresultsadol',
+            quantiferon_result=IND,
+            child_visit=self.child_visit)
+
+        self.unscheduled_child_visit.save()
+
+        result = CrfMetadata.objects.get(
+            subject_identifier=self.child_subject_identifier,
+            visit_code='2100A',
+            visit_code_sequence=1,
+            model='flourish_child.tblabresultsadol')
+
+        self.assertEqual(result.entry_status, REQUIRED)
+
+    @tag('tb-lab-results')
+    def test_invalid_tb_lab_results_required(self):
+        """TB Lab Results invalid on visit 2100A.0 
+        Should be required on visit 2100A.1
+        """
+        mommy.make_recipe(
+            'flourish_child.tblabresultsadol',
+            quantiferon_result='invalid',
+            child_visit=self.child_visit)
+
+        self.unscheduled_child_visit.save()
+
+        result = CrfMetadata.objects.get(
+            subject_identifier=self.child_subject_identifier,
+            visit_code='2100A',
+            visit_code_sequence=1,
+            model='flourish_child.tblabresultsadol')
+
+        self.assertEqual(result.entry_status, REQUIRED)
+
+    @tag('tb-lab-results')
+    def test_pos_tb_lab_results_not_required(self):
+        """TB Lab Results POS on visit 2100A.0 
+        Should be required on visit 2100A.1
+        """
+        mommy.make_recipe(
+            'flourish_child.tblabresultsadol',
+            quantiferon_result=POS,
+            child_visit=self.child_visit)
+
+        self.unscheduled_child_visit.save()
+
+        result = CrfMetadata.objects.get(
+            subject_identifier=self.child_subject_identifier,
+            visit_code='2100A',
+            visit_code_sequence=1,
+            model='flourish_child.tblabresultsadol')
+
+        self.assertEqual(result.entry_status, NOT_REQUIRED)
