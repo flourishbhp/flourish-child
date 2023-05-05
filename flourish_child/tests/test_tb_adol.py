@@ -1,7 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.test import tag, TestCase
-from django.forms import model_to_dict
 from edc_action_item import site_action_items
 from edc_base import get_utcnow
 from edc_constants.constants import NEG, NEW, NO, NOT_APPLICABLE, YES, POS, IND
@@ -9,7 +8,6 @@ from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
 from edc_visit_schedule.models import SubjectScheduleHistory
-from edc_appointment.creators import UnscheduledAppointmentCreator
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED
 from model_mommy import mommy
 
