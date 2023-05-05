@@ -4,6 +4,7 @@ from django.db import models
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from ..choices import INTERVIEW_LANGUAGE, INTERVIEW_LOCATIONS
+from edc_constants.choices import YES_NO
 
 
 class TbAdolInterview(ChildCrfModelMixin):
@@ -17,6 +18,12 @@ class TbAdolInterview(ChildCrfModelMixin):
         max_length=100,
         null=True,
         blank=True)
+
+    caregiver_present = models.CharField(
+        verbose_name='Was the caregiver present for the interview? ',
+        choices=YES_NO,
+        max_length=3,
+    )
 
     interview_duration = models.PositiveIntegerField(
         verbose_name='Duration of interview:',
