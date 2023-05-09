@@ -50,6 +50,7 @@ from .child_previous_hospitalisation_form import \
 from .child_previous_hospitalisation_form import \
     ChildPreviousHospitalizationForm
 from .child_requisition_form import ChildRequisitionForm
+from .child_requisition_result_form import ChildRequisitionResultForm
 from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_tanner_staging_form import ChildTannerStagingForm
 from .child_visit_form import ChildVisitForm

@@ -216,7 +216,7 @@ childphqreferral = Recipe(
 childphqreferralfu = Recipe(
     ChildPhqReferralFU)
 
-adoltblabresults = Recipe(
+tblabresultsadol = Recipe(
     TbLabResultsAdol)
 
 tbadoloffstudy = Recipe(
