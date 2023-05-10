@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.sites.models import Site
 
-from edc_appointment.managers import AppointmentManager
 from edc_appointment.model_mixins import AppointmentModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import CurrentSiteManager, SiteModelMixin
 from edc_protocol.validators import datetime_not_before_study_start
+
+from ..managers import AppointmentManager
 
 
 class Appointment(AppointmentModelMixin, SiteModelMixin, BaseUuidModel):
