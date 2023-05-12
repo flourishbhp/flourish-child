@@ -127,7 +127,7 @@ def child_appointment_on_post_save(sender, instance, raw, created, **kwargs):
         instance.appt_status == COMPLETE_APPT:
         
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
-                            instance.child_visit.subject_identifier,
+                            instance.subject_identifier,
                             repeat=True)
 
 @receiver(post_save, weak=False, sender=ChildDummySubjectConsent,
