@@ -20,8 +20,6 @@ class AppointmentManager(EdcAppointmentManager, models.Manager):
         If a visit form exists for any appointment, a ProtectedError will
         be raised.
         """
-        if not subject_identifier:
-            raise TypeError('Expected value for subject_identifier. Got None')
         valid_ops = ['gt', 'gte']
         op = 'gte' if op is None else op
         if op not in valid_ops:
