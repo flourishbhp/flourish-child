@@ -122,13 +122,12 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
 
 @receiver(post_save, weak=False, sender=ChildAppointment)
 def child_appointment_on_post_save(sender, instance, raw, created, **kwargs):
-    
-    if 'tb_adol_followup_schedule' == instance.schedule_name and\
-        instance.appt_status == COMPLETE_APPT:
-        
+
+    if 'tb_adol_followup_schedule' == instance.schedule_name and instance.appt_status == COMPLETE_APPT:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.subject_identifier,
                             repeat=True)
+
 
 @receiver(post_save, weak=False, sender=ChildDummySubjectConsent,
           dispatch_uid='child_consent_on_post_save')
