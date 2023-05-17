@@ -1093,6 +1093,7 @@ EVAL_LOCATION = (
 YES_NO_UNABLE_DET = (
     (YES, YES),
     (NO, NO),
+    (PENDING, 'Pending'),
     ('unable_to_determine', 'Unable to determine'),)
 
 DECLINE_REASON = (
@@ -1107,12 +1108,12 @@ YES_NO_NOT_ELIGIBLE = (
 
 
 CLINIC_NON_VISIT_REASONS = (
-        ('out_of_study_area', 'Temporarily out of study area'),
-        ('no_fares', 'Participant does not have transport fares'),
-        ('school_exams', 'Unable to attend due to school, exams or tests'),
-        ('emergency_issues', 'Participant/caregiver has work/home emergency issues'),
-        ('work_release', 'Participant/caregiver cannot be released from work'),
-        ('isolation', 'Participant is in isolation due to COVID-19 or another infection'),
-        ('caregiver_not_well', 'Participant/caregiver is not well'),
-        (OTHER, 'Other'),
-    )
+    ('out_of_study_area', 'Temporarily out of study area'),
+    ('no_fares', 'Participant does not have transport fares'),
+    ('school_exams', 'Unable to attend due to school, exams or tests'),
+    ('emergency_issues', 'Participant/caregiver has work/home emergency issues'),
+    ('work_release', 'Participant/caregiver cannot be released from work'),
+    ('isolation', 'Participant is in isolation due to COVID-19 or another infection'),
+    ('caregiver_not_well', 'Participant/caregiver is not well'),
+    (OTHER, 'Other'),
+)
