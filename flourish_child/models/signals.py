@@ -21,7 +21,7 @@ from edc_appointment.constants import COMPLETE_APPT
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, CHILDOFF_STUDY_ACTION
 from flourish_prn.models.child_death_report import ChildDeathReport
 
 from flourish_child.models.tb_adol_assent import TbAdolAssent
@@ -31,7 +31,7 @@ from flourish_child.models.adol_tb_presence_household_member import \
     TbPresenceHouseholdMembersAdol
 from flourish_child.models.child_appointment import Appointment as ChildAppointment
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
-from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
+from flourish_prn.models import TBAdolOffStudy, ChildOffStudy
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
@@ -163,7 +163,6 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
           dispatch_uid='adol_tb_visit_presence_on_post_save')
 def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
-
     if (instance.cough_duration == NO or instance.fever_duration == NO or
             instance.night_sweats == NO or instance.weight_loss == NO):
 
@@ -175,7 +174,6 @@ def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwar
 @receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
           dispatch_uid='adol_tb_presence_on_post_save')
 def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.tb_referral == YES:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
@@ -185,7 +183,6 @@ def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=HivTestingAdol,
           dispatch_uid='hiv_testing_on_post_save')
 def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.last_result in [NEG, IND,
                                 UNKNOWN] or instance.referred_for_treatment == NO:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
@@ -347,7 +344,6 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
             comment=('''Child was hospitalised within the past year,
                         please complete INFORM CRF on REDCAP.''')
         )
-
 
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
     if cohort:

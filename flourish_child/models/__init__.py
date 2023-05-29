@@ -103,3 +103,4 @@ from .tb_visit_screen_adol import TbVisitScreeningAdolescent
 from .adol_hiv_testing import HivTestingAdol
 from .adol_tb_lab_results import TbLabResultsAdol
 from .adol_tb_referral import TbReferalAdol
+from .infant_hiv_testing import InfantHIVTesting

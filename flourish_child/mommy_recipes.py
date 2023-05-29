@@ -22,7 +22,7 @@ from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
     TbAdolEngagement, TbAdolInterview, TbLabResultsAdol, TbPresenceHouseholdMembersAdol, \
     TbVisitScreeningAdolescent
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
-    ChildSocioDemographic
+    ChildSocioDemographic, InfantFeeding, InfantHIVTesting
 from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 
 fake = Faker()
@@ -248,3 +248,11 @@ tbadolinterview = Recipe(
 
 tbadolengagement = Recipe(
     TbAdolEngagement)
+
+infantfeeding = Recipe(
+    InfantFeeding,
+)
+
+infanthivtesting = Recipe(
+    InfantHIVTesting
+)
