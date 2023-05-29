@@ -1,6 +1,6 @@
 from django.db import models
 from .child_crf_model_mixin import ChildCrfModelMixin
-from flourish_caregiver.choices import POS_NEG_PENDING_UNKNOWN, PREFERRED_CLINIC, NOT_TESTED_REASON
+from ..choices import POS_NEG_PENDING_UNKNOWN, PREFERRED_CLINIC, NOT_TESTED_REASON
 from edc_constants.choices import YES_NO_DONT_KNOW, YES_NO
 
 
