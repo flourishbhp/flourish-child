@@ -29,7 +29,6 @@ from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_presence_household_member import \
     TbPresenceHouseholdMembersAdol
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
-from flourish_child.models.infant_hiv_testing import InfantHIVTesting
 from flourish_prn.models import TBAdolOffStudy, ChildOffStudy
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
