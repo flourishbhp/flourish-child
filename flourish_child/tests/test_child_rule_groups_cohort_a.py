@@ -1,3 +1,4 @@
+from django.utils.datetime_safe import datetime
 from flourish_caregiver.models import CaregiverChildConsent
 
 from dateutil.relativedelta import relativedelta
@@ -23,11 +24,11 @@ class TestRuleGroups(TestCase):
         self.options = {
             'consent_datetime': get_utcnow(),
             'version': '2'
-            }
+        }
 
         self.screening_preg = mommy.make_recipe(
             'flourish_caregiver.screeningpregwomen',
-            )
+        )
 
         self.preg_subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -51,11 +52,10 @@ class TestRuleGroups(TestCase):
 
     @tag('bexm')
     def test_birthexam_required(self):
-
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
@@ -71,7 +71,7 @@ class TestRuleGroups(TestCase):
 
         child_consent = ChildDummySubjectConsent.objects.get(
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            )
+        )
 
         child_consent.dob = (get_utcnow() - relativedelta(days=1)).date()
         child_consent.save_base(raw=True)
@@ -93,11 +93,10 @@ class TestRuleGroups(TestCase):
 
     @tag('bexm')
     def test_birthexam_not_required(self):
-
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
@@ -113,7 +112,7 @@ class TestRuleGroups(TestCase):
 
         child_consent = ChildDummySubjectConsent.objects.get(
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            )
+        )
 
         child_consent.dob = (get_utcnow() - relativedelta(days=1)).date()
         child_consent.save_base(raw=True)
@@ -138,7 +137,7 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
@@ -154,7 +153,7 @@ class TestRuleGroups(TestCase):
 
         child_consent = ChildDummySubjectConsent.objects.get(
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            )
+        )
 
         child_consent.dob = (get_utcnow() - relativedelta(days=1)).date()
         child_consent.save_base(raw=True)
@@ -176,7 +175,7 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.birthdata',
             child_visit=visit,
-            )
+        )
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -197,7 +196,7 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
@@ -207,7 +206,7 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childbirth',
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            dob=(get_utcnow() - relativedelta(months=36)).date(),)
+            dob=(get_utcnow() - relativedelta(months=36)).date(), )
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -239,16 +238,16 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_child.childbirth',
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            dob=(get_utcnow() - relativedelta(days=1)).date(),)
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -269,16 +268,16 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_child.childbirth',
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            dob=(get_utcnow() - relativedelta(days=1)).date(),)
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -299,16 +298,16 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_child.childbirth',
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            dob=(get_utcnow() - relativedelta(days=1)).date(),)
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
 
         mommy.make_recipe(
             'flourish_child.childvisit',
@@ -325,21 +324,179 @@ class TestRuleGroups(TestCase):
                 visit_code='2000D',
                 panel_name='dna_pcr',
                 visit_code_sequence='0').entry_status, NOT_REQUIRED)
-        
-    
+
     def test_infant_feeding_preg_valid(self):
-        
-         mommy.make_recipe(
+        mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
-            subject_identifier=self.preg_subject_consent.subject_identifier,)
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_child.childbirth',
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            dob=(get_utcnow() - relativedelta(days=1)).date(),)
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
 
+    def test_infant_hiv_test_preg_valid(self):
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=POS,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infanthivtesting',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001', ).entry_status, REQUIRED)
+    def test_infant_hiv_test_infant_feeding_required(self):
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=POS,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2003'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        child_visit_4 = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2004'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.infantfeeding',
+            child_visit=child_visit_4,
+            continuing_to_bf=YES,
+        )
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infanthivtesting',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2004', ).entry_status, REQUIRED)
+
+    def test_infant_hiv_test_infant_feeding_hiv_test(self):
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=NEG,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        child_visit=mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.infantfeeding',
+            child_visit=child_visit,
+            continuing_to_bf=NO,
+            dt_weaned=datetime(2023, 5, 24)
+        )
+
+        mommy.make_recipe(
+            'flourish_child.infanthivtesting',
+            child_visit=child_visit,
+            received_date=datetime(2023, 6, 5)
+        )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infanthivtesting',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002', ).entry_status, REQUIRED)
