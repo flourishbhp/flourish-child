@@ -334,16 +334,6 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
                         please complete INFORM CRF on REDCAP.''')
         )
 
-
-@receiver(post_save, weak=False, sender=InfantHIVTesting,
-          dispatch_uid='infant_hiv_testing_on_post_save')
-def infant_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
-    if instance.hiv_test_result == POS:
-        trigger_action_item(ChildOffStudy, CHILDOFF_STUDY_ACTION,
-                            instance.child_visit.subject_identifier,
-                            repeat=True)
-
-
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
     if cohort:
         instance.registration_update_or_create()
