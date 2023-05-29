@@ -347,7 +347,6 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
                         please complete INFORM CRF on REDCAP.''')
         )
 
-
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
     if cohort:
         instance.registration_update_or_create()
