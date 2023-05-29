@@ -63,6 +63,7 @@ from .infant_dev_screening_72_months_admin import InfantDevScreening72MonthsAdmi
 from .infant_dev_screening_9_months_admin import InfantDevScreening9MonthsAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
+from .infant_hiv_testing_admin import InfantHIVTestingAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
 from .tb_adol_assent_admin import TbAdolAssentAdmin
 from .tb_engagement_admin import TbEngagementAdmin

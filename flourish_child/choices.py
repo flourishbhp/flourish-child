@@ -1118,7 +1118,6 @@ CLINIC_NON_VISIT_REASONS = (
     (OTHER, 'Other'),
 )
 
-
 NOT_TESTED_REASON = (
     ('no_apparent_reason', 'No apparent reason'),
     ('missed_visit', 'Missed clinic visit due to time constraints/ No transport fare'),
