@@ -22,7 +22,7 @@ class InfantHIVTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_test_date_estimated',
                 'results_received',
                 'recall_result_date',
-                'receive_date',
+                'received_date',
                 'result_date_estimated',
                 'hiv_test_result',
                 'reason_child_not_tested',
