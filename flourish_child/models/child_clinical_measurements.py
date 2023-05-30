@@ -38,7 +38,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         max_digits=5,
         decimal_places=2,
         verbose_name="Infant/child/adolescent's height? ",
-        validators=[MinValueValidator(40), MaxValueValidator(120), ],
+        validators=[MinValueValidator(40), MaxValueValidator(210), ],
         null=True,
         blank=True,
         help_text="Measured in Centimeters (cm)")
