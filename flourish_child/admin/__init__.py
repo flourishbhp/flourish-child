@@ -45,6 +45,7 @@ from .child_preg_testing_admin import ChildPregTestingAdmin
 from .child_previous_hospitalization_admin import \
     ChildPreviousHospitalizationAdmin
 from .child_requisition_admin import ChildRequisitionAdmin
+from .child_requisition_result_admin import ChildRequisitionResultAdmin
 from .child_socio_demographic_admin import ChildSocioDemographicAdmin
 from .child_tanner_staging_admin import ChildTannerStagingAdmin
 from .child_visit_admin import ChildVisitAdmin

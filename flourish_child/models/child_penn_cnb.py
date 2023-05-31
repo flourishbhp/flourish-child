@@ -46,7 +46,9 @@ class ChildPennCNB(ChildCrfModelMixin):
     testing_impacted = models.CharField(
         verbose_name='Did any of the following impact the testing session',
         choices=PENNCNB_INVALID,
-        max_length=30)
+        max_length=30,
+        null=True,
+        blank=True)
 
     impact_other = OtherCharField()
 
