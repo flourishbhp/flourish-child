@@ -838,6 +838,7 @@ POS_NEG_PENDING_UNKNOWN = (
     (POS, 'Positive'),
     (NEG, 'Negative'),
     ('PENDING', 'Pending'),
+    (IND, 'Indeterminate'),
     (UNKNOWN, 'Unknown'),
 )
 
