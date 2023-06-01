@@ -17,10 +17,11 @@ from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import OPEN, NEW, POS, NO, YES, NEG, IND, UNKNOWN
+from edc_appointment.constants import COMPLETE_APPT
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, CHILDOFF_STUDY_ACTION
 from flourish_prn.models.child_death_report import ChildDeathReport
 
 from flourish_child.models.tb_adol_assent import TbAdolAssent
@@ -28,11 +29,9 @@ from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_presence_household_member import \
     TbPresenceHouseholdMembersAdol
+from flourish_child.models.child_appointment import Appointment as ChildAppointment
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
-from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
-from pre_flourish.helper_classes.heu_huu_matching_helper import HEUHUUMatchingHelper
-from pre_flourish.models import HeuHuuMatch
-from . import ChildClinicalMeasurements
+from flourish_prn.models import TBAdolOffStudy, ChildOffStudy
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
@@ -119,6 +118,15 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                         caregiver_child_consent_obj.save(
                             update_fields=['subject_identifier', 'modified',
                                            'user_modified'])
+
+
+@receiver(post_save, weak=False, sender=ChildAppointment)
+def child_appointment_on_post_save(sender, instance, raw, created, **kwargs):
+
+    if 'tb_adol_followup_schedule' == instance.schedule_name and instance.appt_status == COMPLETE_APPT:
+        trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
+                            instance.subject_identifier,
+                            repeat=True)
 
 
 @receiver(post_save, weak=False, sender=ChildDummySubjectConsent,
@@ -294,61 +302,6 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
 def clinician_notes_image_on_post_save(sender, instance, raw, created, **kwargs):
     if not raw and created:
         stamp_image(instance)
-
-
-@receiver(post_save, weak=False, sender=ChildClinicalMeasurements,
-          dispatch_uid='huu_pre_enrollment_on_post_save')
-def huu_pre_enrollment_on_post_save(sender, instance, raw, created, **kwargs):
-    """Create a HEUHUUMatch object when a HuuPreEnrollment object is saved.
-
-    This function is called after a HuuPreEnrollment object is saved to the database.
-    If the object is not newly created, the function fetches a related
-    PreFlourishChildAssent object from the database. If the related object is found,
-    the function creates a new HeuHuuMatch object and saves it to the database.
-
-    Args:
-        sender: The model class of the sender.
-        instance: The actual instance being saved.
-        raw: A boolean indicating whether the model is saved in raw mode.
-        created: A boolean indicating whether the model was created or updated.
-        **kwargs: Additional keyword arguments.
-
-    Raises:
-        CaregiverConsentError: If the associated caregiver consent on behalf of the child
-            for this participant is not found.
-
-    Returns:
-        None
-    """
-    if not raw:
-        caregiver_child_consent_cls = django_apps.get_model(
-            'flourish_caregiver.caregiverchildconsent')
-        try:
-            flourish_child_consent_obj = caregiver_child_consent_cls.objects.get(
-                subject_identifier=instance.child_visit.subject_identifier, )
-        except caregiver_child_consent_cls.DoesNotExist:
-            raise CaregiverConsentError('Associated caregiver consent on behalf of '
-                                        'child for this participant not found')
-        else:
-            heu_huu_matching_helper = HEUHUUMatchingHelper(
-                dob=flourish_child_consent_obj.child_dob,
-                child_weight_kg=instance.child_weight_kg,
-                child_height_cm=instance.child_height,
-                subject_identifier=instance.child_visit.subject_identifier,
-                gender=flourish_child_consent_obj.gender)
-            huu_subject_identifier = heu_huu_matching_helper.find_matching_pre_flourish()
-            if huu_subject_identifier:
-                try:
-                    HeuHuuMatch.objects.get(
-                        huu_prt=huu_subject_identifier.get('subject_identifier'),
-                        hue_prt=instance.child_visit.subject_identifier)
-                except HeuHuuMatch.DoesNotExist:
-                    heu_huu_match_obj = HeuHuuMatch.objects.create(
-                        huu_prt=huu_subject_identifier.get('subject_identifier'),
-                        heu_prt=instance.child_visit.subject_identifier,
-                        match_datetime=get_utcnow().date()
-                    )
-                    heu_huu_match_obj.save()
 
 
 def notification(subject_identifier, subject, user_created,

@@ -27,6 +27,8 @@ class TbReferalAdol(ChildCrfModelMixin):
         max_length=15
     )
     
+    location_other = OtherCharField()
+
     class Meta:
         app_label = 'flourish_child'
         verbose_name = 'TB Adol. Referral'

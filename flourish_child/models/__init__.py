@@ -46,6 +46,7 @@ from .child_physical_activity import ChildPhysicalActivity
 from .child_preg_testing import ChildPregTesting
 from .child_previous_hospitalization import ChildPreHospitalizationInline, \
     ChildPreviousHospitalization
+from .child_requisition_result import ChildRequisitionResult, ChildResultValue
 from .child_requisition import ChildRequisition
 from .child_socio_demographic import ChildSocioDemographic
 from .child_tanner_staging import ChildTannerStaging
@@ -102,3 +103,4 @@ from .tb_visit_screen_adol import TbVisitScreeningAdolescent
 from .adol_hiv_testing import HivTestingAdol
 from .adol_tb_lab_results import TbLabResultsAdol
 from .adol_tb_referral import TbReferalAdol
+from .infant_hiv_testing import InfantHIVTesting

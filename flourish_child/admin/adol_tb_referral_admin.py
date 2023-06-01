@@ -20,7 +20,8 @@ class TbReferralAdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_visit',
                 'report_datetime',
                 'referral_date',
-                'location']}
+                'location',
+                'location_other']}
          ), audit_fieldset_tuple)
 
 
