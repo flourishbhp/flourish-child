@@ -21,13 +21,12 @@ class ChildDummySubjectConsentManager(SearchSlugManager, models.Manager):
 
 
 class ChildDummySubjectConsent(
-        ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin, SearchSlugModelMixin,
-        SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin, BaseUuidModel):
-
+    ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin, SearchSlugModelMixin,
+    SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin, BaseUuidModel):
     """ A dummy child model auto completed by the s. """
 
     consent_datetime = models.DateTimeField(
-        verbose_name='Consent date and time',)
+        verbose_name='Consent date and time', )
 
     report_datetime = models.DateTimeField(
         null=True,
@@ -68,19 +67,6 @@ class ChildDummySubjectConsent(
 
     def natural_key(self):
         return (self.subject_identifier, self.version)
-
-    def registration_update_or_create(self):
-        """Creates or Updates the registration model with attributes
-                from this instance.
-
-                Called from the signal
-                """
-        try:
-            self.registration_model.objects.get(
-                identity=self.identity)
-        except self.registration_model.DoesNotExist:
-            if self.is_eligible:
-                return super().registration_update_or_create()
 
     class Meta(ConsentModelMixin.Meta):
         app_label = 'flourish_child'
