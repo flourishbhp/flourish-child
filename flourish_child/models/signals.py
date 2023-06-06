@@ -163,6 +163,7 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
           dispatch_uid='adol_tb_visit_presence_on_post_save')
 def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
+
     if (instance.cough_duration == NO or instance.fever_duration == NO or
             instance.night_sweats == NO or instance.weight_loss == NO):
 
@@ -174,6 +175,7 @@ def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwar
 @receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
           dispatch_uid='adol_tb_presence_on_post_save')
 def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
+
     if instance.tb_referral == YES:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
@@ -183,6 +185,7 @@ def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=HivTestingAdol,
           dispatch_uid='hiv_testing_on_post_save')
 def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
+
     if instance.last_result in [NEG, IND,
                                 UNKNOWN] or instance.referred_for_treatment == NO:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
@@ -344,6 +347,7 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
             comment=('''Child was hospitalised within the past year,
                         please complete INFORM CRF on REDCAP.''')
         )
+
 
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
     if cohort:

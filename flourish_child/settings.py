@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django.contrib.sites',
     'django_q',
+    'django_nose',
     'edc_action_item.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_device.apps.AppConfig',
@@ -87,6 +88,7 @@ INSTALLED_APPS = [
     'flourish_child.apps.EdcFacilityAppConfig',
     'flourish_child.apps.EdcSenaiteInterfaceAppConfig',
     'flourish_visit_schedule.apps.AppConfig',
+    'pre_flourish.apps.AppConfig',
     'flourish_child.apps.AppConfig'
 ]
 
@@ -138,7 +140,8 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -177,7 +180,6 @@ DASHBOARD_URL_NAMES = {}
 BASE_FORMAT = ''
 
 if 'test' in sys.argv:
-
     class DisableMigrations:
 
         def __contains__(self, item):
@@ -185,6 +187,7 @@ if 'test' in sys.argv:
 
         def __getitem__(self, item):
             return None
+
 
     MIGRATION_MODULES = DisableMigrations()
     PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)

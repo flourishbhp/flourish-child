@@ -9,9 +9,9 @@ class AppConfig(DjangoAppConfig):
     verbose_name = 'Flourish Child'
     admin_site_name = 'flourish_child_admin'
     start_date_year_3 = datetime(
-            2022, 7, 1, 0, 0, 0, tzinfo=gettz('UTC')).date()
+        2022, 7, 1, 0, 0, 0, tzinfo=gettz('UTC')).date()
     end_date_year_5 = datetime(
-            2024, 6, 30, 0, 0, 0, tzinfo=gettz('UTC')).date()
+        2024, 6, 30, 0, 0, 0, tzinfo=gettz('UTC')).date()
 
     def ready(self):
         from .models import child_consent_on_post_save
@@ -36,6 +36,7 @@ if settings.APP_NAME == 'flourish_child':
     from edc_constants.constants import FAILED_ELIGIBILITY
     from edc_senaite_interface.apps import AppConfig as BaseEdcSenaiteInterfaceAppConfig
 
+
     class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):
         configurations = [
             AppointmentConfig(
@@ -43,15 +44,21 @@ if settings.APP_NAME == 'flourish_child':
                 related_visit_model='flourish_caregiver.maternalvisit',
                 appt_type='clinic'),
             AppointmentConfig(
+                model='pre_flourish.appointment',
+                related_visit_model='pre_flourish.preflourishvisit',
+                appt_type='clinic'),
+            AppointmentConfig(
                 model='flourish_child.appointment',
                 related_visit_model='flourish_child.childvisit',
                 appt_type='clinic')]
 
-    class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
 
-        reason_field = {'flourish_child.childvisit': 'reason'}
+    class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
+        reason_field = {'flourish_child.childvisit': 'reason',
+                        'pre_flourish.preflourishvisit': 'reason',}
         create_on_reasons = [SCHEDULED, UNSCHEDULED, COMPLETED_PROTOCOL_VISIT]
         delete_on_reasons = [LOST_VISIT, MISSED_VISIT, FAILED_ELIGIBILITY]
+
 
     class EdcProtocolAppConfig(BaseEdcProtocolAppConfigs):
         protocol = 'BHP142'
@@ -62,6 +69,7 @@ if settings.APP_NAME == 'flourish_child':
             2020, 8, 14, 0, 0, 0, tzinfo=gettz('UTC'))
         study_close_datetime = datetime(
             2025, 8, 13, 23, 59, 59, tzinfo=gettz('UTC'))
+
 
     class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
         timepoints = TimepointCollection(
@@ -86,7 +94,13 @@ if settings.APP_NAME == 'flourish_child':
                     datetime_field='appt_datetime',
                     status_field='appt_status',
                     closed_status=COMPLETE_APPT),
+                Timepoint(
+                    model='pre_flourish.appointment',
+                    datetime_field='appt_datetime',
+                    status_field='appt_status',
+                    closed_status=COMPLETE_APPT),
             ])
+
 
     class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
         visit_models = {
@@ -95,7 +109,8 @@ if settings.APP_NAME == 'flourish_child':
             'flourish_child': (
                 'child_visit', 'flourish_child.childvisit'),
             'pre_flourish': (
-                'maternal_visit', 'pre_flourish.preflourishcaregivervisit')}
+                'pre_flourish_visit', 'pre_flourish.preflourishvisit'), }
+
 
     class EdcFacilityAppConfig(BaseEdcFacilityAppConfig):
         country = 'botswana'
@@ -104,6 +119,7 @@ if settings.APP_NAME == 'flourish_child':
                                  slots=[100, 100, 100, 100, 100, 100, 100]),
             '5-day clinic': dict(days=[MO, TU, WE, TH, FR],
                                  slots=[100, 100, 100, 100, 100])}
+
 
     class EdcSenaiteInterfaceAppConfig(BaseEdcSenaiteInterfaceAppConfig):
         host = "https://bhplims.bhp.org.bw"
