@@ -1,12 +1,12 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
 from edc_constants.constants import DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, NO, \
-    OFF_STUDY, ON_STUDY, OTHER, YES
+    OFF_STUDY, ON_STUDY, OTHER, YES, ABNORMAL, NORMAL
 from edc_constants.constants import IND, NEG, PENDING, POS
 from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, MISSED_VISIT
 from edc_visit_tracking.constants import LOST_VISIT, SCHEDULED, UNSCHEDULED
 
-from .constants import BREASTFEED_ONLY, PNTA
+from .constants import BREASTFEED_ONLY, PNTA, NOT_RECEIVED
 
 HIV_STATUS = (
     (POS, 'Positive'),
@@ -837,8 +837,15 @@ TESTING_REASONS = (
 POS_NEG_PENDING_UNKNOWN = (
     (POS, 'Positive'),
     (NEG, 'Negative'),
-    ('PENDING', 'Pending'),
+    (PENDING, 'Pending'),
     (UNKNOWN, 'Unknown'),
+)
+
+POS_NEG_PENDING_NOT_RECEIVED = (
+    (POS, 'Positive'),
+    (NEG, 'Negative'),
+    (PENDING, 'Pending'),
+    (NOT_RECEIVED, 'Not Received'),
 )
 
 ISOLATION_LOCATION = (
@@ -1116,4 +1123,12 @@ CLINIC_NON_VISIT_REASONS = (
     ('isolation', 'Participant is in isolation due to COVID-19 or another infection'),
     ('caregiver_not_well', 'Participant/caregiver is not well'),
     (OTHER, 'Other'),
+)
+
+
+XRAY_RESULTS = (
+    (NORMAL, 'Normal'),
+    (ABNORMAL, 'Abnormal'),
+    (PENDING, 'Pending'),
+    (NOT_RECEIVED, 'Not Received')
 )

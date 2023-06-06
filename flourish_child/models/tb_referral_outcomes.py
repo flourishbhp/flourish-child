@@ -5,7 +5,9 @@ from edc_constants.choices import YES_NO
 
 from .list_models import TbDiagnostics
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import EVAL_LOCATION, YES_NO_UNABLE_DET, CLINIC_NON_VISIT_REASONS
+from ..choices import (EVAL_LOCATION, YES_NO_UNABLE_DET,
+                       CLINIC_NON_VISIT_REASONS, POS_NEG_PENDING_NOT_RECEIVED,
+                       XRAY_RESULTS)
 
 
 class TbAdolReferralOutcomes(ChildCrfModelMixin):
@@ -62,11 +64,44 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
         null=True,
         blank=True)
 
-    tb_test_results = models.TextField(
-        verbose_name='Specify test and test result',
-        max_length=250,
+    sputum_sample = models.CharField(
+        verbose_name='Sputum Sample',
+        choices=POS_NEG_PENDING_NOT_RECEIVED,
+        max_length=13,
         null=True,
-        blank=True)
+        blank=True
+    )
+
+    chest_xray = models.CharField(
+        verbose_name='Chest x-ray',
+        choices=XRAY_RESULTS,
+        max_length=13,
+        null=True,
+        blank=True
+    )
+
+    gene_xpert = models.CharField(
+        verbose_name='Gene Xpert',
+        choices=POS_NEG_PENDING_NOT_RECEIVED,
+        max_length=13,
+        null=True,
+        blank=True
+    )
+    tst_or_mentoux = models.CharField(
+        verbose_name='TST/Mantoux',
+        choices=POS_NEG_PENDING_NOT_RECEIVED,
+        max_length=13,
+        null=True,
+        blank=True
+    )
+
+    covid_19 = models.CharField(
+        verbose_name='COVID-19',
+        choices=XRAY_RESULTS,
+        max_length=13,
+        null=True,
+        blank=True
+    )
 
     tb_treat_start = models.CharField(
         verbose_name='Was TB treatment started?',
