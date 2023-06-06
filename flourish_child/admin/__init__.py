@@ -45,6 +45,7 @@ from .child_preg_testing_admin import ChildPregTestingAdmin
 from .child_previous_hospitalization_admin import \
     ChildPreviousHospitalizationAdmin
 from .child_requisition_admin import ChildRequisitionAdmin
+from .child_requisition_result_admin import ChildRequisitionResultAdmin
 from .child_socio_demographic_admin import ChildSocioDemographicAdmin
 from .child_tanner_staging_admin import ChildTannerStagingAdmin
 from .child_visit_admin import ChildVisitAdmin
@@ -62,6 +63,7 @@ from .infant_dev_screening_72_months_admin import InfantDevScreening72MonthsAdmi
 from .infant_dev_screening_9_months_admin import InfantDevScreening9MonthsAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
+from .infant_hiv_testing_admin import InfantHIVTestingAdmin
 from .offschedule_admin import ChildOffScheduleAdmin
 from .tb_adol_assent_admin import TbAdolAssentAdmin
 from .tb_engagement_admin import TbEngagementAdmin

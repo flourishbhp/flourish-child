@@ -558,7 +558,7 @@ PENNCNB_INVALID = (
     ('sensory_handicap', 'Child has a sensory handicap'),
     ('motor_handicap', 'Child has a motor handicap'),
     ('uncooperative', 'Child was uncooperative'),
-    ('misunderstood_directions', 'Child did not understand directions'),
+    ('misunderstood_instructions', 'Child did not understand instructions'),
     ('unavailable_resources', 'Equipment/room was not available'),
     (OTHER, 'Other, specify'),
 )
@@ -838,6 +838,7 @@ POS_NEG_PENDING_UNKNOWN = (
     (POS, 'Positive'),
     (NEG, 'Negative'),
     (PENDING, 'Pending'),
+    (IND, 'Indeterminate'),
     (UNKNOWN, 'Unknown'),
 )
 
@@ -1125,10 +1126,23 @@ CLINIC_NON_VISIT_REASONS = (
     (OTHER, 'Other'),
 )
 
-
 XRAY_RESULTS = (
     (NORMAL, 'Normal'),
     (ABNORMAL, 'Abnormal'),
     (PENDING, 'Pending'),
     (NOT_RECEIVED, 'Not Received')
+
+NOT_TESTED_REASON = (
+    ('no_apparent_reason', 'No apparent reason'),
+    ('missed_visit', 'Missed clinic visit due to time constraints/ No transport fare'),
+    ('hcw_decision', 'Healthcare worker did not say it was necessary'),
+    ('no_kits', 'Test kits out of stock'),
+    (OTHER, 'Other'),
+)
+
+PREFERRED_CLINIC = (
+    ('local', 'Local Clinic'),
+    ('flourish', 'FLOURISH Clinic'),
+    ('no_testing', 'I do not wish to have my infant tested at this time'),
+    (OTHER, 'Other'),
 )
