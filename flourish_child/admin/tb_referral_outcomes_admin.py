@@ -25,8 +25,12 @@ class TbReferralOutcomesAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'tb_diagnostic_perf',
                 'tb_diagnostics',
                 'tb_diagnostics_other',
+                'sputum_sample',
+                'chest_xray',
+                'gene_xpert',
+                'tst_or_mentoux',
+                'covid_19',
                 'tb_diagnose_pos',
-                'tb_test_results',
                 'tb_treat_start',
                 'tb_prev_therapy_start',
                 'tb_comments'
@@ -40,6 +44,11 @@ class TbReferralOutcomesAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'tb_diagnostic_perf': admin.VERTICAL,
         'tb_diagnose_pos': admin.VERTICAL,
         'tb_treat_start': admin.VERTICAL,
-        'tb_prev_therapy_start': admin.VERTICAL, }
+        'tb_prev_therapy_start': admin.VERTICAL,
+        'sputum_sample': admin.VERTICAL,
+        'chest_xray': admin.VERTICAL,
+        'gene_xpert': admin.VERTICAL,
+        'tst_or_mentoux': admin.VERTICAL,
+        'covid_19': admin.VERTICAL, }
 
     filter_horizontal = ('tb_diagnostics',)
