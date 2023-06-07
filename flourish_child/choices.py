@@ -1131,6 +1131,7 @@ XRAY_RESULTS = (
     (ABNORMAL, 'Abnormal'),
     (PENDING, 'Pending'),
     (NOT_RECEIVED, 'Not Received')
+)
 
 NOT_TESTED_REASON = (
     ('no_apparent_reason', 'No apparent reason'),
