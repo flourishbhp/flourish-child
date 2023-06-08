@@ -45,8 +45,8 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
 
     tb_diagnostic_perf = models.CharField(
         verbose_name='Were TB diagnostic studies performed at the clinic visit?',
-        max_length=20,
-        choices=YES_NO_UNABLE_DET,
+        max_length=3,
+        choices=YES_NO,
         null=True,
         blank=True)
 
@@ -56,13 +56,6 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
         blank=True)
 
     tb_diagnostics_other = OtherCharField()
-
-    tb_diagnose_pos = models.CharField(
-        verbose_name='Were any of the TB diagnostic studies positive',
-        max_length=20,
-        choices=YES_NO_UNABLE_DET,
-        null=True,
-        blank=True)
 
     sputum_sample = models.CharField(
         verbose_name='Sputum Sample',
