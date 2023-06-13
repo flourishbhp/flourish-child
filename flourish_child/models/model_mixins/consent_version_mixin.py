@@ -22,12 +22,11 @@ class ConsentVersionModelModelMixin:
 
         try:
             subject_screening_obj = preg_subject_screening_cls.objects.get(
-                subject_identifier__startswith=caregiver_subject_identifier)
+                subject_identifier=caregiver_subject_identifier)
         except preg_subject_screening_cls.DoesNotExist:
-
             try:
                 subject_screening_obj = prior_subject_screening_cls.objects.get(
-                    subject_identifier__startswith=caregiver_subject_identifier)
+                    subject_identifier=caregiver_subject_identifier)
             except prior_subject_screening_cls.DoesNotExist:
                 raise ValidationError(
                     'Missing Subject Screening form. Please complete '
