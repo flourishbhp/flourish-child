@@ -15,6 +15,8 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         max_digits=5,
         decimal_places=2,
         validators=[MinValueValidator(5), MaxValueValidator(200), ],
+        null=True,
+        blank=True,
         help_text="Measured in Kilograms (kg)")
 
     child_systolic_bp = models.IntegerField(
@@ -36,7 +38,9 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
         max_digits=5,
         decimal_places=2,
         verbose_name="Infant/child/adolescent's height? ",
-        validators=[MinValueValidator(40), MaxValueValidator(120), ],
+        validators=[MinValueValidator(40), MaxValueValidator(210), ],
+        null=True,
+        blank=True,
         help_text="Measured in Centimeters (cm)")
 
     is_child_preg = models.CharField(

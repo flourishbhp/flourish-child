@@ -838,6 +838,7 @@ POS_NEG_PENDING_UNKNOWN = (
     (POS, 'Positive'),
     (NEG, 'Negative'),
     ('PENDING', 'Pending'),
+    (IND, 'Indeterminate'),
     (UNKNOWN, 'Unknown'),
 )
 
@@ -1115,5 +1116,20 @@ CLINIC_NON_VISIT_REASONS = (
     ('work_release', 'Participant/caregiver cannot be released from work'),
     ('isolation', 'Participant is in isolation due to COVID-19 or another infection'),
     ('caregiver_not_well', 'Participant/caregiver is not well'),
+    (OTHER, 'Other'),
+)
+
+NOT_TESTED_REASON = (
+    ('no_apparent_reason', 'No apparent reason'),
+    ('missed_visit', 'Missed clinic visit due to time constraints/ No transport fare'),
+    ('hcw_decision', 'Healthcare worker did not say it was necessary'),
+    ('no_kits', 'Test kits out of stock'),
+    (OTHER, 'Other'),
+)
+
+PREFERRED_CLINIC = (
+    ('local', 'Local Clinic'),
+    ('flourish', 'FLOURISH Clinic'),
+    ('no_testing', 'I do not wish to have my infant tested at this time'),
     (OTHER, 'Other'),
 )
