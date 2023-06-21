@@ -1,13 +1,9 @@
 from django.db import models
 from edc_base.utils import get_utcnow
-from ..choices import LOCATION_REFERRAL, YES_NO_UNK_PNTA, \
-    VISIT_NUMBER, HEALTH_CARE_CENTER, YES_NO_DN_PNTA, \
-        TB_SYMPTOM, TB_DIAGONISTIC_TYPE, YES_NO_PENDING_UNK 
+from ..choices import LOCATION_REFERRAL
     
 from .child_crf_model_mixin import ChildCrfModelMixin
-from .list_models import TbRoutineScreenAdolMedium
 from edc_base.model_fields import OtherCharField
-from edc_base.model_mixins import BaseUuidModel
 
 
 class TbReferalAdol(ChildCrfModelMixin):

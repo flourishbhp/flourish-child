@@ -1,10 +1,11 @@
-import datetime
 from django.test import tag, SimpleTestCase as TestCase
 from edc_constants.constants import NO, YES
+
+
 from ..models.eligibility import TbAdolAssentEligibility
 
 
-@tag('tbadol')
+@tag('adol')
 class TestTbAdolAssentEligibility(TestCase):
     
     def setUp(self):
@@ -18,9 +19,6 @@ class TestTbAdolAssentEligibility(TestCase):
              'consent_signature': YES
         }
         
-
-        
-        
     def test_citizen_required(self):
         self.data['citizen'] = NO
         elibility = TbAdolAssentEligibility(**self.data)
@@ -28,7 +26,7 @@ class TestTbAdolAssentEligibility(TestCase):
         self.assertFalse(elibility.is_eligible)
         self.assertTrue(elibility.error_message)
         
-    def test_age_is_withing_10_and_17(self):
+    def test_age_is_within_10_and_17(self):
         self.data['child_age'] = 15
         elibility = TbAdolAssentEligibility(**self.data)
         
@@ -80,5 +78,3 @@ class TestTbAdolAssentEligibility(TestCase):
         
         self.assertFalse(elibility.is_eligible)
         self.assertTrue(elibility.error_message)
-        
-        

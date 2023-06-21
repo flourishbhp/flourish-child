@@ -1,7 +1,7 @@
 from django.db import models
 
-from ..choices import YES_NO_UNK_PNTA, \
-    VISIT_NUMBER, HEALTH_CARE_CENTER, YES_NO_DN_PNTA, TB_SYMPTOM, TB_DIAGONISTIC_TYPE, YES_NO_PENDING_UNK 
+from ..choices import (YES_NO_UNK_PNTA, VISIT_NUMBER, YES_NO_DN_PNTA,
+                       TB_SYMPTOM, TB_DIAGONISTIC_TYPE, YES_NO_PENDING_UNK)
     
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .list_models import TbRoutineScreenAdolMedium
@@ -24,12 +24,15 @@ class TbRoutineScreenAdol(ChildCrfModelMixin):
 
 
 class TbHealthVisitAdol(BaseUuidModel):
-    tb_screenin = models.ForeignKey(TbRoutineScreenAdol, on_delete=models.DO_NOTHING)
+    tb_screenin = models.ForeignKey(
+        TbRoutineScreenAdol,
+        on_delete=models.DO_NOTHING)
 
-    care_location = models.ManyToManyField(TbRoutineScreenAdolMedium,
-                                           verbose_name='Where did you receive care at this healthcare visit?',
-                                           help_text='if 0, end of CRF else continue',
-                                           blank=False)
+    care_location = models.ManyToManyField(
+        TbRoutineScreenAdolMedium,
+        verbose_name='Where did you receive care at this healthcare visit?',
+        help_text='if 0, end of CRF else continue',
+        blank=False)
 
     care_location_other = OtherCharField(
         verbose_name='If ‘other’, specify',
@@ -48,9 +51,10 @@ class TbHealthVisitAdol(BaseUuidModel):
     )
 
     screening_questions = models.CharField(
-        verbose_name="At this visit, (specify service if multiple services within same visit),"
-                     " were you screened for TB with the four screening"
-                     " questions (cough, fever, weight loss, night sweats)?",
+        verbose_name=('At this visit, (specify service if multiple services '
+                      'within same visit), were you screened for TB with the'
+                      ' four screening questions (cough, fever, weight loss,'
+                      'night sweats)?'),
         choices=YES_NO_DN_PNTA,
         max_length=20,
         help_text='if yes continue to Q7 '

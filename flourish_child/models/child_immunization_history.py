@@ -2,7 +2,6 @@ from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import date_not_future
-from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from .child_crf_model_mixin import ChildCrfModelMixin

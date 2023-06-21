@@ -34,8 +34,7 @@ class TbAdolAssentEligibility:
         self.assessment_score = kwargs['assessment_score']
         self.consent_signature = kwargs['consent_signature']
         
-        
-        if self.child_age < 10 and self.child_age > 17:
+        if self.child_age < 10 or self.child_age > 17:
             self.error_message.append(f'Participint is {self.child_age} old')
         
         if self.citizen == NO:
@@ -55,7 +54,7 @@ class TbAdolAssentEligibility:
                                       ' about the study')
         if self.consent_signature == NO:
             self.error_message.append('The participant did not sign the consent')
-            
+
         self.is_eligible = False if self.error_message else True
         
             

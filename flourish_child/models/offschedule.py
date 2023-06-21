@@ -8,8 +8,9 @@ from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import CurrentSiteManager
 from edc_identifier.managers import SubjectIdentifierManager
 
+from ..helper_classes.utils import child_utils
 
-# from .model_mixins import ConsentVersionModelModelMixin
+
 class ChildOffSchedule(OffScheduleModelMixin, BaseUuidModel):
 
     schedule_name = models.CharField(
@@ -31,30 +32,20 @@ class ChildOffSchedule(OffScheduleModelMixin, BaseUuidModel):
         pass
 
     def get_consent_version(self):
-        preg_subject_screening_cls = django_apps.get_model(
-            'flourish_caregiver.screeningpregwomen')
-        prior_subject_screening_cls = django_apps.get_model(
-            'flourish_caregiver.screeningpriorbhpparticipants')
-
         consent_version_cls = django_apps.get_model(
             'flourish_caregiver.flourishconsentversion')
 
-        # subject_screening_obj = None
+        screening_identifiers = []
+        preg_screening_obj = child_utils.preg_screening_model_obj(
+            subject_identifier=self.subject_identifier)
+        screening_identifiers.append(
+            getattr(preg_screening_obj, 'screening_identifier', None))
+        prior_screening_obj = child_utils.prior_screening_model_obj(
+            subject_identifier=self.subject_identifier)
+        screening_identifiers.append(
+            getattr(prior_screening_obj, 'screening_identifier', None))
 
-        preg_screening_objs = preg_subject_screening_cls.objects.filter(
-            subject_identifier=self.subject_identifier[:-3])
-
-        screening_identifiers = preg_screening_objs.values_list('screening_identifier',
-                                                                flat=True)
-
-        prior_screening_objs = prior_subject_screening_cls.objects.filter(
-            subject_identifier=self.subject_identifier[:-3])
-
-        if prior_screening_objs:
-            screening_identifiers = list(screening_identifiers) + list(
-                prior_screening_objs.values_list('screening_identifier', flat=True))
-
-        if screening_identifiers:
+        if not all(idx is None for idx in screening_identifiers):
             try:
                 consent_version_obj = consent_version_cls.objects.get(
                     screening_identifier__in=screening_identifiers)

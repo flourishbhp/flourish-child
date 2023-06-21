@@ -616,7 +616,7 @@ class TestRuleGroups(TestCase):
     def test_require_infant_hiv_test_q2_if_not_tested_q1(self):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
-            current_hiv_status=NEG,
+            current_hiv_status=POS,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(

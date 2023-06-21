@@ -1,13 +1,11 @@
-from django.apps import apps as django_apps
 from django.db import models
 from edc_base.model_fields.custom_fields import OtherCharField
 from edc_constants.choices import YES_NO
 
 from .list_models import TbDiagnostics
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import (EVAL_LOCATION, YES_NO_UNABLE_DET,
-                       CLINIC_NON_VISIT_REASONS, POS_NEG_PENDING_NOT_RECEIVED,
-                       XRAY_RESULTS)
+from ..choices import (EVAL_LOCATION, CLINIC_NON_VISIT_REASONS,
+                       POS_NEG_PENDING_NOT_RECEIVED, XRAY_RESULTS)
 
 
 class TbAdolReferralOutcomes(ChildCrfModelMixin):

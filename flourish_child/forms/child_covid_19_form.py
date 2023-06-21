@@ -16,10 +16,9 @@ class ChildCovid19Form(ChildModelFormMixin, forms.ModelForm):
         if not subject_identifier:
             return
 
-        prev_instance = ChildCovid19.objects \
-            .filter(child_visit__appointment__subject_identifier=subject_identifier) \
-            .order_by('-report_datetime') \
-            .first()
+        prev_instance = ChildCovid19.objects.filter(
+            child_visit__appointment__subject_identifier=subject_identifier).order_by(
+                '-report_datetime').first()
 
         if prev_instance:
             self.initial['fully_vaccinated'] = prev_instance.fully_vaccinated
