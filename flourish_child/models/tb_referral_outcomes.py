@@ -99,9 +99,7 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
     tb_treat_start = models.CharField(
         verbose_name='Was TB treatment started?',
         max_length=3,
-        choices=YES_NO,
-        null=True,
-        blank=True)
+        choices=YES_NO,)
 
     tb_prev_therapy_start = models.CharField(
         verbose_name='Was TB preventative therapy started?',
