@@ -8,7 +8,7 @@ from ..models import Appointment, ChildDummySubjectConsent
 from edc_visit_tracking.constants import MISSED_VISIT,SCHEDULED
 from django.apps import apps as django_apps
 
-@tag('dev_screening')
+@tag('missedbirthvisit')
 class TestMissedBirthVisit(TestCase):
     def setUp(self):
         import_holidays()
