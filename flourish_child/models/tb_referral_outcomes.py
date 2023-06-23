@@ -58,6 +58,7 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
     tb_diagnostics_other = OtherCharField()
 
     tb_diagnostics_other_results = models.CharField(
+        verbose_name='If other test, specified, what are the results',
         max_length=50,
         blank=True, 
         null=True)
