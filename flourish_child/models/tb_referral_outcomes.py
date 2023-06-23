@@ -57,6 +57,11 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
 
     tb_diagnostics_other = OtherCharField()
 
+    tb_diagnostics_other_results = models.CharField(
+        max_length=50,
+        blank=True, 
+        null=True)
+
     sputum_sample = models.CharField(
         verbose_name='Sputum Sample',
         choices=POS_NEG_PENDING_NOT_RECEIVED,
@@ -116,5 +121,5 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
 
     class Meta:
         app_label = 'flourish_child'
-        verbose_name = 'TB Referral Outcomes'
-        verbose_name_plural = "TB Referral Outcomes"
+        verbose_name = 'TB Adol. Referral Outcomes'
+        verbose_name_plural = "TB Adol. Referral Outcomes"
