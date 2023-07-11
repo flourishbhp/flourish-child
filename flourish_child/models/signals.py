@@ -7,10 +7,11 @@ from edc_constants.constants import NO, YES, NEG, IND, UNKNOWN
 from edc_appointment.constants import COMPLETE_APPT
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
+from edc_visit_tracking.constants import MISSED_VISIT
 from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION
-from flourish_prn.models.child_death_report import ChildDeathReport
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, CHILDOFF_STUDY_ACTION, MISSED_BIRTH_VISIT_ACTION
 
+from flourish_prn.models.child_death_report import ChildDeathReport
 from flourish_child.models.tb_adol_assent import TbAdolAssent
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
@@ -198,6 +199,17 @@ def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=ChildVisit,
           dispatch_uid='child_visit_on_post_save')
 def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
+    """
+    Check is the child visit with visit_code 200OD is missed
+    """
+    missed_birth_visit_cls = django_apps.get_model(
+        'flourish_prn.missedbirthvisit')
+
+    if getattr(instance, 'reason') == MISSED_VISIT and getattr(instance, 'visit_code') == '2000D' :
+                trigger_action_item(missed_birth_visit_cls, MISSED_BIRTH_VISIT_ACTION,
+                                    instance.subject_identifier,
+                                    repeat=True)
+
     """
     - Put subject on quarterly schedule at enrollment visit.
     """

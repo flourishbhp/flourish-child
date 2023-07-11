@@ -25,6 +25,7 @@ class TbReferralOutcomesAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'tb_diagnostic_perf',
                 'tb_diagnostics',
                 'tb_diagnostics_other',
+                'tb_diagnostics_other_results',
                 'sputum_sample',
                 'chest_xray',
                 'gene_xpert',
