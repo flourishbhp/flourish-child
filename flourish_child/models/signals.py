@@ -9,7 +9,7 @@ from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import MISSED_VISIT
 from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, CHILDOFF_STUDY_ACTION, MISSED_BIRTH_VISIT_ACTION
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, MISSED_BIRTH_VISIT_ACTION
 
 from flourish_prn.models.child_death_report import ChildDeathReport
 from flourish_child.models.tb_adol_assent import TbAdolAssent
