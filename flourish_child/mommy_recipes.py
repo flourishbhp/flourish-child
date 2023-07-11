@@ -14,7 +14,7 @@ from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
 from flourish_child.models.birth_data import BirthData
 from model_mommy.recipe import Recipe, seq
 
-from flourish_prn.models import TbReferalAdol
+from flourish_child.models.adol_tb_referral import TbReferalAdol
 from .models import ChildDummySubjectConsent, ChildDataset, ChildAssent, \
     ChildVisit, ChildBirth, HivTestingAdol, InfantDevScreening36Months, \
     InfantDevScreening12Months, \
