@@ -1,3 +1,4 @@
+import pytz
 import os
 from datetime import datetime
 
@@ -41,6 +42,7 @@ from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographi
 from ..models import ChildPreHospitalizationInline
 from ..helper_classes import ChildFollowUpBookingHelper
 from edc_visit_tracking.constants import MISSED_VISIT
+
 
 class CaregiverConsentError(Exception):
     pass
@@ -265,7 +267,9 @@ def tb_referral_adol_on_post_save(sender, instance, raw, created, **kwargs):
             onschedule_model=onschedule_model, name=schedule_name)
         child_visit = getattr(instance, 'child_visit', None)
         subject_identifier = getattr(child_visit, 'subject_identifier', None)
-        onschedule_datetime = getattr(child_visit, 'report_datetime', None)
+        referral_dt = getattr(instance, 'referral_date', None)
+        tz = pytz.timezone('Africa/Gaborone')
+        onschedule_datetime = datetime.combine(referral_dt, get_utcnow().time(), tz)
 
         if not schedule.is_onschedule(subject_identifier=subject_identifier,
                                       report_datetime=onschedule_datetime):
