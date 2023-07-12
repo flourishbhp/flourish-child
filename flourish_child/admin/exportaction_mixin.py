@@ -235,17 +235,17 @@ class ExportActionMixin:
             return consent.last().screening_identifier
         return None
 
-    def previous_bhp_study(self, screening_identifier=None):
+    def previous_bhp_study(self, subject_identifier=None):
         dataset_cls = django_apps.get_model(
-            'flourish_caregiver.maternaldataset')
-        if screening_identifier:
+            'flourish_caregiver.CaregiverChildConsent')
+        if subject_identifier:
             try:
                 dataset_obj = dataset_cls.objects.get(
-                    screening_identifier=screening_identifier)
+                    subject_identifier=subject_identifier)
             except dataset_cls.DoesNotExist:
                 return None
             else:
-                return dataset_obj.protocol
+                return dataset_obj.get_protocol
 
     def study_maternal_identifier(self, screening_identifier=None):
         dataset_cls = django_apps.get_model(
