@@ -271,7 +271,7 @@ class TestTBAdol(TestCase):
         self.assertIsNone(schedule_history.offschedule_datetime)
 
         mommy.make_recipe(
-            'flourish_child.tbadoloffstudy',
+            'flourish_prn.tbadoloffstudy',
             subject_identifier=self.child_subject_identifier, )
 
         schedule_history = SubjectScheduleHistory.objects.get(
