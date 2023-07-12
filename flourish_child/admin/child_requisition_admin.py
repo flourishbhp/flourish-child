@@ -95,3 +95,26 @@ class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
                      + requisition_identifier_fields
                      + requisition_verify_fields)
         return read_only + ('exists_on_lis', 'sample_id', ) if on_lis else read_only
+
+    def get_previous_instance(self, request, instance=None, **kwargs):
+        """Returns a model instance that is the first occurrence of a previous
+        instance relative to this object's appointment and panel.
+        """
+        panel_id = request.GET.get('panel', None)
+        obj = None
+        appointment = instance or self.get_instance(request)
+
+        if appointment:
+            while appointment:
+                options = {
+                    '{}__appointment'.format(
+                        self.model.visit_model_attr()): appointment,
+                    'panel__id': panel_id}
+                try:
+                    obj = self.model.objects.get(**options)
+                except self.model.DoesNotExist:
+                    pass
+                else:
+                    break
+                appointment = self.get_previous_appt_instance(appointment)
+        return obj
