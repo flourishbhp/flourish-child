@@ -13,7 +13,7 @@ from ..models import Appointment, ChildDummySubjectConsent, OnScheduleChildCohor
 
 
 @tag('dev_screening')
-class TestMissedBirthVisit(TestCase):
+class TestBirthRequisitions(TestCase):
     def setUp(self):
         import_holidays()
 
