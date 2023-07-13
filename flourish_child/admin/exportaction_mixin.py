@@ -85,7 +85,7 @@ class ExportActionMixin:
                 screening_identifier = self.screening_identifier(
                     subject_identifier=subject_identifier[:-3])
                 previous_study = self.previous_bhp_study(
-                    screening_identifier=screening_identifier)
+                    subject_identifier=subject_identifier[:-3])
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(study_maternal_identifier,
