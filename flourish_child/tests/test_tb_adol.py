@@ -15,7 +15,7 @@ from flourish_child.models import Appointment, OnScheduleTbAdolFollowupSchedule
 from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 
 
-@tag('tb-offstudy')
+@tag('tb_adol')
 class TestTBAdol(TestCase):
 
     def setUp(self):
@@ -271,7 +271,7 @@ class TestTBAdol(TestCase):
         self.assertIsNone(schedule_history.offschedule_datetime)
 
         mommy.make_recipe(
-            'flourish_child.tbadoloffstudy',
+            'flourish_prn.tbadoloffstudy',
             subject_identifier=self.child_subject_identifier, )
 
         schedule_history = SubjectScheduleHistory.objects.get(
@@ -284,8 +284,8 @@ class TestTBAdol(TestCase):
     def test_puts_on_followup_schedule(self):
         """Asserts that the subject is put on the followup schedule."""
         mommy.make_recipe(
-            'flourish_prn.tbadolreferral',
-            subject_identifier=self.child_subject_identifier, )
+            'flourish_child.tbadolreferral',
+            child_visit=self.child_visit, )
         self.assertEqual(
             OnScheduleTbAdolFollowupSchedule.objects.filter(
                 subject_identifier=self.child_subject_identifier).count(), 1)
@@ -295,10 +295,10 @@ class TestTBAdol(TestCase):
         interview language is  not none."""
 
         mommy.make_recipe(
-            'flourish_prn.tbadolreferral',
-            subject_identifier=self.child_subject_identifier, )
+            'flourish_child.tbadolreferral',
+            child_visit=self.child_visit, )
 
-        self.child_visit = mommy.make_recipe(
+        child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
                 visit_code='2200A',
@@ -313,7 +313,7 @@ class TestTBAdol(TestCase):
 
         mommy.make_recipe(
             'flourish_child.tbadolinterview',
-            child_visit=self.child_visit,
+            child_visit=child_visit,
             interview_language='None'
         )
 
@@ -327,10 +327,10 @@ class TestTBAdol(TestCase):
         interview language is setswana or both."""
 
         mommy.make_recipe(
-            'flourish_prn.tbadolreferral',
-            subject_identifier=self.child_subject_identifier, )
+            'flourish_child.tbadolreferral',
+            child_visit=self.child_visit, )
 
-        self.child_visit = mommy.make_recipe(
+        child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
                 visit_code='2200A',
@@ -345,7 +345,7 @@ class TestTBAdol(TestCase):
 
         mommy.make_recipe(
             'flourish_child.tbadolinterview',
-            child_visit=self.child_visit,
+            child_visit=child_visit,
             interview_language='both'
         )
 
@@ -359,10 +359,10 @@ class TestTBAdol(TestCase):
         interview_consent is YES."""
 
         mommy.make_recipe(
-            'flourish_prn.tbadolreferral',
-            subject_identifier=self.child_subject_identifier, )
+            'flourish_child.tbadolreferral',
+            child_visit=self.child_visit, )
 
-        self.child_visit = mommy.make_recipe(
+        child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
                 visit_code='2200A',
@@ -377,7 +377,7 @@ class TestTBAdol(TestCase):
 
         mommy.make_recipe(
             'flourish_child.tbadolengagement',
-            child_visit=self.child_visit,
+            child_visit=child_visit,
             interview_consent=YES
         )
 
@@ -392,10 +392,10 @@ class TestTBAdol(TestCase):
         visit"""
 
         mommy.make_recipe(
-            'flourish_prn.tbadolreferral',
-            subject_identifier=self.child_subject_identifier, )
+            'flourish_child.tbadolreferral',
+            child_visit=self.child_visit, )
 
-        self.child_visit = mommy.make_recipe(
+        mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
                 visit_code='2200A',
