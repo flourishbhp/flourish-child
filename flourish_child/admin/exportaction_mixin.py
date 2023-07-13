@@ -85,7 +85,7 @@ class ExportActionMixin:
                 screening_identifier = self.screening_identifier(
                     subject_identifier=subject_identifier[:-3])
                 previous_study = self.previous_bhp_study(
-                    subject_identifier=subject_identifier[:-3])
+                    subject_identifier=subject_identifier)
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(study_maternal_identifier,
@@ -236,11 +236,11 @@ class ExportActionMixin:
 
     def previous_bhp_study(self, subject_identifier=None):
         caregiver_child_consent_cls = django_apps.get_model(
-            'flourish_caregiver.CaregiverChildConsent')
+            'flourish_caregiver.caregiverchildconsent')
         if subject_identifier:
             try:
-                caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
-                    subject_identifier=subject_identifier)
+                caregiver_child_consent_obj = caregiver_child_consent_cls.objects.filter(
+                    subject_identifier=subject_identifier).latest('consent_datetime')
             except caregiver_child_consent_cls .DoesNotExist:
                 return None
             else:
