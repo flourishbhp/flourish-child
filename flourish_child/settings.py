@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'flourish_child.apps.EdcSenaiteInterfaceAppConfig',
     'flourish_visit_schedule.apps.AppConfig',
     'pre_flourish.apps.AppConfig',
+    'pre_flourish_follow.apps.AppConfig',
     'flourish_child.apps.AppConfig'
 ]
 

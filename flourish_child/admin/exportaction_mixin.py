@@ -49,7 +49,6 @@ class ExportActionMixin:
         is_tb_adol_model = ('tb' in queryset[0].child_visit.schedule_name if hasattr(
             queryset[0], 'child_visit') else False) or ('TB Adol' in queryset[0].verbose_name)
 
-
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
             field_names.insert(1, 'child_exposure_status')
@@ -235,17 +234,17 @@ class ExportActionMixin:
             return consent.last().screening_identifier
         return None
 
-    def previous_bhp_study(self, screening_identifier=None):
-        dataset_cls = django_apps.get_model(
-            'flourish_caregiver.maternaldataset')
-        if screening_identifier:
+    def previous_bhp_study(self, subject_identifier=None):
+        caregiver_child_consent_cls = django_apps.get_model(
+            'flourish_caregiver.CaregiverChildConsent')
+        if subject_identifier:
             try:
-                dataset_obj = dataset_cls.objects.get(
-                    screening_identifier=screening_identifier)
-            except dataset_cls.DoesNotExist:
+                caregiver_child_consent_obj = caregiver_child_consent_cls.objects.get(
+                    subject_identifier=subject_identifier)
+            except caregiver_child_consent_cls .DoesNotExist:
                 return None
             else:
-                return dataset_obj.protocol
+                return caregiver_child_consent_obj.get_protocol
 
     def study_maternal_identifier(self, screening_identifier=None):
         dataset_cls = django_apps.get_model(
