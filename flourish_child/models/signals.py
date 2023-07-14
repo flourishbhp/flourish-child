@@ -36,7 +36,7 @@ from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, \
 from flourish_prn.models import TBAdolOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 from pre_flourish.helper_classes import MatchHelper
-from . import ChildClinicalMeasurements, TbReferalAdol
+from flourish_child.models.adol_tb_referral import TbReferalAdol
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
@@ -44,6 +44,7 @@ from .child_visit import ChildVisit
 from ..helper_classes import ChildFollowUpBookingHelper
 from ..models import AcademicPerformance, ChildOffSchedule, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
+from ..models.child_clinical_measurements import ChildClinicalMeasurements
 
 
 class CaregiverConsentError(Exception):
@@ -127,8 +128,8 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
 
 @receiver(post_save, weak=False, sender=ChildAppointment)
 def child_appointment_on_post_save(sender, instance, raw, created, **kwargs):
-
-    if 'tb_adol_followup_schedule' == instance.schedule_name and instance.appt_status == COMPLETE_APPT:
+    if 'tb_adol_followup_schedule' == instance.schedule_name and instance.appt_status \
+            == COMPLETE_APPT:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.subject_identifier,
                             repeat=True)
@@ -168,10 +169,8 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
           dispatch_uid='adol_tb_visit_presence_on_post_save')
 def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
-
     if (instance.cough_duration == NO or instance.fever_duration == NO or
             instance.night_sweats == NO or instance.weight_loss == NO):
-
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
                             repeat=True)
@@ -180,7 +179,6 @@ def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwar
 @receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
           dispatch_uid='adol_tb_presence_on_post_save')
 def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.tb_referral == YES:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
@@ -190,7 +188,6 @@ def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=HivTestingAdol,
           dispatch_uid='hiv_testing_on_post_save')
 def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.last_result in [NEG, IND,
                                 UNKNOWN] or instance.referred_for_treatment == NO:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
@@ -201,7 +198,6 @@ def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbLabResultsAdol,
           dispatch_uid='child_tb_lab_results_on_post_save')
 def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.quantiferon_result == NEG:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
@@ -217,10 +213,11 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
     missed_birth_visit_cls = django_apps.get_model(
         'flourish_prn.missedbirthvisit')
 
-    if getattr(instance, 'reason') == MISSED_VISIT and getattr(instance, 'visit_code') == '2000D' :
-                trigger_action_item(missed_birth_visit_cls, MISSED_BIRTH_VISIT_ACTION,
-                                    instance.subject_identifier,
-                                    repeat=True)
+    if getattr(instance, 'reason') == MISSED_VISIT and getattr(instance,
+                                                               'visit_code') == '2000D':
+        trigger_action_item(missed_birth_visit_cls, MISSED_BIRTH_VISIT_ACTION,
+                            instance.subject_identifier,
+                            repeat=True)
 
     """
     - Put subject on quarterly schedule at enrollment visit.
