@@ -4,42 +4,47 @@ from datetime import datetime
 import PIL
 import pyminizip
 import pypdfium2 as pdfium
-from PIL import Image
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.conf import settings
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
-from edc_base.utils import age, get_utcnow
-from edc_constants.constants import OPEN, NEW, POS, NO, YES, NEG, IND, UNKNOWN
 from edc_appointment.constants import COMPLETE_APPT
+from edc_base.utils import age, get_utcnow
+from edc_constants.constants import IND, MALE, NEG, NEW, NO, OPEN, UNKNOWN, YES
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, CHILDOFF_STUDY_ACTION,MISSED_BIRTH_VISIT_ACTION
-from flourish_prn.models.child_death_report import ChildDeathReport
+from edc_visit_tracking.constants import MISSED_VISIT
+from PIL import Image
 
-from flourish_child.models.tb_adol_assent import TbAdolAssent
-from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
+from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_tb_presence_household_member import \
     TbPresenceHouseholdMembersAdol
 from flourish_child.models.child_appointment import Appointment as ChildAppointment
+from flourish_child.models.child_birth import ChildBirth
+from flourish_child.models.tb_adol_assent import TbAdolAssent
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
-from flourish_prn.models import TBAdolOffStudy, ChildOffStudy
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, \
+    MISSED_BIRTH_VISIT_ACTION, TB_ADOL_STUDY_ACTION
+from flourish_prn.models import TBAdolOffStudy
+from flourish_prn.models.child_death_report import ChildDeathReport
+from pre_flourish.helper_classes import MatchHelper
+from . import ChildClinicalMeasurements
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
-from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
-from ..models import ChildPreHospitalizationInline
 from ..helper_classes import ChildFollowUpBookingHelper
-from edc_visit_tracking.constants import MISSED_VISIT
+from ..models import AcademicPerformance, ChildOffSchedule, ChildSocioDemographic
+from ..models import ChildPreHospitalizationInline
+
 
 class CaregiverConsentError(Exception):
     pass
@@ -122,8 +127,8 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
 
 @receiver(post_save, weak=False, sender=ChildAppointment)
 def child_appointment_on_post_save(sender, instance, raw, created, **kwargs):
-
-    if 'tb_adol_followup_schedule' == instance.schedule_name and instance.appt_status == COMPLETE_APPT:
+    if 'tb_adol_followup_schedule' == instance.schedule_name and instance.appt_status \
+            == COMPLETE_APPT:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.subject_identifier,
                             repeat=True)
@@ -163,10 +168,8 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
           dispatch_uid='adol_tb_visit_presence_on_post_save')
 def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwargs):
-
     if (instance.cough_duration == NO or instance.fever_duration == NO or
             instance.night_sweats == NO or instance.weight_loss == NO):
-
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
                             repeat=True)
@@ -175,7 +178,6 @@ def child_tb_visit_screening_on_post_save(sender, instance, raw, created, **kwar
 @receiver(post_save, weak=False, sender=TbPresenceHouseholdMembersAdol,
           dispatch_uid='adol_tb_presence_on_post_save')
 def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.tb_referral == YES:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
@@ -185,7 +187,6 @@ def child_tb_presence_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=HivTestingAdol,
           dispatch_uid='hiv_testing_on_post_save')
 def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.last_result in [NEG, IND,
                                 UNKNOWN] or instance.referred_for_treatment == NO:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
@@ -196,7 +197,6 @@ def child_hiv_testing_on_post_save(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=TbLabResultsAdol,
           dispatch_uid='child_tb_lab_results_on_post_save')
 def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
-
     if instance.quantiferon_result == NEG:
         trigger_action_item(TBAdolOffStudy, TB_ADOL_STUDY_ACTION,
                             instance.child_visit.subject_identifier,
@@ -212,10 +212,11 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
     missed_birth_visit_cls = django_apps.get_model(
         'flourish_prn.missedbirthvisit')
 
-    if getattr(instance, 'reason') == MISSED_VISIT and getattr(instance, 'visit_code') == '2000D' :
-                trigger_action_item(missed_birth_visit_cls, MISSED_BIRTH_VISIT_ACTION,
-                                    instance.subject_identifier,
-                                    repeat=True)
+    if getattr(instance, 'reason') == MISSED_VISIT and getattr(instance,
+                                                               'visit_code') == '2000D':
+        trigger_action_item(missed_birth_visit_cls, MISSED_BIRTH_VISIT_ACTION,
+                            instance.subject_identifier,
+                            repeat=True)
 
     """
     - Put subject on quarterly schedule at enrollment visit.
@@ -358,6 +359,42 @@ def child_prev_hospitalisation_on_post_save(sender, instance, raw, created, **kw
             comment=('''Child was hospitalised within the past year,
                         please complete INFORM CRF on REDCAP.''')
         )
+
+
+@receiver(post_save, weak=False, sender=ChildClinicalMeasurements,
+          dispatch_uid='child_clinical_measurements_on_post_save')
+def child_clinical_measurements_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw:
+        caregiver_child_consent_cls = django_apps.get_model(
+            'flourish_caregiver.caregiverchildconsent')
+        matrix_pool_cls = django_apps.get_model('pre_flourish.matrixpool')
+
+        caregiver_child_consent_obj = caregiver_child_consent_cls.objects.filter(
+            subject_identifier=instance.child_visit.subject_identifier
+        ).latest('version')
+
+        match_helper = MatchHelper()
+        bmi = instance.child_weight_kg / ((instance.child_height / 100) ** 2)
+        bmi_group = match_helper.bmi_group(bmi)
+        _age = match_helper.calculate_age(caregiver_child_consent_obj.child_dob)
+        age_range = match_helper.age_range(_age)
+        gender = 'male' if caregiver_child_consent_obj.gender == MALE else 'female'
+
+        if bmi_group and age_range:
+            heu_matrix_group_count = matrix_pool_cls.objects.filter(
+                pool='heu', bmi_group=bmi_group, age_group=str(age_range),
+                gender_group=gender
+            ).count()
+            huu_matrix_group = matrix_pool_cls.objects.filter(
+                pool='huu', bmi_group=bmi_group, age_group=str(age_range),
+                gender_group=gender
+            )
+            if heu_matrix_group_count == 0 and huu_matrix_group.count() > 0:
+                match_helper.create_new_matrix_pool(
+                    pool='heu', bmi_group=bmi_group, age_group=str(age_range),
+                    gender_group=gender,
+                    subject_identifier=instance.child_visit.subject_identifier)
+                match_helper.send_email_to_pre_flourish_users(huu_matrix_group)
 
 
 def put_cohort_onschedule(cohort, instance, base_appt_datetime=None):
