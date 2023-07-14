@@ -1,6 +1,3 @@
-from flourish_child.models.child_phq_referral import ChildPhqReferral
-from flourish_child.models.child_phq_referral_fu import ChildPhqReferralFU
-
 from dateutil.relativedelta import relativedelta
 from edc_base.utils import get_utcnow
 from edc_constants.constants import ALIVE, MALE, NO, NOT_APPLICABLE, ON_STUDY, \
@@ -14,13 +11,9 @@ from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
 from flourish_child.models.birth_data import BirthData
 from model_mommy.recipe import Recipe, seq
 
-from flourish_caregiver.models import CaregiverChildConsent, \
-    CaregiverPreviouslyEnrolled, \
-    ScreeningPregWomen, ScreeningPriorBhpParticipants, SubjectConsent, TbAdolConsent
-from flourish_child.models.birth_data import BirthData
 from flourish_child.models.child_phq_referral import ChildPhqReferral
 from flourish_child.models.child_phq_referral_fu import ChildPhqReferralFU
-from flourish_prn.models import TbReferalAdol
+from flourish_child.models.adol_tb_referral import TbReferalAdol
 from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 from .models import ChildAssent, ChildBirth, ChildClinicalMeasurements, ChildDataset, \
     ChildDummySubjectConsent, ChildFoodSecurityQuestionnaire, ChildVisit, HivTestingAdol, \
@@ -29,7 +22,6 @@ from .models import ChildAssent, ChildBirth, ChildClinicalMeasurements, ChildDat
     TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic, InfantFeeding, InfantHIVTesting
-from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 
 fake = Faker()
 
