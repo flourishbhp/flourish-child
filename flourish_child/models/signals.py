@@ -1,3 +1,4 @@
+import pytz
 import os
 from datetime import datetime
 
@@ -16,14 +17,15 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
-from edc_constants.constants import OPEN, NEW, POS, NO, YES, NEG, IND, UNKNOWN
+from edc_constants.constants import OPEN, NEW, NO, YES, NEG, IND, UNKNOWN
 from edc_appointment.constants import COMPLETE_APPT
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from flourish_child.models.child_birth import ChildBirth
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, CHILDOFF_STUDY_ACTION
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION,MISSED_BIRTH_VISIT_ACTION
 from flourish_prn.models.child_death_report import ChildDeathReport
 
+from flourish_child.models.adol_tb_referral import TbReferalAdol
 from flourish_child.models.tb_adol_assent import TbAdolAssent
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
@@ -31,7 +33,7 @@ from flourish_child.models.adol_tb_presence_household_member import \
     TbPresenceHouseholdMembersAdol
 from flourish_child.models.child_appointment import Appointment as ChildAppointment
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
-from flourish_prn.models import TBAdolOffStudy, ChildOffStudy
+from flourish_prn.models import TBAdolOffStudy
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
@@ -39,6 +41,7 @@ from .child_visit import ChildVisit
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
 from ..helper_classes import ChildFollowUpBookingHelper
+from edc_visit_tracking.constants import MISSED_VISIT
 
 
 class CaregiverConsentError(Exception):
@@ -203,6 +206,17 @@ def child_tb_lab_results_on_post_save(sender, instance, raw, created, **kwargs):
           dispatch_uid='child_visit_on_post_save')
 def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
     """
+    Check is the child visit with visit_code 200OD is missed
+    """
+    missed_birth_visit_cls = django_apps.get_model(
+        'flourish_prn.missedbirthvisit')
+
+    if getattr(instance, 'reason') == MISSED_VISIT and getattr(instance, 'visit_code') == '2000D' :
+                trigger_action_item(missed_birth_visit_cls, MISSED_BIRTH_VISIT_ACTION,
+                                    instance.subject_identifier,
+                                    repeat=True)
+
+    """
     - Put subject on quarterly schedule at enrollment visit.
     """
     if getattr(instance, 'survival_status') == 'dead':
@@ -241,6 +255,29 @@ def tb_adol_assent_on_post_save(sender, instance, raw, created, **kwargs):
                         subject_identifier=instance.subject_identifier,
                         base_appt_datetime=instance.consent_datetime.replace(
                             microsecond=0))
+
+
+@receiver(post_save, weak=False, sender=TbReferalAdol,
+          dispatch_uid='tb_referral_adol_on_post_save')
+def tb_referral_adol_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw:
+        onschedule_model = 'flourish_child.onscheduletbadolfollowupschedule'
+        schedule_name = 'tb_adol_followup_schedule'
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model=onschedule_model, name=schedule_name)
+        child_visit = getattr(instance, 'child_visit', None)
+        subject_identifier = getattr(child_visit, 'subject_identifier', None)
+        referral_dt = getattr(instance, 'referral_date', None)
+        tz = pytz.timezone('Africa/Gaborone')
+        onschedule_datetime = datetime.combine(referral_dt, get_utcnow().time(), tz)
+
+        if not schedule.is_onschedule(subject_identifier=subject_identifier,
+                                      report_datetime=onschedule_datetime):
+            schedule.put_on_schedule(
+                subject_identifier=subject_identifier,
+                onschedule_datetime=onschedule_datetime.replace(microsecond=0),
+                schedule_name=schedule_name,
+                base_appt_datetime=onschedule_datetime.replace(microsecond=0))
 
 
 @receiver(post_save, weak=False, sender=ChildBirth,

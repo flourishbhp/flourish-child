@@ -9,7 +9,7 @@ from ..models import BirthData
 class BirthDataForm(ChildModelFormMixin):
     form_validator_cls = BirthDataFormValidator
 
-    gestational_age = forms.IntegerField(
+    gestational_age = forms.DecimalField(
         label="What is the infant's determined gestational age: ",
         widget=forms.TextInput(attrs={'readonly': 'readonly'}),
         required=False)
@@ -40,8 +40,7 @@ class BirthDataForm(ChildModelFormMixin):
     def get_latest_ultrasound(self):
         try:
             return self.ultrasound_model_cls.objects.filter(
-                maternal_visit__appointment__subject_identifier=
-                self.caregiver_subject_identifier).order_by(
+                maternal_visit__appointment__subject_identifier=self.caregiver_subject_identifier).order_by(
                 '-report_datetime').first()
         except self.ultrasound_model_cls.DoesNotExist:
             return None
