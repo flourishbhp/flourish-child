@@ -1,3 +1,6 @@
+import pytz
+from datetime import datetime
+
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.db.models.signals import post_save
@@ -10,8 +13,8 @@ from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import MISSED_VISIT
 from flourish_child.models.child_birth import ChildBirth
 from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, MISSED_BIRTH_VISIT_ACTION
-
 from flourish_prn.models.child_death_report import ChildDeathReport
+from flourish_child.models.adol_tb_referral import TbReferalAdol
 from flourish_child.models.tb_adol_assent import TbAdolAssent
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
@@ -29,6 +32,7 @@ from ..models import ChildPreHospitalizationInline
 from ..helper_classes import ChildFollowUpBookingHelper, ChildOnScheduleHelper
 from ..helper_classes.utils import (child_utils, notification, trigger_action_item,
                                     stamp_image)
+
 
 
 class CaregiverConsentError(Exception):
@@ -253,6 +257,29 @@ def tb_adol_assent_on_post_save(sender, instance, raw, created, **kwargs):
                             microsecond=0),
             cohort='tb_adol')
         helper_cls.put_on_schedule(instance, )
+
+
+@receiver(post_save, weak=False, sender=TbReferalAdol,
+          dispatch_uid='tb_referral_adol_on_post_save')
+def tb_referral_adol_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw:
+        onschedule_model = 'flourish_child.onscheduletbadolfollowupschedule'
+        schedule_name = 'tb_adol_followup_schedule'
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model=onschedule_model, name=schedule_name)
+        child_visit = getattr(instance, 'child_visit', None)
+        subject_identifier = getattr(child_visit, 'subject_identifier', None)
+        referral_dt = getattr(instance, 'referral_date', None)
+        tz = pytz.timezone('Africa/Gaborone')
+        onschedule_datetime = datetime.combine(referral_dt, get_utcnow().time(), tz)
+
+        if not schedule.is_onschedule(subject_identifier=subject_identifier,
+                                      report_datetime=onschedule_datetime):
+            schedule.put_on_schedule(
+                subject_identifier=subject_identifier,
+                onschedule_datetime=onschedule_datetime.replace(microsecond=0),
+                schedule_name=schedule_name,
+                base_appt_datetime=onschedule_datetime.replace(microsecond=0))
 
 
 @receiver(post_save, weak=False, sender=ChildBirth,
