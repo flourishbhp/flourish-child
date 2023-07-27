@@ -114,7 +114,7 @@ class ExportActionMixin:
                 screening_identifier = self.screening_identifier(
                     subject_identifier=caregiver_sid)
                 previous_study = self.previous_bhp_study(
-                    screening_identifier=screening_identifier)
+                    subject_identifier=subject_identifier)
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(
@@ -248,7 +248,7 @@ class ExportActionMixin:
             try:
                 caregiver_child_consent_obj = caregiver_child_consent_cls.objects.filter(
                     subject_identifier=subject_identifier).latest('consent_datetime')
-            except caregiver_child_consent_cls .DoesNotExist:
+            except caregiver_child_consent_cls.DoesNotExist:
                 return None
             else:
                 return caregiver_child_consent_obj.get_protocol
