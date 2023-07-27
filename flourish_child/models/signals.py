@@ -340,8 +340,28 @@ def clinician_notes_image_on_post_save(sender, instance, raw, created, **kwargs)
         stamp_image(instance)
 
 
+@receiver(post_save, weak=False, sender=AcademicPerformance,
+          dispatch_uid='academic_performance_on_post_save')
+def academic_performance_on_post_save(sender, instance, raw, created, **kwargs):
+    if not raw and created:
+        overall_performance = getattr(instance, 'overall_performance', None)
+        if overall_performance and overall_performance == 'pending':
+            child_visit = instance.child_visit
+            subject = f'Pending academic results at visit {child_visit.visit_code}'
+            try:
+                DataActionItem.objects.get(
+                    subject_identifier=child_visit.subject_identifier,
+                    subject=subject)
+            except DataActionItem.DoesNotExist:
+                notification(
+                    subject_identifier=child_visit.subject_identifier,
+                    user_created=instance.user_created,
+                    subject=subject,
+                    comment=f'{subject}. Please capture results once available.')
+
+
 def notification(subject_identifier, subject, user_created,
-                 group_names=('assignable users',)):
+                 group_names=('assignable users',), comment=''):
     if user_created:
         try:
             user = User.objects.get(username=user_created)
@@ -362,7 +382,8 @@ def notification(subject_identifier, subject, user_created,
                     status=OPEN,
                     action_priority='high',
                     assigned=user.username,
-                    subject=subject)
+                    subject=subject,
+                    comment=comment)
 
 
 @receiver(post_save, weak=False, sender=ChildPreHospitalizationInline,
