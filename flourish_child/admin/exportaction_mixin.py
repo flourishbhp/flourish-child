@@ -93,7 +93,7 @@ class ExportActionMixin:
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(
-                    study_maternal_identifier, subject_identifier, caregiver_sid)
+                    study_maternal_identifier, caregiver_sid)
 
                 tb_age = self.tb_age_at_enrollment(subject_identifier)
 
@@ -118,7 +118,7 @@ class ExportActionMixin:
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(
-                    study_maternal_identifier, subject_identifier, caregiver_sid)
+                    study_maternal_identifier, caregiver_sid)
 
                 tb_age = self.tb_age_at_enrollment(subject_identifier)
 
@@ -266,7 +266,7 @@ class ExportActionMixin:
                 return dataset_obj.study_maternal_identifier
 
     def child_hiv_exposure(self, study_maternal_identifier=None,
-                           subject_identifier=None, caregiver_subject_identifier=None):
+                           caregiver_subject_identifier=None):
 
         child_dataset_cls = django_apps.get_model(
             'flourish_child.childdataset')
