@@ -96,7 +96,7 @@ child_utils = ChildUtils()
 
 
 def notification(subject_identifier, subject, user_created,
-                 group_names=('assignable users',)):
+                 group_names=('assignable users',), comment=''):
     if user_created:
         try:
             user = User.objects.get(username=user_created)
@@ -117,7 +117,8 @@ def notification(subject_identifier, subject, user_created,
                     status=OPEN,
                     action_priority='high',
                     assigned=user.username,
-                    subject=subject)
+                    subject=subject,
+                    comment=comment)
 
 
 def trigger_action_item(model_cls, action_name, subject_identifier, repeat=False):
