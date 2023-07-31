@@ -81,6 +81,9 @@ class AcademicPerformanceForm(ChildModelFormMixin):
 
     def clean(self):
         previous_instance = getattr(self, 'previous_instance', None)
+
+        self.validate_prev_results_pending(previous_instance)
+
         has_changed = self.compare_instance_fields(previous_instance)
 
         academic_perf_changed = self.cleaned_data.get('academic_perf_changed')
@@ -115,6 +118,16 @@ class AcademicPerformanceForm(ChildModelFormMixin):
 
         cleaned_data = super().clean()
         return cleaned_data
+
+    def validate_prev_results_pending(self, prev_instance):
+        overall_performance = getattr(prev_instance, 'overall_performance', None)
+        child_visit = getattr(prev_instance, 'child_visit', None)
+        if overall_performance == 'pending':
+            message = {'__all__':
+                       'Overall performance results is still pending from the '
+                       f'last visit {child_visit.visit_code}. Cannot capture'
+                       ' academic performance until results captured at previous visit.'}
+            raise forms.ValidationError(message)
 
     def compare_instance_fields(self, prev_instance=None):
         exclude_fields = [
