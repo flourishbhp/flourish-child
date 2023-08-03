@@ -30,8 +30,7 @@ class ChildCBCLSection3(ChildCrfModelMixin):
     eye_probl_desc = models.TextField(
          verbose_name='Problems with eyes (not if corrected by glasses (describe)',
          blank=True,
-         null=True,
-         max_length=500)
+         null=True,)
 
     skin_prob = models.CharField(
         verbose_name='Rashes or other skin problems',
@@ -66,8 +65,7 @@ class ChildCBCLSection3(ChildCrfModelMixin):
     picking_desc = models.TextField(
         verbose_name='Picks nose, skin, or other parts of body (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     sexparts_public_play = models.CharField(
         verbose_name='Plays with own sex parts in public',
@@ -112,8 +110,7 @@ class ChildCBCLSection3(ChildCrfModelMixin):
     compulsions_desc = models.TextField(
         verbose_name='Repeats certain acts over and over; compulsions (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     home_runaway = models.CharField(
         verbose_name='Runs away from home',
@@ -138,8 +135,7 @@ class ChildCBCLSection3(ChildCrfModelMixin):
     sh_desc = models.TextField(
         verbose_name='Sees things that aren\'t there (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     self_conscious = models.CharField(
         verbose_name='Self-conscious or easily embarrassed',
@@ -159,8 +155,7 @@ class ChildCBCLSection3(ChildCrfModelMixin):
     sexual_prob_desc = models.TextField(
         verbose_name='Sexual problems (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     showing_off = models.CharField(
         verbose_name='Showing off or clowning',
@@ -185,8 +180,7 @@ class ChildCBCLSection3(ChildCrfModelMixin):
     sleeps_more_desc = models.TextField(
         verbose_name='Sleeps more than most kids during day and/or night (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     inattentive = models.CharField(
         verbose_name='Inattentive or easily distracted',
@@ -201,8 +195,7 @@ class ChildCBCLSection3(ChildCrfModelMixin):
     speech_prob_desc = models.TextField(
         verbose_name='Speech problem (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
