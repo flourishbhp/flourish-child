@@ -18,7 +18,6 @@ class ChildCBCLSection1(ChildCrfModelMixin):
 
     alc_intake_desc = models.TextField(
         verbose_name='Drinks alcohol without parents\' approval (describe)',
-        max_length=500,
         blank=True, null=True)
 
     argues_alot = models.CharField(
@@ -58,7 +57,6 @@ class ChildCBCLSection1(ChildCrfModelMixin):
 
     obssessive_desc = models.TextField(
         verbose_name='Can\'t get his/her mind off certain thoughts; obsessions (describe)',
-        max_length=500,
         blank=True, null=True)
 
     hyperactive = models.CharField(
@@ -165,7 +163,6 @@ class ChildCBCLSection1(ChildCrfModelMixin):
     fearful_desc = models.TextField(
         verbose_name=('Fears certain animals, situations, or places, other than '
                       'school (describe)'),
-        max_length=10,
         blank=True,
         null=True)
 
