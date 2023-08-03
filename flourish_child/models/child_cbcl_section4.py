@@ -1,11 +1,11 @@
 from django.db import models
 
 from .child_crf_model_mixin import ChildCrfModelMixin
+from .model_mixins.test_questions_mixin import TestQuestionMixin
 from ..choices import CBCL_SCALE
 
 
-class ChildCBCLSection4(ChildCrfModelMixin):
-
+class ChildCBCLSection4(ChildCrfModelMixin, TestQuestionMixin):
     stares_blankly = models.CharField(
         verbose_name='Stares blankly',
         choices=CBCL_SCALE,
@@ -157,13 +157,15 @@ class ChildCBCLSection4(ChildCrfModelMixin):
         max_length=10)
 
     drug_usage = models.CharField(
-        verbose_name='Uses drugs for nonmedical purposes (don\'t include alcohol or tobacco)',
+        verbose_name='Uses drugs for nonmedical purposes (don\'t include alcohol or '
+                     'tobacco)',
         choices=CBCL_SCALE,
         max_length=10)
 
     drug_usage_desc = models.TextField(
-        verbose_name=('Uses drugs for nonmedical purposes (don\'t include alcohol or tobacco)'
-                      ' (describe)'),
+        verbose_name=(
+            'Uses drugs for nonmedical purposes (don\'t include alcohol or tobacco)'
+            ' (describe)'),
         blank=True,
         null=True,)
 

@@ -2,14 +2,15 @@ from django.contrib import admin
 from edc_model_admin import audit_fieldset_tuple
 
 from ..admin_site import flourish_child_admin
-from ..forms import ChildCBCLSection1Form, ChildCBCLSection2Form, ChildCBCLSection3Form, ChildCBCLSection4Form
-from ..models import ChildCBCLSection1, ChildCBCLSection2, ChildCBCLSection3, ChildCBCLSection4
+from ..forms import ChildCBCLSection1Form, ChildCBCLSection2Form, ChildCBCLSection3Form, \
+    ChildCBCLSection4Form
+from ..models import ChildCBCLSection1, ChildCBCLSection2, ChildCBCLSection3, \
+    ChildCBCLSection4
 from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 @admin.register(ChildCBCLSection1, site=flourish_child_admin)
 class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = ChildCBCLSection1Form
 
     fieldsets = (
@@ -50,7 +51,7 @@ class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'fearful',
                 'fearful_desc',
                 'fears_school',
-                ]}, ),
+            ]},),
         audit_fieldset_tuple)
 
     radio_fields = {'acts_young': admin.VERTICAL,
@@ -82,12 +83,11 @@ class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'easily_jealous': admin.VERTICAL,
                     'breaks_rules': admin.VERTICAL,
                     'fearful': admin.VERTICAL,
-                    'fears_school': admin.VERTICAL, }
+                    'fears_school': admin.VERTICAL,}
 
 
 @admin.register(ChildCBCLSection2, site=flourish_child_admin)
 class ChildCBCLSection2Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = ChildCBCLSection2Form
 
     fieldsets = (
@@ -121,7 +121,7 @@ class ChildCBCLSection2Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'feels_guity',
                 'overeating',
                 'overtired_noreason',
-                'overweight', ]}, ),
+                'overweight', ]},),
         audit_fieldset_tuple)
 
     radio_fields = {'fear_harmful_thoughts': admin.VERTICAL,
@@ -153,7 +153,6 @@ class ChildCBCLSection2Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
 @admin.register(ChildCBCLSection3, site=flourish_child_admin)
 class ChildCBCLSection3Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = ChildCBCLSection3Form
 
     fieldsets = (
@@ -198,7 +197,7 @@ class ChildCBCLSection3Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'sleeps_more_desc',
                 'inattentive',
                 'speech_prob',
-                'speech_prob_desc', ]}, ),
+                'speech_prob_desc', ]},),
         audit_fieldset_tuple)
 
     radio_fields = {'body_aches': admin.VERTICAL,
@@ -235,7 +234,6 @@ class ChildCBCLSection3Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
 @admin.register(ChildCBCLSection4, site=flourish_child_admin)
 class ChildCBCLSection4Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = ChildCBCLSection4Form
     fieldsets = (
         (None, {
@@ -281,7 +279,13 @@ class ChildCBCLSection4Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'gender_dissonant',
                 'withdrawn',
                 'worries',
-                'other_problems', ]}, ),
+                'other_problems',
+                'caregiver_interest',
+                'caregiver_understanding',
+                'valid',
+                'invalid_reason',
+                'impact_on_responses',
+                'overall_comments',]},),
         audit_fieldset_tuple)
 
     radio_fields = {'stares_blankly': admin.VERTICAL,
@@ -316,4 +320,9 @@ class ChildCBCLSection4Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'whining': admin.VERTICAL,
                     'gender_dissonant': admin.VERTICAL,
                     'withdrawn': admin.VERTICAL,
-                    'worries': admin.VERTICAL, }
+                    'worries': admin.VERTICAL,
+                    'caregiver_interest': admin.VERTICAL,
+                    'caregiver_understanding': admin.VERTICAL,
+                    'valid': admin.VERTICAL,
+                    'impact_on_responses': admin.VERTICAL,
+                    'invalid_reason': admin.VERTICAL, }

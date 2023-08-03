@@ -29,6 +29,12 @@ class Brief2SelfReportedAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'forgetful',
                 'delayed_task_completion',
                 'unthinking'
+                'brief2_self_interest',
+                'brief2_self_understanding',
+                'brief2_self_valid',
+                'brief2_self_invalid_reason',
+                'brief2_self_impact_on_responses',
+                'brief2_self_overall_comments'
             ]}
          ), audit_fieldset_tuple)
 
@@ -43,4 +49,9 @@ class Brief2SelfReportedAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'overreact': admin.VERTICAL,
                     'forgetful': admin.VERTICAL,
                     'delayed_task_completion': admin.VERTICAL,
-                    'unthinking': admin.VERTICAL, }
+                    'unthinking': admin.VERTICAL,
+                    'brief2_self_interest': admin.VERTICAL,
+                    'brief2_self_understanding': admin.VERTICAL,
+                    'brief2_self_valid': admin.VERTICAL,
+                    'brief2_self_impact_on_responses': admin.VERTICAL,
+                    'brief2_self_invalid_reason': admin.VERTICAL, }
