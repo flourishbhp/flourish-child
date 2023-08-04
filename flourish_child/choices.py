@@ -582,9 +582,9 @@ POS_NEG_IND_INVALID = (
 )
 
 REASONS_PENNCNB_INCOMPLETE = (
-    ('software_error', 'Software/Application errors'),
+    ('software_errors', 'Software/Application errors'),
     ('restless_child', 'Child was restless'),
-    ('not_understand', 'Child could not understand the program'),
+    ('lack_of_understanding', 'Child could not understand the program'),
     ('no_private_space', 'No private space/room available for test'),
     ('handicapped', 'Child is handicapped (please provide additional information in Q9)'),
     (OTHER, 'Other, specify'),
