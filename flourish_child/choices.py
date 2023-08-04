@@ -585,7 +585,8 @@ REASONS_PENNCNB_INCOMPLETE = (
     ('software_errors', 'Software/Application errors'),
     ('restless_child', 'Child was restless'),
     ('lack_of_understanding', 'Child could not understand the program'),
-    ('no_private_space', 'No private space to complete'),
+    ('no_private_space', 'No private space/room available for test'),
+    ('handicapped', 'Child is handicapped (please provide additional information in Q9)'),
     (OTHER, 'Other, specify'),
 )
 
@@ -1114,7 +1115,6 @@ YES_NO_NOT_ELIGIBLE = (
     (NO, NO),
     ('not_eligible', 'Not eligible'),)
 
-
 CLINIC_NON_VISIT_REASONS = (
     ('out_of_study_area', 'Temporarily out of study area'),
     ('no_fares', 'Participant does not have transport fares'),
@@ -1146,4 +1146,32 @@ PREFERRED_CLINIC = (
     ('flourish', 'FLOURISH Clinic'),
     ('no_testing', 'I do not wish to have my infant tested at this time'),
     (OTHER, 'Other'),
+)
+
+CBCL_INTEREST = (
+    ('interested', 'Interested and/or cooperative'),
+    ('disinterested', 'Disinterested, disliked process'),
+    ('unknown', 'Unknown'),
+)
+
+CBCL_UNDERSTANDING = (
+    ('understood', 'Understood easily'),
+    ('mild_difficulty', 'Had mild difficulty understanding'),
+    ('significant_difficulty', 'Had significant difficulty understanding'),
+    ('unknown', 'Unknown'),
+)
+
+CBCL_INVALID_REASON = (
+    ('inadequate_info', 'Does not have adequate information on the child’s development'),
+    ('did_not_understand', 'Did not understand the questions'),
+    ('uncomfortable_sharing', 'Did not feel comfortable sharing information'),
+    ('unknown', 'Unknown'),
+    ('other', 'Other')
+)
+
+CBCL_IMPACT = (
+    ('no_impact', 'No Impact'),
+    ('sensory_handicap', 'Child has a sensory handicap'),
+    ('motor_handicap', 'Child has a motor handicap'),
+    ('other', 'Other')
 )
