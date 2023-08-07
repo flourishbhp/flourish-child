@@ -1,11 +1,11 @@
 from django.db import models
 
 from .child_crf_model_mixin import ChildCrfModelMixin
+from .model_mixins.test_questions_mixin import TestQuestionMixin
 from ..choices import CBCL_SCALE
 
 
-class ChildCBCLSection4(ChildCrfModelMixin):
-
+class ChildCBCLSection4(ChildCrfModelMixin, TestQuestionMixin):
     stares_blankly = models.CharField(
         verbose_name='Stares blankly',
         choices=CBCL_SCALE,
@@ -29,8 +29,7 @@ class ChildCBCLSection4(ChildCrfModelMixin):
     hoarding_desc = models.TextField(
         verbose_name='Stores up too many things he/she doesn\'t need (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     strange_behavior = models.CharField(
         verbose_name='Strange behavior',
@@ -40,8 +39,7 @@ class ChildCBCLSection4(ChildCrfModelMixin):
     behavior_desc = models.TextField(
         verbose_name='Strange behavior (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     strange_ideas = models.CharField(
         verbose_name='Strange ideas',
@@ -51,8 +49,7 @@ class ChildCBCLSection4(ChildCrfModelMixin):
     ideas_desc = models.TextField(
         verbose_name='Strange ideas (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     irritable = models.CharField(
         verbose_name='Stubborn, sullen, or irritable',
@@ -92,8 +89,7 @@ class ChildCBCLSection4(ChildCrfModelMixin):
     sleepwalk_desc = models.TextField(
         verbose_name='Talks or walks in sleep (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     talks_alot = models.CharField(
         verbose_name='Talks too much',
@@ -138,8 +134,7 @@ class ChildCBCLSection4(ChildCrfModelMixin):
     sleeping_desc = models.TextField(
         verbose_name='Trouble sleeping (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     skips_school = models.CharField(
         verbose_name='Truancy, skips school',
@@ -162,16 +157,17 @@ class ChildCBCLSection4(ChildCrfModelMixin):
         max_length=10)
 
     drug_usage = models.CharField(
-        verbose_name='Uses drugs for nonmedical purposes (don\'t include alcohol or tobacco)',
+        verbose_name='Uses drugs for nonmedical purposes (don\'t include alcohol or '
+                     'tobacco)',
         choices=CBCL_SCALE,
         max_length=10)
 
     drug_usage_desc = models.TextField(
-        verbose_name=('Uses drugs for nonmedical purposes (don\'t include alcohol or tobacco)'
-                      ' (describe)'),
+        verbose_name=(
+            'Uses drugs for nonmedical purposes (don\'t include alcohol or tobacco)'
+            ' (describe)'),
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     vandalism = models.CharField(
         verbose_name='Vandalism',
@@ -209,8 +205,7 @@ class ChildCBCLSection4(ChildCrfModelMixin):
         max_length=10)
 
     other_problems = models.TextField(
-        verbose_name='Please write in any problems your child has that were not listed above',
-        max_length=200)
+        verbose_name='Please write in any problems your child has that were not listed above',)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'

@@ -4,6 +4,7 @@ from edc_base import get_utcnow
 from edc_constants.constants import MALE, YES, NOT_APPLICABLE, NEG, FEMALE
 from edc_facility.import_holidays import import_holidays
 from model_mommy import mommy
+from unittest.case import skip
 from flourish_calendar.models import ParticipantNote
 
 from ..helper_classes import ChildFollowUpBookingHelper
@@ -72,7 +73,7 @@ class TestFuBooking(TestCase):
             screening_identifier=maternal_dataset_obj.screening_identifier,
             )
 
-        subject_consent = mommy.make_recipe(
+        self.subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
             screening_identifier=maternal_dataset_obj.screening_identifier,
             breastfeed_intent=YES,
@@ -81,14 +82,14 @@ class TestFuBooking(TestCase):
 
         self.caregiver_child_consent = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
-            subject_consent=subject_consent,
+            subject_consent=self.subject_consent,
             gender=MALE,
             study_child_identifier=child_dataset.study_child_identifier,
             child_dob=maternal_dataset_obj.delivdt.date(), )
 
         mommy.make_recipe(
             'flourish_caregiver.caregiverpreviouslyenrolled',
-            subject_identifier=subject_consent.subject_identifier)
+            subject_identifier=self.subject_consent.subject_identifier)
 
     def test_fu_booking(self):
         self.assertEqual(ChildDummySubjectConsent.objects.filter(
@@ -284,3 +285,36 @@ class TestFuBooking(TestCase):
 
         self.assertEqual(ParticipantNote.objects.filter(
             subject_identifier=child_assent.subject_identifier).count(), 0)
+
+
+    def test_aging_out_scheduling(self):
+        """ Assert child enrolled 5months prior aging out of their cohort
+            is scheduled for follow-up before they age up.
+        """
+        child_dataset_options = {
+            'infant_hiv_exposed': 'Exposed',
+            'infant_enrolldate': get_utcnow().date(),
+            'study_maternal_identifier': '12345',
+            'study_child_identifier': '1235',
+            'infant_sex': MALE
+        }
+
+        child_dataset = mommy.make_recipe(
+            'flourish_child.childdataset',
+            dob=(get_utcnow() - relativedelta(years=4, months=5)).date(),
+            **child_dataset_options)
+
+        caregiver_child_consent = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=self.subject_consent,
+            gender=MALE,
+            study_child_identifier=child_dataset.study_child_identifier,
+            child_dob=child_dataset.dob, )
+
+        self.assertEqual(OnScheduleChildCohortAEnrollment.objects.filter(
+            subject_identifier=caregiver_child_consent.subject_identifier).count(), 1)
+
+        booked_date = (get_utcnow() + relativedelta(months=7)).date()
+        self.assertEqual(ParticipantNote.objects.filter(
+            subject_identifier=caregiver_child_consent.subject_identifier,
+            date=booked_date).count(), 1)
