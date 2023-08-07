@@ -59,8 +59,7 @@ class ChildCBCLSection2(ChildCrfModelMixin):
     ah_desc = models.TextField(
         verbose_name='Hears sounds or voices that aren\'t there (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     impulsive = models.CharField(
         verbose_name='Impulsive of acts without thinking',
@@ -95,8 +94,7 @@ class ChildCBCLSection2(ChildCrfModelMixin):
     nervous_desc = models.TextField(
         verbose_name='Nervous movements or twitching (describe)',
         blank=True,
-        null=True,
-        max_length=500)
+        null=True,)
 
     nightmares = models.CharField(
         verbose_name='Nightmares',
