@@ -462,8 +462,35 @@ def put_on_schedule(cohort, instance=None, subject_identifier=None,
         if 'enrol' in cohort and 'sec' not in cohort:
             # book participant for followup
             booking_helper = ChildFollowUpBookingHelper()
-            booking_dt = base_appt_datetime + relativedelta(years=1)
-            booking_helper.schedule_fu_booking(subject_identifier, booking_dt)
+            is_aging_out = aging_out(subject_identifier)
+            booking_dt = None
+            if is_aging_out:
+                age_in_months = round(is_aging_out * 12)
+                booking_dt = base_appt_datetime + relativedelta(months=age_in_months)
+                booking_helper.create_booking(subject_identifier, booking_dt)
+            else:
+                booking_dt = base_appt_datetime + relativedelta(years=1)
+                booking_helper.schedule_fu_booking(subject_identifier, booking_dt)
+
+
+def aging_out(subject_identifier):
+        """ Check if child is aging out before the year mark for follow-up
+            booking arrives.
+        """
+        child_consent_cls = django_apps.get_model(
+            'flourish_caregiver.caregiverchildconsent')
+        try:
+            latest_consent = child_consent_cls.objects.filter(
+                subject_identifier=subject_identifier).latest('consent_datetime')
+        except child_consent_cls.DoesNotExist:
+            return None
+        else:
+            child_age = age(latest_consent.child_dob, get_utcnow().date())
+            age_in_years = (child_age.years + child_age.months/12)
+            if age_in_years <= 5 and round(5 - age_in_years, 2) < 1:
+                return round(5 - age_in_years, 2)
+            elif age_in_years <= 10 and round(10 - age_in_years, 2) < 1:
+                return round(10 - age_in_years, 2)
 
 
 def trigger_action_item(model_cls, action_name, subject_identifier, repeat=False):
