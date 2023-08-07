@@ -9,7 +9,6 @@ from .model_admin_mixins import ChildCrfModelAdminMixin
 
 @admin.register(Brief2Parent, site=flourish_child_admin)
 class Brief2ParentAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = Brief2ParentForm
 
     fieldsets = (
@@ -28,7 +27,13 @@ class Brief2ParentAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'unaware_of_others',
                 'easily_triggered',
                 'trouble_moving_on',
-                'stuck_on_activty'
+                'stuck_on_activty',
+                'caregiver_interest',
+                'caregiver_understanding',
+                'valid',
+                'invalid_reason',
+                'impact_on_responses',
+                'overall_comments'
             ]}
          ), audit_fieldset_tuple)
 
@@ -43,4 +48,9 @@ class Brief2ParentAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'unaware_of_others': admin.VERTICAL,
                     'easily_triggered': admin.VERTICAL,
                     'trouble_moving_on': admin.VERTICAL,
-                    'stuck_on_activty': admin.VERTICAL, }
+                    'stuck_on_activty': admin.VERTICAL,
+                    'caregiver_interest': admin.VERTICAL,
+                    'caregiver_understanding': admin.VERTICAL,
+                    'valid': admin.VERTICAL,
+                    'impact_on_responses': admin.VERTICAL,
+                    'invalid_reason': admin.VERTICAL, }
