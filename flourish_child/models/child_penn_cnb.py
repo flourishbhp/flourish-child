@@ -59,7 +59,7 @@ class ChildPennCNB(ChildCrfModelMixin):
 
     claim_experience = models.CharField(
         verbose_name='Does the child claim to have experience using a computer?',
-        choices=YES_NO_NOT_ASKED,
+        choices=YES_NO,
         max_length=30,
         null=True,
         blank=True)
