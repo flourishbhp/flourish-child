@@ -1175,3 +1175,43 @@ CBCL_IMPACT = (
     ('motor_handicap', 'Child has a motor handicap'),
     ('other', 'Other')
 )
+
+DELIVERY_LOCATION = [
+    ('pmh', 'PMH'),
+    ('gwest', 'GWest'),
+    ('lesirane', 'Lesirane'),
+    ('bh3', 'BH3'),
+    ('mafitlha_kgosi', 'Mafitlha Kgosi'),
+    ('old_naledi', 'Old Naledi'),
+    ('drm_hospital', 'DRM Hospital'),
+    ('slh', 'SLH'),
+    ('blh', 'BLH'),
+    ('thamaga_hospital', 'Thamaga Hospital'),
+    ('athlone_hospital', 'Athlone Hospital'),
+    ('kanye_sda_hospital', 'Kanye SDA Hospital'),
+    ('other', 'Other')
+]
+
+DELIVERY_METHOD = [
+    ('vaginal', 'Vaginal'),
+    ('c_section', 'C-section')
+]
+
+GESTATIONAL_AGE_KNOWN = [
+    ('yes_weeks', 'Yes (in weeks)'),
+    ('yes_months', 'Yes (in months)'),
+    ('no', 'No')
+]
+
+BORN = [
+    ('early', 'Early/Pre-term'),
+    ('on_time', 'On-time'),
+    ('late', 'Late')
+]
+
+CHILD_TYPE = [
+    ('singleton', 'Singleton'),
+    ('twin', 'Twin'),
+    ('triplet', 'Triplet')
+]
+
