@@ -17,13 +17,18 @@ class ChildPennCNB(ChildCrfModelMixin):
         validators=[
             date_not_before_study_start,
             date_not_future],
-        default=get_utcnow)
+        blank=True,
+        null=True)
 
     start_time = models.TimeField(
-        verbose_name='Start time of PennCNB')
+        verbose_name='Start time of PennCNB',
+        blank=True,
+        null=True)
 
     stop_time = models.TimeField(
-        verbose_name='Stop time of PennCNB')
+        verbose_name='Stop time of PennCNB',
+        blank=True,
+        null=True)
 
     staff_assisting = models.ManyToManyField(
         StaffMember,
@@ -32,7 +37,7 @@ class ChildPennCNB(ChildCrfModelMixin):
     completed = models.CharField(
         verbose_name='Was the PennCNB successfully completed?',
         choices=YES_NO,
-        max_length=3)
+        max_length=3,)
 
     reason_incomplete = models.CharField(
         verbose_name='If no, please provide reasons',
@@ -54,8 +59,10 @@ class ChildPennCNB(ChildCrfModelMixin):
 
     claim_experience = models.CharField(
         verbose_name='Does the child claim to have experience using a computer?',
-        choices=YES_NO_NOT_ASKED,
-        max_length=30)
+        choices=YES_NO,
+        max_length=30,
+        null=True,
+        blank=True)
 
     comments = models.TextField(
         verbose_name=('Please provide any additional comments you would like to add '
