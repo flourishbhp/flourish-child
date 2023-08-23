@@ -1,4 +1,5 @@
 from django.db import models
+from edc_base.model_fields import OtherCharField
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins.test_questions_mixin import TestQuestionMixin

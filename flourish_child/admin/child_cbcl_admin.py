@@ -284,7 +284,9 @@ class ChildCBCLSection4Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'caregiver_understanding',
                 'valid',
                 'invalid_reason',
+                'other_invalid_reason',
                 'impact_on_responses',
+                'other_impact_on_responses',
                 'overall_comments',]},),
         audit_fieldset_tuple)
 

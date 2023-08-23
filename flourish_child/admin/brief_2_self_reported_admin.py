@@ -33,7 +33,9 @@ class Brief2SelfReportedAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'brief2_self_understanding',
                 'brief2_self_valid',
                 'brief2_self_invalid_reason',
+                'other_brief2_self_invalid_reason',
                 'brief2_self_impact_on_responses',
+                'other_brief2_self_impact_on_responses',
                 'brief2_self_overall_comments'
             ]}
          ), audit_fieldset_tuple)
