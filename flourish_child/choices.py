@@ -1162,7 +1162,6 @@ CBCL_UNDERSTANDING = (
 )
 
 CBCL_INVALID_REASON = (
-    ('inadequate_info', 'Does not have adequate information on the child’s development'),
     ('did_not_understand', 'Did not understand the questions'),
     ('uncomfortable_sharing', 'Did not feel comfortable sharing information'),
     ('unknown', 'Unknown'),

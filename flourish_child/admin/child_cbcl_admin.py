@@ -1,12 +1,14 @@
+import json
+
 from django.contrib import admin
 from edc_model_admin import audit_fieldset_tuple
 
+from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import ChildCBCLSection1Form, ChildCBCLSection2Form, ChildCBCLSection3Form, \
     ChildCBCLSection4Form
 from ..models import ChildCBCLSection1, ChildCBCLSection2, ChildCBCLSection3, \
     ChildCBCLSection4
-from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 @admin.register(ChildCBCLSection1, site=flourish_child_admin)
@@ -83,7 +85,7 @@ class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'easily_jealous': admin.VERTICAL,
                     'breaks_rules': admin.VERTICAL,
                     'fearful': admin.VERTICAL,
-                    'fears_school': admin.VERTICAL,}
+                    'fears_school': admin.VERTICAL, }
 
 
 @admin.register(ChildCBCLSection2, site=flourish_child_admin)
@@ -284,8 +286,10 @@ class ChildCBCLSection4Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'caregiver_understanding',
                 'valid',
                 'invalid_reason',
+                'other_invalid_reason',
                 'impact_on_responses',
-                'overall_comments',]},),
+                'other_impact_on_responses',
+                'overall_comments', ]},),
         audit_fieldset_tuple)
 
     radio_fields = {'stares_blankly': admin.VERTICAL,
@@ -326,3 +330,14 @@ class ChildCBCLSection4Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'valid': admin.VERTICAL,
                     'impact_on_responses': admin.VERTICAL,
                     'invalid_reason': admin.VERTICAL, }
+
+    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['fields_to_check'] = json.dumps([
+            'caregiver_interest',
+            'caregiver_understanding',
+            'valid',
+            'invalid_reason',
+            'impact_on_responses',
+        ])
+        return super().changeform_view(request, object_id, form_url, extra_context)

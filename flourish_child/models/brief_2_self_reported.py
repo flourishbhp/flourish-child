@@ -1,4 +1,5 @@
 from django.db import models
+from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
 
 from .child_crf_model_mixin import ChildCrfModelMixin
@@ -104,6 +105,8 @@ class Brief2SelfReported(ChildCrfModelMixin):
         blank=True,
         null=True)
 
+    other_breif2_self_invalid_reason = OtherCharField()
+
     brief2_self_impact_on_responses = models.CharField(
         verbose_name='Did any of the following impact responses to the Brief-2 '
                      'questions:',
@@ -112,11 +115,14 @@ class Brief2SelfReported(ChildCrfModelMixin):
         blank=True,
         null=True)
 
+    other_brief2_self_impact_on_responses = OtherCharField()
+
     brief2_self_overall_comments = models.TextField(
         verbose_name='Overall comments for the Brief 2 Self-Report:',
         max_length=1000,
         blank=True,
         null=True)
+
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
