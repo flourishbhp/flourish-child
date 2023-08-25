@@ -14,6 +14,7 @@ from edc_search.model_mixins import SearchSlugManager
 
 from ..action_items import CHILDCONTINUEDCONSENT_STUDY_ACTION
 from ..choices import IDENTITY_TYPE
+from ..helper_classes.utils import child_utils
 from .eligibility import ContinuedConsentEligibility
 from .model_mixins import SearchSlugModelMixin
 
@@ -110,33 +111,33 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
 
     @property
     def consent_version_cls(self):
-        return django_apps.get_model('flourish_caregiver.flourishconsentversion')
+        return django_apps.get_model(
+            'flourish_caregiver.flourishconsentversion')
 
     @property
     def subject_consent_cls(self):
-        return django_apps.get_model('flourish_caregiver.subjectconsent')
+        return django_apps.get_model(
+            'flourish_caregiver.subjectconsent')
 
     @property
     def latest_consent_version(self):
-        subject_identifier = self.subject_identifier.split('-')
-        subject_identifier.pop()
-        caregiver_subject_identifier = '-'.join(subject_identifier)
+        caregiver_subject_identifier = child_utils.caregiver_subject_identifier(
+            subject_identifier=self.subject_identifier)
 
         version = None
         try:
-            consent = self.subject_consent_cls.objects.filter(
-                subject_identifier=caregiver_subject_identifier)
+            latest_consent = self.subject_consent_cls.objects.filter(
+                subject_identifier=caregiver_subject_identifier).latest('consent_datetime')
         except self.subject_consent_cls.ObjectDoesNotExist:
             return None
         else:
-            latest_consent = consent[0]
             try:
                 consent_version_obj = self.consent_version_cls.objects.get(
                     screening_identifier=latest_consent.screening_identifier)
             except self.consent_version_cls.DoesNotExist:
                 version = '1'
             else:
-                version = consent_version_obj.version
+                version = getattr(consent_version_obj, 'version', None)
             return version
 
     def save(self, *args, **kwargs):

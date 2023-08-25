@@ -32,7 +32,8 @@ class TbAdolAssentManager(SearchSlugManager, models.Manager):
 
 class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                    IdentityFieldsMixin, PersonalFieldsMixin, ReviewFieldsMixin,
-                   VulnerabilityFieldsMixin, CitizenFieldsMixin, SearchSlugModelMixin, VerificationFieldsMixin, BaseUuidModel):
+                   VulnerabilityFieldsMixin, CitizenFieldsMixin,
+                   SearchSlugModelMixin, VerificationFieldsMixin, BaseUuidModel):
 
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
@@ -162,7 +163,8 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
 
     @property
     def subject_consent_cls(self):
-        return django_apps.get_model('flourish_caregiver.subjectconsent')
+        return django_apps.get_model(
+            'flourish_caregiver.subjectconsent')
 
     @property
     def child_age(self):
@@ -181,8 +183,6 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
-        # if self.is_eligible and not self.subject_identifier:
-        #     self.subject_identifier = self.update_subject_identifier
         super().save(*args, **kwargs)
 
     class Meta:

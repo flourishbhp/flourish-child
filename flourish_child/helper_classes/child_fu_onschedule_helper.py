@@ -5,6 +5,7 @@ from django.db.models import Q
 from edc_appointment.constants import NEW_APPT
 from edc_base.utils import get_utcnow
 
+from .utils import child_utils
 from ..models import Appointment
 from ..models import ChildOffSchedule
 from ..models import OnScheduleChildCohortAFU, OnScheduleChildCohortBFU
@@ -39,8 +40,9 @@ class ChildFollowUpEnrolmentHelper(object):
         """ Get latest child appointment that was started/completed given the
          subject identifier """
 
-        appts = Appointment.objects.filter(~Q(appt_status=NEW_APPT) & ~Q(
-            schedule_name__icontains='sec'), subject_identifier=subject_identifier).exclude(
+        appts = Appointment.objects.filter(
+            ~Q(appt_status=NEW_APPT) & ~Q(schedule_name__icontains='sec'),
+            subject_identifier=subject_identifier).exclude(
                 schedule_name__icontains='tb')
 
         if appts:
@@ -50,7 +52,6 @@ class ChildFollowUpEnrolmentHelper(object):
     def child_off_current_schedule(self, latest_appointment):
 
         if latest_appointment:
-
             quart_appt = Appointment.objects.filter(
                 subject_identifier=latest_appointment.subject_identifier,
                 schedule_name__icontains='quart').latest('-appt_datetime')
@@ -116,8 +117,10 @@ class ChildFollowUpEnrolmentHelper(object):
 
                 cohort = latest_child_appt.schedule_name.split('_')[1]
                 schedule_number = latest_child_appt.schedule_name[-1]
-                caregiver_pid = self.subject_identifier[:-3]
+                caregiver_pid = child_utils.caregiver_subject_identifier(
+                    subject_identifier=self.subject_identifier)
                 schedule_enrol_helper = FollowUpEnrolmentHelper(
-                            subject_identifier=caregiver_pid, cohort=cohort,
+                            subject_identifier=caregiver_pid,
+                            cohort=cohort,
                             schedule_number=schedule_number)
                 schedule_enrol_helper.activate_fu_schedule()

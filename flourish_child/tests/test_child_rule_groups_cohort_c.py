@@ -23,7 +23,7 @@ class TestRuleGroups(TestCase):
             'version': '1'}
 
         maternal_dataset_options = {
-            'delivdt': get_utcnow() - relativedelta(years=10, months=2),
+            'delivdt': get_utcnow() - relativedelta(years=12, months=2),
             'mom_enrolldate': get_utcnow(),
             'mom_hivstatus': 'HIV-infected',
             'study_maternal_identifier': '12345',
@@ -38,12 +38,18 @@ class TestRuleGroups(TestCase):
 
         mommy.make_recipe(
             'flourish_child.childdataset',
-            dob=get_utcnow() - relativedelta(years=10, months=2),
+            dob=get_utcnow() - relativedelta(years=12, months=2),
             **child_dataset_options)
 
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
             **maternal_dataset_options)
+
+        mommy.make_recipe(
+            'flourish_caregiver.flourishconsentversion',
+            screening_identifier=maternal_dataset_obj.screening_identifier,
+            version='1',
+            child_version='1')
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
@@ -61,17 +67,17 @@ class TestRuleGroups(TestCase):
             study_child_identifier=child_dataset_options.get('study_child_identifier'),
             identity='126513789',
             confirm_identity='126513789',
-            child_dob=(get_utcnow() - relativedelta(years=10, months=2)).date(),
+            child_dob=(get_utcnow() - relativedelta(years=12, months=2)).date(),
             version='1')
 
         mommy.make_recipe(
-                'flourish_caregiver.caregiverpreviouslyenrolled',
-                subject_identifier=subject_consent.subject_identifier)
+            'flourish_caregiver.caregiverpreviouslyenrolled',
+            subject_identifier=subject_consent.subject_identifier)
 
         mommy.make_recipe(
             'flourish_child.childassent',
             subject_identifier=caregiver_child_consent_obj.subject_identifier,
-            dob=(get_utcnow() - relativedelta(years=10, months=2)).date(),
+            dob=(get_utcnow() - relativedelta(years=12, months=2)).date(),
             identity=caregiver_child_consent_obj.identity,
             confirm_identity=caregiver_child_consent_obj.identity,
             version=subject_consent.version)
@@ -168,6 +174,9 @@ class TestRuleGroups(TestCase):
         caregiver_child_consent_obj = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
+            child_dob=None,
+            first_name=None,
+            last_name=None,
             version='1')
 
         mommy.make_recipe(
@@ -218,6 +227,9 @@ class TestRuleGroups(TestCase):
         caregiver_child_consent_obj = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
+            child_dob=None,
+            first_name=None,
+            last_name=None,
             version='1')
 
         mommy.make_recipe(
