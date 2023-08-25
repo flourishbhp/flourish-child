@@ -1,10 +1,12 @@
+import json
+
 from django.contrib import admin
 from edc_model_admin import audit_fieldset_tuple
 
+from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import Brief2ParentForm
 from ..models import Brief2Parent
-from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 @admin.register(Brief2Parent, site=flourish_child_admin)
@@ -32,7 +34,9 @@ class Brief2ParentAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'caregiver_understanding',
                 'valid',
                 'invalid_reason',
+                'other_invalid_reason',
                 'impact_on_responses',
+                'other_impact_on_responses',
                 'overall_comments'
             ]}
          ), audit_fieldset_tuple)
@@ -54,3 +58,14 @@ class Brief2ParentAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'valid': admin.VERTICAL,
                     'impact_on_responses': admin.VERTICAL,
                     'invalid_reason': admin.VERTICAL, }
+
+    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        extra_context['fields_to_check'] = json.dumps([
+            'caregiver_interest',
+            'caregiver_understanding',
+            'valid',
+            'invalid_reason',
+            'impact_on_responses',
+        ])
+        return super().changeform_view(request, object_id, form_url, extra_context)
