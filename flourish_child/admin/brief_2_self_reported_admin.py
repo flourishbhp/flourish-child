@@ -28,7 +28,7 @@ class Brief2SelfReportedAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'overreact',
                 'forgetful',
                 'delayed_task_completion',
-                'unthinking'
+                'unthinking',
                 'brief2_self_interest',
                 'brief2_self_understanding',
                 'brief2_self_valid',

@@ -68,12 +68,14 @@ class ChildOnScheduleHelper(object):
     
             _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
                 onschedule_model=onschedule_model, name=schedule_name)
-    
-            schedule.put_on_schedule(
-                subject_identifier=subject_identifier,
-                onschedule_datetime=self.base_appt_datetime,
-                schedule_name=schedule_name,
-                base_appt_datetime=self.base_appt_datetime)
+
+            if not schedule.is_onschedule(subject_identifier=subject_identifier,
+                                          report_datetime=self.base_appt_datetime):    
+                schedule.put_on_schedule(
+                    subject_identifier=subject_identifier,
+                    onschedule_datetime=self.base_appt_datetime,
+                    schedule_name=schedule_name,
+                    base_appt_datetime=self.base_appt_datetime)
     
             if 'enrol' in cohort and 'sec' not in cohort:
                 # book participant for followup
@@ -124,11 +126,14 @@ class ChildOnScheduleHelper(object):
             latest_consent = child_consent_cls.objects.filter(
                 subject_identifier=subject_identifier).latest('consent_datetime')
         except child_consent_cls.DoesNotExist:
-            return None
+            return False
         else:
-            child_age = age(latest_consent.child_dob, get_utcnow().date())
-            age_in_years = (child_age.years + child_age.months/12)
-            if age_in_years <= 5 and round(5 - age_in_years, 2) < 1:
-                return round(5 - age_in_years, 2)
-            elif age_in_years <= 10 and round(10 - age_in_years, 2) < 1:
-                return round(10 - age_in_years, 2)
+            child_dob = latest_consent.child_dob
+            if child_dob:
+                child_age = age(child_dob, get_utcnow().date())
+                age_in_years = (child_age.years + child_age.months/12)
+                if age_in_years <= 5 and round(5 - age_in_years, 2) < 1:
+                    return round(5 - age_in_years, 2)
+                elif age_in_years <= 10 and round(10 - age_in_years, 2) < 1:
+                    return round(10 - age_in_years, 2)
+            return False
