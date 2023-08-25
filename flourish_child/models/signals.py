@@ -132,7 +132,6 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     """Put subject on cohort a schedule after consenting.
     """
     if not raw:
-
         caregiver_prev_enrolled_cls = django_apps.get_model(
             'flourish_caregiver.caregiverpreviouslyenrolled')
         try:
