@@ -1,6 +1,32 @@
 {% extends 'edc_model_admin/admin/change_form.html' %}
 {% load static %}
 
+{% block form_top %}
+    {{ block.super }}
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    <script>
+        $(document).on('submit', 'form', function(e) {
+        let fields = JSON.parse('{{ fields_to_check|safe }}');
+        let unfilledFields = [];
+
+        for(const field of fields) {
+            let fieldValue = $(`#id_${field} input[type='radio']:checked`).val();
+            console.log(fieldValue)
+            if(!fieldValue) {
+                unfilledFields.push(field);
+            }
+        }
+
+        if(unfilledFields.length > 0) {
+            let confirmMessage = 'The following fields are not filled: \n' + unfilledFields.join(', ') + '.\n Are you sure you want to submit this form?';
+            if (!confirm(confirmMessage)) {
+                e.preventDefault();
+            }
+        }
+    });
+    </script>
+{% endblock %}
+
 {% block extrahead %}
     {{ block.super }}
 {% endblock %}

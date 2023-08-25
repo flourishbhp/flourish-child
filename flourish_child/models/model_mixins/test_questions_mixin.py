@@ -1,4 +1,5 @@
 from django.db import models
+from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
 
 from flourish_child.choices import CBCL_IMPACT, CBCL_INTEREST, CBCL_INVALID_REASON, \
@@ -36,12 +37,16 @@ class TestQuestionMixin(models.Model):
         blank=True,
         null=True)
 
+    other_invalid_reason = OtherCharField()
+
     impact_on_responses = models.CharField(
         verbose_name='Did any of the following impact responses to the test questions:',
         choices=CBCL_IMPACT,
         max_length=50,
         blank=True,
         null=True)
+
+    other_impact_on_responses = OtherCharField()
 
     overall_comments = models.TextField(
         verbose_name='Overall comments for the test:',
