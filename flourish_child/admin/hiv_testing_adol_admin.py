@@ -1,11 +1,10 @@
 from django.contrib import admin
-from edc_model_admin import audit_fieldset_tuple
+from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import HIVTestingAdolForm
 from ..models import HivTestingAdol
-from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 
 
 @admin.register(HivTestingAdol, site=flourish_child_admin)

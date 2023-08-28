@@ -22,6 +22,7 @@ from edc_search.model_mixins import SearchSlugManager
 
 from ..action_items import CHILDASSENT_ACTION
 from ..choices import IDENTITY_TYPE
+from ..helper_classes.utils import child_utils
 from .eligibility import AssentEligibility
 from .model_mixins import SearchSlugModelMixin
 
@@ -136,30 +137,27 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
 
     @property
     def consent_version_cls(self):
-        return django_apps.get_model('flourish_caregiver.flourishconsentversion')
+        return django_apps.get_model(
+            'flourish_caregiver.flourishconsentversion')
 
     @property
     def subject_consent_cls(self):
-        return django_apps.get_model('flourish_caregiver.subjectconsent')
+        return django_apps.get_model(
+            'flourish_caregiver.subjectconsent')
 
     @property
     def latest_consent_version(self):
-
         version = None
 
-        consents = self.subject_consent_cls.objects.filter(
-                subject_identifier=self.subject_identifier[:-3])
-
-        if consents:
-            latest_consent = consents[0]
-            try:
-                consent_version_obj = self.consent_version_cls.objects.get(
-                    screening_identifier=latest_consent.screening_identifier)
-            except self.consent_version_cls.DoesNotExist:
-                version = '1'
-            else:
-                version = getattr(consent_version_obj, 'child_version', consent_version_obj.version)
-            return version
+        try:
+            consent_version_obj = self.consent_version_cls.objects.get(
+                screening_identifier=self.screening_identifier)
+        except self.consent_version_cls.DoesNotExist:
+            version = '1'
+        else:
+            version = getattr(
+                consent_version_obj, 'child_version', consent_version_obj.version)
+        return version
 
     @property
     def child_age(self):
@@ -171,13 +169,12 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             self.remain_in_study, self.hiv_testing, self.preg_testing, self.child_age)
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
-        
         if not self.version:
             self.version = self.latest_consent_version
 
         if self.is_eligible and not self.subject_identifier:
                 self.subject_identifier = self.update_subject_identifier
-                
+
         super().save(*args, **kwargs)
 
     @property
@@ -186,16 +183,15 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             'flourish_caregiver.subjectconsent')
         try:
             consent = subject_consent_cls.objects.get(
-                screening_identifier=self.screening_identifier)
+                screening_identifier=self.screening_identifier,
+                version=self.version)
         except subject_consent_cls.DoesNotExist:
             raise ValidationError(
-                'Please complete the adult participation consent first.')
+                'Please complete the adult participation consent '
+                f'v{self.version} first.')
         else:
-            child_dummy_consent_cls = django_apps.get_model(
-                'flourish_child.childdummysubjectconsent')
-
-            children_count = 1 + child_dummy_consent_cls.objects.filter(
-                subject_identifier__icontains=consent.subject_identifier).exclude(
+            children_count = 1 + child_utils.registered_subject_cls.objects.filter(
+                relative_identifier=consent.subject_identifier).exclude(
                     identity=self.identity).count()
             child_identifier_postfix = '-' + str(children_count * 10)
             return consent.subject_identifier + child_identifier_postfix

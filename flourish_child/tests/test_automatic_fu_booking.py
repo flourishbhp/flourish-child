@@ -10,6 +10,7 @@ from flourish_calendar.models import ParticipantNote
 from ..helper_classes import ChildFollowUpBookingHelper
 from ..models import (ChildDummySubjectConsent, OnScheduleChildCohortAEnrollment,
                       OnScheduleChildCohortCSec, OnScheduleChildCohortABirth)
+from unittest.case import skip
 
 
 @tag('booking')

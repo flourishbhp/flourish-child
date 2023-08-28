@@ -1,3 +1,4 @@
+from django.apps import apps as django_apps
 from django.db import models
 from django_crypto_fields.fields import IdentityField
 from edc_base.model_managers import HistoricalRecords
@@ -9,15 +10,35 @@ from edc_consent.model_mixins import ConsentModelMixin
 from edc_registration.model_mixins import (
     UpdatesOrCreatesRegistrationModelMixin)
 from edc_search.model_mixins import SearchSlugManager
+
 from .model_mixins import SearchSlugModelMixin
 from ..choices import COHORTS
 
 
 class ChildDummySubjectConsentManager(SearchSlugManager, models.Manager):
 
+    child_consent_cls = 'flourish_caregiver.caregiverchildconsent'
+
     def get_by_natural_key(self, subject_identifier, version):
         return self.get(
             subject_identifier=subject_identifier, version=version)
+
+    @property
+    def child_consent_model_cls(self):
+        return django_apps.get_model(self.child_consent_cls)
+
+    def parent_identifier(self, child_subject_identifier=None):
+        consent = self.child_consent_model_cls.objects.filter(
+                subject_identifier=child_subject_identifier).last()
+        if consent:
+            return consent.subject_consent.subject_identifier
+        return None
+
+    def update_relative_identifier(self):
+        for obj in self.all():
+            parent_identifier = self.parent_identifier(obj.subject_identifier)
+            setattr(obj, 'relative_identifier', parent_identifier)
+            obj.save_base(raw=True, update_fields=['relative_identifier'])
 
 
 class ChildDummySubjectConsent(
@@ -54,12 +75,18 @@ class ChildDummySubjectConsent(
         blank=True,
         null=True)
 
+    relative_identifier = models.CharField(
+        verbose_name='Identifier of immediate relation',
+        max_length=36,
+        null=True,
+        blank=True,
+        help_text='For example, mother\'s identifier, if available / appropriate')
+
     history = HistoricalRecords()
 
     objects = ChildDummySubjectConsentManager()
 
     def save(self, *args, **kwargs):
-        self.relative_identifier = self.subject_identifier[:-3]
         super().save(*args, **kwargs)
 
     def __str__(self):

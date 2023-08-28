@@ -3,10 +3,8 @@ from .adol_clinical_measurements import AdolescentClinicalMeasurements
 from .adol_covid19_screen import Covid19Adol
 from .adol_hiv_knowledge import HivKnowledge
 from .adol_hiv_testing import HivTestingAdol
-from .adol_hiv_testing import HivTestingAdol
 from .adol_tb_history import TbHistoryAdol
 from .adol_tb_knowledge import TbKnowledgeAdol
-from .adol_tb_lab_results import TbLabResultsAdol
 from .adol_tb_lab_results import TbLabResultsAdol
 from .adol_tb_presence_household_member import TbPresenceHouseholdMembersAdol
 from .adol_tb_referral import TbReferalAdol

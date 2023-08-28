@@ -17,10 +17,12 @@ class ChildContinuedConsentForm(SiteModelFormMixin, FormValidatorMixin, forms.Mo
     def __init__(self, *args, **kwargs):
         initial = kwargs.pop('initial', {})
         subject_identifier = initial.get('subject_identifier')
-        if subject_identifier:
+        version = initial.get('version')
+        if subject_identifier and version:
             try:
                 child_assent = ChildAssent.objects.get(
-                    subject_identifier=subject_identifier)
+                    subject_identifier=subject_identifier,
+                    version=version)
             except ChildAssent.DoesNotExist:
                 raise forms.ValidationError(
                     'Child assent for this child is missing. Please complete form')

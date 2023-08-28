@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import configparser
 import os
 import sys
 
@@ -58,7 +57,6 @@ INSTALLED_APPS = [
     'django_crypto_fields.apps.AppConfig',
     'django.contrib.sites',
     'django_q',
-    'django_nose',
     'edc_action_item.apps.AppConfig',
     'edc_dashboard.apps.AppConfig',
     'edc_device.apps.AppConfig',

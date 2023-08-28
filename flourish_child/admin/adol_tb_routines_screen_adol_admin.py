@@ -1,7 +1,6 @@
 from django.contrib import admin
-from edc_model_admin import audit_fieldset_tuple, TabularInlineMixin,\
-    StackedInlineMixin, ModelAdminFormAutoNumberMixin, ModelAdminFormAutoNumberMixin
-from django.core.exceptions import ValidationError
+from edc_model_admin import (audit_fieldset_tuple, StackedInlineMixin,
+                             ModelAdminFormAutoNumberMixin)
 from ..admin_site import flourish_child_admin
 from ..forms import TbRoutineScreenAdolForm, TbHealthVisitAdolForm
 from ..models import TbRoutineScreenAdol, TbHealthVisitAdol
