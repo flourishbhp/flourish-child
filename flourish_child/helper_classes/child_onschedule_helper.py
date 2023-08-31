@@ -80,13 +80,7 @@ class ChildOnScheduleHelper(object):
             if 'enrol' in cohort and 'sec' not in cohort:
                 # book participant for followup
                 booking_helper = ChildFollowUpBookingHelper()
-                is_aging_out = self.aging_out(subject_identifier)
-                booking_dt = None
-                if is_aging_out:
-                    age_in_months = round(is_aging_out * 12)
-                    booking_dt = self.base_appt_datetime + relativedelta(months=age_in_months)
-                    booking_helper.create_booking(subject_identifier, booking_dt)
-                else:
+                if not self.aging_out(subject_identifier):
                     booking_dt = self.base_appt_datetime + relativedelta(years=1)
                     booking_helper.schedule_fu_booking(subject_identifier, booking_dt)
 
@@ -133,7 +127,7 @@ class ChildOnScheduleHelper(object):
                 child_age = age(child_dob, get_utcnow().date())
                 age_in_years = (child_age.years + child_age.months/12)
                 if age_in_years <= 5 and round(5 - age_in_years, 2) < 1:
-                    return round(5 - age_in_years, 2)
+                    return True
                 elif age_in_years <= 10 and round(10 - age_in_years, 2) < 1:
-                    return round(10 - age_in_years, 2)
+                    return True
             return False
