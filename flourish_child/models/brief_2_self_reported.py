@@ -1,11 +1,13 @@
 from django.db import models
+from edc_base.model_fields import OtherCharField
+from edc_constants.choices import YES_NO
 
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import BRIEF2_SCALE
+from ..choices import BRIEF2_SCALE, CBCL_IMPACT, CBCL_INTEREST, CBCL_INVALID_REASON, \
+    CBCL_UNDERSTANDING
 
 
 class Brief2SelfReported(ChildCrfModelMixin):
-
     short_attention_span = models.CharField(
         verbose_name='I have a short attention span',
         choices=BRIEF2_SCALE,
@@ -71,6 +73,56 @@ class Brief2SelfReported(ChildCrfModelMixin):
         verbose_name='I don’t think of consequences before acting',
         choices=BRIEF2_SCALE,
         max_length=10)
+
+    brief2_self_interest = models.CharField(
+        verbose_name='For BRIEF-2 Screening Self-Report Form how interested was the '
+                     'child/adolescent?',
+        choices=CBCL_INTEREST,
+        max_length=30,
+        blank=True,
+        null=True)
+
+    brief2_self_understanding = models.CharField(
+        verbose_name='For this test, how well did the child/adolescent understand the '
+                     'questions being asked?',
+        choices=CBCL_UNDERSTANDING,
+        max_length=30,
+        blank=True,
+        null=True)
+
+    brief2_self_valid = models.CharField(
+        verbose_name='In your opinion, are the results of the Brief-2 self-report valid?',
+        choices=YES_NO,
+        max_length=10,
+        blank=True,
+        null=True)
+
+    brief2_self_invalid_reason = models.CharField(
+        verbose_name='If the test was NOT VALID, specify the reason why it was not '
+                     'valid:',
+        choices=CBCL_INVALID_REASON,
+        max_length=100,
+        blank=True,
+        null=True)
+
+    other_breif2_self_invalid_reason = OtherCharField()
+
+    brief2_self_impact_on_responses = models.CharField(
+        verbose_name='Did any of the following impact responses to the Brief-2 '
+                     'questions:',
+        choices=CBCL_IMPACT,
+        max_length=50,
+        blank=True,
+        null=True)
+
+    other_brief2_self_impact_on_responses = OtherCharField()
+
+    brief2_self_overall_comments = models.TextField(
+        verbose_name='Overall comments for the Brief 2 Self-Report:',
+        max_length=1000,
+        blank=True,
+        null=True)
+
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'

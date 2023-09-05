@@ -1,11 +1,11 @@
 from django.db import models
 
 from .child_crf_model_mixin import ChildCrfModelMixin
+from .model_mixins.test_questions_mixin import TestQuestionMixin
 from ..choices import BRIEF2_SCALE
 
 
-class Brief2Parent(ChildCrfModelMixin):
-
+class Brief2Parent(ChildCrfModelMixin, TestQuestionMixin):
     memory_retention = models.CharField(
         verbose_name='When given three things to do, remembers only the first or last',
         choices=BRIEF2_SCALE,

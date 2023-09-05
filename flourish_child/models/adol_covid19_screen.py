@@ -1,7 +1,7 @@
 from django.db import models
 
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import YES_NO_COVID_FORM,YES_NO_DN_PNTA, POS_NEG_IND_IDK
+from ..choices import YES_NO_DN_PNTA, POS_NEG_IND_IDK
 
 
 class Covid19Adol(ChildCrfModelMixin):

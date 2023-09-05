@@ -1,5 +1,4 @@
 from django.db import models
-from edc_constants.choices import YES_NO
 from edc_base.model_fields import OtherCharField
 
 from ..choices import YES_NO_PNTA, YES_NO_DN_PNTA, COMMUNITY_TREATMENT, COMMUNITY_IMPACT

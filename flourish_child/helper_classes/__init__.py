@@ -1,1 +1,2 @@
 from .child_fu_booking_helper import ChildFollowUpBookingHelper
+from .child_onschedule_helper import ChildOnScheduleHelper

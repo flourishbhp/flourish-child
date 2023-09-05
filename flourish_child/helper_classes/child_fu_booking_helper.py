@@ -20,6 +20,9 @@ class ChildFollowUpBookingHelper(object):
             @param subject_identifier: Participant identifier
             @param booking_dt: Date to schedule participant against
         """
+        # Check participant is not already scheduled for FU
+        if self.is_scheduled(subject_identifier):
+            return
         cutoff_date = date(2025, 4, 30)
 
         while booking_dt.date() < cutoff_date:
@@ -85,15 +88,17 @@ class ChildFollowUpBookingHelper(object):
             title='Follow Up Schedule', date=booking_date.date()).values_list('subject_identifier', flat=True)
         return max_possible > fu_notes.count(), fu_notes
 
-    def create_booking(self, subject_identifier, booking_date):
-        participant_notes = self.participant_note_cls.objects.filter(
+    def is_scheduled(self, subject_identifier):
+        return self.participant_note_cls.objects.filter(
             subject_identifier=subject_identifier,
             title='Follow Up Schedule').exists()
-        if not participant_notes:
-            self.participant_note_cls.objects.create(
-                subject_identifier=subject_identifier,
-                title='Follow Up Schedule',
-                date=booking_date.date())
+            
+
+    def create_booking(self, subject_identifier, booking_date):
+        self.participant_note_cls.objects.create(
+            subject_identifier=subject_identifier,
+            title='Follow Up Schedule',
+            date=booking_date.date())
 
     def remove_booking(self, subject_identifier, booking_date):
         try:
