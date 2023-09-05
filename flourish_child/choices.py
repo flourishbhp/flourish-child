@@ -1,12 +1,12 @@
 from django.utils.translation import ugettext_lazy as _
+from edc_constants.constants import ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, \
+    NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
-from edc_constants.constants import DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, NO, \
-    OFF_STUDY, ON_STUDY, OTHER, YES, ABNORMAL, NORMAL
 from edc_constants.constants import IND, NEG, PENDING, POS
 from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, MISSED_VISIT
 from edc_visit_tracking.constants import LOST_VISIT, SCHEDULED, UNSCHEDULED
 
-from .constants import BREASTFEED_ONLY, PNTA, NOT_RECEIVED
+from .constants import BREASTFEED_ONLY, NOT_RECEIVED, PNTA
 
 HIV_STATUS = (
     (POS, 'Positive'),
@@ -1174,3 +1174,42 @@ CBCL_IMPACT = (
     ('motor_handicap', 'Child has a motor handicap'),
     ('other', 'Other')
 )
+
+DELIVERY_LOCATION = [
+    ('pmh', 'PMH'),
+    ('gwest', 'GWest'),
+    ('lesirane', 'Lesirane'),
+    ('bh3', 'BH3'),
+    ('mafitlha_kgosi', 'Mafitlha Kgosi'),
+    ('old_naledi', 'Old Naledi'),
+    ('drm_hospital', 'DRM Hospital'),
+    ('slh', 'SLH'),
+    ('blh', 'BLH'),
+    ('thamaga_hospital', 'Thamaga Hospital'),
+    ('athlone_hospital', 'Athlone Hospital'),
+    ('kanye_sda_hospital', 'Kanye SDA Hospital'),
+    ('other', 'Other')
+]
+
+DELIVERY_METHOD = [
+    ('vaginal', 'Vaginal'),
+    ('c_section', 'C-section')
+]
+
+GESTATIONAL_AGE_KNOWN = [
+    ('yes_weeks', 'Yes (in weeks)'),
+    ('yes_months', 'Yes (in months)'),
+    ('no', 'No')
+]
+
+BORN = [
+    ('early', 'Early/Pre-term'),
+    ('on_time', 'On-time'),
+    ('late', 'Late')
+]
+
+CHILD_TYPE = [
+    ('singleton', 'Singleton'),
+    ('twin', 'Twin'),
+    ('triplet', 'Triplet')
+]

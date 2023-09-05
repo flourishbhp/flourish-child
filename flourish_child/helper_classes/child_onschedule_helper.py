@@ -126,8 +126,8 @@ class ChildOnScheduleHelper(object):
             if child_dob:
                 child_age = age(child_dob, get_utcnow().date())
                 age_in_years = (child_age.years + child_age.months/12)
-                if age_in_years <= 5 and round(5 - age_in_years, 2) < 1:
-                    return True
-                elif age_in_years <= 10 and round(10 - age_in_years, 2) < 1:
-                    return True
+                if age_in_years < 5 and round(5 - age_in_years, 2) < 1:
+                    return round(5 - age_in_years, 2)
+                elif age_in_years < 10 and round(10 - age_in_years, 2) < 1:
+                    return round(10 - age_in_years, 2)
             return False
