@@ -10,7 +10,6 @@ from flourish_calendar.models import ParticipantNote
 from ..helper_classes import ChildFollowUpBookingHelper
 from ..models import (ChildDummySubjectConsent, OnScheduleChildCohortAEnrollment,
                       OnScheduleChildCohortCSec, OnScheduleChildCohortABirth)
-from unittest.case import skip
 
 
 @tag('booking')
@@ -287,6 +286,7 @@ class TestFuBooking(TestCase):
             subject_identifier=child_assent.subject_identifier).count(), 0)
 
 
+    @skip("Only showing notification, no longer scheduling from signals")
     def test_aging_out_scheduling(self):
         """ Assert child enrolled 5months prior aging out of their cohort
             is scheduled for follow-up before they age up.

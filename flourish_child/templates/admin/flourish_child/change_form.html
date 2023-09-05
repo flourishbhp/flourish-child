@@ -6,24 +6,24 @@
     <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
     <script>
         $(document).on('submit', 'form', function(e) {
-        let fields = JSON.parse('{{ fields_to_check|safe }}');
-        let unfilledFields = [];
+            let fields = JSON.parse('{{ fields_to_check|safe }}');
+            let unfilledFields = [];
 
-        for(const field of fields) {
-            let fieldValue = $(`#id_${field} input[type='radio']:checked`).val();
-            console.log(fieldValue)
-            if(!fieldValue) {
-                unfilledFields.push(field);
+            fields.forEach((field, index) => {
+                let fieldValue = $(`#id_${field} input[type='radio']:checked`).val();
+                if (!fieldValue) {
+                let fieldNumber = $(`#id_${field}`).parent().find("a[title='"+field+"']").html();
+                unfilledFields.push('q'+fieldNumber);
             }
-        }
+            });
 
-        if(unfilledFields.length > 0) {
-            let confirmMessage = 'The following fields are not filled: \n' + unfilledFields.join(', ') + '.\n Are you sure you want to submit this form?';
-            if (!confirm(confirmMessage)) {
-                e.preventDefault();
+            if(unfilledFields.length > 0) {
+                let confirmMessage = 'The following fields are not filled: \n' + unfilledFields.join(', ') + '.\n Are you sure you want to submit this form?';
+                if (!confirm(confirmMessage)) {
+                    e.preventDefault();
+                }
             }
-        }
-    });
+        });
     </script>
 {% endblock %}
 
