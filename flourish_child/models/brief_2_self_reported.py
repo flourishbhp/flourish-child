@@ -123,7 +123,6 @@ class Brief2SelfReported(ChildCrfModelMixin):
         blank=True,
         null=True)
 
-
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'BRIEF-2 Screening Self-Reported'

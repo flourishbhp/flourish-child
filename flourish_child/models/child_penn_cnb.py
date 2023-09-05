@@ -53,7 +53,7 @@ class ChildPennCNB(ChildCrfModelMixin):
         verbose_name='Did any of the following impact the testing session',
         choices=PENNCNB_INVALID,
         max_length=30,
-        null=True,
+        default='no_impact',
         blank=True)
 
     impact_other = OtherCharField()

@@ -1,0 +1,17 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron:  '0 0 * * *'
+
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+    - name: repo-sync
+      uses: repo-sync/github-sync@v2
+      with:
+        source_repo: "https://github.com/flourishbhp/flourish-child.git"
+        source_branch: "develop"
+        destination_branch: "develop"
+        github_token: ${{ secrets.GITHUB_TOKEN }}
