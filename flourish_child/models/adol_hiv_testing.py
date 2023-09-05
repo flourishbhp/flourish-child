@@ -2,8 +2,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
-from ..choices import YES_NO_PNTA, YES_NO_DN_PNTA, TIMES_TESTED, POS_NEG_IND_IDK
-from .list_models import HIVKnowledgeMedium
+from ..choices import YES_NO_DN_PNTA, TIMES_TESTED, POS_NEG_IND_IDK
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 

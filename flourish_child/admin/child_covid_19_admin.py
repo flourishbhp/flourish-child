@@ -61,8 +61,8 @@ class Covid19Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         subject_identifier = self.get_appointment(request).subject_identifier
 
         covid_crf = ChildCovid19.objects.filter(
-            child_visit__appointment__subject_identifier=subject_identifier) \
-            .order_by('-report_datetime')
+            child_visit__appointment__subject_identifier=subject_identifier).order_by(
+                '-report_datetime')
         if covid_crf:
             extra_context = {'followup_question': f'Since the last FLOURISH visit on ',
                              'followup_question_date': covid_crf.first().report_datetime}

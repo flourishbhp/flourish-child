@@ -1,5 +1,6 @@
 import datetime
 import uuid
+import xlwt
 
 from django.apps import apps as django_apps
 from django.db.models import ManyToManyField, ForeignKey, OneToOneField, ManyToOneRel
@@ -9,7 +10,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import NEG, POS, YES
 from edc_base.utils import age
-import xlwt
+
+from ..helper_classes.utils import child_utils
 
 
 class ExportActionMixin:
@@ -80,21 +82,23 @@ class ExportActionMixin:
 
             # Add subject identifier and visit code
             if hasattr(obj, 'child_visit'):
-
                 subject_identifier = obj.child_visit.subject_identifier
+                caregiver_sid = child_utils.caregiver_subject_identifier(
+                    subject_identifier=subject_identifier)
+
                 screening_identifier = self.screening_identifier(
-                    subject_identifier=subject_identifier[:-3])
+                    subject_identifier=caregiver_sid)
                 previous_study = self.previous_bhp_study(
                     subject_identifier=subject_identifier)
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
-                child_exposure_status = self.child_hiv_exposure(study_maternal_identifier,
-                                                                subject_identifier)
+                child_exposure_status = self.child_hiv_exposure(
+                    study_maternal_identifier, caregiver_sid)
 
                 tb_age = self.tb_age_at_enrollment(subject_identifier)
 
                 data.append(subject_identifier)
-                data.append(subject_identifier[:-3])
+                data.append(caregiver_sid)
                 data.append(study_maternal_identifier)
                 data.append(previous_study)
                 data.append(child_exposure_status)
@@ -103,15 +107,18 @@ class ExportActionMixin:
                 data.append(obj.child_visit.visit_code)
 
             elif self.is_non_crf(obj):
-                subject_identifier = getattr(obj, 'subject_identifier')
+                subject_identifier = getattr(obj, 'subject_identifier', None)
+                caregiver_sid = child_utils.caregiver_subject_identifier(
+                    subject_identifier=subject_identifier)
+
                 screening_identifier = self.screening_identifier(
-                    subject_identifier=subject_identifier[:-3])
+                    subject_identifier=caregiver_sid)
                 previous_study = self.previous_bhp_study(
                     subject_identifier=subject_identifier)
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(
-                    study_maternal_identifier, subject_identifier)
+                    study_maternal_identifier, caregiver_sid)
 
                 tb_age = self.tb_age_at_enrollment(subject_identifier)
 
@@ -258,7 +265,8 @@ class ExportActionMixin:
             else:
                 return dataset_obj.study_maternal_identifier
 
-    def child_hiv_exposure(self, study_maternal_identifier=None, subject_identifier=None):
+    def child_hiv_exposure(self, study_maternal_identifier=None,
+                           caregiver_subject_identifier=None):
 
         child_dataset_cls = django_apps.get_model(
             'flourish_child.childdataset')
@@ -279,15 +287,16 @@ class ExportActionMixin:
 
             try:
                 rapid_test_obj = rapid_test_cls.objects.get(
-                    maternal_visit__visit_code='1000M', maternal_visit__visit_code_sequence=0,
-                    maternal_visit__subject_identifier=subject_identifier[:-3],
+                    maternal_visit__visit_code='1000M',
+                    maternal_visit__visit_code_sequence=0,
+                    maternal_visit__subject_identifier=caregiver_subject_identifier,
                     rapid_test_done=YES)
             except rapid_test_cls.DoesNotExist:
                 antenatal_enrollment_cls = django_apps.get_model(
                     'flourish_caregiver.antenatalenrollment')
                 try:
                     antenatal_enrollment = antenatal_enrollment_cls.objects.get(
-                        subject_identifier=subject_identifier[:-3])
+                        subject_identifier=caregiver_subject_identifier)
                 except antenatal_enrollment_cls.DoesNotExist:
                     # To refactor to include new enrollees
                     maternal_hiv_status = 'UNK'

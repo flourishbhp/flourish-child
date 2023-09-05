@@ -1,43 +1,35 @@
 import datetime
 from django import forms
-from django.apps import apps as django_apps
 from django.core.exceptions import ValidationError
 
 from flourish_child_validations.form_validators import BirthFeedingAndVaccineFormValidator
 
 
-from ..models import BirthFeedingVaccine, BirthVaccines
+from ..models import BirthFeedingVaccine, BirthVaccines, ChildBirth
 from .child_form_mixin import ChildModelFormMixin
 
 
 class BirthFeedingVaccineForm(ChildModelFormMixin):
 
     form_validator_cls = BirthFeedingAndVaccineFormValidator
-    maternal_delivery_model = 'flourish_caregiver.maternaldelivery'
 
-    @property
-    def maternal_delivery_cls(self):
-        return django_apps.get_model(self.maternal_delivery_model)
-
-    def validate_against_birth_date(self, infant_identifier=None,
+    def validate_against_birth_date(self, subject_identifier=None,
                                     vaccine_date=None, vaccine_name=None):
 
         try:
-            infant_birth = self.maternal_delivery_cls.objects.get(
-                subject_identifier=infant_identifier)
-        except self.maternal_delivery_cls.DoesNotExist:
-
-            raise ValidationError(
-                'Please complete Infant Birth form '
-                f'before  proceeding.')
+            infant_birth = ChildBirth.objects.get(
+                subject_identifier=subject_identifier)
+        except self.ChildBirth.DoesNotExist:
+            raise ValidationError('Please complete Child Birth form '
+                                  'before proceeding.')
         else:
-            infant_date = infant_birth.report_datetime.date()
-            if vaccine_date and infant_date:
-                if vaccine_date < infant_date:
+            infant_dob = infant_birth.dob
+            if vaccine_date and infant_dob:
+                if vaccine_date < infant_dob:
                     raise forms.ValidationError(
-                        "The date vaccine was given should not be before the "
-                        f"delivery date Got vaccine {vaccine_name} and date {vaccine_date} "
-                        f" but delivery date is {infant_date}"
+                        'The date vaccine was given should not be before the '
+                        f'delivery date. Got vaccine {vaccine_name} and date {vaccine_date}'
+                        f' but delivery date is {infant_dob}'
                     )
 
     def clean(self):
@@ -45,10 +37,10 @@ class BirthFeedingVaccineForm(ChildModelFormMixin):
         self.subject_identifier = self.cleaned_data.get(
             'child_visit').appointment.subject_identifier
 
-        # self.validate_vaccine_date_against_birth_date()
+        self.validate_vaccine_date_against_birth_date()
 
     def validate_vaccine_date_against_birth_date(self):
-        infant_identifier = self.cleaned_data.get(
+        subject_identifier = self.cleaned_data.get(
             'child_visit').subject_identifier
         total = self.data.get('infantvaccines_set-TOTAL_FORMS')
         for i in range(int(total)):
@@ -60,7 +52,7 @@ class BirthFeedingVaccineForm(ChildModelFormMixin):
                 vaccine_date = datetime.datetime.strptime(
                     vaccine_date, '%Y-%m-%d')
                 self.validate_against_birth_date(
-                    infant_identifier, vaccine_date.date(), vaccine_name)
+                    subject_identifier, vaccine_date.date(), vaccine_name)
 
     class Meta:
         model = BirthFeedingVaccine

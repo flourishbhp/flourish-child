@@ -35,11 +35,13 @@ class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
 
     @property
     def consent_version_cls(self):
-        return django_apps.get_model('flourish_caregiver.flourishconsentversion')
+        return django_apps.get_model(
+            'flourish_caregiver.flourishconsentversion')
 
     @property
     def subject_consent_cls(self):
-        return django_apps.get_model('flourish_caregiver.subjectconsent')
+        return django_apps.get_model(
+            'flourish_caregiver.subjectconsent')
 
     @property
     def latest_consent_obj_version(self):
@@ -52,7 +54,8 @@ class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
             latest_consent = subject_consents.latest('consent_datetime')
             return latest_consent.version
         else:
-            raise forms.ValidationError('Missing dummy consent obj, cannot proceed.')
+            raise forms.ValidationError(
+                'Missing dummy consent obj, cannot proceed.')
 
     class Meta:
         unique_together = ('subject_identifier', 'schedule_name')

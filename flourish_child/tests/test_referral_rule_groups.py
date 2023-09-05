@@ -4,7 +4,7 @@ from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
 from edc_constants.constants import NOT_APPLICABLE, YES
 from edc_facility.import_holidays import import_holidays
-from edc_metadata.constants import REQUIRED, NOT_REQUIRED
+from edc_metadata.constants import REQUIRED
 from edc_metadata.models import CrfMetadata
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
@@ -49,6 +49,12 @@ class TestVisitScheduleSetup(TestCase):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
             **self.maternal_dataset_options)
+
+        mommy.make_recipe(
+            'flourish_caregiver.flourishconsentversion',
+            screening_identifier=maternal_dataset_obj.screening_identifier,
+            version='1',
+            child_version='1')
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',

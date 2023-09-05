@@ -146,7 +146,6 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 except BirthFeedingVaccine.DoesNotExist:
                     pass
                 else:
-
                     model_objs = birth_feeding_obj.birthvaccines_set.all()
                     for model_obj in model_objs:
                         visit_code = birth_feeding_obj.visit.visit_code
