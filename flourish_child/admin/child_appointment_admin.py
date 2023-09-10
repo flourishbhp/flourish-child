@@ -32,6 +32,8 @@ class AppointmentAdmin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirec
     dashboard_url_name = settings.DASHBOARD_URL_NAMES.get(
         'child_dashboard_url')
 
+    model = Appointment
+
     form = AppointmentForm
     date_hierarchy = 'appt_datetime'
     list_display = ('subject_identifier', '__str__',
@@ -85,7 +87,7 @@ class AppointmentAdmin(ModelAdminFormInstructionsMixin, ModelAdminNextUrlRedirec
     def change_view(self, request, object_id, form_url='', extra_context=None):
 
         extra_context = extra_context or {}
-        app_obj = Appointment.objects.get(id=object_id)
+        app_obj = self.model.objects.get(id=object_id)
 
         if app_obj.visit_code_sequence == 0:
 
