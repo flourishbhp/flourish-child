@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-import configparser
 import os
 import sys
 
@@ -140,7 +139,8 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation'
+                '.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -179,7 +179,6 @@ DASHBOARD_URL_NAMES = {}
 BASE_FORMAT = ''
 
 if 'test' in sys.argv:
-
     class DisableMigrations:
 
         def __contains__(self, item):
@@ -187,6 +186,7 @@ if 'test' in sys.argv:
 
         def __getitem__(self, item):
             return None
+
 
     MIGRATION_MODULES = DisableMigrations()
     PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
