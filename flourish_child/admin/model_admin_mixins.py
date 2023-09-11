@@ -169,11 +169,13 @@ class ChildCrfModelAdminMixin(
 
     def get_previous_appt_instance(self, appointment):
 
-        return appointment.__class__.objects.filter(
+        previous_appt = appointment.__class__.objects.filter(
             subject_identifier=appointment.subject_identifier,
             timepoint__lt=appointment.timepoint,
             schedule_name__startswith=appointment.schedule_name[:7],
             visit_code_sequence=0).order_by('timepoint').last()
+
+        return previous_appt or appointment.previous_by_timepoint
 
     def get_instance(self, request):
         try:
