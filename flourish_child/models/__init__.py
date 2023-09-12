@@ -103,4 +103,4 @@ from .tb_int_translation import TbAdolInterviewTranslation
 from .tb_interview import TbAdolInterview
 from .tb_referral_outcomes import TbAdolReferralOutcomes
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
-from .child_locator import ChildLocator
+from .young_adult_locator import YoungAdultLocator
