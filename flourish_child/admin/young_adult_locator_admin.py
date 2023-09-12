@@ -5,18 +5,18 @@ from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ModelAdminMixin
 from ..admin_site import flourish_child_admin
-from ..forms import ChildLocatorForm
-from ..models import ChildLocator
+from ..forms import YoungAdultLocatorForm
+from ..models import YoungAdultLocator
 
 
-@admin.register(ChildLocator, site=flourish_child_admin)
-class ChildLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
-    form = ChildLocatorForm
+@admin.register(YoungAdultLocator, site=flourish_child_admin)
+class YoungAdultLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
+    form = YoungAdultLocatorForm
     fieldsets = (
         (None, {
             'fields': [
                 'subject_identifier',
-                'report_datetime',
+                'along_side_caregiver',
                 'locator_date',
                 'first_name',
                 'last_name',
@@ -41,6 +41,7 @@ class ChildLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
          ), audit_fieldset_tuple)
 
     radio_fields = {
+        'along_side_caregiver': admin.VERTICAL,
         'may_call': admin.VERTICAL,
         'may_call_work': admin.VERTICAL,
         'may_visit_home': admin.VERTICAL,

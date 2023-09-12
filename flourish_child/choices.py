@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, \
-    NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES
+    NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES, NOT_APPLICABLE
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
 from edc_constants.constants import IND, NEG, PENDING, POS
 from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, MISSED_VISIT
@@ -1213,3 +1213,11 @@ CHILD_TYPE = [
     ('twin', 'Twin'),
     ('triplet', 'Triplet')
 ]
+
+
+YES_NO_DOESNT_WORK_NA = (
+    (YES, YES),
+    (NO, NO),
+    ('Doesnt_work', 'Doesn\'t work'),
+    (NOT_APPLICABLE, 'Not Applicable'),
+)

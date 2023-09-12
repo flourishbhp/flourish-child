@@ -7,26 +7,16 @@ from edc_base.sites import SiteModelFormMixin
 from edc_constants.constants import YES
 from edc_form_validators import FormValidatorMixin
 
-from ..models import ChildLocator
+from ..models import YoungAdultLocator
+from flourish_child_validations.form_validators import YoungAdultLocatorFormValidator
 from edc_locator.forms import SubjectLocatorForm, SubjectLocatorFormValidator
 
 
-class ChildLocatorForm(SiteModelFormMixin, SubjectLocatorForm, forms.ModelForm):
+class YoungAdultLocatorForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
 
     caregiver_child_consent_model = 'flourish_caregiver.caregiverchildconsent'
 
-    subject_identifier = forms.CharField(
-        label='Subject Identifier',
-        widget=forms.TextInput(attrs={'readonly': 'readonly'}),
-        required=False)
-
-    first_name = forms.CharField(
-        label='First Name',
-        required=False)
-
-    last_name = forms.CharField(
-        label='Last Name',
-        required=False)
+    form_validator_cls = YoungAdultLocatorFormValidator
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -49,5 +39,5 @@ class ChildLocatorForm(SiteModelFormMixin, SubjectLocatorForm, forms.ModelForm):
         return django_apps.get_model(self.caregiver_child_consent_model)
 
     class Meta:
-        model = ChildLocator
+        model = YoungAdultLocator
         fields = '__all__'
