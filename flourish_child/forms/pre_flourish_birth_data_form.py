@@ -1,4 +1,5 @@
 from django import forms
+from django.apps import apps as django_apps
 from edc_form_validators import FormValidatorMixin
 
 from flourish_child.models.pre_flourish_birth_data import PreFlourishBirthData
@@ -8,6 +9,29 @@ from flourish_child_validations.form_validators import \
 
 class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
     form_validator_cls = PreFlourishBirthDataFormValidator
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = getattr(self, 'instance', None)
+        subject_identifier = self.initial.get('subject_identifier', None) \
+                             or instance.subject_identifier \
+                             or args[0].get('subject_identifier', None) \
+                             or self.cleaned_data.get('subject_identifier', None)
+        child_consent = self.get_caregiver_child_consent(
+            subject_identifier=subject_identifier)
+        if child_consent:
+            self.initial.update({
+                'dob': child_consent.child_dob,
+            })
+
+    def get_caregiver_child_consent(self, subject_identifier=None):
+        child_consent_cls = django_apps.get_model(
+            'flourish_caregiver.caregiverchildconsent')
+        if subject_identifier:
+            consents = child_consent_cls.objects.filter(
+                subject_identifier=subject_identifier)
+
+            return consents.latest('consent_datetime')
 
     class Meta:
         model = PreFlourishBirthData
