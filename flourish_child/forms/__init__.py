@@ -95,3 +95,4 @@ from .tb_int_translation_form import TbInterviewTranslationForm
 from .tb_interview_form import TbInterviewForm
 from .tb_referral_outcomes_form import TbReferralOutcomesForm
 from .tb_screen_adol_form import TbVisitScreeningAdolescentForm
+from .young_adult_locator_form import YoungAdultLocatorForm
