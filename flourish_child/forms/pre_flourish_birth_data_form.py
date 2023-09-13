@@ -27,10 +27,13 @@ class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
         child_consent_cls = django_apps.get_model(
             'flourish_caregiver.caregiverchildconsent')
         if subject_identifier:
-            consents = child_consent_cls.objects.filter(
-                subject_identifier=subject_identifier)
-
-            return consents.latest('consent_datetime')
+            try:
+                consents = child_consent_cls.objects.filter(
+                    subject_identifier=subject_identifier).latest('consent_datetime')
+            except child_consent_cls.DoesNotExist:
+                pass
+            else:
+                return consents
 
     class Meta:
         model = PreFlourishBirthData
