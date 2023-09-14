@@ -1325,3 +1325,9 @@ CLINIC_VISIT = (
     ('appointment_scheduled', 'Appointment Scheduled'),
     ('will_seek_care', 'Will seek care'),
 )
+
+ARV_DRUG_LIST = (
+    ('3tc', 'Lamivudine (3TC)'),
+    ('ral', 'Raltegravir (RAL)'),
+    (OTHER, 'Other, specify'),
+)
