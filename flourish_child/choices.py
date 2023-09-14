@@ -554,6 +554,7 @@ OVERALL_MARKS = (
 )
 
 PENNCNB_INVALID = (
+    ('no_impact', 'No Impact'),
     ('child_ill', 'Child was ill'),
     ('sensory_handicap', 'Child has a sensory handicap'),
     ('motor_handicap', 'Child has a motor handicap'),
