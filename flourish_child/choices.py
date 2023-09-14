@@ -1266,3 +1266,9 @@ CHILD_ARV_PROPH = (
     ('arv_proph_ral', 'RAL'),
     (UNKNOWN, 'Unknown'),
 )
+
+ARV_DRUG_LIST = (
+    ('3tc', 'Lamivudine (3TC)'),
+    ('ral', 'Raltegravir (RAL)'),
+    (OTHER, 'Other, specify'),
+)
