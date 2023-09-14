@@ -54,6 +54,7 @@ from .child_tanner_staging import ChildTannerStaging
 from .child_visit import ChildVisit
 from .child_working_status import ChildWorkingStatus
 from .infant_arv_exposure import InfantArvExposure
+from .infant_arv_prophylaxis import InfantArvProphylaxis, ChildArvProphDates
 from .infant_congenital_anomalies import BaseCnsItem, InfantCongenitalAnomalies
 from .infant_congenital_anomalies import InfantCardioDisorder, \
     InfantFacialDefect

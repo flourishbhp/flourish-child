@@ -32,7 +32,6 @@ class ChildPennCNB(ChildCrfModelMixin):
     staff_assisting = models.ManyToManyField(
         StaffMember,
         verbose_name='Staff member who helped deploy test and monitored',
-        null=True,
         blank=True)
 
     completed = models.CharField(

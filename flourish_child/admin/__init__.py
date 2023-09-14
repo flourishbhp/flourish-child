@@ -5,7 +5,6 @@ from .adol_hiv_knowledge_admin import HivKnowledgeAdmin
 from .adol_tb_history_admin import TbHistoryAdolAdmin
 from .adol_tb_knowledge_admin import TbKnowledgeAdmin
 from .adol_tb_lab_results_admin import TbLabResultAdolAdmin
-from .adol_tb_lab_results_admin import TbLabResultAdolAdmin
 from .adol_tb_presence_household_member_admin import TbPresenceHouseholdMembersAdolAdmin
 from .adol_tb_referral_admin import TbReferralAdolAdmin
 from .adol_tb_routines_screen_adol_admin import TbRoutineScreenAdolAdmin
@@ -53,7 +52,7 @@ from .child_tanner_staging_admin import ChildTannerStagingAdmin
 from .child_visit_admin import ChildVisitAdmin
 from .child_working_status_admin import ChildWorkingStatusAdmin
 from .hiv_testing_adol_admin import HivTestingAdmin
-from .hiv_testing_adol_admin import HivTestingAdmin
+from .infant_arv_prophylaxis_admin import InfantArvProphylaxisAdmin
 from .infant_arv_exposure_admin import InfantArvExposureAdmin
 from .infant_congenital_anomalies_admin import InfantCongenitalAnomaliesAdmin
 from .infant_dev_screening_12_months_admin import InfantDevScreening12MonthsAdmin
