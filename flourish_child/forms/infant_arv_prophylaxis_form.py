@@ -1,4 +1,5 @@
 from django import forms
+from edc_constants.constants import YES, NO
 from flourish_child_validations.form_validators import InfantArvProphylaxisFormValidator
 
 from ..models import InfantArvProphylaxis, ChildArvProphDates
@@ -17,10 +18,15 @@ class InfantArvProphylaxisForm(ChildModelFormMixin):
         arvs_took_name = self.data.get(
             'childarvprophdates_set-0-arv_name')
 
-        if took_art_proph and not arvs_took_name:
+        if took_art_proph == YES and not arvs_took_name:
             message = {'took_art_proph':
-                       'The baby took some ARVs please complete dates for each ARV'}
-            self._errors.update(message)
+                       'The baby took some ARVs please complete table for each'
+                       ' ARV, start date and stop date.'}
+            raise forms.ValidationError(message)
+        elif took_art_proph == NO and arvs_took_name:
+            message = {'took_art_proph':
+                       'The baby did not take any ARVs do not complete table'
+                       ' for ARVs, start date and stop date.'}
             raise forms.ValidationError(message)
             
         
