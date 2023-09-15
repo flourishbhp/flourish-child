@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, \
-    NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES
+    NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES, NOT_APPLICABLE
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
 from edc_constants.constants import IND, NEG, PENDING, POS
 from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, MISSED_VISIT
@@ -1190,11 +1190,13 @@ DELIVERY_LOCATION = [
     ('athlone_hospital', 'Athlone Hospital'),
     ('kanye_sda_hospital', 'Kanye SDA Hospital'),
     (OTHER, 'Other'),
+    (UNKNOWN, 'Unknown'),
 ]
 
 DELIVERY_METHOD = [
     ('vaginal', 'Vaginal'),
-    ('c_section', 'C-section')
+    ('c_section', 'C-section'),
+    (UNKNOWN, 'Unknown'),
 ]
 
 GESTATIONAL_AGE_KNOWN = [
@@ -1206,7 +1208,8 @@ GESTATIONAL_AGE_KNOWN = [
 BORN = [
     ('early', 'Early/Pre-term'),
     ('on_time', 'On-time'),
-    ('late', 'Late')
+    ('late', 'Late'),
+    (UNKNOWN, 'Unknown'),
 ]
 
 CHILD_TYPE = [

@@ -71,3 +71,4 @@ class PreFlourishBirthData(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     class Meta:
         app_label = 'flourish_child'
         verbose_name = 'Pre Flourish Birth Data'
+        verbose_name_plural = 'Pre Flourish Birth Data'
