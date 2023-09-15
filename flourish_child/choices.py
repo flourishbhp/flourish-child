@@ -1,7 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
-from edc_constants.constants import (ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE,
-                                     MALE, \
-                                     NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES)
+from edc_constants.constants import ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, \
+    NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES, NOT_APPLICABLE
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
 from edc_constants.constants import IND, NEG, PENDING, POS
 from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, MISSED_VISIT
@@ -1224,4 +1223,55 @@ YES_NO_DOESNT_WORK_NA = (
     (NO, NO),
     ('Doesnt_work', 'Doesn\'t work'),
     (NOT_APPLICABLE, 'Not Applicable'),
+)
+
+NO_ART_REASON = (
+    ('lack_of_understanding',
+     'Mother did not understand medication instructions and did not collect'),
+    ('forgot_meds', 'Mother forget to collect medication'),
+    ('out_of_stock', 'Medication was out of stock'),
+    ('period_elapsed',
+     '72hrs period to start prophylactic antiretroviral medication elapsed'),
+    ('didnt_give_baby', 'Medication collected and did not give the baby'),
+    (OTHER, 'Other, specify'),
+)
+
+ART_PROPH_STATUS = (
+    ('in_progress', 'In progress, still taking prophylaxis'),
+    ('completed_in_time',
+     'Completed PMTCT intervention within stipulated prophylaxis time (28 days)'),
+    ('completed_gt_28days',
+     'Completed PMTCT intervention with prophylaxis greater than 28 days'),
+    ('incomplete',
+     'Incomplete, did not finish within stipulated prophylaxis time'),
+)
+
+REASON_MODIFIED = (
+    ('toxicity_resolved', 'Toxicity decreased/resolved'),
+    ('dose_increase', 'Scheduled dose increase'),
+    ('triple_art_na', 'Triple ARTs not available'),
+    ('anemia', 'Anemia'),
+    ('bleeding', 'Bleeding'),
+    ('side_effects', 'Side effects'),
+    ('toxicity', 'Toxicity'),
+    (OTHER, 'Other, specify'),
+)
+
+CHILD_ARV_PROPH = (
+    ('arv_proph_nvp', 'NVP'),
+    ('arv_proph_azt', 'AZT'),
+    ('arv_proph_3tc', '3TC'),
+    ('arv_proph_ftc', 'FTC'),
+    ('arv_proph_alu', 'ALU'),
+    ('arv_proph_trv', 'TRV'),
+    ('arv_proph_tdf', 'TDF'),
+    ('arv_proph_abc', 'ABC'),
+    ('arv_proph_ral', 'RAL'),
+    (UNKNOWN, 'Unknown'),
+)
+
+ARV_DRUG_LIST = (
+    ('3tc', 'Lamivudine (3TC)'),
+    ('ral', 'Raltegravir (RAL)'),
+    (OTHER, 'Other, specify'),
 )
