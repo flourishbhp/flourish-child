@@ -280,6 +280,7 @@ HIGHEST_EDUCATION = (
     (OTHER, 'Other'),
     ('no_schooling', 'No Schooling ')
 )
+
 HOSPITAL = (
     ('princess_marina', 'Princess Marina'),
     ('slh', 'SLH'),
