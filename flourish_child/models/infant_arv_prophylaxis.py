@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 from edc_base.model_fields.custom_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
-from edc_constants.choices import YES_NO, YES_NO_NA
+from edc_constants.choices import YES_NO
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from ..choices import (NO_ART_REASON, ART_PROPH_STATUS, REASON_MODIFIED,
@@ -40,8 +40,9 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
         blank=True)
 
     days_art_received = models.IntegerField(
-        verbose_name=('Approximately how many days did the infant '
-                      'receive prophylaxis'),
+        verbose_name=('If completed PMTCT intervention with prophylaxis '
+                      'greater than 28days. Approximately how many days '
+                      'did the infant receive prophylaxis'),
         validators=[MinValueValidator(29), MaxValueValidator(90)],
         null=True,
         blank=True,
@@ -84,11 +85,14 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
 
     missed_dose = models.CharField(
         verbose_name='Has the baby missed any dose since last scheduled visit?',
-        choices=YES_NO_NA,
-        max_length=3)
+        choices=YES_NO,
+        max_length=3,
+        blank=True,
+        null=True)
 
     missed_dose_count = models.PositiveIntegerField(
-        verbose_name='How many doses missed?', )
+        verbose_name='How many doses missed?',
+        default=0)
     
     reason_missed = models.TextField(
         verbose_name='Reason for missing doses',
@@ -113,7 +117,10 @@ class ChildArvProphDates(CrfInlineModelMixin, BaseUuidModel):
 
     arv_start_date = models.DateField(verbose_name='Start date')
 
-    arv_stop_date = models.DateField(verbose_name='Stop date')
+    arv_stop_date = models.DateField(
+        verbose_name='Stop date',
+        blank=True,
+        null=True)
 
     class Meta:
         app_label = 'flourish_child'
