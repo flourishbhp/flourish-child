@@ -1,15 +1,10 @@
-from itertools import chain
-
 from django import forms
-from django.db.models import ManyToManyField
 from django.apps import apps as django_apps
 from edc_base.sites import SiteModelFormMixin
-from edc_constants.constants import YES
 from edc_form_validators import FormValidatorMixin
 
 from ..models import YoungAdultLocator
 from flourish_child_validations.form_validators import YoungAdultLocatorFormValidator
-from edc_locator.forms import SubjectLocatorForm, SubjectLocatorFormValidator
 
 
 class YoungAdultLocatorForm(SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
