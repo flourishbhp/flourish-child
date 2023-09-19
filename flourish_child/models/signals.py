@@ -38,7 +38,6 @@ from ..helper_classes.utils import (child_utils, notification, trigger_action_it
                                     stamp_image)
 from ..action_items import YoungAdultLocatorAction, YOUNG_ADULT_LOCATOR_ACTION
 from ..models.young_adult_locator import YoungAdultLocator
-# from ..forms.young_adult_locator_form import YoungAdultLocatorForm
 
 
 class CaregiverConsentError(Exception):
