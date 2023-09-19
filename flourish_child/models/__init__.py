@@ -104,3 +104,4 @@ from .tb_interview import TbAdolInterview
 from .tb_referral_outcomes import TbAdolReferralOutcomes
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
 from .young_adult_locator import YoungAdultLocator
+from .young_adult_locator_crf import YoungAdultLocatorCrf
