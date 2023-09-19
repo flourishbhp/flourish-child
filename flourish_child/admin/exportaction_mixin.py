@@ -47,7 +47,7 @@ class ExportActionMixin:
                     field_names.append(choice)
                 continue
             field_names.append(field.name)
-
+        field_names.extend(['enrollment_cohort', 'current_cohort', ])
         is_tb_adol_model = ('tb' in queryset[0].child_visit.schedule_name if hasattr(
             queryset[0], 'child_visit') else False) or ('TB Adol' in queryset[0].verbose_name)
 
@@ -163,6 +163,10 @@ class ExportActionMixin:
                         inline_objs.append(inline_values)
                 field_value = getattr(obj, field.name, '')
                 data.append(field_value)
+            
+            # Add current and enrollment cohort
+            enrol_cohort, current_cohort = self.get_cohort_details(subject_identifier)
+            data.extend([enrol_cohort, current_cohort])
 
             if inline_objs:
                 # Update header
@@ -391,3 +395,18 @@ class ExportActionMixin:
                 selected = 1
             m2m_values.append(selected)
         return m2m_values
+
+    def get_cohort_details(self, subject_identifier):
+        cohort_model_cls = django_apps.get_model('flourish_caregiver.cohort')
+        enrol_cohort = cohort_model_cls.objects.filter(
+            subject_identifier=subject_identifier,
+            enrollment_cohort=True).order_by('-assign_datetime').first()
+        
+        current_cohort = cohort_model_cls.objects.filter(
+            subject_identifier=subject_identifier,
+            current_cohort=True).order_by('-assign_datetime').first()
+
+        enrol_name = getattr(enrol_cohort, 'name', None)
+        current_name = getattr(current_cohort, 'name', None)
+
+        return enrol_name, current_name

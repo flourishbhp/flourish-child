@@ -554,6 +554,7 @@ OVERALL_MARKS = (
 )
 
 PENNCNB_INVALID = (
+    ('no_impact', 'No Impact'),
     ('child_ill', 'Child was ill'),
     ('sensory_handicap', 'Child has a sensory handicap'),
     ('motor_handicap', 'Child has a motor handicap'),
@@ -1165,14 +1166,14 @@ CBCL_INVALID_REASON = (
     ('did_not_understand', 'Did not understand the questions'),
     ('uncomfortable_sharing', 'Did not feel comfortable sharing information'),
     ('unknown', 'Unknown'),
-    ('other', 'Other')
+    (OTHER, 'Other'),
 )
 
 CBCL_IMPACT = (
     ('no_impact', 'No Impact'),
     ('sensory_handicap', 'Child has a sensory handicap'),
     ('motor_handicap', 'Child has a motor handicap'),
-    ('other', 'Other')
+    (OTHER, 'Other'),
 )
 
 DELIVERY_LOCATION = [
@@ -1188,7 +1189,7 @@ DELIVERY_LOCATION = [
     ('thamaga_hospital', 'Thamaga Hospital'),
     ('athlone_hospital', 'Athlone Hospital'),
     ('kanye_sda_hospital', 'Kanye SDA Hospital'),
-    ('other', 'Other')
+    (OTHER, 'Other'),
 ]
 
 DELIVERY_METHOD = [
