@@ -1191,7 +1191,6 @@ DELIVERY_LOCATION = [
     ('athlone_hospital', 'Athlone Hospital'),
     ('kanye_sda_hospital', 'Kanye SDA Hospital'),
     (OTHER, 'Other'),
-    (UNKNOWN, 'Unknown'),
 ]
 
 DELIVERY_METHOD = [
