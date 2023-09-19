@@ -30,9 +30,9 @@ class YoungAdultLocatorManager(SearchSlugManager, models.Manager):
 
 
 class YoungAdultLocator(SiteModelMixin, SubjectContactFieldsMixin,
-                   SubjectIndirectContactFieldsMixin, ActionModelMixin,
-                   SubjectWorkFieldsMixin, LocatorMethodsModelMixin,
-                   SearchSlugModelMixin, BaseUuidModel):
+                        SubjectIndirectContactFieldsMixin, ActionModelMixin,
+                        SubjectWorkFieldsMixin, LocatorMethodsModelMixin,
+                        SearchSlugModelMixin, BaseUuidModel):
     action_name = YOUNG_ADULT_LOCATOR_ACTION
 
     tracking_identifier_prefix = 'CL'
@@ -40,12 +40,6 @@ class YoungAdultLocator(SiteModelMixin, SubjectContactFieldsMixin,
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
         max_length=50)
-
-    along_side_caregiver = models.CharField(
-        verbose_name='Do you feel comfortable with continuing on the FLOURISH study alongside your caregiver?',
-        max_length=3,
-        choices=YES_NO,
-    )
 
     locator_date = models.DateField(blank=True, null=True)
 

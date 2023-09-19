@@ -5,6 +5,7 @@ from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.forms import model_to_dict
 from edc_appointment.constants import COMPLETE_APPT
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import IND, MALE, NEG, NO, UNKNOWN, YES
@@ -29,12 +30,15 @@ from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
 from ..models.child_clinical_measurements import ChildClinicalMeasurements
+from ..models.young_adult_locator_crf import YoungAdultLocatorCrf
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
 from ..helper_classes import ChildFollowUpBookingHelper, ChildOnScheduleHelper
 from ..helper_classes.utils import (child_utils, notification, trigger_action_item,
                                     stamp_image)
-
+from ..action_items import YoungAdultLocatorAction, YOUNG_ADULT_LOCATOR_ACTION
+from ..models.young_adult_locator import YoungAdultLocator
+# from ..forms.young_adult_locator_form import YoungAdultLocatorForm
 
 
 class CaregiverConsentError(Exception):
@@ -242,7 +246,7 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
         helper_cls = ChildOnScheduleHelper(
             subject_identifier=instance.subject_identifier,
             base_appt_datetime=instance.report_datetime.replace(
-                            microsecond=0),
+                microsecond=0),
             cohort=cohort)
         helper_cls.put_on_schedule(instance, )
 
@@ -254,7 +258,7 @@ def tb_adol_assent_on_post_save(sender, instance, raw, created, **kwargs):
         helper_cls = ChildOnScheduleHelper(
             subject_identifier=instance.subject_identifier,
             base_appt_datetime=instance.consent_datetime.replace(
-                            microsecond=0),
+                microsecond=0),
             cohort='tb_adol')
         helper_cls.put_on_schedule(instance, )
 
@@ -271,7 +275,8 @@ def tb_referral_adol_on_post_save(sender, instance, raw, created, **kwargs):
         subject_identifier = getattr(child_visit, 'subject_identifier', None)
         referral_dt = getattr(instance, 'referral_date', None)
         tz = pytz.timezone('Africa/Gaborone')
-        onschedule_datetime = datetime.combine(referral_dt, get_utcnow().time(), tz)
+        onschedule_datetime = datetime.combine(
+            referral_dt, get_utcnow().time(), tz)
 
         if not schedule.is_onschedule(subject_identifier=subject_identifier,
                                       report_datetime=onschedule_datetime):
@@ -304,7 +309,7 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
             if maternal_delivery_obj.live_infants_to_register == 1:
                 base_appt_datetime = maternal_delivery_obj.delivery_datetime.replace(
                     microsecond=0)
-                
+
                 helper_cls = ChildOnScheduleHelper(
                     subject_identifier=instance.subject_identifier,
                     base_appt_datetime=base_appt_datetime,
@@ -398,7 +403,8 @@ def child_clinical_measurements_on_post_save(sender, instance, raw, created, **k
         match_helper = MatchHelper()
         bmi = instance.child_weight_kg / ((instance.child_height / 100) ** 2)
         bmi_group = match_helper.bmi_group(bmi)
-        _age = match_helper.calculate_age(caregiver_child_consent_obj.child_dob)
+        _age = match_helper.calculate_age(
+            caregiver_child_consent_obj.child_dob)
         age_range = match_helper.age_range(_age)
         gender = 'male' if caregiver_child_consent_obj.gender == MALE else 'female'
 
@@ -436,3 +442,102 @@ def child_take_off_schedule(sender, instance, raw, created, **kwargs):
                     subject_identifier=instance.subject_identifier,
                     offschedule_datetime=instance.offschedule_datetime,
                     schedule_name=instance.schedule_name)
+
+
+def child_assent(subject_identifier):
+
+    try:
+        child_assent_obj = ChildAssent.objects.filter(
+            subject_identifier=subject_identifier
+        ).latest('version')
+    except ChildAssent.DoesNotExist:
+        pass
+    else:
+        return child_assent_obj
+
+
+def registered_subject(subject_identifier):
+
+    registered_subject_cls = django_apps.get_model(
+        'edc_registration.registeredsubject')
+    try:
+        registered_subject_obj = registered_subject_cls.objects.get(
+            subject_identifier=subject_identifier
+        )
+
+    except registered_subject_cls.DoesNotExist:
+        pass
+    else:
+        return registered_subject_obj
+
+
+@receiver(post_save, weak=False, sender=YoungAdultLocatorCrf,
+          dispatch_uid='young_adult_locator_crf_on_post_save')
+def young_adult_locator_crf(sender, instance, raw, created, **kwargs):
+
+    subject_identifier = instance.child_visit.subject_identifier
+
+    if instance.along_side_caregiver == NO:
+
+        trigger_action_item(
+            model_cls=YoungAdultLocator,
+            action_name=YOUNG_ADULT_LOCATOR_ACTION,
+            subject_identifier=subject_identifier,
+            repeat=False
+        )
+
+    else:
+
+        caregiver_locator_cls = django_apps.get_model(
+            'flourish_caregiver.caregiverlocator')
+
+        registered_subject_obj = registered_subject(subject_identifier)
+
+        try:
+            caregiver_locator_obj = caregiver_locator_cls.objects.get(
+                subject_identifier=registered_subject_obj.relative_identifier
+            )
+
+        except caregiver_locator_cls.DoesNotExist:
+            pass
+        else:
+
+            if not YoungAdultLocator.objects.filter(
+                    subject_identifier=subject_identifier).exists():
+
+                assent = child_assent(subject_identifier)
+
+                fields = [
+                    'indirect_contact_cell',
+                    'indirect_contact_cell_alt',
+                    'indirect_contact_name',
+                    'indirect_contact_phone',
+                    'indirect_contact_physical_address',
+                    'indirect_contact_relation',
+                    'locator_date',
+                    'mail_address',
+                    'may_call',
+                    'may_call_work',
+                    'may_contact_indirectly',
+                    'may_sms',
+                    'may_visit_home',
+                    'physical_address',
+                    'subject_cell',
+                    'subject_cell_alt',
+                    'subject_identifier',
+                    'subject_phone',
+                    'subject_phone_alt',
+                    'subject_work_cell',
+                    'subject_work_phone',
+                    'subject_work_place',
+                ]
+
+                locator_dict = model_to_dict(
+                    caregiver_locator_obj, fields=fields
+                )
+
+                locator_dict['subject_identifier'] = subject_identifier
+                locator_dict['first_name'] = assent.first_name
+                locator_dict['last_name'] = assent.last_name
+
+                YoungAdultLocator.objects.update_or_create(**locator_dict)

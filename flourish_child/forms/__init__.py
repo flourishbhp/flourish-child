@@ -94,3 +94,4 @@ from .tb_interview_form import TbInterviewForm
 from .tb_referral_outcomes_form import TbReferralOutcomesForm
 from .tb_screen_adol_form import TbVisitScreeningAdolescentForm
 from .young_adult_locator_form import YoungAdultLocatorForm
+from .young_adult_locator_crf_form import YoungAdultLocatorCrfForm
