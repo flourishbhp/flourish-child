@@ -43,16 +43,17 @@ class BirthFeedingVaccineForm(ChildModelFormMixin):
         subject_identifier = self.cleaned_data.get(
             'child_visit').subject_identifier
         total = self.data.get('infantvaccines_set-TOTAL_FORMS')
-        for i in range(int(total)):
-            vaccine_date = self.data.get(
-                'infantvaccines_set-' + str(i) + '-vaccine_date')
-            vaccine_name = self.data.get(
-                'infantvaccines_set-' + str(i) + '-vaccination')
-            if vaccine_name and vaccine_date:
-                vaccine_date = datetime.datetime.strptime(
-                    vaccine_date, '%Y-%m-%d')
-                self.validate_against_birth_date(
-                    subject_identifier, vaccine_date.date(), vaccine_name)
+        if total is not None:
+            for i in range(int(total)):
+                vaccine_date = self.data.get(
+                    'infantvaccines_set-' + str(i) + '-vaccine_date')
+                vaccine_name = self.data.get(
+                    'infantvaccines_set-' + str(i) + '-vaccination')
+                if vaccine_name and vaccine_date:
+                    vaccine_date = datetime.datetime.strptime(
+                        vaccine_date, '%Y-%m-%d')
+                    self.validate_against_birth_date(
+                        subject_identifier, vaccine_date.date(), vaccine_name)
 
     class Meta:
         model = BirthFeedingVaccine
