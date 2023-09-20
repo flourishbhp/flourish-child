@@ -14,9 +14,9 @@ class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         subject_identifier = None
 
-        if self.initial and self.initial.get('subject_identifier', None):
+        if self.initial:
             subject_identifier = self.initial.get('subject_identifier', None)
-        if self.cleaned_data and self.cleaned_data.get('subject_identifier', None):
+        if self.cleaned_data:
             subject_identifier = self.cleaned_data.get('subject_identifier', None)
 
         if subject_identifier:
