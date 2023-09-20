@@ -30,7 +30,6 @@ from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
 from ..models.child_clinical_measurements import ChildClinicalMeasurements
-from ..models.young_adult_locator_crf import YoungAdultLocatorCrf
 from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline
 from ..helper_classes import ChildFollowUpBookingHelper, ChildOnScheduleHelper
@@ -38,6 +37,7 @@ from ..helper_classes.utils import (child_utils, notification, trigger_action_it
                                     stamp_image)
 from ..action_items import YoungAdultLocatorAction, YOUNG_ADULT_LOCATOR_ACTION
 from ..models.young_adult_locator import YoungAdultLocator
+from ..models.child_continued_consent import ChildContinuedConsent
 
 
 class CaregiverConsentError(Exception):
@@ -470,13 +470,13 @@ def registered_subject(subject_identifier):
         return registered_subject_obj
 
 
-@receiver(post_save, weak=False, sender=YoungAdultLocatorCrf,
-          dispatch_uid='young_adult_locator_crf_on_post_save')
-def young_adult_locator_crf(sender, instance, raw, created, **kwargs):
+@receiver(post_save, weak=False, sender=ChildContinuedConsent,
+          dispatch_uid='child_continued_consent_on_post_save')
+def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
-    subject_identifier = instance.child_visit.subject_identifier
+    subject_identifier = instance.subject_identifier
 
-    if instance.along_side_caregiver == NO:
+    if instance.include_contact_details == NO:
 
         trigger_action_item(
             model_cls=YoungAdultLocator,
@@ -501,42 +501,39 @@ def young_adult_locator_crf(sender, instance, raw, created, **kwargs):
             pass
         else:
 
-            if not YoungAdultLocator.objects.filter(
-                    subject_identifier=subject_identifier).exists():
+            assent = child_assent(subject_identifier)
 
-                assent = child_assent(subject_identifier)
+            fields = [
+                'indirect_contact_cell',
+                'indirect_contact_cell_alt',
+                'indirect_contact_name',
+                'indirect_contact_phone',
+                'indirect_contact_physical_address',
+                'indirect_contact_relation',
+                'locator_date',
+                'mail_address',
+                'may_call',
+                'may_call_work',
+                'may_contact_indirectly',
+                'may_sms',
+                'may_visit_home',
+                'physical_address',
+                'subject_cell',
+                'subject_cell_alt',
+                'subject_identifier',
+                'subject_phone',
+                'subject_phone_alt',
+                'subject_work_cell',
+                'subject_work_phone',
+                'subject_work_place',
+            ]
 
-                fields = [
-                    'indirect_contact_cell',
-                    'indirect_contact_cell_alt',
-                    'indirect_contact_name',
-                    'indirect_contact_phone',
-                    'indirect_contact_physical_address',
-                    'indirect_contact_relation',
-                    'locator_date',
-                    'mail_address',
-                    'may_call',
-                    'may_call_work',
-                    'may_contact_indirectly',
-                    'may_sms',
-                    'may_visit_home',
-                    'physical_address',
-                    'subject_cell',
-                    'subject_cell_alt',
-                    'subject_identifier',
-                    'subject_phone',
-                    'subject_phone_alt',
-                    'subject_work_cell',
-                    'subject_work_phone',
-                    'subject_work_place',
-                ]
+            locator_dict = model_to_dict(
+                caregiver_locator_obj, fields=fields
+            )
 
-                locator_dict = model_to_dict(
-                    caregiver_locator_obj, fields=fields
-                )
+            locator_dict['subject_identifier'] = subject_identifier
+            locator_dict['first_name'] = assent.first_name
+            locator_dict['last_name'] = assent.last_name
 
-                locator_dict['subject_identifier'] = subject_identifier
-                locator_dict['first_name'] = assent.first_name
-                locator_dict['last_name'] = assent.last_name
-
-                YoungAdultLocator.objects.update_or_create(**locator_dict)
+            YoungAdultLocator.objects.update_or_create(**locator_dict)
