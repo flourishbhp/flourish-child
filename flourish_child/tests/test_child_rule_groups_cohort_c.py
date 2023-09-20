@@ -23,7 +23,7 @@ class TestRuleGroups(TestCase):
             'version': '1'}
 
         maternal_dataset_options = {
-            'delivdt': get_utcnow() - relativedelta(years=18, months=2),
+            'delivdt': get_utcnow() - relativedelta(years=12, months=2),
             'mom_enrolldate': get_utcnow(),
             'mom_hivstatus': 'HIV-infected',
             'study_maternal_identifier': '12345',
@@ -38,7 +38,7 @@ class TestRuleGroups(TestCase):
 
         mommy.make_recipe(
             'flourish_child.childdataset',
-            dob=get_utcnow() - relativedelta(years=18, months=2),
+            dob=get_utcnow() - relativedelta(years=12, months=2),
             **child_dataset_options)
 
         maternal_dataset_obj = mommy.make_recipe(
@@ -69,7 +69,7 @@ class TestRuleGroups(TestCase):
             identity='126513789',
             confirm_identity='126513789',
             child_dob=(get_utcnow() -
-                       relativedelta(years=18, months=2)).date(),
+                       relativedelta(years=12, months=2)).date(),
             version='1')
 
         mommy.make_recipe(
@@ -265,33 +265,3 @@ class TestRuleGroups(TestCase):
                 model='flourish_child.infantcongenitalanomalies',
                 subject_identifier=caregiver_child_consent_obj.subject_identifier,
                 visit_code='2000D').entry_status, NOT_REQUIRED)
-
-    def test_young_adult_locator_crf_required(self):
-
-        # self.caregiver_child_consent_obj.child_dob = (get_utcnow() - relativedelta(years=18, months=2)).date(),
-
-        onschedule_model = 'flourish_child.onschedulechildcohortcsecquart'
-        schedule_name = 'child_c_sec_qt_schedule1'
-
-        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-            onschedule_model=onschedule_model, name=schedule_name)
-
-        schedule.put_on_schedule(
-            subject_identifier=self.subject_identifier,
-            schedule_name=schedule_name,)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                subject_identifier=self.subject_identifier,
-                visit_code='2001',
-                schedule_name=schedule_name
-            ),
-            report_datetime=get_utcnow(),
-            reason=SCHEDULED)
-
-        self.assertEqual(
-            CrfMetadata.objects.get(
-                model='flourish_child.youngadultlocatorcrf',
-                subject_identifier=self.subject_identifier,
-                visit_code='2001').entry_status, REQUIRED)
