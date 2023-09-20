@@ -12,8 +12,12 @@ class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        subject_identifier = self.initial.get('subject_identifier', None) \
-                             or self.cleaned_data.get('subject_identifier', None)
+        subject_identifier = None
+
+        if self.initial and self.initial.get('subject_identifier', None):
+            subject_identifier = self.initial.get('subject_identifier', None)
+        if self.cleaned_data and self.cleaned_data.get('subject_identifier', None):
+            subject_identifier = self.cleaned_data.get('subject_identifier', None)
 
         if subject_identifier:
             child_consent = self.get_caregiver_child_consent(
