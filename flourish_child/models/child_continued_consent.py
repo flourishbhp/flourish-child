@@ -80,6 +80,18 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
         verbose_name='Do you give us permission to use your blood samples for future studies?',
         choices=YES_NO)
 
+    along_side_caregiver = models.CharField(
+        verbose_name='Do you feel comfortable with continuing on the FLOURISH study alongside your caregiver?',
+        max_length=3,
+        choices=YES_NO,
+    )
+
+    include_contact_details = models.CharField(
+        verbose_name='Will your contact information, including phone numbers and physical address, remain the same',
+        max_length=3,
+        choices=YES_NO,
+    )
+
     consent_datetime = models.DateTimeField(
         verbose_name='Consent date and time',
         validators=[

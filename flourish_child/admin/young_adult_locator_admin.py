@@ -16,7 +16,6 @@ class YoungAdultLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
         (None, {
             'fields': [
                 'subject_identifier',
-                'along_side_caregiver',
                 'locator_date',
                 'first_name',
                 'last_name',
@@ -41,7 +40,6 @@ class YoungAdultLocatorAdmin(ModelAdminMixin, admin.ModelAdmin):
          ), audit_fieldset_tuple)
 
     radio_fields = {
-        'along_side_caregiver': admin.VERTICAL,
         'may_call': admin.VERTICAL,
         'may_call_work': admin.VERTICAL,
         'may_visit_home': admin.VERTICAL,

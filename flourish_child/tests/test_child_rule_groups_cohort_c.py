@@ -6,7 +6,7 @@ from edc_facility.import_holidays import import_holidays
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
 from edc_metadata.models import CrfMetadata
 from model_mommy import mommy
-
+from edc_visit_schedule import site_visit_schedules
 from edc_visit_tracking.constants import SCHEDULED
 
 from ..models import ChildVisit, Appointment
@@ -64,10 +64,12 @@ class TestRuleGroups(TestCase):
         caregiver_child_consent_obj = mommy.make_recipe(
             'flourish_caregiver.caregiverchildconsent',
             subject_consent=subject_consent,
-            study_child_identifier=child_dataset_options.get('study_child_identifier'),
+            study_child_identifier=child_dataset_options.get(
+                'study_child_identifier'),
             identity='126513789',
             confirm_identity='126513789',
-            child_dob=(get_utcnow() - relativedelta(years=12, months=2)).date(),
+            child_dob=(get_utcnow() -
+                       relativedelta(years=12, months=2)).date(),
             version='1')
 
         mommy.make_recipe(
