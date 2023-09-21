@@ -68,7 +68,7 @@ class ChildContinuedConsentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.Mode
         'specimen_consent': admin.VERTICAL,
         'along_side_caregiver': admin.VERTICAL,
         'include_contact_details': admin.VERTICAL, }
-
+    
     list_display = ('subject_identifier',
                     'first_name',
                     'initials',

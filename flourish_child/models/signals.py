@@ -443,38 +443,13 @@ def child_take_off_schedule(sender, instance, raw, created, **kwargs):
                     schedule_name=instance.schedule_name)
 
 
-def child_assent(subject_identifier):
-
-    try:
-        child_assent_obj = ChildAssent.objects.filter(
-            subject_identifier=subject_identifier
-        ).latest('version')
-    except ChildAssent.DoesNotExist:
-        pass
-    else:
-        return child_assent_obj
-
-
-def registered_subject(subject_identifier):
-
-    registered_subject_cls = django_apps.get_model(
-        'edc_registration.registeredsubject')
-    try:
-        registered_subject_obj = registered_subject_cls.objects.get(
-            subject_identifier=subject_identifier
-        )
-
-    except registered_subject_cls.DoesNotExist:
-        pass
-    else:
-        return registered_subject_obj
-
-
 @receiver(post_save, weak=False, sender=ChildContinuedConsent,
           dispatch_uid='child_continued_consent_on_post_save')
 def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
     subject_identifier = instance.subject_identifier
+
+
 
     if instance.include_contact_details == NO:
 
@@ -487,21 +462,21 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
     else:
 
+        caregiver_subject_identifier = child_utils.caregiver_subject_identifier(
+        subject_identifier)
+
         caregiver_locator_cls = django_apps.get_model(
             'flourish_caregiver.caregiverlocator')
 
-        registered_subject_obj = registered_subject(subject_identifier)
-
         try:
             caregiver_locator_obj = caregiver_locator_cls.objects.get(
-                subject_identifier=registered_subject_obj.relative_identifier
-            )
+                subject_identifier=caregiver_subject_identifier)
 
         except caregiver_locator_cls.DoesNotExist:
             pass
         else:
 
-            assent = child_assent(subject_identifier)
+            assent = child_utils.child_assent_obj(subject_identifier)
 
             fields = [
                 'indirect_contact_cell',

@@ -17,12 +17,17 @@ from edc_data_manager.models import DataActionItem
 
 
 class ChildUtils:
-    
+
     registered_subject_model = 'edc_registration.registeredsubject'
     child_dummy_consent_model = 'flourish_child.childdummysubjectconsent'
     preg_screening_model = 'flourish_caregiver.screeningpregwomen'
     prior_screening_model = 'flourish_caregiver.screeningpriorbhpparticipants'
     consent_version_model = 'flourish_caregiver.flourishconsentversion'
+    child_assent_model = 'flourish_child.childassent'
+
+    @property
+    def child_assent_model_cls(self):
+        return django_apps.get_model(self.child_assent_model)
 
     @property
     def child_dummy_consent_model_cls(self):
@@ -35,7 +40,7 @@ class ChildUtils:
     @property
     def prior_screening_model_cls(self):
         return django_apps.get_model(self.prior_screening_model)
-    
+
     @property
     def registered_subject_cls(self):
         return django_apps.get_model(self.registered_subject_model)
@@ -47,8 +52,17 @@ class ChildUtils:
     def caregiver_subject_identifier(self, subject_identifier=None):
         childconsent_obj = self.child_dummy_consent_model_cls.objects.filter(
             subject_identifier=subject_identifier).last()
-    
+
         return getattr(childconsent_obj, 'relative_identifier', None)
+
+    def child_assent_obj(self, subject_identifier):
+        try:
+            child_assent = self.child_assent_model_cls.objects.get(
+                subject_identifier=subject_identifier)
+        except self.child_assent_model_cls.DoesNotExist:
+            pass
+        else:
+            return child_assent
 
     def preg_screening_model_obj(self, subject_identifier=None):
         caregiver_sid = self.caregiver_subject_identifier(
@@ -76,11 +90,11 @@ class ChildUtils:
         subject_screening_obj = self.preg_screening_model_obj(
             subject_identifier) or self.prior_screening_model_obj(
                 subject_identifier)
-    
+
         if not subject_screening_obj:
             raise ValidationError(
-                    'Missing Subject Screening form. Please complete '
-                    'it before proceeding.')
+                'Missing Subject Screening form. Please complete '
+                'it before proceeding.')
 
         try:
             consent_version_obj = self.consent_version_cls.objects.get(
@@ -90,7 +104,7 @@ class ChildUtils:
                 'Missing Consent Version form. Please complete '
                 'it before proceeding.')
         return consent_version_obj.child_version or consent_version_obj.version
-        
+
 
 child_utils = ChildUtils()
 
