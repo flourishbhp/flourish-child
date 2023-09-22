@@ -35,7 +35,9 @@ class ChildContinuedConsentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.Mode
                 'confirm_identity',
                 'remain_in_study',
                 'hiv_testing',
-                'preg_testing')}),
+                'preg_testing',
+                'along_side_caregiver',
+                'include_contact_details',)}),
         ('Review Questions', {
             'fields': (
                 'consent_reviewed',
@@ -63,8 +65,10 @@ class ChildContinuedConsentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.Mode
         'remain_in_study': admin.VERTICAL,
         'hiv_testing': admin.VERTICAL,
         'preg_testing': admin.VERTICAL,
-        'specimen_consent': admin.VERTICAL, }
-
+        'specimen_consent': admin.VERTICAL,
+        'along_side_caregiver': admin.VERTICAL,
+        'include_contact_details': admin.VERTICAL, }
+    
     list_display = ('subject_identifier',
                     'first_name',
                     'initials',
