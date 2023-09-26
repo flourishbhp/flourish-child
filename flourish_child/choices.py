@@ -1225,3 +1225,9 @@ YES_NO_DOESNT_WORK_NA = (
     ('Doesnt_work', 'Doesn\'t work'),
     (NOT_APPLICABLE, 'Not Applicable'),
 )
+
+LAPTOP_CHOICES = (
+    ("computer1", "Computer 1 (Serial # FVFHN3S2Q6L4)"),
+    ("computer2", "Computer 2 (Serial # FVHHR2JHQ6L4)"),
+    ("computer3", "Computer 3 (Serial # CO2HXOZUQ6L4)")
+)
