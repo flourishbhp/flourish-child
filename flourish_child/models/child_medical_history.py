@@ -2,6 +2,7 @@ from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
 
+from flourish_caregiver.choices import CLINIC_VISIT_CHOICES, SYMPTOMS_CHOICES
 from .list_models import ChronicConditions
 from .child_crf_model_mixin import ChildCrfModelMixin
 
@@ -33,6 +34,44 @@ class ChildMedicalHistory(ChildCrfModelMixin):
         max_length=20,
         choices=YES_NO,
         null=True)
+
+    # version 2 questions
+
+    current_illness_child = models.CharField(
+        verbose_name="Does your child have any current illness?",
+        max_length=10,
+        choices=YES_NO
+    )
+
+    current_symptoms_child = models.CharField(
+        verbose_name="What are your child's current symptoms",
+        max_length=30,
+        blank=True,
+        null=True,
+        choices=SYMPTOMS_CHOICES
+    )
+
+    current_symptoms_child_other = OtherCharField(
+        max_length=35,
+        verbose_name='If other, specify.',
+        blank=True,
+        null=True
+    )
+
+    symptoms_start_date_child = models.DateField(
+        verbose_name="When did the symptoms start.",
+        null=True,
+        blank=True
+    )
+
+    clinic_visit_child = models.CharField(
+        verbose_name="Has your child been seen at a local clinic or have you been seen"
+                     " for consultation at a local clinic because of this illness?",
+        max_length=20,
+        choices=CLINIC_VISIT_CHOICES,
+        null=True,
+        blank=True
+    )
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
