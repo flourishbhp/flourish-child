@@ -25,7 +25,13 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'chronic_since',
                 'child_chronic',
-                'child_chronic_other']}
+                'child_chronic_other'
+                'current_illness_child'
+                'current_symptoms_child'
+                'current_symptoms_child_other'
+                'symptoms_start_date_child'
+                'clinic_visit_child'
+            ]}
          ), audit_fieldset_tuple)
 
     radio_fields = {'chronic_since': admin.VERTICAL,
