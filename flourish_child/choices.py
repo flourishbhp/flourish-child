@@ -651,6 +651,8 @@ RESPIRATORY_DEFECT = (
 SCHOOL_TYPE = (
     ('public', 'Public/Government'),
     ('private', 'Private'),
+    ('public_boarding_school', 'Boarding School Public/Government'),
+    ('private_boarding_school', 'Boarding School Private'),
     (NOT_APPLICABLE, 'Not applicable'),
 )
 
