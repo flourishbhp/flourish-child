@@ -27,6 +27,7 @@ class ChildPennCNBAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'testing_impacted',
                 'impact_other',
                 'claim_experience',
+                'laptop_used',
                 'comments'
             ]}
          ), audit_fieldset_tuple)
