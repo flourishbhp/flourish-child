@@ -35,6 +35,9 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
          ), audit_fieldset_tuple)
 
     radio_fields = {'chronic_since': admin.VERTICAL,
+                    'current_illness_child': admin.VERTICAL,
+                    'current_symptoms_child': admin.VERTICAL,
+                    'clinic_visit_child': admin.VERTICAL,
                     'med_history_changed': admin.VERTICAL}
 
     filter_horizontal = ('child_chronic',)
