@@ -37,4 +37,5 @@ class ChildPennCNBAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     radio_fields = {'completed': admin.VERTICAL,
                     'reason_incomplete': admin.VERTICAL,
                     'testing_impacted': admin.VERTICAL,
+                    'laptop_used': admin.VERTICAL,
                     'claim_experience': admin.VERTICAL, }
