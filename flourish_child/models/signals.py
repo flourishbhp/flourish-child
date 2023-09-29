@@ -136,32 +136,41 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     """Put subject on cohort a schedule after consenting.
     """
     if not raw:
-        caregiver_prev_enrolled_cls = django_apps.get_model(
-            'flourish_caregiver.caregiverpreviouslyenrolled')
-        try:
-            prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
-                subject_identifier=instance.relative_identifier)
-        except caregiver_prev_enrolled_cls.DoesNotExist:
-            pass
-        else:
-            helper_cls = ChildOnScheduleHelper(
-                subject_identifier=instance.subject_identifier,
-                base_appt_datetime=prev_enrolled.report_datetime,
-                cohort=instance.cohort)
-            helper_cls.put_cohort_onschedule(instance, )
 
+        child_birth_exists = ChildBirth.objects.filter(
+                subject_identfier=instance.subject_identifier).exists()
+        
+        caregiver_prev_enrolled_cls = django_apps.get_model(
+                'flourish_caregiver.caregiverpreviouslyenrolled')
+        
         maternal_delivery_cls = django_apps.get_model(
-            'flourish_caregiver.maternaldelivery')
-        try:
-            maternal_delivery_obj = maternal_delivery_cls.objects.get(
-                delivery_datetime=instance.consent_datetime,
-                subject_identifier=instance.relative_identifier)
-        except maternal_delivery_cls.DoesNotExist:
-            pass
+                'flourish_caregiver.maternaldelivery')
+        
+        if not child_birth_exists:
+            # The criteria is for child from a previous study
+            try:
+                prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
+                    subject_identifier=instance.relative_identifier)
+            except caregiver_prev_enrolled_cls.DoesNotExist:
+                pass
+            else:
+                helper_cls = ChildOnScheduleHelper(
+                    subject_identifier=instance.subject_identifier,
+                    base_appt_datetime=prev_enrolled.report_datetime,
+                    cohort=instance.cohort)
+                helper_cls.put_cohort_onschedule(instance, )
         else:
-            helper_cls.cohort = (instance.cohort + '_birth')
-            helper_cls.base_appt_datetime = maternal_delivery_obj.created
-            helper_cls.put_on_schedule(instance, )
+
+            try:
+                maternal_delivery_obj = maternal_delivery_cls.objects.get(
+                    delivery_datetime=instance.consent_datetime,
+                    subject_identifier=instance.relative_identifier)
+            except maternal_delivery_cls.DoesNotExist:
+                pass
+            else:
+                helper_cls.cohort = (instance.cohort + '_birth')
+                helper_cls.base_appt_datetime = maternal_delivery_obj.created
+                helper_cls.put_on_schedule(instance, )
 
 
 @receiver(post_save, weak=False, sender=TbVisitScreeningAdolescent,
