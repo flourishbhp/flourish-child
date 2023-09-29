@@ -39,6 +39,7 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'education_level',
                 'education_level_other',
                 'school_type',
+                'months_in_boarding',
                 'working']}
          ), audit_fieldset_tuple)
 
