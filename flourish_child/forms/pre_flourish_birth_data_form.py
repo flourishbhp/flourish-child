@@ -48,13 +48,12 @@ class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
                 return consents
 
     def huu_pre_enrollment_obj(self, child_consent):
-        if hasattr(child_consent, 'study_child_identifier'):
-            try:
-                return self.huu_pre_enrollment_cls.objects.get(
-                    pre_flourish_visit__subject_identifier=child_consent
-                    .study_child_identifier)
-            except self.huu_pre_enrollment_cls.DoesNotExist:
-                return None
+        try:
+            return self.huu_pre_enrollment_cls.objects.get(
+                pre_flourish_visit__subject_identifier=child_consent
+                .study_child_identifier)
+        except self.huu_pre_enrollment_cls.DoesNotExist:
+            return None
 
     class Meta:
         model = PreFlourishBirthData
