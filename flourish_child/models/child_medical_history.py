@@ -1,26 +1,26 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
+from edc_base.model_validators import datetime_not_future
 from edc_constants.choices import YES_NO
 
 from flourish_caregiver.choices import CLINIC_VISIT_CHOICES, SYMPTOMS_CHOICES
-from .list_models import ChronicConditions
 from .child_crf_model_mixin import ChildCrfModelMixin
+from .list_models import ChronicConditions
 
 
 class ChildMedicalHistory(ChildCrfModelMixin):
-
     """A model completed by the user on Medical History for all children."""
 
     chronic_since = models.CharField(
         max_length=25,
         choices=YES_NO,
-        verbose_name='Does the Child/Adolescent have any chronic conditions?',)
+        verbose_name='Does the Child/Adolescent have any chronic conditions?', )
 
     child_chronic = models.ManyToManyField(
         ChronicConditions,
         related_name='child',
         verbose_name=('Does the Child/Adolescent have any of the above. '
-                      'Tick all that apply'),)
+                      'Tick all that apply'), )
 
     child_chronic_other = OtherCharField(
         max_length=35,
@@ -60,8 +60,9 @@ class ChildMedicalHistory(ChildCrfModelMixin):
 
     symptoms_start_date_child = models.DateField(
         verbose_name="When did the symptoms start.",
+        validators=[datetime_not_future],
         null=True,
-        blank=True
+        blank=True,
     )
 
     clinic_visit_child = models.CharField(
