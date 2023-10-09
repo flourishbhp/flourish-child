@@ -9,20 +9,30 @@ from flourish_child_validations.form_validators import \
 
 class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
     form_validator_cls = PreFlourishBirthDataFormValidator
+    pre_flourish_child_consent_model = 'pre_flourish.preflourishcaregiverchildconsent'
+    child_dataset_cls = django_apps.get_model('flourish_child.childdataset')
+    huu_pre_enrollment_cls = django_apps.get_model('pre_flourish.HuuPreEnrollment')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        subject_identifier = None
+        self.subject_identifier = None
 
         if self.initial:
-            subject_identifier = self.initial.get('subject_identifier', None)
+            self.subject_identifier = self.initial.get('subject_identifier', None)
 
-        if subject_identifier:
+        if self.subject_identifier:
             child_consent = self.get_caregiver_child_consent(
-                subject_identifier=subject_identifier)
+                subject_identifier=self.subject_identifier)
             if child_consent:
+                huu_pre_enrollment_obj = self.huu_pre_enrollment_obj(child_consent)
+                gestational_age_weeks = getattr(huu_pre_enrollment_obj,
+                                                'gestational_age_weeks', None)
+                gestational_age_months = getattr(huu_pre_enrollment_obj,
+                                                 'gestational_age_months', None)
                 self.initial.update({
                     'dob': child_consent.child_dob,
+                    'gestational_age_weeks': gestational_age_weeks,
+                    'gestational_age_months': gestational_age_months,
                 })
 
     def get_caregiver_child_consent(self, subject_identifier=None):
@@ -36,6 +46,15 @@ class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
                 pass
             else:
                 return consents
+
+    def huu_pre_enrollment_obj(self, child_consent):
+        if hasattr(child_consent, 'study_child_identifier'):
+            try:
+                return self.huu_pre_enrollment_cls.objects.get(
+                    pre_flourish_visit__subject_identifier=child_consent
+                    .study_child_identifier)
+            except self.huu_pre_enrollment_cls.DoesNotExist:
+                return None
 
     class Meta:
         model = PreFlourishBirthData
