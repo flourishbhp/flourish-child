@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
-from edc_constants.constants import ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, \
-    NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES
+from edc_constants.constants import (ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE,
+                                     MALE, \
+                                     NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES)
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
 from edc_constants.constants import IND, NEG, PENDING, POS
 from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, MISSED_VISIT
@@ -1190,11 +1191,13 @@ DELIVERY_LOCATION = [
     ('athlone_hospital', 'Athlone Hospital'),
     ('kanye_sda_hospital', 'Kanye SDA Hospital'),
     (OTHER, 'Other'),
+    (UNKNOWN, 'Unknown'),
 ]
 
 DELIVERY_METHOD = [
     ('vaginal', 'Vaginal'),
-    ('c_section', 'C-section')
+    ('c_section', 'C-section'),
+    (UNKNOWN, 'Unknown'),
 ]
 
 GESTATIONAL_AGE_KNOWN = [
@@ -1206,7 +1209,8 @@ GESTATIONAL_AGE_KNOWN = [
 BORN = [
     ('early', 'Early/Pre-term'),
     ('on_time', 'On-time'),
-    ('late', 'Late')
+    ('late', 'Late'),
+    (UNKNOWN, 'Unknown'),
 ]
 
 CHILD_TYPE = [
@@ -1214,3 +1218,16 @@ CHILD_TYPE = [
     ('twin', 'Twin'),
     ('triplet', 'Triplet')
 ]
+
+YES_NO_DOESNT_WORK_NA = (
+    (YES, YES),
+    (NO, NO),
+    ('Doesnt_work', 'Doesn\'t work'),
+    (NOT_APPLICABLE, 'Not Applicable'),
+)
+
+LAPTOP_CHOICES = (
+    ("computer1", "Computer 1 (Serial # FVFHN3S2Q6L4)"),
+    ("computer2", "Computer 2 (Serial # FVHHR2JHQ6L4)"),
+    ("computer3", "Computer 3 (Serial # CO2HXOZUQ6L4)")
+)

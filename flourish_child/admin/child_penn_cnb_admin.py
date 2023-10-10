@@ -27,6 +27,7 @@ class ChildPennCNBAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'testing_impacted',
                 'impact_other',
                 'claim_experience',
+                'laptop_used',
                 'comments'
             ]}
          ), audit_fieldset_tuple)
@@ -36,4 +37,5 @@ class ChildPennCNBAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     radio_fields = {'completed': admin.VERTICAL,
                     'reason_incomplete': admin.VERTICAL,
                     'testing_impacted': admin.VERTICAL,
+                    'laptop_used': admin.VERTICAL,
                     'claim_experience': admin.VERTICAL, }

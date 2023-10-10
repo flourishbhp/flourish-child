@@ -42,7 +42,7 @@ class BirthFeedingVaccineForm(ChildModelFormMixin):
     def validate_vaccine_date_against_birth_date(self):
         subject_identifier = self.cleaned_data.get(
             'child_visit').subject_identifier
-        total = self.data.get('infantvaccines_set-TOTAL_FORMS')
+        total = self.data.get('infantvaccines_set-TOTAL_FORMS', 0)
         for i in range(int(total)):
             vaccine_date = self.data.get(
                 'infantvaccines_set-' + str(i) + '-vaccine_date')
