@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
-from edc_constants.constants import ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE, MALE, \
-    NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES, NOT_APPLICABLE
+from edc_constants.constants import (ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE,
+                                     MALE, \
+                                     NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES)
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
 from edc_constants.constants import IND, NEG, PENDING, POS
 from edc_visit_tracking.constants import COMPLETED_PROTOCOL_VISIT, MISSED_VISIT
@@ -1276,4 +1277,10 @@ ARV_DRUG_LIST = (
     ('3tc', 'Lamivudine (3TC)'),
     ('ral', 'Raltegravir (RAL)'),
     (OTHER, 'Other, specify'),
+)
+
+LAPTOP_CHOICES = (
+    ("computer1", "Computer 1 (Serial # FVFHN3S2Q6L4)"),
+    ("computer2", "Computer 2 (Serial # FVHHR2JHQ6L4)"),
+    ("computer3", "Computer 3 (Serial # CO2HXOZUQ6L4)")
 )
