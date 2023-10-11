@@ -138,14 +138,14 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     if not raw:
 
         child_birth_exists = ChildBirth.objects.filter(
-                subject_identfier=instance.subject_identifier).exists()
-        
+            subject_identifier=instance.subject_identifier).exists()
+
         caregiver_prev_enrolled_cls = django_apps.get_model(
-                'flourish_caregiver.caregiverpreviouslyenrolled')
-        
+            'flourish_caregiver.caregiverpreviouslyenrolled')
+
         maternal_delivery_cls = django_apps.get_model(
-                'flourish_caregiver.maternaldelivery')
-        
+            'flourish_caregiver.maternaldelivery')
+
         if not child_birth_exists:
             # The criteria is for child from a previous study
             try:
@@ -458,8 +458,6 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
     subject_identifier = instance.subject_identifier
 
-
-
     if instance.include_contact_details == NO:
 
         trigger_action_item(
@@ -472,7 +470,7 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
     else:
 
         caregiver_subject_identifier = child_utils.caregiver_subject_identifier(
-        subject_identifier)
+            subject_identifier)
 
         caregiver_locator_cls = django_apps.get_model(
             'flourish_caregiver.caregiverlocator')
