@@ -25,16 +25,19 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'chronic_since',
                 'child_chronic',
-                'child_chronic_other'
-                'current_illness_child'
-                'current_symptoms_child'
-                'current_symptoms_child_other'
-                'symptoms_start_date_child'
+                'child_chronic_other',
+                'current_illness_child',
+                'current_symptoms_child',
+                'current_symptoms_child_other',
+                'symptoms_start_date_child',
                 'clinic_visit_child'
             ]}
          ), audit_fieldset_tuple)
 
     radio_fields = {'chronic_since': admin.VERTICAL,
+                    'current_illness_child': admin.VERTICAL,
+                    'current_symptoms_child': admin.VERTICAL,
+                    'clinic_visit_child': admin.VERTICAL,
                     'med_history_changed': admin.VERTICAL}
 
     filter_horizontal = ('child_chronic',)

@@ -33,8 +33,6 @@ class ChildPregTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     schedule_names = ['child_a_sec_qt_schedule1',
                       'child_a_quart_schedule1',
-                      'child_a_quart_schedule1',
-                      'child_a_quart_schedule1',
                       'child_b_sec_qt_schedule1',
                       'child_b_quart_schedule1',
                       'child_c_sec_qt_schedule1',
@@ -50,7 +48,7 @@ class ChildPregTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     conditional_fieldlists = {}
 
-    for schedule in schedule_names:
+    for schedule in quartely_schedules:
         conditional_fieldlists.update(
             {schedule: Insert(
                 'menarche',
