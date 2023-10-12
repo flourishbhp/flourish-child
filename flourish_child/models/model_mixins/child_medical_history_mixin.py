@@ -1,5 +1,6 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
+from edc_base.model_validators import date_not_future
 from edc_constants.choices import YES_NO
 
 from ...choices import CLINIC_VISIT, CURRENT_MEDICATIONS, CURRENT_SYMPTOMS, \
@@ -65,6 +66,7 @@ class ChildMedicalHistoryMixin(models.Model):
 
     symptoms_start_date = models.DateField(
         verbose_name='When did the symptoms start',
+        validators=[date_not_future],
         blank=True,
         null=True)
 
