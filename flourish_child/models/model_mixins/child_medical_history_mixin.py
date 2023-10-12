@@ -2,18 +2,17 @@ from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
 
-from flourish_caregiver.choices import CLINIC_VISIT_CHOICES, SYMPTOMS_CHOICES
-from ..list_models import ChronicConditions
+from ...choices import CLINIC_VISIT, CURRENT_MEDICATIONS, CURRENT_SYMPTOMS, \
+    DURATION_MEDICATIONS
 
 
 class ChildMedicalHistoryMixin(models.Model):
-
     """A model completed by the user on Medical History for all children."""
 
     chronic_since = models.CharField(
         max_length=25,
         choices=YES_NO,
-        verbose_name='Does the Child/Adolescent have any chronic conditions?',)
+        verbose_name='Does the Child/Adolescent have any chronic conditions?', )
 
     child_chronic_other = OtherCharField(
         max_length=35,
@@ -28,41 +27,54 @@ class ChildMedicalHistoryMixin(models.Model):
         choices=YES_NO,
         null=True)
 
-    current_illness_child = models.CharField(
-        verbose_name="Does your child have any current illness?",
+    # version 2 questions
+    currently_taking_medications = models.CharField(
+        verbose_name='Is your child currently taking any medications',
+        choices=YES_NO,
         max_length=10,
-        choices=YES_NO
+        default=''
     )
 
-    current_symptoms_child = models.CharField(
+    current_medications = models.CharField(
+        verbose_name='What medications does your child currently take',
+        choices=CURRENT_MEDICATIONS,
+        max_length=50,
+        null=True,
+        blank=True)
+
+    duration_of_medications = models.CharField(
+        verbose_name='How long has your child been taking these medications',
+        choices=DURATION_MEDICATIONS,
+        max_length=50,
+        null=True,
+        blank=True)
+
+    current_illness = models.CharField(
+        verbose_name='Does your child have any current illness',
+        choices=YES_NO,
+        max_length=10,
+        default=''
+    )
+
+    current_symptoms = models.CharField(
         verbose_name="What are your child's current symptoms",
-        max_length=30,
+        choices=CURRENT_SYMPTOMS,
+        max_length=50,
+        null=True,
+        blank=True)
+
+    symptoms_start_date = models.DateField(
+        verbose_name='When did the symptoms start',
         blank=True,
-        null=True,
-        choices=SYMPTOMS_CHOICES
-    )
+        null=True)
 
-    current_symptoms_child_other = OtherCharField(
-        max_length=35,
-        verbose_name='If other, specify.',
+    seen_at_local_clinic = models.CharField(
+        verbose_name='Has your child been seen at a local clinic or have you been seen '
+                     'for consultation at a local clinic because of this illness?',
+        choices=CLINIC_VISIT,
+        null=True,
         blank=True,
-        null=True
-    )
-
-    symptoms_start_date_child = models.DateField(
-        verbose_name="When did the symptoms start.",
-        null=True,
-        blank=True
-    )
-
-    clinic_visit_child = models.CharField(
-        verbose_name="Has your child been seen at a local clinic or have you been seen"
-                     " for consultation at a local clinic because of this illness?",
-        max_length=20,
-        choices=CLINIC_VISIT_CHOICES,
-        null=True,
-        blank=True
-    )
+        max_length=50)
 
     class Meta:
         abstract = True

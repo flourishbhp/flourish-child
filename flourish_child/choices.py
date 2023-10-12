@@ -1285,3 +1285,48 @@ LAPTOP_CHOICES = (
     ("computer2", "Computer 2 (Serial # FVHHR2JHQ6L4)"),
     ("computer3", "Computer 3 (Serial # CO2HXOZUQ6L4)")
 )
+
+CURRENT_MEDICATIONS = (
+    ('inhaler', 'Inhaler/Albuterol'),
+    ('antibiotics', 'Antibiotics'),
+    ('anti_anxiety_drugs', 'Anti-anxiety drugs'),
+    ('anti_asthmatic_drugs', 'Anti-asthmatic drugs'),
+    ('antidepressant_drugs', 'Antidepressant drugs'),
+    ('cholesterol_medications', 'Cholesterol medications'),
+    ('diabetic_medications', 'Diabetic medications'),
+    ('heart_disease_medications', 'Heart disease medications'),
+    ('hypertensive_medications', 'Hypertensive medications'),
+    ('pain_killers', 'Pain killers'),
+    ('tb_treatment', 'TB Treatment'),
+    ('tpt', 'TPT (TB preventive therapy)'),
+    ('traditional_medications', 'Traditional medications'),
+    ('vitamin_d_supplement', 'Vitamin D supplement'),
+    (OTHER, 'Other'),
+)
+
+DURATION_MEDICATIONS = (
+    ('less_than_week', 'Less than 1 week'),
+    ('week_to_2weeks', '1 week to 2 weeks'),
+    ('2weeks_to_1month', '2 weeks to 1 month'),
+    ('1month_6months', '1 month- 6 months'),
+    ('more_than_6months', 'More than 6 months'),
+)
+
+CURRENT_SYMPTOMS = (
+    ('cough', 'Cough'),
+    ('fever', 'Fever'),
+    ('headache', 'Headache'),
+    ('vomiting', 'Vomiting'),
+    ('diarrhea', 'Diarrhea'),
+    ('fatigue', 'Fatigue'),
+    ('congestion', 'Congestion'),
+    ('enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
+    (OTHER, 'Other'),
+)
+
+CLINIC_VISIT = (
+    ('yes', 'Yes'),
+    ('no', 'No'),
+    ('appointment_scheduled', 'Appointment Scheduled'),
+    ('will_seek_care', 'Will seek care'),
+)
