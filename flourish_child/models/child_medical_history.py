@@ -1,4 +1,5 @@
 from django.db import models
+
 from .list_models import ChronicConditions
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins import ChildMedicalHistoryMixin
