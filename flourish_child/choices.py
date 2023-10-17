@@ -1325,8 +1325,8 @@ CURRENT_SYMPTOMS = (
 )
 
 CLINIC_VISIT = (
-    ('yes', 'Yes'),
-    ('no', 'No'),
+    (YES, YES),
+    (NO, NO),
     ('appointment_scheduled', 'Appointment Scheduled'),
     ('will_seek_care', 'Will seek care'),
 )
