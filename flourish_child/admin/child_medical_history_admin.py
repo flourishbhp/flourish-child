@@ -33,7 +33,6 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'current_symptoms',
                 'symptoms_start_date',
                 'seen_at_local_clinic',
-                'clinic_visit_child'
             ]}
          ), audit_fieldset_tuple)
 
