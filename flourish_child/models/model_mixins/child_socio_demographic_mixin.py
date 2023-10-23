@@ -110,8 +110,14 @@ class ChildSocioDemographicMixin(models.Model):
     school_type = models.CharField(
         verbose_name='What type of school does this child attend?',
         choices=SCHOOL_TYPE,
-        max_length=15,
+        max_length=30,
         default=NOT_APPLICABLE)
+    
+    months_in_boarding = models.PositiveSmallIntegerField(
+        verbose_name='How many months of the year does your child stay at boarding school?',
+        validators=[MinValueValidator(1), MaxValueValidator(12)],
+        null=True,
+        blank=True)
 
     working = models.CharField(
         verbose_name='Is this adolescent currently working in return '

@@ -281,6 +281,7 @@ HIGHEST_EDUCATION = (
     (OTHER, 'Other'),
     ('no_schooling', 'No Schooling ')
 )
+
 HOSPITAL = (
     ('princess_marina', 'Princess Marina'),
     ('slh', 'SLH'),
@@ -651,6 +652,8 @@ RESPIRATORY_DEFECT = (
 SCHOOL_TYPE = (
     ('public', 'Public/Government'),
     ('private', 'Private'),
+    ('public_boarding_school', 'Boarding School Public/Government'),
+    ('private_boarding_school', 'Boarding School Private'),
     (NOT_APPLICABLE, 'Not applicable'),
 )
 
@@ -1218,6 +1221,7 @@ CHILD_TYPE = [
     ('twin', 'Twin'),
     ('triplet', 'Triplet')
 ]
+
 
 YES_NO_DOESNT_WORK_NA = (
     (YES, YES),
