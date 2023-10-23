@@ -43,6 +43,12 @@ class ChildMedicalHistoryMixin(models.Model):
         null=True,
         blank=True)
 
+    current_medications_other = OtherCharField(
+        verbose_name='If other, specify.',
+        max_length=35,
+        blank=True,
+        null=True)
+
     duration_of_medications = models.CharField(
         verbose_name='How long has your child been taking these medications',
         choices=DURATION_MEDICATIONS,
@@ -63,6 +69,11 @@ class ChildMedicalHistoryMixin(models.Model):
         max_length=50,
         null=True,
         blank=True)
+
+    current_symptoms_other = models.TextField(
+        verbose_name='If other, specify.',
+        blank=True,
+        null=True)
 
     symptoms_start_date = models.DateField(
         verbose_name='When did the symptoms start',

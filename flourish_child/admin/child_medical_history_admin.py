@@ -28,9 +28,11 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_chronic_other',
                 'currently_taking_medications',
                 'current_medications',
+                'current_medications_other',
                 'duration_of_medications',
                 'current_illness',
                 'current_symptoms',
+                'current_symptoms_other',
                 'symptoms_start_date',
                 'seen_at_local_clinic',
             ]}
