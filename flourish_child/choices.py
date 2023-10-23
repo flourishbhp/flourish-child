@@ -1222,6 +1222,7 @@ CHILD_TYPE = [
     ('triplet', 'Triplet')
 ]
 
+
 YES_NO_DOESNT_WORK_NA = (
     (YES, YES),
     (NO, NO),
