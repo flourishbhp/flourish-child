@@ -137,16 +137,20 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
     """
     if not raw:
 
-        child_birth_exists = ChildBirth.objects.filter(
-            subject_identifier=instance.subject_identifier).exists()
+        caregiver_child_consent_cls = django_apps.get_model(
+            'flourish_caregiver.caregiverchildconsent')
 
         caregiver_prev_enrolled_cls = django_apps.get_model(
             'flourish_caregiver.caregiverpreviouslyenrolled')
 
         maternal_delivery_cls = django_apps.get_model(
             'flourish_caregiver.maternaldelivery')
-
-        if not child_birth_exists:
+        
+        child_prev_enrolled = caregiver_child_consent_cls.objects.filter(
+            subject_identifier = instance.subject_identifier,
+            study_child_identifier__isnull = False).exists()
+        
+        if child_prev_enrolled:
             # The criteria is for child from a previous study
             try:
                 prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
