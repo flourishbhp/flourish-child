@@ -37,6 +37,11 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
                 'child_hip_circ',
             ]}
          ),
+        ("Skin Folds Questions", {
+            'fields': [
+                'visit_skin_fold_messure',
+            ]}
+         ),
         ("Skin Folds Triceps", {
             'fields': [
                 'skin_folds_triceps',
@@ -61,7 +66,9 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
         audit_fieldset_tuple)
 
     radio_fields = {
-        'is_child_preg': admin.VERTICAL, }
+        'is_child_preg': admin.VERTICAL,
+        'visit_skin_fold_messure': admin.VERTICAL,
+    }
 
     conditional_fieldlists = {}
 
