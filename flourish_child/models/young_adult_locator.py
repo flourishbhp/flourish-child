@@ -60,8 +60,6 @@ class YoungAdultLocator(SiteModelMixin, SubjectContactFieldsMixin,
     may_call = models.CharField(
         max_length=25,
         choices=YES_NO,
-        blank=True,
-        null=True,
         verbose_name=mark_safe(
             'Has the participant given his/her permission for study '
             'staff to call her for follow-up purposes during the study?'))
@@ -69,8 +67,6 @@ class YoungAdultLocator(SiteModelMixin, SubjectContactFieldsMixin,
     may_visit_home = models.CharField(
         max_length=25,
         choices=YES_NO,
-        blank=True,
-        null=True,
         verbose_name=mark_safe(
             'Has the participant given his/her permission for study staff <b>to '
             'make home visits</b> for follow-up purposes during the study?'))
@@ -78,8 +74,6 @@ class YoungAdultLocator(SiteModelMixin, SubjectContactFieldsMixin,
     may_call_work = models.CharField(
         max_length=25,
         choices=YES_NO_DOESNT_WORK,
-        blank=True,
-        null=True,
         verbose_name=mark_safe(
             'Has the participant given his/her permission for study staff '
             'to contact her at work for follow up purposes during the study?'))
