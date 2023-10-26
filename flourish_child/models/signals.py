@@ -12,32 +12,34 @@ from edc_constants.constants import IND, MALE, NEG, NO, UNKNOWN, YES
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import MISSED_VISIT
-from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, TB_ADOL_STUDY_ACTION, MISSED_BIRTH_VISIT_ACTION
+
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_tb_presence_household_member import \
     TbPresenceHouseholdMembersAdol
+from flourish_child.models.adol_tb_referral import TbReferalAdol
 from flourish_child.models.child_appointment import Appointment as ChildAppointment
 from flourish_child.models.child_birth import ChildBirth
 from flourish_child.models.tb_adol_assent import TbAdolAssent
 from flourish_child.models.tb_visit_screen_adol import TbVisitScreeningAdolescent
+from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, \
+    MISSED_BIRTH_VISIT_ACTION, TB_ADOL_STUDY_ACTION
 from flourish_prn.models import TBAdolOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 from pre_flourish.helper_classes import MatchHelper
-from flourish_child.models.adol_tb_referral import TbReferalAdol
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
-from ..models.child_clinical_measurements import ChildClinicalMeasurements
-from ..models import ChildOffSchedule, AcademicPerformance, ChildSocioDemographic
-from ..models import ChildPreHospitalizationInline
+from ..action_items import YOUNG_ADULT_LOCATOR_ACTION
 from ..helper_classes import ChildFollowUpBookingHelper, ChildOnScheduleHelper
-from ..helper_classes.utils import (child_utils, notification, trigger_action_item,
-                                    stamp_image)
-from ..action_items import YoungAdultLocatorAction, YOUNG_ADULT_LOCATOR_ACTION
-from ..models.young_adult_locator import YoungAdultLocator
+from ..helper_classes.utils import (child_utils, notification, stamp_image,
+                                    trigger_action_item)
+from ..models import AcademicPerformance, ChildOffSchedule, ChildSocioDemographic
+from ..models import ChildPreHospitalizationInline
+from ..models.child_clinical_measurements import ChildClinicalMeasurements
 from ..models.child_continued_consent import ChildContinuedConsent
+from ..models.young_adult_locator import YoungAdultLocator
 
 
 class CaregiverConsentError(Exception):
@@ -88,7 +90,8 @@ def child_assent_on_post_save(sender, instance, raw, created, **kwargs):
                 raise CaregiverConsentError('Associated caregiver consent on behalf of '
                                             'child for this participant not found')
             else:
-                caregiver_subject_identifier = caregiver_child_consent_obj.subject_consent.subject_identifier
+                caregiver_subject_identifier = (
+                    caregiver_child_consent_obj.subject_consent.subject_identifier)
                 if caregiver_child_consent_obj.is_eligible:
                     try:
                         dummy_consent_obj = ChildDummySubjectConsent.objects.get(
@@ -145,16 +148,15 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 
         maternal_delivery_cls = django_apps.get_model(
             'flourish_caregiver.maternaldelivery')
-        
+
         child_prev_enrolled = caregiver_child_consent_cls.objects.filter(
-            subject_identifier = instance.subject_identifier,
-            study_child_identifier__isnull = False).exists()
+            subject_identifier=instance.subject_identifier,
+            study_child_identifier__isnull=False).exists()
 
         helper_cls = ChildOnScheduleHelper(
-                    subject_identifier=instance.subject_identifier,
-                    base_appt_datetime=prev_enrolled.report_datetime,
-                    cohort=instance.cohort)
-        
+            subject_identifier=instance.subject_identifier,
+            cohort=instance.cohort)
+
         if child_prev_enrolled:
             # The criteria is for child from a previous study
             try:
@@ -163,7 +165,9 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
             except caregiver_prev_enrolled_cls.DoesNotExist:
                 pass
             else:
+                helper_cls.base_appt_datetime = prev_enrolled.report_datetime
                 helper_cls.put_cohort_onschedule(instance, )
+
         else:
 
             try:
@@ -460,7 +464,6 @@ def child_take_off_schedule(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=ChildContinuedConsent,
           dispatch_uid='child_continued_consent_on_post_save')
 def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
-
     subject_identifier = instance.subject_identifier
 
     if instance.include_contact_details == NO:
