@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
-from django.test import TestCase, tag
+from django.test import TestCase
 from edc_base.utils import get_utcnow
 from edc_constants.constants import NOT_APPLICABLE, YES
 from edc_facility.import_holidays import import_holidays
@@ -52,17 +52,14 @@ class TestVisitScheduleSetup(TestCase):
         return child_dob
 
     def test_cohort_a_onschedule_birth_valid(self):
-        maternal_dataset_obj = mommy.make_recipe(
-            'flourish_caregiver.maternaldataset',
-            **self.maternal_dataset_options)
+        screening_preg = mommy.make_recipe(
+            'flourish_caregiver.screeningpregwomen', )
 
-        mommy.make_recipe(
-            'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier,)
+        self.options.update(version=3)
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
-            screening_identifier=maternal_dataset_obj.screening_identifier,
+            screening_identifier=screening_preg.screening_identifier,
             breastfeed_intent=YES,
             biological_caregiver=YES,
             **self.options)
@@ -80,7 +77,9 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
-            subject_identifier=subject_consent.subject_identifier,)
+            subject_identifier=subject_consent.subject_identifier,
+            delivery_datetime=get_utcnow(),
+            live_infants_to_register=1)
 
         mommy.make_recipe(
             'flourish_child.childbirth',
@@ -154,6 +153,7 @@ class TestVisitScheduleSetup(TestCase):
 
     def test_cohort_b_onschedule_valid(self):
         self.maternal_dataset_options['protocol'] = 'Mpepu'
+        self.maternal_dataset_options['mom_pregarv_strat'] = '3-drug ART'
         self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(
             years=5,
             months=2)
@@ -221,6 +221,7 @@ class TestVisitScheduleSetup(TestCase):
         self.maternal_dataset_options['delivdt'] = get_utcnow() - relativedelta(
             years=7,
             months=2)
+        self.child_dataset_options['infant_hiv_exposed'] = 'unexposed'
 
         child_dataset = mommy.make_recipe(
             'flourish_child.childdataset',
