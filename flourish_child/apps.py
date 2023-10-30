@@ -48,12 +48,17 @@ if settings.APP_NAME == 'flourish_child':
             AppointmentConfig(
                 model='flourish_child.appointment',
                 related_visit_model='flourish_child.childvisit',
-                appt_type='clinic')]
+                appt_type='clinic'),
+            AppointmentConfig(
+                model='flourish_facet.appointment',
+                related_visit_model='flourish_facet.facetvisit',
+                appt_type='clinic'),]
 
 
     class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
         reason_field = {'flourish_child.childvisit': 'reason',
-                        'pre_flourish.preflourishvisit': 'reason',}
+                        'pre_flourish.preflourishvisit': 'reason',
+                        'flourish_facet.facetvisit': 'reason', }
         create_on_reasons = [SCHEDULED, UNSCHEDULED, COMPLETED_PROTOCOL_VISIT]
         delete_on_reasons = [LOST_VISIT, MISSED_VISIT, FAILED_ELIGIBILITY]
 
@@ -97,6 +102,11 @@ if settings.APP_NAME == 'flourish_child':
                     datetime_field='appt_datetime',
                     status_field='appt_status',
                     closed_status=COMPLETE_APPT),
+                Timepoint(
+                    model='flourish_facet.appointment',
+                    datetime_field='appt_datetime',
+                    status_field='appt_status',
+                    closed_status=COMPLETE_APPT),
             ])
 
 
@@ -107,7 +117,9 @@ if settings.APP_NAME == 'flourish_child':
             'flourish_child': (
                 'child_visit', 'flourish_child.childvisit'),
             'pre_flourish': (
-                'pre_flourish_visit', 'pre_flourish.preflourishvisit'), }
+                'pre_flourish_visit', 'pre_flourish.preflourishvisit'),
+            'flourish_facet': (
+                'facet_visit', 'flourish_facet.facetvisit'), }
 
 
     class EdcFacilityAppConfig(BaseEdcFacilityAppConfig):
