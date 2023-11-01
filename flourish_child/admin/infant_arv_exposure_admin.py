@@ -19,17 +19,10 @@ class InfantArvExposureAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'azt_after_birth',
                 'azt_dose_date',
-                'azt_within_72h',
                 'azt_additional_dose',
                 'sdnvp_after_birth',
                 'nvp_dose_date',
-                'snvp_dose_within_72h',
-                'nvp_cont_dosing',
                 'azt_discharge_supply',
-                'additional_arvs',
-                'arvs_specify',
-                'arvs_specify_other',
-                'date_1st_arv_dose',
                 'infant_arv_comments', ]}
          ), audit_fieldset_tuple)
 
@@ -46,9 +39,4 @@ class InfantArvExposureAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'azt_additional_dose': admin.VERTICAL,
         'sdnvp_after_birth': admin.VERTICAL,
         'azt_discharge_supply': admin.VERTICAL,
-        'arvs_specify': admin.VERTICAL,
-        'additional_arvs': admin.VERTICAL,
-        'nvp_cont_dosing': admin.VERTICAL,
-        'snvp_dose_within_72h': admin.VERTICAL,
-        'azt_within_72h': admin.VERTICAL
     }
