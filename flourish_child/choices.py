@@ -1275,12 +1275,6 @@ CHILD_ARV_PROPH = (
     (UNKNOWN, 'Unknown'),
 )
 
-ARV_DRUG_LIST = (
-    ('3tc', 'Lamivudine (3TC)'),
-    ('ral', 'Raltegravir (RAL)'),
-    (OTHER, 'Other, specify'),
-)
-
 LAPTOP_CHOICES = (
     ("computer1", "Computer 1 (Serial # FVFHN3S2Q6L4)"),
     ("computer2", "Computer 2 (Serial # FVHHR2JHQ6L4)"),
