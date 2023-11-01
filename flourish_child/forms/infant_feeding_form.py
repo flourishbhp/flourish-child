@@ -36,6 +36,24 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
 
+        # Make breasfeeding start fields readonly if auto-filled from previous visit
+        if initial.get('bf_start_dt', None):
+            self.fields['ever_breastfed'].widget = forms.TextInput(
+                attrs={'readonly': 'readonly'})
+            self.fields['bf_start_dt_est'].widget = forms.TextInput(
+                attrs={'readonly': 'readonly'})
+            self.fields['bf_start_dt'].widget = forms.DateInput(
+                attrs={'readonly': 'readonly'})
+        if (initial.get('dt_weaned', None) and
+                initial.get('child_weaned', None) == YES):
+            self.fields['child_weaned'].widget = forms.TextInput(
+                attrs={'readonly': 'readonly'})
+            self.fields['dt_weaned'].widget = forms.DateInput(
+                attrs={'readonly': 'readonly'})
+        if initial.get('dt_formula_introduced', None):
+            self.fields['dt_formula_introduced'].widget = forms.DateInput(
+                attrs={'readonly': 'readonly'})
+
     def clean(self):
         previous_instance = getattr(self, 'previous_instance', None)
         has_changed = self.compare_instance_fields(prev_instance=previous_instance)

@@ -1,10 +1,9 @@
 from django.utils.datetime_safe import datetime
-from flourish_caregiver.models import CaregiverChildConsent
 
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, POS, NEG, MALE, NO
+from edc_constants.constants import YES, POS, NEG, NO
 from edc_facility.import_holidays import import_holidays
 from edc_metadata.constants import REQUIRED, NOT_REQUIRED
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
@@ -15,7 +14,7 @@ from ..models import Appointment, ChildDummySubjectConsent, \
     OnScheduleChildCohortAQuarterly
 
 
-@tag('rga')
+@tag('testrg')
 class TestRuleGroups(TestCase):
 
     def setUp(self):
@@ -432,7 +431,7 @@ class TestRuleGroups(TestCase):
     def test_infant_hiv_test_infant_feeding_hiv_test(self):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
-            current_hiv_status=NEG,
+            current_hiv_status=POS,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -495,7 +494,7 @@ class TestRuleGroups(TestCase):
                 subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
                 visit_code='2003', ).entry_status, REQUIRED)
 
-    def test_infant_hiv_test_infant_feeding_hiv_test(self):
+    def test_infant_hiv_test_infant_feeding_not_required(self):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
@@ -664,3 +663,288 @@ class TestRuleGroups(TestCase):
                 subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
                 visit_code='2002', ).entry_status, REQUIRED)
 
+    def test_arv_proph_not_required_2000d(self):
+        """ Assert ARV prophylaxis crf not required at child birth visit
+        """
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=POS,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            CrfMetadata.objects.filter(
+                model='flourish_child.infantarvprophylaxis',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D', ).exists(), False)
+        
+    def test_arv_proph_2001_preg_pos_required(self):
+        """ Assert ARV proph crf is required at 2001 if participant is
+            ANC enrolled and POS.
+        """
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=POS,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infantarvprophylaxis',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001', ).entry_status, REQUIRED)
+        
+    def test_arv_proph_if_missed_at_2001(self):
+        """ Assert ARV proph crf is required at next visit if missed at 2001
+        """
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=POS,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infantarvprophylaxis',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002', ).entry_status, REQUIRED)
+
+    def test_arv_proph_if_completed_at_2001(self):
+        """ Assert ARV proph crf is not required at next visit(s) if completed at 2001
+            and status is not in-progress.
+        """
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=POS,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        child_visit = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.infantarvprophylaxis',
+            child_visit=child_visit,
+            art_status='completed_in_time',
+        )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infantarvprophylaxis',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002', ).entry_status, NOT_REQUIRED)
+
+    def test_arv_proph_status_in_progress(self):
+        """ Assert ARV proph crf is required at next visit(s) if status is in-progress.
+        """
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=POS,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        child_visit = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.infantarvprophylaxis',
+            child_visit=child_visit,
+            art_status='in_progress',
+        )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infantarvprophylaxis',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002', ).entry_status, REQUIRED)
+
+    def test_arv_proph_status_in_progress_2003(self):
+        """ Assert ARV proph crf is required at next visit(s) if status is in-progress.
+        """
+        mommy.make_recipe(
+            'flourish_caregiver.antenatalenrollment',
+            current_hiv_status=POS,
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_caregiver.maternaldelivery',
+            subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        mommy.make_recipe(
+            'flourish_child.childbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            dob=(get_utcnow() - relativedelta(days=1)).date(), )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2000D'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2001'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        child_visit = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2002'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.infantarvprophylaxis',
+            child_visit=child_visit,
+            art_status='in_progress',
+        )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2003'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(
+            CrfMetadata.objects.get(
+                model='flourish_child.infantarvprophylaxis',
+                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                visit_code='2003', ).entry_status, REQUIRED)

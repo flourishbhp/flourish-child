@@ -1230,8 +1230,104 @@ YES_NO_DOESNT_WORK_NA = (
     (NOT_APPLICABLE, 'Not Applicable'),
 )
 
+NO_ART_REASON = (
+    ('lack_of_understanding',
+     'Mother did not understand medication instructions and did not collect'),
+    ('forgot_meds', 'Mother forget to collect medication'),
+    ('out_of_stock', 'Medication was out of stock'),
+    ('period_elapsed',
+     '72hrs period to start prophylactic antiretroviral medication elapsed'),
+    ('didnt_give_baby', 'Medication collected and did not give the baby'),
+    (OTHER, 'Other, specify'),
+)
+
+ART_PROPH_STATUS = (
+    ('in_progress', 'In progress, still taking prophylaxis'),
+    ('completed_in_time',
+     'Completed PMTCT intervention within stipulated prophylaxis time (28 days)'),
+    ('completed_gt_28days',
+     'Completed PMTCT intervention with prophylaxis greater than 28 days'),
+    ('incomplete',
+     'Incomplete, did not finish within stipulated prophylaxis time'),
+)
+
+REASON_MODIFIED = (
+    ('toxicity_resolved', 'Toxicity decreased/resolved'),
+    ('dose_increase', 'Scheduled dose increase'),
+    ('triple_art_na', 'Triple ARTs not available'),
+    ('anemia', 'Anemia'),
+    ('bleeding', 'Bleeding'),
+    ('side_effects', 'Side effects'),
+    ('toxicity', 'Toxicity'),
+    (OTHER, 'Other, specify'),
+)
+
+CHILD_ARV_PROPH = (
+    ('arv_proph_nvp', 'NVP'),
+    ('arv_proph_azt', 'AZT'),
+    ('arv_proph_3tc', '3TC'),
+    ('arv_proph_ftc', 'FTC'),
+    ('arv_proph_alu', 'ALU'),
+    ('arv_proph_trv', 'TRV'),
+    ('arv_proph_tdf', 'TDF'),
+    ('arv_proph_abc', 'ABC'),
+    ('arv_proph_ral', 'RAL'),
+    (UNKNOWN, 'Unknown'),
+)
+
+ARV_DRUG_LIST = (
+    ('3tc', 'Lamivudine (3TC)'),
+    ('ral', 'Raltegravir (RAL)'),
+    (OTHER, 'Other, specify'),
+)
+
 LAPTOP_CHOICES = (
     ("computer1", "Computer 1 (Serial # FVFHN3S2Q6L4)"),
     ("computer2", "Computer 2 (Serial # FVHHR2JHQ6L4)"),
     ("computer3", "Computer 3 (Serial # CO2HXOZUQ6L4)")
+)
+
+CURRENT_MEDICATIONS = (
+    ('inhaler', 'Inhaler/Albuterol'),
+    ('antibiotics', 'Antibiotics'),
+    ('anti_anxiety_drugs', 'Anti-anxiety drugs'),
+    ('anti_asthmatic_drugs', 'Anti-asthmatic drugs'),
+    ('antidepressant_drugs', 'Antidepressant drugs'),
+    ('cholesterol_medications', 'Cholesterol medications'),
+    ('diabetic_medications', 'Diabetic medications'),
+    ('heart_disease_medications', 'Heart disease medications'),
+    ('hypertensive_medications', 'Hypertensive medications'),
+    ('pain_killers', 'Pain killers'),
+    ('tb_treatment', 'TB Treatment'),
+    ('tpt', 'TPT (TB preventive therapy)'),
+    ('traditional_medications', 'Traditional medications'),
+    ('vitamin_d_supplement', 'Vitamin D supplement'),
+    (OTHER, 'Other'),
+)
+
+DURATION_MEDICATIONS = (
+    ('less_than_week', 'Less than 1 week'),
+    ('week_to_2weeks', '1 week to 2 weeks'),
+    ('2weeks_to_1month', '2 weeks to 1 month'),
+    ('1month_6months', '1 month- 6 months'),
+    ('more_than_6months', 'More than 6 months'),
+)
+
+CURRENT_SYMPTOMS = (
+    ('cough', 'Cough'),
+    ('fever', 'Fever'),
+    ('headache', 'Headache'),
+    ('vomiting', 'Vomiting'),
+    ('diarrhea', 'Diarrhea'),
+    ('fatigue', 'Fatigue'),
+    ('congestion', 'Congestion'),
+    ('enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
+    (OTHER, 'Other'),
+)
+
+CLINIC_VISIT = (
+    (YES, YES),
+    (NO, NO),
+    ('appointment_scheduled', 'Appointment Scheduled'),
+    ('will_seek_care', 'Will seek care'),
 )

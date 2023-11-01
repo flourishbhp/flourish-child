@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'flourish_follow.apps.AppConfig',
     'flourish_labs.apps.AppConfig',
     'flourish_caregiver.apps.AppConfig',
+    'flourish_facet.apps.AppConfig',
     'flourish_calendar.apps.AppConfig',
     'flourish_child.apps.EdcAppointmentAppConfig',
     'flourish_child.apps.EdcMetadataAppConfig',

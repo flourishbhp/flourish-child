@@ -9,12 +9,11 @@ class ChildMedicalHistory(ChildCrfModelMixin,
                           ChildMedicalHistoryMixin):
     """A model completed by the user on Medical History for all children."""
 
-
     child_chronic = models.ManyToManyField(
         ChronicConditions,
         related_name='child',
         verbose_name=('Does the Child/Adolescent have any of the above. '
-                      'Tick all that apply'),)
+                      'Tick all that apply'), )
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'

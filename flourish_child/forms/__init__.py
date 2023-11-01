@@ -1,11 +1,9 @@
 from .academic_performance_form import AcademicPerformanceForm
 from .ado_tb_lab_results_form import TbLabResultsAdolForm
-from .ado_tb_lab_results_form import TbLabResultsAdolForm
 from .adol_clinical_measurements_form import AdolClinicalMeasurementsForm
 from .adol_covid19_screen_form import Covid19AdolForm
 from .adol_hiv_knowledge_form import HivKnowledgeForm
 from .adol_tb_history_form import TbHistoryAdolForm
-from .adol_tb_knowledge_form import TbKnowledgeAdolForm
 from .adol_tb_knowledge_form import TbKnowledgeAdolForm
 from .adol_tb_presence_household_member_form import TbPresenceHouseholdMembersAdolForm
 from .adol_tb_referral_form import TbReferralAdolForm
@@ -59,7 +57,7 @@ from .child_tanner_staging_form import ChildTannerStagingForm
 from .child_visit_form import ChildVisitForm
 from .child_working_status_form import ChildWorkingStatusForm
 from .hiv_testing_adol_form import HIVTestingAdolForm
-from .hiv_testing_adol_form import HIVTestingAdolForm
+from .infant_arv_prophylaxis_form import InfantArvProphylaxisForm, ChildArvProphDatesForm
 from .infant_arv_exposure_form import InfantArvExposureForm
 from .infant_congenital_anomalies_form import InfantCardioDisorderForm
 from .infant_congenital_anomalies_form import InfantCleftDisorderForm
