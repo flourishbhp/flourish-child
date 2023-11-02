@@ -319,7 +319,8 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
         base_appt_datetime = None
         try:
             maternal_delivery_obj = maternal_delivery_cls.objects.get(
-                subject_identifier=caregiver_subject_identifier)
+                subject_identifier=caregiver_subject_identifier,
+                child_subject_identifier=instance.subject_identifier)
         except maternal_delivery_cls.DoesNotExist:
             pass
         else:

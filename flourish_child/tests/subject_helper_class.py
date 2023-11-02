@@ -59,12 +59,13 @@ class SubjectHelperClass:
             'flourish_caregiver.subjectconsent',
             **self.options)
 
-        mommy.make_recipe(
+        child_consent=mommy.make_recipe(
                 'flourish_caregiver.caregiverchildconsent',
                 subject_consent=subject_consent, )
 
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
+            child_subject_identifier=child_consent.subject_identifier,
             subject_identifier=subject_consent.subject_identifier,)
 
         mommy.make_recipe(

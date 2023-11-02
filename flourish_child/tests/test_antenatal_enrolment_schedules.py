@@ -45,12 +45,14 @@ class TestAntenatalEnrolmentSchedules(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
             current_hiv_status=NEG,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=self.preg_subject_consent.subject_identifier,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
             delivery_datetime=get_utcnow(),
             live_infants_to_register=1)
 

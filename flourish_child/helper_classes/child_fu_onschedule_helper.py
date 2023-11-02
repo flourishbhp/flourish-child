@@ -97,8 +97,6 @@ class ChildFollowUpEnrolmentHelper(object):
             subject_identifier=subject_identifier,
             schedule_name=schedule_name)
 
-        print("Going well..")
-
     def activate_child_fu_schedule(self):
 
         latest_child_appt = self.get_latest_completed_child_appointment(
@@ -110,8 +108,6 @@ class ChildFollowUpEnrolmentHelper(object):
 
             self.put_on_child_fu_schedule(latest_child_appt.schedule_name,
                                           latest_child_appt.subject_identifier)
-
-            print("Done!")
 
             if self.update_mother:
 
