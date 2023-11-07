@@ -16,6 +16,7 @@ class BirthDataForm(ChildModelFormMixin):
 
     def __init__(self, *args, **kwargs):
         super(BirthDataForm, self).__init__(*args, **kwargs)
+        self.subject_identifier = self.initial.get('subject_identifier')
         if self.antenatal_enrolment_obj:
             self.initial['gestational_age'] = self.antenatal_enrolment_obj.real_time_ga
         elif self.get_ga_confirmed:
@@ -40,7 +41,9 @@ class BirthDataForm(ChildModelFormMixin):
     def get_latest_ultrasound(self):
         try:
             return self.ultrasound_model_cls.objects.filter(
-                maternal_visit__appointment__subject_identifier=self.caregiver_subject_identifier).order_by(
+                child_subject_identifier=self.subject_identifier,
+                maternal_visit__appointment__subject_identifier=(
+                    self.caregiver_subject_identifier)).order_by(
                 '-report_datetime').first()
         except self.ultrasound_model_cls.DoesNotExist:
             return None
@@ -49,6 +52,7 @@ class BirthDataForm(ChildModelFormMixin):
     def antenatal_enrolment_obj(self):
         try:
             antenatal_enrolment_obj = self.antenatal_enrolment_cls.objects.get(
+                child_subject_identifier=self.subject_identifier,
                 subject_identifier=self.caregiver_subject_identifier)
         except self.antenatal_enrolment_cls.DoesNotExist:
             return None
