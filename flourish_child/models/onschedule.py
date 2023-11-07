@@ -138,6 +138,10 @@ class OnScheduleChildCohortASecQuart(OnScheduleModelMixin):
     pass
 
 
+class OnScheduleChildCohortASecSeq(OnScheduleModelMixin):
+    pass
+
+
 class OnScheduleChildCohortBSec(OnScheduleModelMixin):
     pass
 
@@ -146,7 +150,15 @@ class OnScheduleChildCohortBSecQuart(OnScheduleModelMixin):
     pass
 
 
+class OnScheduleChildCohortBSecSeq(OnScheduleModelMixin):
+    pass
+
+
 class OnScheduleChildCohortCSecQuart(OnScheduleModelMixin):
+    pass
+
+
+class OnScheduleChildCohortCSecSeq(OnScheduleModelMixin):
     pass
 
 

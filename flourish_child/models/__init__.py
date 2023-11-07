@@ -96,6 +96,8 @@ from .onschedule import OnScheduleChildCohortCPool, \
 from .onschedule import OnScheduleChildCohortCQuarterly
 from .onschedule import OnScheduleChildTbAdolSchedule
 from .onschedule import OnScheduleTbAdolFollowupSchedule
+from .onschedule import (OnScheduleChildCohortASecSeq, OnScheduleChildCohortBSecSeq,
+                         OnScheduleChildCohortCSecSeq)
 from .pre_flourish_birth_data import PreFlourishBirthData
 from .signals import child_consent_on_post_save
 from .tb_adol_assent import TbAdolAssent
