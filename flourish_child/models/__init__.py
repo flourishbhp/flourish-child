@@ -87,6 +87,7 @@ from .onschedule import OnScheduleChildCohortASec, OnScheduleChildCohortBSec
 from .onschedule import OnScheduleChildCohortASecQuart, \
     OnScheduleChildCohortBSecQuart
 from .onschedule import OnScheduleChildCohortBFU, OnScheduleChildCohortCFU
+from .onschedule import OnScheduleChildCohortAFUSeq, OnScheduleChildCohortBFUSeq, OnScheduleChildCohortCFUSeq
 from .onschedule import OnScheduleChildCohortBQuarterly, \
     OnScheduleChildCohortCEnrollment
 from .onschedule import OnScheduleChildCohortCFUQuart
