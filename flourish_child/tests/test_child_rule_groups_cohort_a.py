@@ -1,4 +1,5 @@
 from django.utils.datetime_safe import datetime
+from flourish_caregiver.models import CaregiverChildConsent
 
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
@@ -54,12 +55,16 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=self.preg_subject_consent.subject_identifier,
             delivery_datetime=get_utcnow(),
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             live_infants_to_register=1)
 
         mommy.make_recipe(
@@ -95,12 +100,16 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=self.preg_subject_consent.subject_identifier,
             delivery_datetime=get_utcnow(),
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             live_infants_to_register=1)
 
         mommy.make_recipe(
@@ -136,12 +145,16 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=self.preg_subject_consent.subject_identifier,
             delivery_datetime=get_utcnow(),
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             live_infants_to_register=1)
 
         mommy.make_recipe(
@@ -195,11 +208,15 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=self.preg_subject_consent.subject_identifier,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             live_infants_to_register=1)
 
         mommy.make_recipe(
@@ -237,10 +254,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -267,10 +288,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -297,10 +322,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -328,10 +357,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -365,10 +398,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -431,11 +468,15 @@ class TestRuleGroups(TestCase):
     def test_infant_hiv_test_infant_feeding_hiv_test(self):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
-            current_hiv_status=POS,
+            current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -498,10 +539,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -564,10 +609,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -616,10 +665,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -669,10 +722,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -693,7 +750,7 @@ class TestRuleGroups(TestCase):
                 model='flourish_child.infantarvprophylaxis',
                 subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
                 visit_code='2000D', ).exists(), False)
-        
+
     def test_arv_proph_2001_preg_pos_required(self):
         """ Assert ARV proph crf is required at 2001 if participant is
             ANC enrolled and POS.
@@ -701,10 +758,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -733,17 +794,21 @@ class TestRuleGroups(TestCase):
                 model='flourish_child.infantarvprophylaxis',
                 subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
                 visit_code='2001', ).entry_status, REQUIRED)
-        
+
     def test_arv_proph_if_missed_at_2001(self):
         """ Assert ARV proph crf is required at next visit if missed at 2001
         """
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -788,10 +853,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -841,10 +910,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
@@ -894,10 +967,14 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=POS,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
 
         mommy.make_recipe(
