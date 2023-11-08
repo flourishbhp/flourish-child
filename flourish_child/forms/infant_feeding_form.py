@@ -42,6 +42,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                 child_visit__subject_identifier=getattr(previous_instance, 'subject_identifier')).first()
             if birth_feeding_and_vaccine_obj:
                 initial['bf_start_dt'] = birth_feeding_and_vaccine_obj.breastfeed_start_dt
+                initial['bf_start_dt_est'] = birth_feeding_and_vaccine_obj.breastfeed_start_est
         kwargs['initial'] = initial
 
         super().__init__(*args, **kwargs)

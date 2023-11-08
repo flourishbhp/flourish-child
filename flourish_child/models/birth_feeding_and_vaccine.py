@@ -2,7 +2,7 @@ from django.db import models
 from edc_base.model_mixins.base_uuid_model import BaseUuidModel
 from edc_constants.choices import YES_NO
 
-from ..choices import INFANT_VACCINATIONS, FEEDING_CHOICES
+from ..choices import INFANT_VACCINATIONS, FEEDING_CHOICES, BF_ESTIMATED
 from .child_crf_model_mixin import ChildCrfModelMixin
 
 
@@ -23,10 +23,10 @@ class BirthFeedingVaccine(ChildCrfModelMixin):
 
     breastfeed_start_est = models.CharField(
         verbose_name='Is this date estimated?',
-        choices=YES_NO,
+        choices=BF_ESTIMATED,
         null=True,
         blank=True,
-        max_length=3, )
+        max_length=15, )
 
     formulafeed_start_dt = models.DateField(
         verbose_name='When did you begin feeding your infant formula?',
