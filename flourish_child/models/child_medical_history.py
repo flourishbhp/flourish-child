@@ -1,6 +1,6 @@
 from django.db import models
 
-from .list_models import ChronicConditions
+from .list_models import ChronicConditions, GeneralSymptoms, Medications
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins import ChildMedicalHistoryMixin
 
@@ -13,7 +13,20 @@ class ChildMedicalHistory(ChildCrfModelMixin,
         ChronicConditions,
         related_name='child',
         verbose_name=('Does the Child/Adolescent have any of the above. '
-                      'Tick all that apply'), )
+                      'Tick all that apply'),
+        blank=True)
+
+    current_symptoms = models.ManyToManyField(
+        GeneralSymptoms,
+        verbose_name="What are your child's current symptoms",
+        blank=True,
+    )
+
+    current_medications = models.ManyToManyField(
+        Medications,
+        verbose_name='What medications does your child currently take',
+        blank=True,
+    )
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'

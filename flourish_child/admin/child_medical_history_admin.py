@@ -41,14 +41,13 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     radio_fields = {'chronic_since': admin.VERTICAL,
                     'currently_taking_medications': admin.VERTICAL,
-                    'current_medications': admin.VERTICAL,
                     'duration_of_medications': admin.VERTICAL,
                     'current_illness': admin.VERTICAL,
-                    'current_symptoms': admin.VERTICAL,
                     'seen_at_local_clinic': admin.VERTICAL,
                     'med_history_changed': admin.VERTICAL}
 
-    filter_horizontal = ('child_chronic',)
+    filter_horizontal = (
+        'child_chronic', 'current_symptoms', 'current_medications')
 
     custom_form_labels = [
         FormLabel(

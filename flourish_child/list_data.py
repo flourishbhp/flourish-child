@@ -40,8 +40,7 @@ list_data = {
         ('chist_arrhyt ', 'Cardiac arrhythmia'),
         ('chist_thyroid ', 'Thyroid disorder'),
         ('chist_ibs', 'Inflammatory bowel disease (Crohn’s, ulcerative colitis)'),
-        ('chist_other', 'Other, Specify'),
-        ('chist_na', 'Not Applicable')
+        (OTHER, 'Other, Specify'),
     ],
     'flourish_child.childmedications': [
         (NOT_APPLICABLE, 'Not Applicable'),
@@ -209,6 +208,35 @@ list_data = {
         ('tst_mantoux', 'TST/Mantoux'),
         ('covid_19_test', 'COVID-19 test'),
         (OTHER, 'Other, specify')
+    ],
+    'flourish_child.medications': [
+        ('inhaler', 'Inhaler/Albuterol'),
+        ('antibiotics', 'Antibiotics'),
+        ('anti_anxiety_drugs', 'Anti-anxiety drugs'),
+        ('anti_asthmatic_drugs', 'Anti-asthmatic drugs'),
+        ('antidepressant_drugs', 'Antidepressant drugs'),
+        ('cholesterol_medications', 'Cholesterol medications'),
+        ('diabetic_medications', 'Diabetic medications'),
+        ('heart_disease_medications', 'Heart disease medications'),
+        ('hypertensive_medications', 'Hypertensive medications'),
+        ('pain_killers', 'Pain killers'),
+        ('tb_treatment', 'TB Treatment'),
+        ('tpt', 'TPT (TB preventive therapy)'),
+        ('traditional_medications', 'Traditional medications'),
+        ('vitamin_d_supplement', 'Vitamin D supplement'),
+        (UNKNOWN, 'Unknown'),
+        (OTHER, 'Other'),
+    ],
+    'flourish_child.generalsymptoms': [
+        ('cough', 'Cough'),
+        ('fever', 'Fever'),
+        ('headache', 'Headache'),
+        ('vomiting', 'Vomiting'),
+        ('diarrhea', 'Diarrhea'),
+        ('fatigue', 'Fatigue'),
+        ('congestion', 'Congestion'),
+        ('enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
+        (OTHER, 'Other'),
     ]
 }
 

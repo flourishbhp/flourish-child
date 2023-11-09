@@ -59,3 +59,11 @@ class StaffMember(ListModelMixin, BaseUuidModel):
 
 class TbDiagnostics(ListModelMixin, BaseUuidModel):
     pass
+
+
+class Medications(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class GeneralSymptoms(ListModelMixin, BaseUuidModel):
+    pass
