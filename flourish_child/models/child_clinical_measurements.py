@@ -80,7 +80,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      'at triceps',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(45), ],
         blank=True,
         null=True,
         help_text='in mm e.g 2, should be between 1 and 45')
@@ -90,7 +90,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      ' at triceps',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(45), ],
         blank=True,
         null=True,
         help_text='in mm e.g 2, should be between 1 and 45')
@@ -100,7 +100,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      'at triceps',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(45), ],
         blank=True,
         null=True,
         help_text='Third measurement: Required if first and second measurements differ '
@@ -111,7 +111,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      'at subscapular',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(45), ],
         blank=True,
         null=True,
         help_text='in mm e.g 2, should be between 1 and 45')
@@ -121,7 +121,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      'at subscapular',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(45), ],
         blank=True,
         null=True,
         help_text='in mm e.g 2, should be between 1 and 45')
@@ -131,7 +131,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      'at subscapular',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(45), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(45), ],
         blank=True,
         null=True,
         help_text='Third measurement: Required if first and second measurements differ '
@@ -142,7 +142,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      'at suprailiac crest',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(55), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(55), ],
         blank=True,
         null=True,
         help_text='in mm e.g 2, should be between 1 and 55')
@@ -152,7 +152,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      'at suprailiac crest',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(55), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(55), ],
         blank=True,
         null=True,
         help_text='in mm e.g 2, should be between 1 and 55')
@@ -162,7 +162,7 @@ class ChildClinicalMeasurements(ChildCrfModelMixin):
                      'at suprailiac crest',
         max_digits=5,
         decimal_places=2,
-        validators=[MinValueValidator(1), MaxValueValidator(55), ],
+        validators=[MinValueValidator(0.5), MaxValueValidator(55), ],
         blank=True,
         null=True,
         help_text='Third measurement: Required if first and second measurements differ '
