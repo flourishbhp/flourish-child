@@ -1,5 +1,5 @@
 from django.contrib import admin
-from edc_fieldsets.fieldlist import Remove
+from edc_fieldsets.fieldlist import Insert, Remove
 from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -35,11 +35,6 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
             'fields': [
                 'child_waist_circ',
                 'child_hip_circ',
-            ]}
-         ),
-        ("Skin Folds Questions", {
-            'fields': [
-                'visit_skin_fold_messure',
             ]}
          ),
         ("Skin Folds Triceps", {
@@ -80,13 +75,17 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
             return appt_obj.visit_code if appt_obj else None
 
     conditional_fieldlists.update(
-        {'1000':
-             Remove('skin_folds_triceps',
-                    'skin_folds_triceps_second',
-                    'skin_folds_triceps_third',
-                    'skin_folds_subscapular',
-                    'skin_folds_subscapular_second',
-                    'skin_folds_subscapular_third',
-                    'skin_folds_suprailiac',
-                    'skin_folds_suprailiac_second',
-                    'skin_folds_suprailiac_third')})
+        {'1000': Remove('skin_folds_triceps',
+                        'skin_folds_triceps_second',
+                        'skin_folds_triceps_third',
+                        'skin_folds_subscapular',
+                        'skin_folds_subscapular_second',
+                        'skin_folds_subscapular_third',
+                        'skin_folds_suprailiac',
+                        'skin_folds_suprailiac_second',
+                        'skin_folds_suprailiac_third'),
+         '3000': Insert('visit_skin_fold_messure',
+                        after='child_hip_circ',
+                        section='Child Waist and Hip Circumference')
+         }
+    )
