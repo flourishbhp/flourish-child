@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import (ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE,
-                                     MALE, \
+                                     MALE,
                                      NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES)
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
 from edc_constants.constants import IND, NEG, PENDING, POS
@@ -1119,6 +1119,10 @@ YES_NO_NOT_ELIGIBLE = (
     (YES, YES),
     (NO, NO),
     ('not_eligible', 'Not eligible'),)
+YES_NO_NOT_COMPLETED = (
+    (YES, YES),
+    (NO, NO),
+    ('start_not_complete', 'Started, but did not complete'),)
 
 CLINIC_NON_VISIT_REASONS = (
     ('out_of_study_area', 'Temporarily out of study area'),
