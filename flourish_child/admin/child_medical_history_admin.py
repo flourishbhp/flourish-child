@@ -26,15 +26,16 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'chronic_since',
                 'child_chronic',
                 'child_chronic_other',
-                'currently_taking_medications',
-                'current_medications',
-                'current_medications_other',
-                'duration_of_medications',
                 'current_illness',
                 'current_symptoms',
                 'current_symptoms_other',
                 'symptoms_start_date',
                 'seen_at_local_clinic',
+                'currently_taking_medications',
+                'current_medications',
+                'current_medications_other',
+                'duration_of_medications',
+
             ]}
          ), audit_fieldset_tuple)
 
@@ -55,7 +56,7 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             label=('Since the last scheduled visit in {previous}, has any of '
                    'your medical history changed?'),
             previous_appointment=True)
-        ]
+    ]
 
     quartely_schedules = ['child_a_sec_qt_schedule1', 'child_a_quart_schedule1',
                           'child_b_sec_qt_schedule1', 'child_b_quart_schedule1',
