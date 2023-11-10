@@ -31,7 +31,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
             initial['last_att_sche_visit'] = getattr(
                 previous_instance, 'report_datetime').date()
             for key in self.base_fields.keys():
-                if key in ['solid_foods', ]:
+                if key in ['solid_foods', 'solid_foods_past_week']:
                     key_manager = getattr(previous_instance, key)
                     initial[key] = [obj.id for obj in key_manager.all()]
                     continue
@@ -90,7 +90,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                           'hostname_created', 'hostname_modified', 'device_created',
                           'device_modified', 'report_datetime', 'child_visit',
                           'infant_feeding_changed', 'last_att_sche_visit', ]
-        m2m_fields = ['solid_foods', ]
+        m2m_fields = ['solid_foods', 'solid_foods_past_week']
         if prev_instance:
             other_values = self.model_to_dict(
                 prev_instance, exclude=exclude_fields)

@@ -778,6 +778,7 @@ WATER_USED = (
      'Water boiled immediately before use'),
     ('Water boiled earlier and then stored',
      'Water boiled earlier and then stored'),
+    ('Water not required', 'Water not required (ready-made or pre-made formula milk)'),
     ('Specifically treated water', 'Specifically treated water'),
     (OTHER, 'Other (specify)'),
     (NOT_APPLICABLE, 'Not Applicable'),
