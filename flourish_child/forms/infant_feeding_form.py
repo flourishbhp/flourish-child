@@ -38,12 +38,14 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                 if key not in ['child_visit', 'report_datetime', 'infant_feeding_changed',
                                'last_att_sche_visit']:
                     initial[key] = getattr(previous_instance, key)
-            birth_feeding_and_vaccine_obj = self.birth_feeding_and_vaccine_model_cls.objects.filter(
-                child_visit__subject_identifier=getattr(previous_instance, 'subject_identifier')).first()
-            if birth_feeding_and_vaccine_obj:
-                initial['bf_start_dt'] = birth_feeding_and_vaccine_obj.breastfeed_start_dt
-                initial['bf_start_dt_est'] = birth_feeding_and_vaccine_obj.breastfeed_start_est
+
         kwargs['initial'] = initial
+
+        birth_feeding_and_vaccine_obj = self.birth_feeding_and_vaccine_model_cls.objects.filter(
+            child_visit__subject_identifier=initial.get('subject_identifier', None)).first()
+        if birth_feeding_and_vaccine_obj:
+            initial['bf_start_dt'] = birth_feeding_and_vaccine_obj.breastfeed_start_dt
+            initial['bf_start_dt_est'] = birth_feeding_and_vaccine_obj.breastfeed_start_est
 
         super().__init__(*args, **kwargs)
 
