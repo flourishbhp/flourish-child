@@ -40,7 +40,8 @@ list_data = {
         ('chist_arrhyt ', 'Cardiac arrhythmia'),
         ('chist_thyroid ', 'Thyroid disorder'),
         ('chist_ibs', 'Inflammatory bowel disease (Crohn’s, ulcerative colitis)'),
-        (OTHER, 'Other, Specify'),
+        ('chist_other', 'Other, Specify'),
+        ('chist_na', 'Not Applicable')
     ],
     'flourish_child.childmedications': [
         (NOT_APPLICABLE, 'Not Applicable'),

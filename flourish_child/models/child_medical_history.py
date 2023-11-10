@@ -14,7 +14,7 @@ class ChildMedicalHistory(ChildCrfModelMixin,
         related_name='child',
         verbose_name=('Does the Child/Adolescent have any of the above. '
                       'Tick all that apply'),
-        blank=True)
+    )
 
     current_symptoms = models.ManyToManyField(
         GeneralSymptoms,
