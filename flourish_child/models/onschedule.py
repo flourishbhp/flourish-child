@@ -70,6 +70,10 @@ class OnScheduleChildCohortAFU(OnScheduleModelMixin):
     pass
 
 
+class OnScheduleChildCohortAFUSeq(OnScheduleModelMixin):
+    pass
+
+
 class OnScheduleChildCohortAFUQuart(OnScheduleModelMixin):
     pass
 
@@ -90,6 +94,10 @@ class OnScheduleChildCohortBFU(OnScheduleModelMixin):
     pass
 
 
+class OnScheduleChildCohortBFUSeq(OnScheduleModelMixin):
+    pass
+
+
 class OnScheduleChildCohortBFUQuart(OnScheduleModelMixin):
     pass
 
@@ -103,6 +111,10 @@ class OnScheduleChildCohortCEnrollment(OnScheduleModelMixin):
 
 
 class OnScheduleChildCohortCFU(OnScheduleModelMixin):
+    pass
+
+
+class OnScheduleChildCohortCFUSeq(OnScheduleModelMixin):
     pass
 
 
@@ -126,6 +138,10 @@ class OnScheduleChildCohortASecQuart(OnScheduleModelMixin):
     pass
 
 
+class OnScheduleChildCohortASecSeq(OnScheduleModelMixin):
+    pass
+
+
 class OnScheduleChildCohortBSec(OnScheduleModelMixin):
     pass
 
@@ -134,7 +150,15 @@ class OnScheduleChildCohortBSecQuart(OnScheduleModelMixin):
     pass
 
 
+class OnScheduleChildCohortBSecSeq(OnScheduleModelMixin):
+    pass
+
+
 class OnScheduleChildCohortCSecQuart(OnScheduleModelMixin):
+    pass
+
+
+class OnScheduleChildCohortCSecSeq(OnScheduleModelMixin):
     pass
 
 
