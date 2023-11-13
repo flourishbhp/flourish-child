@@ -2,10 +2,11 @@ from django import forms
 from django.db.models import ManyToManyField
 
 from edc_constants.constants import YES, NO, NOT_APPLICABLE
-from flourish_child_validations.form_validators import ChildMedicalHistoryFormValidator
+from flourish_child_validations.form_validators import (ChildMedicalHistoryFormValidator,
+                                                        ChildOutpatientFormValidator)
 from itertools import chain
 
-from ..models import ChildMedicalHistory
+from ..models import ChildMedicalHistory, ChildOutpatientVisit
 from .child_form_mixin import ChildModelFormMixin
 
 
@@ -45,6 +46,16 @@ class ChildMedicalHistoryForm(ChildModelFormMixin, forms.ModelForm):
                            'Participant\'s medical history has not changed since '
                            'last visit. Please don\'t make any changes to this form.'}
                 raise forms.ValidationError(message)
+
+        visit_count = cleaned_data.get('op_visit_count', None)
+        outpatient_visits = self.data.get(
+            'childoutpatientvisit_set-TOTAL_FORMS')
+        if visit_count and visit_count > 0 and visit_count != int(outpatient_visits):
+            raise forms.ValidationError({
+                'op_visit_count':
+                (f'Child has had {visit_count} out-patient visit(s). Please complete '
+                 'the outpatient visit section for all visits.')})
+        
         return cleaned_data
 
     def validate_med_history_changed(self, med_history_changed):
@@ -81,4 +92,16 @@ class ChildMedicalHistoryForm(ChildModelFormMixin, forms.ModelForm):
 
     class Meta:
         model = ChildMedicalHistory
+        fields = '__all__'
+
+
+class ChildOutpatientVisitForm(ChildModelFormMixin, forms.ModelForm):
+
+    form_validator_cls = ChildOutpatientFormValidator
+
+    def has_changed(self):
+        return True
+
+    class Meta:
+        model = ChildOutpatientVisit
         fields = '__all__'

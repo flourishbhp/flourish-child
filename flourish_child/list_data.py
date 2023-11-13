@@ -209,6 +209,17 @@ list_data = {
         ('tst_mantoux', 'TST/Mantoux'),
         ('covid_19_test', 'COVID-19 test'),
         (OTHER, 'Other, specify')
+    ],
+    'flourish_child.outpatientsymptoms': [
+        ('op_cough', 'Cough'),
+        ('op_fever', 'Fever'),
+        ('op_vomiting', 'Vomiting'),
+        ('op_diarrhea', 'Diarrhea'),
+        ('op_headache', 'Headache'),
+        ('op_fatigue', 'Fatigue'),
+        ('op_congestion', 'Congestion'),
+        ('op_enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
+        ('op_other', 'Other, specify')
     ]
 }
 

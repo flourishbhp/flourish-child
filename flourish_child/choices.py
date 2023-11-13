@@ -555,6 +555,23 @@ OVERALL_MARKS = (
     ('I_do_not_know_right_now', 'I do not know right now'),
 )
 
+OP_TYPE = (
+    ('new_illness', 'New illness'),
+    ('growth_check', 'Growth check'),
+    ('immunizations', 'Immunizations'),
+    ('mental_health', 'Mental Health'),
+    (OTHER, 'Other, specify'),
+)
+
+OP_MEDICATIONS = (
+    ('antibiotic', 'Antibiotic'),
+    ('paracetamol', 'Paracetamol'),
+    ('bufen', 'Bufen'),
+    ('multivitamin', 'Multivitamin'),
+    ('ferrous_sulfate', 'Ferrous Sulfate'),
+    (OTHER, 'Other, specify'),
+)
+
 PENNCNB_INVALID = (
     ('no_impact', 'No Impact'),
     ('child_ill', 'Child was ill'),

@@ -37,7 +37,7 @@ from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesMissed
 from .child_immunization_history import VaccinesReceived
-from .child_medical_history import ChildMedicalHistory
+from .child_medical_history import ChildMedicalHistory, ChildOutpatientVisit
 from .child_penn_cnb import ChildPennCNB
 from .child_phq_depression_screening import ChildPhqDepressionScreening
 from .child_phq_post_referral import ChildPhqPostReferral

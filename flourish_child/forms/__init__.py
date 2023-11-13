@@ -38,7 +38,7 @@ from .child_hiv_rapid_test_counseling_form import \
 from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
-from .child_medical_history_form import ChildMedicalHistoryForm
+from .child_medical_history_form import ChildMedicalHistoryForm, ChildOutpatientVisitForm
 from .child_penn_cnb_form import ChildPennCNBForm
 from .child_phq_depression_screening_form import ChildPhqDepressionScreeningForm
 from .child_phq_post_referral_form import ChildPhqPostReferralForm
