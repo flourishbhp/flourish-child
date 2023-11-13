@@ -183,10 +183,12 @@ class TestRuleGroups(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
+            child_subject_identifier=caregiver_child_consent_obj.subject_identifier,
             subject_identifier=subject_consent.subject_identifier,)
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=caregiver_child_consent_obj.subject_identifier,
             subject_identifier=subject_consent.subject_identifier,)
 
         mommy.make_recipe(
@@ -236,10 +238,12 @@ class TestRuleGroups(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
+            child_subject_identifier=caregiver_child_consent_obj.subject_identifier,
             subject_identifier=subject_consent.subject_identifier,)
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=caregiver_child_consent_obj.subject_identifier,
             subject_identifier=subject_consent.subject_identifier,)
 
         mommy.make_recipe(

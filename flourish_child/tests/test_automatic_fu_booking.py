@@ -136,11 +136,13 @@ class TestFuBooking(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
+            child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
             subject_identifier=preg_subject_consent.subject_identifier,)
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=preg_subject_consent.subject_identifier,
+            child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
             delivery_datetime=get_utcnow(),
             live_infants_to_register=1)
 
