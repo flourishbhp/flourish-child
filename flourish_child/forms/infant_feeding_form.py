@@ -50,7 +50,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         # Make breasfeeding start fields readonly if auto-filled from previous visit
-        if initial.get('bf_start_dt', None):
+        if initial.get('bf_start_dt', None) and previous_instance != None:
             self.fields['ever_breastfed'].widget = forms.TextInput(
                 attrs={'readonly': 'readonly'})
             self.fields['bf_start_dt_est'].widget = forms.TextInput(
