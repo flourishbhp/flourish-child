@@ -220,6 +220,35 @@ list_data = {
         ('op_congestion', 'Congestion'),
         ('op_enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
         ('op_other', 'Other, specify')
+    ],
+    'flourish_child.medications': [
+        ('inhaler', 'Inhaler/Albuterol'),
+        ('antibiotics', 'Antibiotics'),
+        ('anti_anxiety_drugs', 'Anti-anxiety drugs'),
+        ('anti_asthmatic_drugs', 'Anti-asthmatic drugs'),
+        ('antidepressant_drugs', 'Antidepressant drugs'),
+        ('cholesterol_medications', 'Cholesterol medications'),
+        ('diabetic_medications', 'Diabetic medications'),
+        ('heart_disease_medications', 'Heart disease medications'),
+        ('hypertensive_medications', 'Hypertensive medications'),
+        ('pain_killers', 'Pain killers'),
+        ('tb_treatment', 'TB Treatment'),
+        ('tpt', 'TPT (TB preventive therapy)'),
+        ('traditional_medications', 'Traditional medications'),
+        ('vitamin_d_supplement', 'Vitamin D supplement'),
+        (UNKNOWN, 'Unknown'),
+        (OTHER, 'Other'),
+    ],
+    'flourish_child.generalsymptoms': [
+        ('cough', 'Cough'),
+        ('fever', 'Fever'),
+        ('headache', 'Headache'),
+        ('vomiting', 'Vomiting'),
+        ('diarrhea', 'Diarrhea'),
+        ('fatigue', 'Fatigue'),
+        ('congestion', 'Congestion'),
+        ('enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
+        (OTHER, 'Other'),
     ]
 }
 
