@@ -63,3 +63,11 @@ class TbDiagnostics(ListModelMixin, BaseUuidModel):
 
 class OutpatientSymptoms(ListModelMixin, BaseUuidModel):
     pass
+
+
+class Medications(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class GeneralSymptoms(ListModelMixin, BaseUuidModel):
+    pass

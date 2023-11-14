@@ -8,7 +8,7 @@ from edc_base.model_fields import OtherCharField
 from edc_protocol.validators import date_not_before_study_start
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from .list_models import ChronicConditions, OutpatientSymptoms
+from .list_models import ChronicConditions, GeneralSymptoms, Medications, OutpatientSymptoms
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins import ChildMedicalHistoryMixin
 from ..choices import OP_TYPE, OP_MEDICATIONS
@@ -22,7 +22,20 @@ class ChildMedicalHistory(ChildCrfModelMixin,
         ChronicConditions,
         related_name='child_chronic_conditions',
         verbose_name=('Does the Child/Adolescent have any of the above. '
-                      'Tick all that apply'), )
+                      'Tick all that apply'),
+    )
+
+    current_symptoms = models.ManyToManyField(
+        GeneralSymptoms,
+        verbose_name="What are your child's current symptoms",
+        blank=True,
+    )
+
+    current_medications = models.ManyToManyField(
+        Medications,
+        verbose_name='What medications does your child currently take',
+        blank=True,
+    )
 
     had_op_visit = models.CharField(
         verbose_name=('Since the last you spoke to FLOURISH staff, '
