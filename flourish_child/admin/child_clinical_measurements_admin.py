@@ -83,9 +83,12 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
                         'skin_folds_subscapular_third',
                         'skin_folds_suprailiac',
                         'skin_folds_suprailiac_second',
-                        'skin_folds_suprailiac_third'),
-         '3000': Insert('visit_skin_fold_messure',
-                        after='child_hip_circ',
-                        section='Child Waist and Hip Circumference')
-         }
+                        'skin_folds_suprailiac_third'), }
     )
+
+    followup_codes = ['3000', '3000A', '3000B', '3000C', '3000S']
+    for fu_code in followup_codes:
+        conditional_fieldlists.update(
+            {fu_code: Insert('visit_skin_fold_messure',
+                             after='child_hip_circ',
+                             section='Child Waist and Hip Circumference'), })
