@@ -20,7 +20,7 @@ class ChildMedicalHistoryForm(ChildModelFormMixin, forms.ModelForm):
         previous_instance = getattr(self, 'previous_instance', None)
         if not instance and previous_instance:
             for key in self.base_fields.keys():
-                if key in ['child_chronic', ]:
+                if key in ['child_chronic', 'current_symptoms', 'current_medications' ]:
                     key_manager = getattr(previous_instance, key)
                     initial[key] = [obj.id for obj in key_manager.all()]
                     continue

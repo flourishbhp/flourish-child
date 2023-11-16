@@ -37,10 +37,9 @@ class ChildOutpatientVisitInlineAdmin(StackedInlineMixin, ModelAdminFormAutoNumb
     radio_fields = {'op_type': admin.VERTICAL,
                     'op_new_dx': admin.VERTICAL,
                     'op_meds_prescribed': admin.VERTICAL,
-                    'op_meds_received': admin.VERTICAL,
                     'op_symp_resolved': admin.VERTICAL, }
 
-    filter_horizontal = ('op_symptoms',)
+    filter_horizontal = ('op_symptoms', 'op_meds_received', )
 
     def get_formset(self, request, obj=None, **kwargs):
         formset = super().get_formset(request, obj=obj, **kwargs)

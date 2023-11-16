@@ -560,15 +560,7 @@ OP_TYPE = (
     ('growth_check', 'Growth check'),
     ('immunizations', 'Immunizations'),
     ('mental_health', 'Mental Health'),
-    (OTHER, 'Other, specify'),
-)
-
-OP_MEDICATIONS = (
-    ('antibiotic', 'Antibiotic'),
-    ('paracetamol', 'Paracetamol'),
-    ('bufen', 'Bufen'),
-    ('multivitamin', 'Multivitamin'),
-    ('ferrous_sulfate', 'Ferrous Sulfate'),
+    (UNKNOWN, 'Unknown'),
     (OTHER, 'Other, specify'),
 )
 

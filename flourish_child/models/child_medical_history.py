@@ -1,17 +1,18 @@
 from django.db import models
 from django.core.validators import MinValueValidator
 from edc_base.model_mixins import BaseUuidModel
-from edc_constants.choices import YES_NO
+from edc_constants.choices import YES_NO_UNKNOWN
 from edc_constants.constants import NO
 from edc_base.model_validators import date_not_future
 from edc_base.model_fields import OtherCharField
 from edc_protocol.validators import date_not_before_study_start
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from .list_models import ChronicConditions, GeneralSymptoms, Medications, OutpatientSymptoms
+from .list_models import (ChronicConditions, GeneralSymptoms, Medications, OutpatientSymptoms,
+                          OutpatientMedications)
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins import ChildMedicalHistoryMixin
-from ..choices import OP_TYPE, OP_MEDICATIONS
+from ..choices import OP_TYPE
 
 
 class ChildMedicalHistory(ChildCrfModelMixin,
@@ -40,8 +41,8 @@ class ChildMedicalHistory(ChildCrfModelMixin,
     had_op_visit = models.CharField(
         verbose_name=('Since the last you spoke to FLOURISH staff, '
                       'has your child had an out-patient clinic visit?'),
-        choices=YES_NO,
-        max_length=3,
+        choices=YES_NO_UNKNOWN,
+        max_length=7,
         default=NO)
 
     op_visit_count = models.PositiveIntegerField(
@@ -83,8 +84,8 @@ class ChildOutpatientVisit(CrfInlineModelMixin, BaseUuidModel):
 
     op_new_dx = models.CharField(
         verbose_name='Did you receive a new diagnosis?',
-        choices=YES_NO,
-        max_length=3)
+        choices=YES_NO_UNKNOWN,
+        max_length=7)
 
     op_new_dx_details = models.TextField(
         verbose_name='What was your child’s diagnosis',
@@ -94,22 +95,21 @@ class ChildOutpatientVisit(CrfInlineModelMixin, BaseUuidModel):
     op_meds_prescribed = models.CharField(
         verbose_name=('Did the healthcare worker prescribe any medications'
                       ' for your child?'),
-        choices=YES_NO,
-        max_length=3)
+        choices=YES_NO_UNKNOWN,
+        max_length=7)
 
-    op_meds_received = models.CharField(
+    op_meds_received = models.ManyToManyField(
+        OutpatientMedications,
+        related_name='child_op_meds',
         verbose_name='What type of medications did your child receive',
-        choices=OP_MEDICATIONS,
-        max_length=15,
-        null=True,
         blank=True)
 
     op_meds_other = OtherCharField()
 
     op_symp_resolved = models.CharField(
         verbose_name='Did your child’s symptoms resolve?',
-        choices=YES_NO,
-        max_length=3,
+        choices=YES_NO_UNKNOWN,
+        max_length=7,
         null=True,
         blank=True)
 

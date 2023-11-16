@@ -219,7 +219,8 @@ list_data = {
         ('op_fatigue', 'Fatigue'),
         ('op_congestion', 'Congestion'),
         ('op_enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
-        ('op_other', 'Other, specify')
+        ('op_unknown', 'Unknown'),
+        ('op_other', 'Other, specify'),
     ],
     'flourish_child.medications': [
         ('inhaler', 'Inhaler/Albuterol'),
@@ -249,6 +250,15 @@ list_data = {
         ('congestion', 'Congestion'),
         ('enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
         (OTHER, 'Other'),
+    ],
+    'flourish_child.outpatientmedications': [
+        ('opmeds_antibiotic', 'Antibiotic'),
+        ('opmeds_paracetamol', 'Paracetamol'),
+        ('opmeds_bufen', 'Bufen'),
+        ('opmeds_multivitamin', 'Multivitamin'),
+        ('opmeds_ferrous_sulfate', 'Ferrous Sulfate'),
+        ('opmeds_unknown', 'Unknown'),
+        ('opmeds_other', 'Other, specify'),
     ]
 }
 

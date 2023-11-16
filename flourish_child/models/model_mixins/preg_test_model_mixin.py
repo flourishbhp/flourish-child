@@ -18,9 +18,22 @@ class PregTestModelMixin(models.Model):
         choices=YES_NO_NA)
 
     menarche = models.CharField(
-        verbose_name='Has the child reached menarche?',
-        max_length=5,
+        verbose_name='Has the child reached menarche since the last scheduled visit?',
+        max_length=3,
         choices=YES_NO)
+
+    menstrual_start_dt = models.DateField(
+        verbose_name='Start date of menstrual',
+        validators=[date_not_future],
+        null=True,
+        blank=True)
+
+    menstrual_start_est = models.CharField(
+        verbose_name='Is the start date of menstrual estimated?',
+        max_length=3,
+        choices=YES_NO,
+        null=True,
+        blank=True)
 
     test_date = models.DateField(
         verbose_name='Date of pregnancy test',

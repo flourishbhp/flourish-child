@@ -71,3 +71,7 @@ class Medications(ListModelMixin, BaseUuidModel):
 
 class GeneralSymptoms(ListModelMixin, BaseUuidModel):
     pass
+
+
+class OutpatientMedications(ListModelMixin, BaseUuidModel):
+    pass
