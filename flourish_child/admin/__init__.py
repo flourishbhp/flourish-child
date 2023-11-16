@@ -76,3 +76,4 @@ from .tb_interview_admin import TbInterviewAdmin
 from .tb_referral_outcomes_admin import TbReferralOutcomesAdmin
 from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
 from .young_adult_locator_admin import YoungAdultLocatorAdmin
+from .child_social_work_referral_admin import ChildSocialWorkReferralAdmin

@@ -7,7 +7,7 @@ from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
 from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
     SubjectConsent, CaregiverPreviouslyEnrolled, ScreeningPregWomen, \
-    CaregiverChildConsent, TbAdolConsent
+    CaregiverChildConsent, TbAdolConsent, RelationshipFatherInvolvement
 from flourish_child.models.birth_data import BirthData
 from model_mommy.recipe import Recipe, seq
 
@@ -260,4 +260,7 @@ infanthivtesting = Recipe(
 
 infantarvprophylaxis = Recipe(
     InfantArvProphylaxis
+)
+relationshipfatherinvolvement = Recipe(
+    RelationshipFatherInvolvement,
 )
