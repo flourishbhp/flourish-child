@@ -259,7 +259,22 @@ list_data = {
         ('opmeds_ferrous_sulfate', 'Ferrous Sulfate'),
         ('opmeds_unknown', 'Unknown'),
         ('opmeds_other', 'Other, specify'),
-    ]
+    ],
+    'flourish_child.childsocialworkreferrallist': [
+        ('refer_c_argument', 'Arguments with partner/spouse'),
+        ('refer_c_violence', 'Violence with partner/spouse'),
+        ('refer_c_distrust', 'Distrust with partner/spouse'),
+        ('refer_c_finances', 'Financial challenges'),
+        ('refer_c_diagnosis',
+         'Difficultly dealing with diagnoses of chronic illness or infectious disease'),
+        ('refer_c_grief', 'Grief counseling (for loss of loved one)'),
+        ('refer_c_adherence', 'Adherence counseling'),
+        ('refer_c_facility', 'Local medical facility (add details under Comments)'),
+        ('refer_c_pedi_support', 'Pediatrician support'),
+        ('refer_c_sch_support', 'Schooling support'),
+        ('refer_c_eye_care', 'Ophthalmology/Eye care support'),
+        ('refer_c_other', 'Other, specify')
+    ],
 }
 
 preload_data = PreloadData(
