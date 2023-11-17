@@ -8,7 +8,7 @@ from flourish_child.models import ChildTBReferralOutcome
 
 
 @admin.register(ChildTBReferralOutcome, site=flourish_child_admin)
-class ChildTBReferralCRFAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = ChildTBReferralOutcomeForm
 
     fieldsets = (
