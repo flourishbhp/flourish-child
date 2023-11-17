@@ -1,4 +1,5 @@
 from django import forms
+from django.apps import apps as django_apps
 from django.db.models import ManyToManyField, DateField, DateTimeField, IntegerField
 from edc_constants.constants import YES, NO
 from itertools import chain
