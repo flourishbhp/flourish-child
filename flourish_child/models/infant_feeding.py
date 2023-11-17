@@ -1,7 +1,7 @@
 from django.db import models
 from edc_base.model_fields.custom_fields import OtherCharField
 from edc_base.model_validators.date import date_not_future
-from edc_constants.choices import YES_NO, YES_NO_UNSURE
+from edc_constants.choices import YES_NO, YES_NO_UNSURE, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 
 from ..choices import (WATER_USED, FREQUENCY_BREASTMILK_REC, BF_ESTIMATED,
@@ -93,7 +93,7 @@ class InfantFeeding(ChildCrfModelMixin):
     formula_first_report = models.CharField(
         verbose_name=('Is this the first reporting of infant formula use?'),
         max_length=3,
-        choices=YES_NO)
+        choices=YES_NO_NA)
 
     dt_formula_introduced = models.DateField(
         verbose_name='Date infant formula introduced',
