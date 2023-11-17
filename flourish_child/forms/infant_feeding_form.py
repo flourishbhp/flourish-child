@@ -1,4 +1,5 @@
 from django import forms
+from django.apps import apps as django_apps
 from django.db.models import ManyToManyField, DateField, DateTimeField, IntegerField
 from edc_constants.constants import YES, NO
 from itertools import chain
@@ -12,6 +13,11 @@ from flourish_child_validations.form_validators import InfantFeedingFormValidato
 class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
 
     form_validator_cls = InfantFeedingFormValidator
+    birth_feeding_and_vaccine_model = 'flourish_child.birthfeedingvaccine'
+
+    @property
+    def birth_feeding_and_vaccine_model_cls(self):
+        return django_apps.get_model(self.birth_feeding_and_vaccine_model)
 
     last_att_sche_visit = forms.DateField(
         label='The last infant feeding form was completed on ',
