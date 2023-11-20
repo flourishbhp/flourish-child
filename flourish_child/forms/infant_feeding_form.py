@@ -1,4 +1,5 @@
 from django import forms
+from django.apps import apps as django_apps
 from django.db.models import ManyToManyField, DateField, DateTimeField, IntegerField
 from edc_constants.constants import YES, NO
 from itertools import chain
@@ -27,10 +28,14 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         initial = kwargs.pop('initial', {})
         instance = kwargs.get('instance')
         previous_instance = getattr(self, 'previous_instance', None)
+        prev_feeding_completed = getattr(
+            previous_instance, 'formula_feedng_completd', None)
         if not instance and previous_instance:
             initial['last_att_sche_visit'] = getattr(
                 previous_instance, 'report_datetime').date()
             for key in self.base_fields.keys():
+                if key == 'dt_formula_introduced' and prev_feeding_completed == YES:
+                    continue
                 if key in ['solid_foods', 'solid_foods_past_week']:
                     key_manager = getattr(previous_instance, key)
                     initial[key] = [obj.id for obj in key_manager.all()]
@@ -39,13 +44,13 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                                'last_att_sche_visit']:
                     initial[key] = getattr(previous_instance, key)
 
-        kwargs['initial'] = initial
-
         birth_feeding_and_vaccine_obj = self.birth_feeding_and_vaccine_model_cls.objects.filter(
             child_visit__subject_identifier=initial.get('subject_identifier', None)).first()
         if birth_feeding_and_vaccine_obj:
             initial['bf_start_dt'] = birth_feeding_and_vaccine_obj.breastfeed_start_dt
             initial['bf_start_dt_est'] = birth_feeding_and_vaccine_obj.breastfeed_start_est
+        
+        kwargs['initial'] = initial
 
         super().__init__(*args, **kwargs)
 
