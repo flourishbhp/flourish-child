@@ -20,7 +20,6 @@ class ChildSocialWorkReferral(ChildCrfModelMixin, CaregiverSocialWorkReferralMix
         ChildSocialWorkReferralList,
         verbose_name=('Please indicate reasons for the need for a social work '
                       'referral for the Mother/Caregiver or Child (select all that apply)'),
-        blank=True
     )
 
     class Meta(ChildCrfModelMixin.Meta):
