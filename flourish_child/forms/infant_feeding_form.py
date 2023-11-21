@@ -6,7 +6,6 @@ from itertools import chain
 
 from ..models import InfantFeeding
 from .child_form_mixin import ChildModelFormMixin
-from django.apps import apps as django_apps
 from flourish_child_validations.form_validators import InfantFeedingFormValidator
 
 
@@ -40,19 +39,14 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                     key_manager = getattr(previous_instance, key)
                     initial[key] = [obj.id for obj in key_manager.all()]
                     continue
+                if key in ['bf_start_dt', 'bf_start_dt_est', 'dt_formula_introduced',
+                           'dt_formula_est']:
+                    initial, _exists = self.prefill_bf_dates(key, initial)
+                    if _exists:
+                        continue
                 if key not in ['child_visit', 'report_datetime', 'infant_feeding_changed',
                                'last_att_sche_visit']:
                     initial[key] = getattr(previous_instance, key)
-
-        birth_feeding_and_vaccine_obj = self.birth_feeding_and_vaccine_model_cls.objects.filter(
-            child_visit__subject_identifier=initial.get('subject_identifier', None)).first()
-        if birth_feeding_and_vaccine_obj:
-            if birth_feeding_and_vaccine_obj.breastfeed_start_dt:
-                initial['bf_start_dt'] = birth_feeding_and_vaccine_obj.breastfeed_start_dt
-                initial['bf_start_dt_est'] = birth_feeding_and_vaccine_obj.breastfeed_start_est
-            initial['dt_formula_introduced'] = birth_feeding_and_vaccine_obj.formulafeed_start_dt
-            initial['dt_formula_est'] = birth_feeding_and_vaccine_obj.formulafeed_start_est
-
         kwargs['initial'] = initial
 
         super().__init__(*args, **kwargs)
@@ -128,6 +122,21 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
             data[f.name] = f.value_from_object(instance) or None
         return data
 
+    def prefill_bf_dates(self, key=None, initial={}):
+        key_map = {'bf_start_dt': 'breastfeed_start_dt',
+                   'bf_start_dt_est': 'breastfeed_start_est',
+                   'dt_formula_introduced': 'formulafeed_start_dt',
+                   'dt_formula_est': 'formulafeed_start_est'}
+
+        feeding_n_vaccine_objs = self.birth_feeding_and_vaccine_model_cls.objects.filter(
+            child_visit__subject_identifier=initial.get('subject_identifier', None))
+        key_value = None
+        if feeding_n_vaccine_objs.exists():
+            feeding_n_vaccine_obj = feeding_n_vaccine_objs.latest('report_datetime')
+            key_value = getattr(feeding_n_vaccine_obj, key_map.get(key, key), None)
+        initial[key] = key_value
+        return (initial, True) if key_value else (initial, False)
+        
     class Meta:
         model = InfantFeeding
         fields = '__all__'
