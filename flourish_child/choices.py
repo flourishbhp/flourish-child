@@ -1345,3 +1345,38 @@ ARV_DRUG_LIST = (
     ('ral', 'Raltegravir (RAL)'),
     (OTHER, 'Other, specify'),
 )
+
+TB_TEST_CHOICES = (
+    ('chest_xray', 'Chest Xray'),
+    ('sputum_sample', 'Sputum sample'),
+    ('stool_sample', 'Stool sample'),
+    ('urine_test', 'Urine test (LAM)'),
+    ('skin_test', 'Skin test (TST/Mantoux)'),
+    ('blood_test', 'Blood test (quantiferon)'),
+    (OTHER, 'other')
+)
+
+TEST_RESULTS_CHOICES = (
+    (POS, 'positive'),
+    (NEG, 'negative'),
+    (PENDING, 'pending'),
+    (NOT_RECEIVED, 'not_received')
+)
+
+DURATION_OPTIONS = (
+    ('< 2 weeks', '< 2 weeks'),
+    ('≥ 2 weeks', '≥ 2 weeks')
+)
+
+TB_TREATMENT_CHOICES = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    ('awaiting_results', 'awaiting_results'),
+    (OTHER, 'Other, specify'),
+)
+
+YES_NO_OTHER = (
+    (YES, _(YES)),
+    (NO, _(NO)),
+    (OTHER, 'Other, specify'),
+)
