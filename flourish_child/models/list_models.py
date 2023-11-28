@@ -1,4 +1,4 @@
-from edc_base.model_mixins import ListModelMixin, BaseUuidModel
+from edc_base.model_mixins import BaseUuidModel, ListModelMixin
 
 
 class ChronicConditions(ListModelMixin, BaseUuidModel):
@@ -78,4 +78,8 @@ class OutpatientMedications(ListModelMixin, BaseUuidModel):
 
 
 class ChildSocialWorkReferralList(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class ChildTBTests(ListModelMixin, BaseUuidModel):
     pass
