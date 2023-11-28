@@ -18,6 +18,7 @@ from edc_data_manager.models import DataActionItem
 
 class ChildUtils:
 
+    subject_schedule_history_model = 'edc_visit_schedule.subjectschedulehistory'
     registered_subject_model = 'edc_registration.registeredsubject'
     child_dummy_consent_model = 'flourish_child.childdummysubjectconsent'
     preg_screening_model = 'flourish_caregiver.screeningpregwomen'
@@ -44,6 +45,10 @@ class ChildUtils:
     @property
     def registered_subject_cls(self):
         return django_apps.get_model(self.registered_subject_model)
+
+    @property
+    def subject_schedule_history_cls(self):
+        return django_apps.get_model(self.subject_schedule_history_model)
 
     @property
     def consent_version_cls(self):
@@ -105,6 +110,27 @@ class ChildUtils:
                 'it before proceeding.')
         return consent_version_obj.child_version or consent_version_obj.version
 
+
+    def get_onschedule_names(self, instance):
+        onschedules = self.subject_schedule_history_cls.objects.filter(
+            subject_identifier=instance.subject_identifier).exclude(
+                Q(schedule_name__icontains='tb') | Q(schedule_name__icontains='facet')).values_list(
+                    'schedule_name', flat=True)
+        return list(onschedules)
+
+
+    def get_previous_appt_instance(self, appointment):
+        schedule_names = self.get_onschedule_names(appointment)
+        try:
+            previous_appt = appointment.__class__.objects.filter(
+                subject_identifier=appointment.subject_identifier,
+                timepoint_datetime__lt=appointment.timepoint_datetime,
+                schedule_name__in=schedule_names,
+                visit_code_sequence=0).latest('timepoint_datetime')
+        except appointment.__class__.DoesNotExist:
+            return appointment.previous_by_timepoint
+        else:
+            return previous_appt
 
 child_utils = ChildUtils()
 
