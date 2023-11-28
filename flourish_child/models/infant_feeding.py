@@ -217,9 +217,7 @@ class InfantFeeding(ChildCrfModelMixin):
         verbose_name=('Are you able to provide answers about solid foods and '
                       'their frequency the child/infant is taking?'),
         max_length=20,
-        choices=YES_NO,
-        blank=True,
-        null=True)
+        choices=YES_NO,)
 
     solid_foods = models.ManyToManyField(
         SolidFoods,

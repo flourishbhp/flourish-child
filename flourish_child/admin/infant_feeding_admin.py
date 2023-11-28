@@ -50,8 +50,8 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'fields': [
                 'solid_foods_dt',
                 'solid_foods_age',
-                'provide_response_solid',
                 'solid_foods',
+                'provide_response_solid',
                 'solid_foods_past_week',
                 'grain_intake_freq',
                 'legumes_intake_freq',

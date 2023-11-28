@@ -45,7 +45,10 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                     if _exists:
                         continue
                 if key not in ['child_visit', 'report_datetime', 'infant_feeding_changed',
-                               'last_att_sche_visit']:
+                               'last_att_sche_visit', 'solid_foods_past_week', 'grain_intake_freq', 'legumes_intake_freq',
+                               'dairy_intake_freq', 'flesh_foods_freq', 'eggs_intake_freq',
+                               'porridge_intake_freq', 'vitamin_a_fruits_freq', 'other_fruits_vegies',
+                               'other_fruits_freq', 'other_solids', 'other_solids_freq']:
                     initial[key] = getattr(previous_instance, key)
         kwargs['initial'] = initial
 
@@ -132,11 +135,13 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
             child_visit__subject_identifier=initial.get('subject_identifier', None))
         key_value = None
         if feeding_n_vaccine_objs.exists():
-            feeding_n_vaccine_obj = feeding_n_vaccine_objs.latest('report_datetime')
-            key_value = getattr(feeding_n_vaccine_obj, key_map.get(key, key), None)
+            feeding_n_vaccine_obj = feeding_n_vaccine_objs.latest(
+                'report_datetime')
+            key_value = getattr(feeding_n_vaccine_obj,
+                                key_map.get(key, key), None)
         initial[key] = key_value
         return (initial, True) if key_value else (initial, False)
-        
+
     class Meta:
         model = InfantFeeding
         fields = '__all__'
