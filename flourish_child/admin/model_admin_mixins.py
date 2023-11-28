@@ -4,7 +4,6 @@ from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
 from django.http import HttpResponse
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
