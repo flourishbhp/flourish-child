@@ -124,9 +124,9 @@ class ChildUtils:
         try:
             previous_appt = appointment.__class__.objects.filter(
                 subject_identifier=appointment.subject_identifier,
-                timepoint_datetime__lt=appointment.timepoint_datetime,
+                appt_datetime__lt=appointment.appt_datetime,
                 schedule_name__in=schedule_names,
-                visit_code_sequence=0).latest('timepoint_datetime')
+                visit_code_sequence=0).latest('appt_datetime')
         except appointment.__class__.DoesNotExist:
             return appointment.previous_by_timepoint
         else:
