@@ -39,17 +39,20 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                     key_manager = getattr(previous_instance, key)
                     initial[key] = [obj.id for obj in key_manager.all()]
                     continue
-                if key in ['bf_start_dt', 'bf_start_dt_est', 'dt_formula_introduced',
-                           'dt_formula_est']:
-                    initial, _exists = self.prefill_bf_dates(key, initial)
-                    if _exists:
-                        continue
                 if key not in ['child_visit', 'report_datetime', 'infant_feeding_changed',
-                               'last_att_sche_visit', 'solid_foods_past_week', 'grain_intake_freq', 'legumes_intake_freq',
-                               'dairy_intake_freq', 'flesh_foods_freq', 'eggs_intake_freq',
-                               'porridge_intake_freq', 'vitamin_a_fruits_freq', 'other_fruits_vegies',
-                               'other_fruits_freq', 'other_solids', 'other_solids_freq']:
+                               'last_att_sche_visit', 'solid_foods_past_week', 'grain_intake_freq',
+                               'legumes_intake_freq', 'dairy_intake_freq', 'flesh_foods_freq',
+                               'eggs_intake_freq', 'porridge_intake_freq', 'vitamin_a_fruits_freq',
+                               'other_fruits_vegies', 'other_fruits_freq', 'other_solids',
+                               'other_solids_freq']:
                     initial[key] = getattr(previous_instance, key)
+
+        subject_identifier = initial.get('subject_identifier', None)
+        for key in ['bf_start_dt', 'bf_start_dt_est', 'dt_formula_introduced', 'dt_formula_est']:
+            key_value, _exists = self.prefill_bf_dates(key, subject_identifier)
+            if _exists:
+                initial[key] = key_value
+                continue
         kwargs['initial'] = initial
 
         super().__init__(*args, **kwargs)
@@ -125,22 +128,22 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
             data[f.name] = f.value_from_object(instance) or None
         return data
 
-    def prefill_bf_dates(self, key=None, initial={}):
+    def prefill_bf_dates(self, key=None, subject_identifier=None):
         key_map = {'bf_start_dt': 'breastfeed_start_dt',
                    'bf_start_dt_est': 'breastfeed_start_est',
                    'dt_formula_introduced': 'formulafeed_start_dt',
                    'dt_formula_est': 'formulafeed_start_est'}
 
         feeding_n_vaccine_objs = self.birth_feeding_and_vaccine_model_cls.objects.filter(
-            child_visit__subject_identifier=initial.get('subject_identifier', None))
+            child_visit__subject_identifier=subject_identifier)
         key_value = None
         if feeding_n_vaccine_objs.exists():
             feeding_n_vaccine_obj = feeding_n_vaccine_objs.latest(
                 'report_datetime')
             key_value = getattr(feeding_n_vaccine_obj,
                                 key_map.get(key, key), None)
-        initial[key] = key_value
-        return (initial, True) if key_value else (initial, False)
+
+        return (key_value, True) if key_value else (key_value, False)
 
     class Meta:
         model = InfantFeeding
