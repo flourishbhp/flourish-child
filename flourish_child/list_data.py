@@ -1,5 +1,4 @@
-from edc_constants.constants import NOT_APPLICABLE, OTHER, NONE, UNKNOWN
-
+from edc_constants.constants import NONE, NOT_APPLICABLE, OTHER, UNKNOWN
 from edc_list_data import PreloadData
 
 list_data = {
@@ -209,6 +208,80 @@ list_data = {
         ('tst_mantoux', 'TST/Mantoux'),
         ('covid_19_test', 'COVID-19 test'),
         (OTHER, 'Other, specify')
+    ],
+    'flourish_child.outpatientsymptoms': [
+        ('op_cough', 'Cough'),
+        ('op_fever', 'Fever'),
+        ('op_vomiting', 'Vomiting'),
+        ('op_diarrhea', 'Diarrhea'),
+        ('op_headache', 'Headache'),
+        ('op_fatigue', 'Fatigue'),
+        ('op_congestion', 'Congestion'),
+        ('op_enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
+        ('op_unknown', 'Unknown'),
+        ('op_other', 'Other, specify'),
+    ],
+    'flourish_child.medications': [
+        ('inhaler', 'Inhaler/Albuterol'),
+        ('antibiotics', 'Antibiotics'),
+        ('anti_anxiety_drugs', 'Anti-anxiety drugs'),
+        ('anti_asthmatic_drugs', 'Anti-asthmatic drugs'),
+        ('antidepressant_drugs', 'Antidepressant drugs'),
+        ('cholesterol_medications', 'Cholesterol medications'),
+        ('diabetic_medications', 'Diabetic medications'),
+        ('heart_disease_medications', 'Heart disease medications'),
+        ('hypertensive_medications', 'Hypertensive medications'),
+        ('pain_killers', 'Pain killers'),
+        ('tb_treatment', 'TB Treatment'),
+        ('tpt', 'TPT (TB preventive therapy)'),
+        ('traditional_medications', 'Traditional medications'),
+        ('vitamin_d_supplement', 'Vitamin D supplement'),
+        (UNKNOWN, 'Unknown'),
+        (OTHER, 'Other'),
+    ],
+    'flourish_child.generalsymptoms': [
+        ('cough', 'Cough'),
+        ('fever', 'Fever'),
+        ('headache', 'Headache'),
+        ('vomiting', 'Vomiting'),
+        ('diarrhea', 'Diarrhea'),
+        ('fatigue', 'Fatigue'),
+        ('congestion', 'Congestion'),
+        ('enlarged_lymph_nodes', 'Enlarged Lymph nodes'),
+        (OTHER, 'Other'),
+    ],
+    'flourish_child.outpatientmedications': [
+        ('opmeds_antibiotic', 'Antibiotic'),
+        ('opmeds_paracetamol', 'Paracetamol'),
+        ('opmeds_bufen', 'Bufen'),
+        ('opmeds_multivitamin', 'Multivitamin'),
+        ('opmeds_ferrous_sulfate', 'Ferrous Sulfate'),
+        ('opmeds_unknown', 'Unknown'),
+        ('opmeds_other', 'Other, specify'),
+    ],
+    'flourish_child.childsocialworkreferrallist': [
+        ('refer_c_argument', 'Arguments with partner/spouse'),
+        ('refer_c_violence', 'Violence with partner/spouse'),
+        ('refer_c_distrust', 'Distrust with partner/spouse'),
+        ('refer_c_finances', 'Financial challenges'),
+        ('refer_c_diagnosis',
+         'Difficultly dealing with diagnoses of chronic illness or infectious disease'),
+        ('refer_c_grief', 'Grief counseling (for loss of loved one)'),
+        ('refer_c_adherence', 'Adherence counseling'),
+        ('refer_c_facility', 'Local medical facility (add details under Comments)'),
+        ('refer_c_pedi_support', 'Pediatrician support'),
+        ('refer_c_sch_support', 'Schooling support'),
+        ('refer_c_eye_care', 'Ophthalmology/Eye care support'),
+        ('refer_c_other', 'Other, specify')
+    ],
+    'flourish_child.childtbtests': [
+        ('chest_xray', 'Chest Xray'),
+        ('sputum_sample', 'Sputum sample'),
+        ('stool_sample', 'Stool sample'),
+        ('urine_test', 'Urine test (LAM)'),
+        ('skin_test', 'Skin test (TST/Mantoux)'),
+        ('blood_test', 'Blood test (quantiferon)'),
+        (OTHER, 'other')
     ]
 }
 

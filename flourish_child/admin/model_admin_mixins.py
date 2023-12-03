@@ -4,7 +4,6 @@ from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Q
 from django.http import HttpResponse
 from django.urls.base import reverse
 from django.urls.exceptions import NoReverseMatch
@@ -26,6 +25,7 @@ import xlwt
 import uuid
 
 from .exportaction_mixin import ExportActionMixin
+from ..helper_classes.utils import child_utils
 
 
 class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
@@ -158,40 +158,15 @@ class ChildCrfModelAdminMixin(
             while appointment:
                 options = {
                     '{}__appointment'.format(self.model.visit_model_attr()):
-                    self.get_previous_appt_instance(appointment)}
+                    child_utils.get_previous_appt_instance(appointment)}
                 try:
                     obj = self.model.objects.get(**options)
                 except ObjectDoesNotExist:
                     pass
                 else:
                     break
-                appointment = self.get_previous_appt_instance(appointment)
+                appointment = child_utils.get_previous_appt_instance(appointment)
         return obj
-
-    def get_previous_appt_instance(self, appointment):
-        schedule_names = self.get_onschedule_names(appointment)
-        try:
-            previous_appt = appointment.__class__.objects.filter(
-                subject_identifier=appointment.subject_identifier,
-                timepoint_datetime__lt=appointment.timepoint_datetime,
-                schedule_name__in=schedule_names,
-                visit_code_sequence=0).latest('timepoint_datetime')
-        except appointment.__class__.DoesNotExist:
-            return appointment.previous_by_timepoint
-        else:
-            return previous_appt
-
-    def get_onschedule_names(self, appointment):
-        onschedules = self.subject_schedule_history_cls.objects.filter(
-            subject_identifier=appointment.subject_identifier).exclude(
-                Q(schedule_name__icontains='tb') | Q(schedule_name__icontains='facet')).values_list(
-                    'schedule_name', flat=True)
-        return list(onschedules)
-
-    @property
-    def subject_schedule_history_cls(self):
-        return django_apps.get_model(
-            'edc_visit_schedule.subjectschedulehistory')
 
     def get_instance(self, request):
         try:

@@ -73,10 +73,12 @@ class TestVisitScheduleSetup(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
+            child_subject_identifier=child_consent.subject_identifier,
             subject_identifier=subject_consent.subject_identifier,)
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
+            child_subject_identifier=child_consent.subject_identifier,
             subject_identifier=subject_consent.subject_identifier,
             delivery_datetime=get_utcnow(),
             live_infants_to_register=1)

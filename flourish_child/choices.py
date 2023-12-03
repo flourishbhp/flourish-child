@@ -1,6 +1,6 @@
 from django.utils.translation import ugettext_lazy as _
 from edc_constants.constants import (ABNORMAL, DONT_KNOW, FAILED_ELIGIBILITY, FEMALE,
-                                     MALE, \
+                                     MALE,
                                      NO, NORMAL, OFF_STUDY, ON_STUDY, OTHER, YES)
 from edc_constants.constants import ALIVE, DEAD, NOT_APPLICABLE, PARTICIPANT, UNKNOWN
 from edc_constants.constants import IND, NEG, PENDING, POS
@@ -555,6 +555,15 @@ OVERALL_MARKS = (
     ('I_do_not_know_right_now', 'I do not know right now'),
 )
 
+OP_TYPE = (
+    ('new_illness', 'New illness'),
+    ('growth_check', 'Growth check'),
+    ('immunizations', 'Immunizations'),
+    ('mental_health', 'Mental Health'),
+    (UNKNOWN, 'Unknown'),
+    (OTHER, 'Other, specify'),
+)
+
 PENNCNB_INVALID = (
     ('no_impact', 'No Impact'),
     ('child_ill', 'Child was ill'),
@@ -778,6 +787,7 @@ WATER_USED = (
      'Water boiled immediately before use'),
     ('Water boiled earlier and then stored',
      'Water boiled earlier and then stored'),
+    ('Water not required', 'Water not required (ready-made or pre-made formula milk)'),
     ('Specifically treated water', 'Specifically treated water'),
     (OTHER, 'Other (specify)'),
     (NOT_APPLICABLE, 'Not Applicable'),
@@ -1119,6 +1129,10 @@ YES_NO_NOT_ELIGIBLE = (
     (YES, YES),
     (NO, NO),
     ('not_eligible', 'Not eligible'),)
+YES_NO_NOT_COMPLETED = (
+    (YES, YES),
+    (NO, NO),
+    ('start_not_complete', 'Started, but did not complete'),)
 
 CLINIC_NON_VISIT_REASONS = (
     ('out_of_study_area', 'Temporarily out of study area'),
@@ -1324,4 +1338,45 @@ CLINIC_VISIT = (
     (NO, NO),
     ('appointment_scheduled', 'Appointment Scheduled'),
     ('will_seek_care', 'Will seek care'),
+)
+
+ARV_DRUG_LIST = (
+    ('3tc', 'Lamivudine (3TC)'),
+    ('ral', 'Raltegravir (RAL)'),
+    (OTHER, 'Other, specify'),
+)
+
+TB_TEST_CHOICES = (
+    ('chest_xray', 'Chest Xray'),
+    ('sputum_sample', 'Sputum sample'),
+    ('stool_sample', 'Stool sample'),
+    ('urine_test', 'Urine test (LAM)'),
+    ('skin_test', 'Skin test (TST/Mantoux)'),
+    ('blood_test', 'Blood test (quantiferon)'),
+    (OTHER, 'other')
+)
+
+TEST_RESULTS_CHOICES = (
+    (POS, 'positive'),
+    (NEG, 'negative'),
+    (PENDING, 'pending'),
+    (NOT_RECEIVED, 'not_received')
+)
+
+DURATION_OPTIONS = (
+    ('< 2 weeks', '< 2 weeks'),
+    ('≥ 2 weeks', '≥ 2 weeks')
+)
+
+TB_TREATMENT_CHOICES = (
+    (YES, 'Yes'),
+    (NO, 'No'),
+    ('awaiting_results', 'awaiting_results'),
+    (OTHER, 'Other, specify'),
+)
+
+YES_NO_OTHER = (
+    (YES, _(YES)),
+    (NO, _(NO)),
+    (OTHER, 'Other, specify'),
 )

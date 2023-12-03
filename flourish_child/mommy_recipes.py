@@ -5,23 +5,28 @@ from edc_constants.constants import ALIVE, MALE, NO, NOT_APPLICABLE, ON_STUDY, \
 from edc_registration.models import RegisteredSubject
 from edc_visit_tracking.constants import SCHEDULED
 from faker import Faker
-from flourish_caregiver.models import ScreeningPriorBhpParticipants, \
-    SubjectConsent, CaregiverPreviouslyEnrolled, ScreeningPregWomen, \
-    CaregiverChildConsent, TbAdolConsent
-from flourish_child.models.birth_data import BirthData
 from model_mommy.recipe import Recipe, seq
 
+from flourish_caregiver.models import (CaregiverChildConsent,
+                                       CaregiverPreviouslyEnrolled, \
+                                       RelationshipFatherInvolvement, ScreeningPregWomen,
+                                       ScreeningPriorBhpParticipants, \
+                                       SubjectConsent, TbAdolConsent)
+from flourish_child.models.adol_tb_referral import TbReferalAdol
+from flourish_child.models.birth_data import BirthData
 from flourish_child.models.child_phq_referral import ChildPhqReferral
 from flourish_child.models.child_phq_referral_fu import ChildPhqReferralFU
-from flourish_child.models.adol_tb_referral import TbReferalAdol
 from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
-from .models import ChildAssent, ChildBirth, ChildClinicalMeasurements, ChildDataset, \
-    ChildDummySubjectConsent, ChildFoodSecurityQuestionnaire, ChildVisit, HivTestingAdol, \
-    InfantDevScreening12Months, InfantDevScreening18Months, InfantDevScreening36Months, \
-    TbAdolAssent, TbAdolEngagement, TbAdolInterview, TbLabResultsAdol, \
-    TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent
+from .models import (ChildAssent, ChildBirth, ChildClinicalMeasurements, ChildDataset, \
+                     ChildDummySubjectConsent, ChildFoodSecurityQuestionnaire, ChildVisit,
+                     HivTestingAdol, \
+                     InfantDevScreening12Months, InfantDevScreening18Months,
+                     InfantDevScreening36Months, \
+                     TbAdolAssent, TbAdolEngagement, TbAdolInterview, TbLabResultsAdol, \
+                     TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent)
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
-    ChildSocioDemographic, InfantFeeding, InfantHIVTesting, InfantArvProphylaxis
+    ChildSocioDemographic, ChildTBReferral, InfantArvProphylaxis, InfantFeeding, \
+    InfantHIVTesting
 
 fake = Faker()
 
@@ -260,4 +265,11 @@ infanthivtesting = Recipe(
 
 infantarvprophylaxis = Recipe(
     InfantArvProphylaxis
+)
+relationshipfatherinvolvement = Recipe(
+    RelationshipFatherInvolvement,
+)
+
+childtbreferral = Recipe(
+    ChildTBReferral,
 )

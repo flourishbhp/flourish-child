@@ -1,5 +1,5 @@
 from django.contrib import admin
-from edc_fieldsets.fieldlist import Remove
+from edc_fieldsets.fieldlist import Insert, Remove
 from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -61,7 +61,9 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
         audit_fieldset_tuple)
 
     radio_fields = {
-        'is_child_preg': admin.VERTICAL, }
+        'is_child_preg': admin.VERTICAL,
+        'visit_skin_fold_messure': admin.VERTICAL,
+    }
 
     conditional_fieldlists = {}
 
@@ -73,13 +75,20 @@ class ChildClinicalMeasurementsAdmin(ChildCrfModelAdminMixin,
             return appt_obj.visit_code if appt_obj else None
 
     conditional_fieldlists.update(
-        {'1000':
-             Remove('skin_folds_triceps',
-                    'skin_folds_triceps_second',
-                    'skin_folds_triceps_third',
-                    'skin_folds_subscapular',
-                    'skin_folds_subscapular_second',
-                    'skin_folds_subscapular_third',
-                    'skin_folds_suprailiac',
-                    'skin_folds_suprailiac_second',
-                    'skin_folds_suprailiac_third')})
+        {'1000': Remove('skin_folds_triceps',
+                        'skin_folds_triceps_second',
+                        'skin_folds_triceps_third',
+                        'skin_folds_subscapular',
+                        'skin_folds_subscapular_second',
+                        'skin_folds_subscapular_third',
+                        'skin_folds_suprailiac',
+                        'skin_folds_suprailiac_second',
+                        'skin_folds_suprailiac_third'), }
+    )
+
+    followup_codes = ['3000', '3000A', '3000B', '3000C', '3000S']
+    for fu_code in followup_codes:
+        conditional_fieldlists.update(
+            {fu_code: Insert('visit_skin_fold_messure',
+                             after='child_hip_circ',
+                             section='Child Waist and Hip Circumference'), })

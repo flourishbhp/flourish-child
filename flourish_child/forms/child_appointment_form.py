@@ -1,6 +1,5 @@
 from django import forms
 from django.apps import apps as django_apps
-from django.core.exceptions import ObjectDoesNotExist
 from edc_appointment.constants import NEW_APPT, IN_PROGRESS_APPT
 from edc_appointment.form_validators import AppointmentFormValidator
 from edc_base.sites.forms import SiteModelFormMixin
@@ -9,6 +8,7 @@ from edc_form_validators import FormValidatorMixin
 import pytz
 
 from ..models import Appointment
+from ..helper_classes.utils import child_utils
 
 
 class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormValidator,
@@ -42,7 +42,7 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
             if self.instance.visit_code_sequence == 0:
                 if (cleaned_data.get('appt_datetime') < earlist_appt_date.replace(
                     microsecond=0)
-                    or (self.instance.visit_code != '2000'
+                    or (self.instance.visit_code not in ['2000', '3000A', '3000B', '3000C']
                         and cleaned_data.get('appt_datetime') > latest_appt_date.replace(
                             microsecond=0))):
                     raise forms.ValidationError(
@@ -62,12 +62,13 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
         """
         if self.cleaned_data.get('appt_status') == IN_PROGRESS_APPT:
             # visit report sequence
-
+            prev_appt = None
             try:
-                self.instance.get_previous_by_appt_datetime(
-                                subject_identifier=self.instance.subject_identifier,
-                                visit_schedule_name=self.instance.visit_schedule_name).childvisit
-            except ObjectDoesNotExist:
+                prev_appt = child_utils.get_previous_appt_instance(self.instance)
+            except Appointment.DoesNotExist:
+                pass
+            
+            if not getattr(prev_appt, 'childvisit', None):
                 last_visit = self.appointment_model_cls.visit_model_cls().objects.filter(
                     appointment__subject_identifier=self.instance.subject_identifier,
                     visit_schedule_name=self.instance.visit_schedule_name,
@@ -84,15 +85,13 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
                             f'A previous visit report is required. Enter the visit report for '
                             f'appointment {next_visit.visit_code} before '
                             'starting with this appointment.')
-            except AttributeError:
-                pass
-
+ 
             # appointment sequence
             try:
-                self.instance.get_previous_by_appt_datetime(
-                                subject_identifier=self.instance.subject_identifier,
-                                visit_schedule_name=self.instance.visit_schedule_name).childvisit
-            except ObjectDoesNotExist:
+                prev_appt = child_utils.get_previous_appt_instance(self.instance)
+            except Appointment.DoesNotExist:
+                pass
+            if not getattr(prev_appt, 'childvisit', None):
                 first_new_appt = self.appointment_model_cls.objects.filter(
                     subject_identifier=self.instance.subject_identifier,
                     visit_schedule_name=self.instance.visit_schedule_name,
@@ -103,8 +102,6 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
                     raise forms.ValidationError(
                         'A previous appointment requires updating. '
                         f'Update appointment for {first_new_appt.visit_code} first.')
-            except AttributeError:
-                pass
 
     def validate_complete_cbcl_crfs(self):
         appointment = self.instance

@@ -2,6 +2,7 @@ from django.db import models
 from edc_base import get_utcnow
 from edc_base.model_validators import date_not_future
 from edc_constants.choices import POS_NEG, YES_NO, YES_NO_NA
+from edc_constants.constants import NOT_APPLICABLE
 from edc_protocol.validators import date_not_before_study_start
 
 
@@ -10,7 +11,8 @@ class PregTestModelMixin(models.Model):
         verbose_name=('Have you experienced pregnancy since the last contact with '
                       'FLOURISH staff?'),
         max_length=3,
-        choices=YES_NO)
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE)
 
     test_done = models.CharField(
         verbose_name='Was a pregnancy test performed?',
@@ -18,9 +20,21 @@ class PregTestModelMixin(models.Model):
         choices=YES_NO_NA)
 
     menarche = models.CharField(
-        verbose_name='Has the child reached menarche?',
-        max_length=5,
+        verbose_name='Has the child reached menarche since the last scheduled visit?',
+        max_length=3,
         choices=YES_NO)
+
+    menarche_start_dt = models.DateField(
+        verbose_name='Start date of menarche',
+        validators=[date_not_future],
+        null=True,
+        blank=True)
+
+    menarche_start_est = models.CharField(
+        verbose_name='Is the start date of menarche estimated?',
+        max_length=3,
+        choices=YES_NO_NA,
+        default=NOT_APPLICABLE)
 
     test_date = models.DateField(
         verbose_name='Date of pregnancy test',

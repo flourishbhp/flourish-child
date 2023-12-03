@@ -243,7 +243,8 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
                             instance.subject_identifier,
                             repeat=True)
 
-    if not raw and created and instance.visit_code in ['2000', '2000D', '3000']:
+    if not raw and created and instance.visit_code in ['2000', '2000D', '3000',
+                                                       '3000A', '3000B', '3000C']:
 
         if 'sec' in instance.schedule_name:
 
@@ -319,7 +320,8 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
         base_appt_datetime = None
         try:
             maternal_delivery_obj = maternal_delivery_cls.objects.get(
-                subject_identifier=caregiver_subject_identifier)
+                subject_identifier=caregiver_subject_identifier,
+                child_subject_identifier=instance.subject_identifier)
         except maternal_delivery_cls.DoesNotExist:
             pass
         else:

@@ -213,63 +213,76 @@ class InfantFeeding(ChildCrfModelMixin):
         blank=True,
         null=True)
 
+    provide_response_solid = models.CharField(
+        verbose_name=('Are you able to provide answers about solid foods and '
+                      'their frequency the child/infant is taking?'),
+        max_length=20,
+        choices=YES_NO,)
+
     solid_foods = models.ManyToManyField(
         SolidFoods,
         verbose_name='What solid foods is your infant/child taking?',
         help_text='(tick all that apply)',
         blank=True)
 
+    solid_foods_past_week = models.ManyToManyField(
+        SolidFoods,
+        related_name='solid_foods_past_week',
+        verbose_name='What solid foods did your child take in the past week (past seven days)',
+        help_text='(tick all that apply)',
+        blank=True)
+
     grain_intake_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'Grains, roots and tubers'),
         blank=True,
         null=True)
 
     legumes_intake_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'Legumes and nuts'),
         blank=True,
         null=True)
 
     dairy_intake_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'Dairy products (milk, yogurt, cheese)'),
         blank=True,
         null=True)
 
     flesh_foods_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'Flesh foods (meat, fish, poultry and liver/organ meat)'),
         blank=True,
         null=True)
 
     eggs_intake_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'Eggs'),
         blank=True,
         null=True)
 
     porridge_intake_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'Porridge'),
         blank=True,
         null=True)
 
     vitamin_a_fruits_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'Vitamin A rich fruits and vegetables (carrots)'),
         blank=True,
         null=True)
 
     other_fruits_vegies = models.CharField(
         verbose_name=('Please describe other types of fruits and vegetables '
-                      'the infant/child is taking'),
+                      'the infant/child is taking(most common)'),
         max_length=150,
         blank=True,
         null=True)
 
     other_fruits_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'Other fruits and vegetables'),
         blank=True,
         null=True)
@@ -282,7 +295,7 @@ class InfantFeeding(ChildCrfModelMixin):
         null=True)
 
     other_solids_freq = models.IntegerField(
-        verbose_name=('On average how many times a week does this child take '
+        verbose_name=('In the past week how many times a week did this child take '
                       'the other foods'),
         blank=True,
         null=True)

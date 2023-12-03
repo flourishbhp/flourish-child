@@ -51,6 +51,8 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'solid_foods_dt',
                 'solid_foods_age',
                 'solid_foods',
+                'provide_response_solid',
+                'solid_foods_past_week',
                 'grain_intake_freq',
                 'legumes_intake_freq',
                 'dairy_intake_freq',
@@ -87,9 +89,10 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'milk_boiled': admin.VERTICAL,
         'taken_salts': admin.VERTICAL,
         'taken_solid_foods': admin.VERTICAL,
-        'infant_feeding_changed': admin.VERTICAL, }
+        'infant_feeding_changed': admin.VERTICAL,
+        'provide_response_solid': admin.VERTICAL, }
 
-    filter_horizontal = ('solid_foods',)
+    filter_horizontal = ('solid_foods', 'solid_foods_past_week')
 
     list_display = ('child_visit', 'report_datetime', 'last_att_sche_visit',)
 
@@ -180,7 +183,7 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             Insert(
             'formula_first_report',
             after='took_formula'))
-            })
+        })
 
     def get_fieldsets(self, request, obj=None):
         """Returns fieldsets after modifications declared in
@@ -247,7 +250,7 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 schedule_name = model_obj.schedule_name
 
                 if 'child_a_quart' in schedule_name:
-                    if self.is_preg_enroll_quart(model_obj):
+                    if self.is_preg_enroll_quart(model_obj) and model_obj.visit_code != '2001':
                         return schedule_name
                     return None
 

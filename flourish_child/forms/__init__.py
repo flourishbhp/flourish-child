@@ -38,7 +38,7 @@ from .child_hiv_rapid_test_counseling_form import \
 from .child_immunization_history_form import ChildImmunizationHistoryForm
 from .child_immunization_history_form import VaccinesMissedForm
 from .child_immunization_history_form import VaccinesReceivedForm
-from .child_medical_history_form import ChildMedicalHistoryForm
+from .child_medical_history_form import ChildMedicalHistoryForm, ChildOutpatientVisitForm
 from .child_penn_cnb_form import ChildPennCNBForm
 from .child_phq_depression_screening_form import ChildPhqDepressionScreeningForm
 from .child_phq_post_referral_form import ChildPhqPostReferralForm
@@ -54,11 +54,14 @@ from .child_requisition_form import ChildRequisitionForm
 from .child_requisition_result_form import ChildRequisitionResultForm
 from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_tanner_staging_form import ChildTannerStagingForm
+from .child_tb_referral_form import ChildTBReferralForm
+from .child_tb_referral_outcome_form import ChildTBReferralOutcomeForm
+from .child_tb_screening_form import ChildTBScreeningForm
 from .child_visit_form import ChildVisitForm
 from .child_working_status_form import ChildWorkingStatusForm
 from .hiv_testing_adol_form import HIVTestingAdolForm
-from .infant_arv_prophylaxis_form import InfantArvProphylaxisForm, ChildArvProphDatesForm
 from .infant_arv_exposure_form import InfantArvExposureForm
+from .infant_arv_prophylaxis_form import ChildArvProphDatesForm, InfantArvProphylaxisForm
 from .infant_congenital_anomalies_form import InfantCardioDisorderForm
 from .infant_congenital_anomalies_form import InfantCleftDisorderForm
 from .infant_congenital_anomalies_form import InfantCnsForm
@@ -94,3 +97,4 @@ from .tb_interview_form import TbInterviewForm
 from .tb_referral_outcomes_form import TbReferralOutcomesForm
 from .tb_screen_adol_form import TbVisitScreeningAdolescentForm
 from .young_adult_locator_form import YoungAdultLocatorForm
+from .child_social_work_referral_form import ChildSocialWorkReferralForm

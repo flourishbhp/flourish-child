@@ -6,7 +6,7 @@ from edc_protocol.validators import date_not_before_study_start
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .list_models import StaffMember
-from ..choices import LAPTOP_CHOICES, PENNCNB_INVALID, REASONS_PENNCNB_INCOMPLETE
+from ..choices import LAPTOP_CHOICES, PENNCNB_INVALID, REASONS_PENNCNB_INCOMPLETE, YES_NO_NOT_COMPLETED
 
 
 class ChildPennCNB(ChildCrfModelMixin):
@@ -35,8 +35,8 @@ class ChildPennCNB(ChildCrfModelMixin):
 
     completed = models.CharField(
         verbose_name='Was the PennCNB successfully completed?',
-        choices=YES_NO,
-        max_length=3, )
+        choices=YES_NO_NOT_COMPLETED,
+        max_length=18, )
 
     reason_incomplete = models.CharField(
         verbose_name='If no, please provide reasons',

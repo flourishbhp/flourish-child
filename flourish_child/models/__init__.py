@@ -37,7 +37,7 @@ from .child_hiv_rapid_test_counseling import ChildHIVRapidTestCounseling
 from .child_immunization_history import ChildImmunizationHistory
 from .child_immunization_history import VaccinesMissed
 from .child_immunization_history import VaccinesReceived
-from .child_medical_history import ChildMedicalHistory
+from .child_medical_history import ChildMedicalHistory, ChildOutpatientVisit
 from .child_penn_cnb import ChildPennCNB
 from .child_phq_depression_screening import ChildPhqDepressionScreening
 from .child_phq_post_referral import ChildPhqPostReferral
@@ -51,10 +51,13 @@ from .child_requisition import ChildRequisition
 from .child_requisition_result import ChildRequisitionResult, ChildResultValue
 from .child_socio_demographic import ChildSocioDemographic
 from .child_tanner_staging import ChildTannerStaging
+from .child_tb_referral import ChildTBReferral
+from .child_tb_referral_outcome import ChildTBReferralOutcome
+from .child_tb_screening import ChildTBScreening
 from .child_visit import ChildVisit
 from .child_working_status import ChildWorkingStatus
 from .infant_arv_exposure import InfantArvExposure
-from .infant_arv_prophylaxis import InfantArvProphylaxis, ChildArvProphDates
+from .infant_arv_prophylaxis import ChildArvProphDates, InfantArvProphylaxis
 from .infant_congenital_anomalies import BaseCnsItem, InfantCongenitalAnomalies
 from .infant_congenital_anomalies import InfantCardioDisorder, \
     InfantFacialDefect
@@ -81,11 +84,15 @@ from .offschedule import ChildOffSchedule
 from .onschedule import OnScheduleChildCohortABirth, OnScheduleChildCohortAEnrollment
 from .onschedule import OnScheduleChildCohortAFU, OnScheduleChildCohortCSec
 from .onschedule import OnScheduleChildCohortAFUQuart, OnScheduleChildCohortBFUQuart
+from .onschedule import OnScheduleChildCohortAFUSeq, OnScheduleChildCohortBFUSeq, \
+    OnScheduleChildCohortCFUSeq
 from .onschedule import OnScheduleChildCohortAQuarterly, \
     OnScheduleChildCohortBEnrollment
 from .onschedule import OnScheduleChildCohortASec, OnScheduleChildCohortBSec
 from .onschedule import OnScheduleChildCohortASecQuart, \
     OnScheduleChildCohortBSecQuart
+from .onschedule import (OnScheduleChildCohortASecSeq, OnScheduleChildCohortBSecSeq,
+                         OnScheduleChildCohortCSecSeq)
 from .onschedule import OnScheduleChildCohortBFU, OnScheduleChildCohortCFU
 from .onschedule import OnScheduleChildCohortBQuarterly, \
     OnScheduleChildCohortCEnrollment
@@ -105,3 +112,4 @@ from .tb_interview import TbAdolInterview
 from .tb_referral_outcomes import TbAdolReferralOutcomes
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
 from .young_adult_locator import YoungAdultLocator
+from .child_social_work_referral import ChildSocialWorkReferral

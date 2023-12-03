@@ -8,7 +8,7 @@ from edc_model_admin import TabularInlineMixin, audit_fieldset_tuple
 from ..admin_site import flourish_child_admin
 from ..forms import (
     ChildImmunizationHistoryForm, VaccinesReceivedForm, VaccinesMissedForm)
-from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived, BirthFeedingVaccine, ChildVisit
+from ..models import ChildImmunizationHistory, VaccinesMissed, VaccinesReceived, BirthFeedingVaccine
 from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
