@@ -16,7 +16,7 @@ class ChildTBReferralOutcome(ChildCrfModelMixin, FlourishTbReferralOutcomeMixin)
     tests_performed = models.ManyToManyField(
         ChildTBTests,
         verbose_name='What diagnostic tests were performed for TB',
-        blank=True, null=True)
+        blank=True, )
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
