@@ -25,6 +25,7 @@ import xlwt
 import uuid
 
 from .exportaction_mixin import ExportActionMixin
+from ..helper_classes.utils import child_utils
 
 
 class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,
@@ -157,25 +158,15 @@ class ChildCrfModelAdminMixin(
             while appointment:
                 options = {
                     '{}__appointment'.format(self.model.visit_model_attr()):
-                    self.get_previous_appt_instance(appointment)}
+                    child_utils.get_previous_appt_instance(appointment)}
                 try:
                     obj = self.model.objects.get(**options)
                 except ObjectDoesNotExist:
                     pass
                 else:
                     break
-                appointment = self.get_previous_appt_instance(appointment)
+                appointment = child_utils.get_previous_appt_instance(appointment)
         return obj
-
-    def get_previous_appt_instance(self, appointment):
-
-        previous_appt = appointment.__class__.objects.filter(
-            subject_identifier=appointment.subject_identifier,
-            timepoint__lt=appointment.timepoint,
-            schedule_name__startswith=appointment.schedule_name[:7],
-            visit_code_sequence=0).order_by('timepoint').last()
-
-        return previous_appt or appointment.previous_by_timepoint
 
     def get_instance(self, request):
         try:

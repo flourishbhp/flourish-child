@@ -1,11 +1,11 @@
 from django import forms
+from django.apps import apps as django_apps
 from django.db.models import ManyToManyField, DateField, DateTimeField, IntegerField
 from edc_constants.constants import YES, NO
 from itertools import chain
 
 from ..models import InfantFeeding
 from .child_form_mixin import ChildModelFormMixin
-from django.apps import apps as django_apps
 from flourish_child_validations.form_validators import InfantFeedingFormValidator
 
 
@@ -27,25 +27,33 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         initial = kwargs.pop('initial', {})
         instance = kwargs.get('instance')
         previous_instance = getattr(self, 'previous_instance', None)
+        prev_feeding_completed = getattr(
+            previous_instance, 'formula_feedng_completd', None)
         if not instance and previous_instance:
             initial['last_att_sche_visit'] = getattr(
                 previous_instance, 'report_datetime').date()
             for key in self.base_fields.keys():
+                if key == 'dt_formula_introduced' and prev_feeding_completed == YES:
+                    continue
                 if key in ['solid_foods', 'solid_foods_past_week']:
                     key_manager = getattr(previous_instance, key)
                     initial[key] = [obj.id for obj in key_manager.all()]
                     continue
                 if key not in ['child_visit', 'report_datetime', 'infant_feeding_changed',
-                               'last_att_sche_visit']:
+                               'last_att_sche_visit', 'solid_foods_past_week', 'grain_intake_freq',
+                               'legumes_intake_freq', 'dairy_intake_freq', 'flesh_foods_freq',
+                               'eggs_intake_freq', 'porridge_intake_freq', 'vitamin_a_fruits_freq',
+                               'other_fruits_vegies', 'other_fruits_freq', 'other_solids',
+                               'other_solids_freq']:
                     initial[key] = getattr(previous_instance, key)
 
+        subject_identifier = initial.get('subject_identifier', None)
+        for key in ['bf_start_dt', 'bf_start_dt_est', 'dt_formula_introduced', 'dt_formula_est']:
+            key_value, _exists = self.prefill_bf_dates(key, subject_identifier)
+            if _exists:
+                initial[key] = key_value
+                continue
         kwargs['initial'] = initial
-
-        birth_feeding_and_vaccine_obj = self.birth_feeding_and_vaccine_model_cls.objects.filter(
-            child_visit__subject_identifier=initial.get('subject_identifier', None)).first()
-        if birth_feeding_and_vaccine_obj:
-            initial['bf_start_dt'] = birth_feeding_and_vaccine_obj.breastfeed_start_dt
-            initial['bf_start_dt_est'] = birth_feeding_and_vaccine_obj.breastfeed_start_est
 
         super().__init__(*args, **kwargs)
 
@@ -119,6 +127,23 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                 continue
             data[f.name] = f.value_from_object(instance) or None
         return data
+
+    def prefill_bf_dates(self, key=None, subject_identifier=None):
+        key_map = {'bf_start_dt': 'breastfeed_start_dt',
+                   'bf_start_dt_est': 'breastfeed_start_est',
+                   'dt_formula_introduced': 'formulafeed_start_dt',
+                   'dt_formula_est': 'formulafeed_start_est'}
+
+        feeding_n_vaccine_objs = self.birth_feeding_and_vaccine_model_cls.objects.filter(
+            child_visit__subject_identifier=subject_identifier)
+        key_value = None
+        if feeding_n_vaccine_objs.exists():
+            feeding_n_vaccine_obj = feeding_n_vaccine_objs.latest(
+                'report_datetime')
+            key_value = getattr(feeding_n_vaccine_obj,
+                                key_map.get(key, key), None)
+
+        return (key_value, True) if key_value else (key_value, False)
 
     class Meta:
         model = InfantFeeding

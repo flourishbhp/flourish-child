@@ -15,6 +15,7 @@ from edc_visit_tracking.model_mixins import VisitModelMixin, CaretakerFieldsMixi
 from .child_appointment import Appointment
 from ..choices import ALIVE_DEAD_UNKNOWN, VISIT_INFO_SOURCE
 from ..choices import VISIT_STUDY_STATUS, VISIT_REASON, INFO_PROVIDER
+from ..visit_sequence import VisitSequence
 
 
 class CurrentSiteManager(VisitModelManager, BaseCurrentSiteManager):
@@ -28,6 +29,7 @@ class ChildVisit(
 
     """ A model completed by the user on child visits. """
 
+    visit_sequence_cls = VisitSequence
     appointment = models.OneToOneField(Appointment, on_delete=models.PROTECT)
 
     reason = models.CharField(

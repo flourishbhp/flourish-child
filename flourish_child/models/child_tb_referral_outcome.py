@@ -4,6 +4,7 @@ from flourish_caregiver.models.model_mixins.flourish_tb_referral_outcome_mixin i
     FlourishTbReferralOutcomeMixin
 from flourish_child.choices import TEST_RESULTS_CHOICES
 from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
+from flourish_child.models.list_models import ChildTBTests
 
 
 class ChildTBReferralOutcome(ChildCrfModelMixin, FlourishTbReferralOutcomeMixin):
@@ -11,6 +12,11 @@ class ChildTBReferralOutcome(ChildCrfModelMixin, FlourishTbReferralOutcomeMixin)
         verbose_name='Stool Sample Results',
         choices=TEST_RESULTS_CHOICES,
         max_length=15, blank=True, null=True)
+
+    tests_performed = models.ManyToManyField(
+        ChildTBTests,
+        verbose_name='What diagnostic tests were performed for TB',
+        blank=True, )
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
