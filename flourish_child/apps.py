@@ -17,7 +17,7 @@ class AppConfig(DjangoAppConfig):
     consent_version = 4
 
     def ready(self):
-        pass
+        from .models import child_consent_on_post_save
 
 
 if settings.APP_NAME == 'flourish_child':
