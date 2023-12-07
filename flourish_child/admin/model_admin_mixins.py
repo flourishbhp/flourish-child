@@ -122,6 +122,11 @@ class ChildCrfModelAdminMixin(
     post_url_on_delete_name = settings.DASHBOARD_URL_NAMES.get(
         'child_dashboard_url')
 
+    @property
+    def cohort_schedules_cls(self):
+        model_name = 'flourish_caregiver.cohortschedules'
+        return django_apps.get_model(model_name)
+
     def post_url_on_delete_kwargs(self, request, obj):
         return dict(
             subject_identifier=obj.child_visit.subject_identifier,

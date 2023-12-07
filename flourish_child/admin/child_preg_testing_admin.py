@@ -1,4 +1,3 @@
-from django.apps import apps as django_apps
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
 from edc_fieldsets.fieldlist import Insert
@@ -40,11 +39,6 @@ class ChildPregTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                       'child_b_quart_schedule1',
                       'child_c_sec_qt_schedule1',
                       'child_c_quart_schedule1', ]
-
-    @property
-    def cohort_schedules_cls(self):
-        model_name = 'flourish_caregiver.cohortschedules'
-        return django_apps.get_model(model_name)
         
     @property
     def quarterly_schedules(self):
