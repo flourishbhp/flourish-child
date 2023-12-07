@@ -12,6 +12,7 @@ from edc_senaite_interface.admin import SenaiteRequisitionAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import ChildRequisitionForm
 from ..models import ChildRequisition
+from ..helper_classes.utils import child_utils
 from .model_admin_mixins import ChildCrfModelAdminMixin, ExportRequisitionCsvMixin
 
 requisition_identifier_fields = (
@@ -116,5 +117,5 @@ class ChildRequisitionAdmin(ExportRequisitionCsvMixin, ChildCrfModelAdminMixin,
                     pass
                 else:
                     break
-                appointment = self.get_previous_appt_instance(appointment)
+                appointment = child_utils.get_previous_appt_instance(appointment)
         return obj
