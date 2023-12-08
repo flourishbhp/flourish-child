@@ -240,8 +240,7 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
     """
     if getattr(instance, 'survival_status') == 'dead':
         trigger_action_item(ChildDeathReport, CHILD_DEATH_REPORT_ACTION,
-                            instance.subject_identifier,
-                            repeat=True)
+                            instance.subject_identifier)
 
     if not raw and created and instance.visit_code in ['2000', '2000D', '3000',
                                                        '3000A', '3000B', '3000C']:
