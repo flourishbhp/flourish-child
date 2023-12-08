@@ -14,7 +14,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
         choices=HAPPENED
     )
 
-    lost_friends_happened_when = models.CharField(
+    lost_friends_period = models.CharField(
         verbose_name='If "Ever happened" : when',
         max_length=20,
         choices=PERIOD_HAPPENED,
@@ -28,7 +28,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
         choices=HAPPENED
     )
 
-    discriminated_when = models.CharField(
+    discriminated_period = models.CharField(
         verbose_name='If "Ever happened" : when',
         choices=PERIOD_HAPPENED,
         max_length=20,

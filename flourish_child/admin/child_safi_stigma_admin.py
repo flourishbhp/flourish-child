@@ -18,9 +18,16 @@ class ChildSafiStigmaAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_visit',
                 'report_datetime',
                 'lost_friends',
-                'lost_friends_happened_when',
+                'lost_friends_period',
                 'discriminated',
-                'discriminated_when',
+                'discriminated_period',
+
+
+
+            ]}),
+        ('Because someone else in my family has HIV, I have experienced discrimination at', {
+            'fields': [
+
                 'child_home_discrimination',
                 'child_home_discrimination_period',
                 'child_neighborhood_discrimination',
@@ -34,24 +41,35 @@ class ChildSafiStigmaAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_other_discrimination',
                 'child_other_discrimination_other',
                 'child_other_discrimination_period',
+
+
+            ]}
+         ),
+        ('Because someone else in my family has HIV, discrimination has led to my family to', {
+            'fields': [
                 'lose_finacial_support',
                 'lose_finacial_support_period',
                 'lose_social_support',
                 'lose_social_support_period',
+
+            ]}
+         ),
+
+        ('Because someone else in my family has HIV, discrimination has made me feel', {
+            'fields': [
                 'stressed_or_anxious',
                 'stressed_or_anxious_period',
                 'depressed_or_saddened',
                 'depressed_or_saddened_period'
-
 
             ]}
          ), audit_fieldset_tuple)
 
     radio_fields = {
         'lost_friends': admin.VERTICAL,
-        'lost_friends_happened_when': admin.VERTICAL,
+        'lost_friends_period': admin.VERTICAL,
         'discriminated': admin.VERTICAL,
-        'discriminated_when': admin.VERTICAL,
+        'discriminated_period': admin.VERTICAL,
         'child_home_discrimination': admin.VERTICAL,
         'child_home_discrimination_period': admin.VERTICAL,
         'child_neighborhood_discrimination': admin.VERTICAL,
