@@ -99,18 +99,21 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             previous_appointment=True)
     ]
 
-    quartely_schedules = ['child_a_sec_qt_schedule1', 'child_a_quart_schedule1',
-                          'child_b_sec_qt_schedule1', 'child_b_quart_schedule1',
-                          'child_c_sec_qt_schedule1', 'child_c_quart_schedule1',
-                          'child_pool_schedule1', 'child_a_fu_schedule1',
-                          'child_b_fu_schedule1', 'child_c_fu_schedule1',
-                          'child_a_fu_qt_schedule1', 'child_b_fu_qt_schedule1',
-                          'child_c_fu_qt_schedule1']
+    @property
+    def quarterly_schedules(self):
+        schedules = self.cohort_schedules_cls.objects.filter(
+            schedule_type__icontains='quarterly',
+            onschedule_model__startswith='flourish_child').values_list(
+                'schedule_name', flat=True)
+        return schedules
 
-    conditional_fieldlists = {}
-    for schedule in quartely_schedules:
-        conditional_fieldlists.update(
-            {schedule: Insert('med_history_changed', after='report_datetime')})
+    @property
+    def conditional_fieldlists(self):
+        conditional_fieldlists = {}
+        for schedule in self.quarterly_schedules:
+            conditional_fieldlists.update(
+                {schedule: Insert('med_history_changed', after='report_datetime')})
+        return conditional_fieldlists
 
     def get_form(self, request, obj=None, *args, **kwargs):
         form = super().get_form(request, *args, **kwargs)

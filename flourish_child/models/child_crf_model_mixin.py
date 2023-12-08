@@ -13,6 +13,7 @@ from edc_visit_tracking.model_mixins import CrfModelMixin as BaseCrfModelMixin
 from edc_visit_tracking.model_mixins import PreviousVisitModelMixin
 
 from .child_visit import ChildVisit
+from ..visit_sequence import VisitSequence
 
 
 class ChildCrfModelMixin(
@@ -27,6 +28,7 @@ class ChildCrfModelMixin(
 
     offschedule_compare_dates_as_datetimes = False
     child_visit = models.OneToOneField(ChildVisit, on_delete=PROTECT)
+    visit_sequence_cls = VisitSequence
 
     def natural_key(self):
         return self.child_visit.natural_key()

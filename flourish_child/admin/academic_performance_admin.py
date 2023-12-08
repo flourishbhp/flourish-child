@@ -48,31 +48,6 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'num_days': admin.VERTICAL,
         'academic_perf_changed': admin.VERTICAL}
 
-    conditional_fieldlists = {
-        'primary': Insert('mathematics_marks',
-                          'science_marks',
-                          'setswana_marks',
-                          'english_marks',
-                          'physical_edu_marks',
-                          'cultural_stds_marks',
-                          after='education_level'),
-        'junior': Insert('mathematics_marks',
-                         'science_marks',
-                         'setswana_marks',
-                         'english_marks',
-                         'social_stds_marks',
-                         'agriculture_marks',
-                         after='education_level'),
-        'senior': Insert('mathematics_marks',
-                         'setswana_marks',
-                         'single_scie_marks',
-                         'biology_marks',
-                         'chemistry_marks',
-                         'physics_marks',
-                         'double_scie_marks',
-                         after='education_level'),
-        }
-
     def get_fieldsets(self, request, obj=None):
         """Returns fieldsets after modifications declared in
         "conditional" dictionaries.
@@ -117,16 +92,45 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             previous_appointment=True)
         ]
 
-    quartely_schedules = ['child_a_quart_schedule1', 'child_a_fu_qt_schedule1',
-                          'child_a_sec_qt_schedule1', 'child_b_quart_schedule1',
-                          'child_b_fu_qt_schedule1', 'child_b_sec_qt_schedule1',
-                          'child_c_quart_schedule1', 'child_c_fu_qt_schedule1',
-                          'child_c_sec_qt_schedule1', 'child_a_fu_schedule1',
-                          'child_b_fu_schedule1', 'child_c_fu_schedule1', ]
+    @property
+    def quarterly_schedules(self):
+        schedules = self.cohort_schedules_cls.objects.filter(
+            schedule_type__icontains='quarterly',
+            onschedule_model__startswith='flourish_child').values_list(
+                'schedule_name', flat=True)
+        return schedules
 
-    for schedule in quartely_schedules:
-        conditional_fieldlists.update(
-            {schedule: Insert('academic_perf_changed', after='report_datetime')})
+    @property
+    def conditional_fieldlists(self):
+        conditional_fieldlists = {
+            'primary': Insert('mathematics_marks',
+                              'science_marks',
+                              'setswana_marks',
+                              'english_marks',
+                              'physical_edu_marks',
+                              'cultural_stds_marks',
+                              after='education_level'),
+            'junior': Insert('mathematics_marks',
+                             'science_marks',
+                             'setswana_marks',
+                             'english_marks',
+                             'social_stds_marks',
+                             'agriculture_marks',
+                             after='education_level'),
+            'senior': Insert('mathematics_marks',
+                             'setswana_marks',
+                             'single_scie_marks',
+                             'biology_marks',
+                             'chemistry_marks',
+                             'physics_marks',
+                             'double_scie_marks',
+                             after='education_level'),
+            }
+
+        for schedule in self.quarterly_schedules:
+            conditional_fieldlists.update(
+                {schedule: Insert('academic_perf_changed', after='report_datetime')})
+        return conditional_fieldlists
 
     def get_socio_demographic_object(self, request):
         socio_demographic_cls = django_apps.get_model('flourish_child.childsociodemographic')
