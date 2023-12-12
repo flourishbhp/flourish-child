@@ -113,4 +113,3 @@ from .tb_referral_outcomes import TbAdolReferralOutcomes
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
 from .young_adult_locator import YoungAdultLocator
 from .child_social_work_referral import ChildSocialWorkReferral
-from .child_safi_stigma import ChildSafiStigma
