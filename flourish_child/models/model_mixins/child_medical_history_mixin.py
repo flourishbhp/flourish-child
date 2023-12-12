@@ -4,8 +4,7 @@ from edc_base.model_validators import date_not_future
 from edc_constants.choices import YES_NO
 from edc_constants.constants import YES
 
-from ...choices import CLINIC_VISIT, CURRENT_MEDICATIONS, CURRENT_SYMPTOMS, \
-    DURATION_MEDICATIONS
+from ...choices import CLINIC_VISIT, DURATION_MEDICATIONS
 
 
 class ChildMedicalHistoryMixin(models.Model):
