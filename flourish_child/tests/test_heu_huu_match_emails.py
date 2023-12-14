@@ -11,6 +11,7 @@ from edc_facility.import_holidays import import_holidays
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
 
+from flourish_calendar.models import Reminder
 from flourish_child.models import ChildClinicalMeasurements
 from flourish_child.models.child_appointment import Appointment
 from pre_flourish.helper_classes import MatchHelper
@@ -129,6 +130,16 @@ class TestHEUHUUMatchEmails(TestCase):
         self.assertEqual(mail.outbox[0].subject, 'Reminder: Enroll into Flourish')
 
         self.assertIn('Subject Identifier(s):\n[\'123', mail.outbox[0].body)
+
+    def test_create_reminder(self):
+        """Test that a reminder is created when a new child clinical
+        measurement is saved."""
+        huu_matrix_group = [self.matrix_pool]
+
+        self.match_helper.send_email_to_pre_flourish_users(huu_matrix_group)
+
+        self.assertNotEquals(0, Reminder.objects.filter(
+            title='Reminder: Enroll into Flourish').count())
 
     @tag('eesa')
     def test_create_new_matrix_pool(self):

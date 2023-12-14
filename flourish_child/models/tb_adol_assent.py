@@ -1,26 +1,23 @@
-
 from django.apps import apps as django_apps
 from django.db import models
 from django_crypto_fields.fields import IdentityField
+from edc_base.model_fields import IsDateEstimatedField
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import datetime_not_future
 from edc_base.sites.site_model_mixin import SiteModelMixin
 from edc_base.utils import age, get_utcnow
-from edc_consent.field_mixins import (
-    CitizenFieldsMixin, VulnerabilityFieldsMixin, ReviewFieldsMixin,
-    VerificationFieldsMixin)
+from edc_consent.field_mixins import CitizenFieldsMixin, ReviewFieldsMixin, \
+    VerificationFieldsMixin, VulnerabilityFieldsMixin
 from edc_consent.field_mixins import IdentityFieldsMixin, PersonalFieldsMixin
-from edc_constants.choices import YES_NO, YES_NO_DECLINED, GENDER
+from edc_constants.choices import GENDER, YES_NO, YES_NO_DECLINED
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
-from edc_base.model_fields import IsDateEstimatedField
 
-
-from ..choices import IDENTITY_TYPE
 from .eligibility import TbAdolAssentEligibility
 from .model_mixins import SearchSlugModelMixin
+from ..choices import IDENTITY_TYPE
 
 
 class TbAdolAssentManager(SearchSlugManager, models.Manager):
@@ -34,7 +31,6 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
                    IdentityFieldsMixin, PersonalFieldsMixin, ReviewFieldsMixin,
                    VulnerabilityFieldsMixin, CitizenFieldsMixin,
                    SearchSlugModelMixin, VerificationFieldsMixin, BaseUuidModel):
-
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
         max_length=50,
@@ -60,7 +56,7 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         help_text='Retype the identity number',
         null=True,
         blank=True)
-    
+
     gender = models.CharField(
         verbose_name="Gender",
         choices=GENDER,
@@ -78,7 +74,7 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         verbose_name=('Use of Samples in Future Research: Do you give us permission '
                       'to use your blood samples for future studies? '),
         max_length=3,
-        choices=YES_NO,)
+        choices=YES_NO, )
 
     consent_datetime = models.DateTimeField(
         verbose_name='Assent date and time',
@@ -95,10 +91,10 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     is_eligible = models.BooleanField(
         default=False,
         editable=False)
-    
+
     version = models.CharField(
         max_length=1, default=1)
-    
+
     consent_reviewed = models.CharField(
         verbose_name='I have reviewed the consent with the participant',
         max_length=3,
@@ -145,7 +141,7 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
         blank=False,
         help_text='If declined, return copy with the consent',
     )
-    
+
     is_dob_estimated = IsDateEstimatedField(
         verbose_name="Is the adolescent date of birth estimated?",
         null=True,
@@ -174,13 +170,13 @@ class TbAdolAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
     def save(self, *args, **kwargs):
         eligibility_criteria = TbAdolAssentEligibility(
             child_age=self.child_age,
-            citizen = self.citizen,
-            tb_testing = self.tb_testing,
-            consent_reviewed = self.consent_reviewed,
-            study_questions = self.study_questions,
-            assessment_score = self.assessment_score,
-            consent_signature = self.consent_signature,)
-        
+            citizen=self.citizen,
+            tb_testing=self.tb_testing,
+            consent_reviewed=self.consent_reviewed,
+            study_questions=self.study_questions,
+            assessment_score=self.assessment_score,
+            consent_signature=self.consent_signature, )
+
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
         super().save(*args, **kwargs)
