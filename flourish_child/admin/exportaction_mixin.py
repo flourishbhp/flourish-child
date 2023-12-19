@@ -119,7 +119,7 @@ class ExportActionMixin:
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(
-                    study_maternal_identifier, caregiver_sid)
+                    subject_identifier, study_maternal_identifier, caregiver_sid)
 
                 tb_age = self.tb_age_at_enrollment(subject_identifier)
 
@@ -279,7 +279,8 @@ class ExportActionMixin:
             else:
                 return dataset_obj.study_maternal_identifier
 
-    def child_hiv_exposure(self, study_maternal_identifier=None,
+    def child_hiv_exposure(self, subject_identifier=None,
+                           study_maternal_identifier=None,
                            caregiver_subject_identifier=None):
 
         child_dataset_cls = django_apps.get_model(
@@ -310,7 +311,8 @@ class ExportActionMixin:
                     'flourish_caregiver.antenatalenrollment')
                 try:
                     antenatal_enrollment = antenatal_enrollment_cls.objects.get(
-                        subject_identifier=caregiver_subject_identifier)
+                        subject_identifier=caregiver_subject_identifier,
+                        child_subject_identifier=subject_identifier)
                 except antenatal_enrollment_cls.DoesNotExist:
                     # To refactor to include new enrollees
                     maternal_hiv_status = 'UNK'
