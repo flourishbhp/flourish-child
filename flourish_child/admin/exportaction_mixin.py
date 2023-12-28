@@ -3,7 +3,8 @@ import uuid
 import xlwt
 
 from django.apps import apps as django_apps
-from django.db.models import ManyToManyField, ForeignKey, OneToOneField, ManyToOneRel
+from django.db.models import (ManyToManyField, ForeignKey, OneToOneField, ManyToOneRel,
+                              FileField, ImageField)
 from django.db.models.fields.reverse_related import OneToOneRel
 from django.http import HttpResponse
 from django.utils import timezone
@@ -118,7 +119,7 @@ class ExportActionMixin:
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(
-                    study_maternal_identifier, caregiver_sid)
+                    subject_identifier, study_maternal_identifier, caregiver_sid)
 
                 tb_age = self.tb_age_at_enrollment(subject_identifier)
 
@@ -138,6 +139,10 @@ class ExportActionMixin:
             inline_objs = []
             for field in self.get_model_fields:
 
+                if isinstance(field, (FileField, ImageField,)):
+                    file_obj = getattr(obj, field.name, '')
+                    data.append(getattr(file_obj, 'name', ''))
+                    continue
                 if isinstance(field, ManyToManyField):
                     m2m_values = self.get_m2m_values(obj, m2m_field=field)
                     data.extend(m2m_values)
@@ -149,7 +154,8 @@ class ExportActionMixin:
                 if isinstance(field, OneToOneRel):
                     continue
                 if isinstance(field, ManyToOneRel):
-                    key_manager = getattr(obj, f'{field.name}_set')
+                    key_manager = getattr(obj, f'{field.name}_set',
+                                          getattr(obj, f'{field.related_name}', None))
                     inline_values = key_manager.all()
                     fields = field.related_model._meta.get_fields()
                     for field in fields:
@@ -182,6 +188,10 @@ class ExportActionMixin:
                         inline_data = []
                         inline_data.extend(data)
                         for field in inline_obj._meta.get_fields():
+                            if isinstance(field, (FileField, ImageField,)):
+                                file_obj = getattr(inline_obj, field.name, '')
+                                inline_data.append(getattr(file_obj, 'name', ''))
+                                continue
                             if field.name in inline_field_names:
                                 inline_data.append(
                                     getattr(inline_obj, field.name, ''))
@@ -269,7 +279,8 @@ class ExportActionMixin:
             else:
                 return dataset_obj.study_maternal_identifier
 
-    def child_hiv_exposure(self, study_maternal_identifier=None,
+    def child_hiv_exposure(self, subject_identifier=None,
+                           study_maternal_identifier=None,
                            caregiver_subject_identifier=None):
 
         child_dataset_cls = django_apps.get_model(
@@ -300,7 +311,8 @@ class ExportActionMixin:
                     'flourish_caregiver.antenatalenrollment')
                 try:
                     antenatal_enrollment = antenatal_enrollment_cls.objects.get(
-                        subject_identifier=caregiver_subject_identifier)
+                        subject_identifier=caregiver_subject_identifier,
+                        child_subject_identifier=subject_identifier)
                 except antenatal_enrollment_cls.DoesNotExist:
                     # To refactor to include new enrollees
                     maternal_hiv_status = 'UNK'
