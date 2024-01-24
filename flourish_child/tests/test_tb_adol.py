@@ -3,7 +3,7 @@ from django.apps import apps as django_apps
 from django.test import tag, TestCase
 from edc_action_item import site_action_items
 from edc_base import get_utcnow
-from edc_constants.constants import NEG, NEW, NO, NOT_APPLICABLE, YES, POS, IND
+from edc_constants.constants import IND, NEG, NEW, NO, NOT_APPLICABLE, POS, YES
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
@@ -114,6 +114,14 @@ class TestTBAdol(TestCase):
             dob=(get_utcnow() - relativedelta(years=15, months=2)).date(),
             subject_identifier=self.child_subject_identifier,
             **self.data)
+
+        self.child_visit_2000 = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000',
+                subject_identifier=self.child_subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
 
         self.child_visit = mommy.make_recipe(
             'flourish_child.childvisit',

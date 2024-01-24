@@ -52,6 +52,17 @@ class ExportActionMixin:
         is_tb_adol_model = ('tb' in queryset[0].child_visit.schedule_name if hasattr(
             queryset[0], 'child_visit') else False) or ('TB Adol' in queryset[0].verbose_name)
 
+        replace_idx = {'subject_identifier': 'childpid',
+                       'study_maternal_identifier': 'old_matpid',
+                       'study_child_identifier': 'old_childpid'}
+        for old_idx, new_idx in replace_idx.items():
+            try:
+                idx_index = field_names.index(old_idx)
+            except ValueError:
+                continue
+            else:
+                field_names[idx_index] = new_idx
+
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
             field_names.insert(1, 'child_exposure_status')
@@ -59,9 +70,9 @@ class ExportActionMixin:
                 field_names.insert(2, 'tb_enrollment')
 
         if queryset and getattr(queryset[0], 'child_visit', None):
-            field_names.insert(0, 'subject_identifier')
-            field_names.insert(1, 'new_maternal_study_subject_identifier')
-            field_names.insert(2, 'old_study_maternal_identifier')
+            field_names.insert(0, 'childpid')
+            field_names.insert(1, 'matpid')
+            field_names.insert(2, 'old_matpid')
 
             if is_tb_adol_model:
                 field_names.insert(6, 'visit_code')
@@ -381,7 +392,8 @@ class ExportActionMixin:
                 'packed_datetime', 'shipped', 'shipped_datetime', 'received_datetime',
                 'identifier_prefix', 'primary_aliquot_identifier', 'clinic_verified',
                 'clinic_verified_datetime', 'drawn_datetime', 'related_tracking_identifier',
-                'parent_tracking_identifier', 'interview_file', 'interview_transcription']
+                'parent_tracking_identifier', 'interview_file', 'interview_transcription',
+                'slug', 'confirm_identity', 'site', 'subject_consent_id', '_django_version']
 
     def inline_exclude(self, field_names=[]):
         return [field_name for field_name in field_names
