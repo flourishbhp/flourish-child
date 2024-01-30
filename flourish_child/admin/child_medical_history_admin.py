@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Q
 from edc_fieldsets.fieldlist import Insert
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import (StackedInlineMixin, ModelAdminFormAutoNumberMixin,
@@ -102,9 +103,9 @@ class ChildMedicalHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     @property
     def quarterly_schedules(self):
         schedules = self.cohort_schedules_cls.objects.filter(
-            schedule_type__icontains='quarterly',
+            Q(schedule_type__icontains='quarterly') | Q(schedule_name__icontains='_fu_'),
             onschedule_model__startswith='flourish_child').values_list(
-                'schedule_name', flat=True)
+            'schedule_name', flat=True)
         return schedules
 
     @property
