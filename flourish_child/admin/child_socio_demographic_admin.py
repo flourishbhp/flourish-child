@@ -69,7 +69,7 @@ class ChildSocioDemographicAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     @property
     def quarterly_schedules(self):
         schedules = self.cohort_schedules_cls.objects.filter(
-            # Q(schedule_type__icontains='quarterly') | Q(schedule_name__icontains='_fu_'),
+            Q(schedule_type__icontains='quarterly') | Q(schedule_name__icontains='_fu_'),
             onschedule_model__startswith='flourish_child').values_list(
                 'schedule_name', flat=True)
         return schedules
