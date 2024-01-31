@@ -282,7 +282,48 @@ list_data = {
         ('skin_test', 'Skin test (TST/Mantoux)'),
         ('blood_test', 'Blood test (quantiferon)'),
         (OTHER, 'other')
-    ]
+    ],
+    'flourish_child.artmedicationreasons': [
+        ('mother_misunderstand_med_instructions', 'Mother did not understand medication '
+                                                  'instructions and did not collect'),
+        ('mother_forgot', 'Mother forget to collect medication'),
+        ('medication_out_of_stock', 'Medication was out of stock'),
+        ('med_not_given_to_baby', 'Medication collected and did not give the baby'),
+        ('does_not_recall', 'Does not reacaall'),
+        ('med_time_elapsed', '72hrs period to start prophylactic antiretroviral '
+                             'medication elapsed'),
+        ('other_reasons', 'Other, specify')
+    ],
+    'flourish_child.artprophstatus': [
+        ('in_progress', 'In progress, still taking prophylaxis'),
+        ('completed_within_28_days', 'Completed PMTCT intervention within stipulated '
+                                     'prophylaxis time (28 days)'),
+        ('completed_after_28_days', 'Completed PMTCT intervention with prophylaxis '
+                                    'greater than 28 days '),
+        ('incomplete', 'Incomplete, did not finish within stipulated prophylaxis time.')
+    ],
+    'flourish_child.childarvsproph': [
+        ('NVP', 'NVP'),
+        ('AZT', 'AZT'),
+        ('3TC', '3TC'),
+        ('FTC', 'FTC'),
+        ('ALU', 'ALU'),
+        ('TRV', 'TRV'),
+        ('TDF', 'TDF'),
+        ('ABC', 'ABC'),
+        ('RAL', 'RAL'),
+        (UNKNOWN, UNKNOWN),
+    ],
+    'flourish_child.childarvsprophmodreason': [
+        ('toxicity_decreased_resolved', 'Toxicity decreased/resolved'),
+        ('scheduled_dose_increase', 'Scheduled dose increase'),
+        ('triple_arts_not_available', 'Triple ARTs not available'),
+        ('anemia', 'Anemia'),
+        ('bleeding', 'Bleeding'),
+        ('side_effects', 'Side effects'),
+        ('toxicity', 'Toxicity'),
+        (OTHER, 'Other, specify')
+    ],
 }
 
 preload_data = PreloadData(
