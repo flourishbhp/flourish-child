@@ -1380,9 +1380,3 @@ YES_NO_OTHER = (
     (NO, _(NO)),
     (OTHER, 'Other, specify'),
 )
-
-YES_NO_DN_RECALL = (
-    (YES, YES),
-    (NO, NO),
-    ('do_not_recall', 'Do not recall'),
-)

@@ -83,19 +83,3 @@ class ChildSocialWorkReferralList(ListModelMixin, BaseUuidModel):
 
 class ChildTBTests(ListModelMixin, BaseUuidModel):
     pass
-
-
-class ARTMedicationReasons(ListModelMixin, BaseUuidModel):
-    pass
-
-
-class ARTProphStatus(ListModelMixin, BaseUuidModel):
-    pass
-
-
-class ChildArvProph(ListModelMixin, BaseUuidModel):
-    pass
-
-
-class ChildARVsProphmodReason(ListModelMixin, BaseUuidModel):
-    pass
