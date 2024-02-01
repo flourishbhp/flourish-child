@@ -16,7 +16,7 @@ def validate_range(value):
 class InfantArvProphylaxisPostFollow(ChildCrfModelMixin):
     """Infant ARV Prophylaxis Post Follow-up"""
 
-    _last_visit = models.CharField(
+    last_visit = models.CharField(
         verbose_name='Did the baby take prophylactic antiretroviral medication for '
                      'any period since the last attended scheduled visit? ',
         choices=YES_NO_DN_RECALL,
