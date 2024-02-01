@@ -15,11 +15,11 @@ class InfantArvProphylaxisPostFollowAdmin(ChildCrfModelAdminMixin, admin.ModelAd
             'fields': (
                 'child_visit',
                 'report_datetime',
-                'prophylactic_med_last_visit',
+                'last_visit',
                 'reason_no_art',
                 'reason_no_art_other',
                 'arv_status',
-                'arv_status_incomplete_reason',
+                'incomplete_reason',
                 'arv_taken',
                 'nvp_start_date',
                 'nvp_end_date',
@@ -39,11 +39,11 @@ class InfantArvProphylaxisPostFollowAdmin(ChildCrfModelAdminMixin, admin.ModelAd
                 'abc_end_date',
                 'ral_start_date',
                 'ral_end_date',
-                'modification_starting_arv',
-                'modification_date',
-                'modification_reason',
-                'modification_reason_other',
-                'modification_reason_side_effects',
+                'mod_starting_arv',
+                'mod_date',
+                'mod_reason',
+                'mod_reason_other',
+                'mod_reason_side_effects',
                 'missed_dose',
                 'missed_dose_count',
                 'reason_missed',
@@ -52,6 +52,6 @@ class InfantArvProphylaxisPostFollowAdmin(ChildCrfModelAdminMixin, admin.ModelAd
 
     radio_fields = {
         'prophylactic_med_last_visit': admin.VERTICAL,
-        'modification_starting_arv': admin.VERTICAL,
+        'mod_starting_arv': admin.VERTICAL,
         'missed_dose': admin.VERTICAL,
     }

@@ -16,7 +16,7 @@ def validate_range(value):
 class InfantArvProphylaxisPostFollow(ChildCrfModelMixin):
     """Infant ARV Prophylaxis Post Follow-up"""
 
-    prophylactic_med_last_visit = models.CharField(
+    _last_visit = models.CharField(
         verbose_name='Did the baby take prophylactic antiretroviral medication for '
                      'any period since the last attended scheduled visit? ',
         choices=YES_NO_DN_RECALL,
@@ -54,7 +54,7 @@ class InfantArvProphylaxisPostFollow(ChildCrfModelMixin):
         validators=[validate_range],
     )
 
-    arv_status_incomplete_reason = models.TextField(
+    incomplete_reason = models.TextField(
         verbose_name='Reason participant did not finish within stipulated prophylaxis '
                      'time',
         null=True,
@@ -175,34 +175,34 @@ class InfantArvProphylaxisPostFollow(ChildCrfModelMixin):
         blank=True,
     )
 
-    modification_starting_arv = models.CharField(
+    mod_starting_arv = models.CharField(
         verbose_name='Was there any Modification occurred since the baby was started on '
                      'ARV prophylaxis?',
         choices=YES_NO_DN_RECALL,
         max_length=50,
     )
 
-    modification_date = models.DateField(
+    mod_date = models.DateField(
         verbose_name='Date modification occurred',
         null=True,
         blank=True,
     )
 
-    modification_reason = models.ManyToManyField(
+    mod_reason = models.ManyToManyField(
         ChildARVsProphmodReason,
         verbose_name='If yes, what was the reason?',
         null=True,
         blank=True,
     )
 
-    modification_reason_other = models.CharField(
+    mod_reason_other = models.CharField(
         verbose_name='Other reason',
         max_length=50,
         null=True,
         blank=True,
     )
 
-    modification_reason_side_effects = models.TextField(
+    mod_reason_side_effects = models.TextField(
         verbose_name='If side effects, specify',
         null=True,
         blank=True,
