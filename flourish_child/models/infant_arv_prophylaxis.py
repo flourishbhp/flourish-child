@@ -13,7 +13,7 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
     """  """
 
     took_art_proph = models.CharField(
-        max_length=3,
+        max_length=20,
         choices=YES_NO_DN_RECALL,
         verbose_name=('Did the baby take prophylactic antiretroviral '
                       'medication for any period since the last '
@@ -56,7 +56,7 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
         verbose_name=('Was there any modification occurred since '
                       'the baby was started on ARV prophylaxis?'),
         choices=YES_NO_DN_RECALL,
-        max_length=3,
+        max_length=20,
         null=True,
         blank=True)
 
@@ -83,7 +83,7 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
     missed_dose = models.CharField(
         verbose_name='Has the baby missed any dose since last scheduled visit?',
         choices=YES_NO_DN_RECALL,
-        max_length=3,
+        max_length=20,
         blank=True,
         null=True)
 
