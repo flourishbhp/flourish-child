@@ -83,11 +83,3 @@ class ChildSocialWorkReferralList(ListModelMixin, BaseUuidModel):
 
 class ChildTBTests(ListModelMixin, BaseUuidModel):
     pass
-
-
-class NOARTREASONS(ListModelMixin, BaseUuidModel):
-    pass
-
-
-class ARTPROPHSTATUS(ListModelMixin, BaseUuidModel):
-    pass
