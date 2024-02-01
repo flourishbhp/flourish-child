@@ -71,7 +71,7 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
         return schedule_name
 
     @property
-    def quarterly_schedules(self):
+    def quarterly_and_fu_schedules(self):
         schedules = self.cohort_schedules_cls.objects.filter(
             Q(schedule_type__icontains='quarterly') | Q(schedule_name__icontains='_fu_'),
             onschedule_model__startswith='flourish_child').values_list(
@@ -81,7 +81,7 @@ class ChildPreviousHospitalizationAdmin(ChildCrfModelAdminMixin,
     @property
     def conditional_fieldlists(self):
         conditional_fieldlists = {}
-        for schedule in self.quarterly_schedules:
+        for schedule in self.quarterly_and_fu_schedules:
             conditional_fieldlists.update(
                 {schedule: Fieldlist(remove_fields=('child_hospitalized',),
                                      insert_fields=('hos_last_visit',),

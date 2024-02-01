@@ -92,7 +92,7 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     ]
 
     @property
-    def quarterly_schedules(self):
+    def quarterly_and_fu_schedules(self):
         schedules = self.cohort_schedules_cls.objects.filter(
             Q(schedule_type__icontains='quarterly') | Q(schedule_name__icontains='_fu_'),
             onschedule_model__startswith='flourish_child').values_list(
@@ -102,7 +102,7 @@ class ChildImmunizationHistoryAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     @property
     def conditional_fieldlists(self):
         conditional_fieldlists = {}
-        for schedule in self.quarterly_schedules:
+        for schedule in self.quarterly_and_fu_schedules:
             conditional_fieldlists.update(
                 {schedule: Fieldlist(insert_fields=('rec_add_immunization',),
                                      remove_fields=('vaccines_received',),
