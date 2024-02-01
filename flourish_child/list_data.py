@@ -284,10 +284,10 @@ list_data = {
         (OTHER, 'other')
     ],
     'flourish_child.artmedicationreasons': [
-        ('mother_misunderstand_med_instructions', 'Mother did not understand medication '
+        ('complex_med_instr', 'Mother did not understand medication '
                                                   'instructions and did not collect'),
         ('mother_forgot', 'Mother forget to collect medication'),
-        ('medication_out_of_stock', 'Medication was out of stock'),
+        ('med_out_of_stock', 'Medication was out of stock'),
         ('med_not_given_to_baby', 'Medication collected and did not give the baby'),
         ('does_not_recall', 'Does not reacaall'),
         ('med_time_elapsed', '72hrs period to start prophylactic antiretroviral '
@@ -296,9 +296,9 @@ list_data = {
     ],
     'flourish_child.artprophstatus': [
         ('in_progress', 'In progress, still taking prophylaxis'),
-        ('completed_within_28_days', 'Completed PMTCT intervention within stipulated '
-                                     'prophylaxis time (28 days)'),
-        ('completed_after_28_days', 'Completed PMTCT intervention with prophylaxis '
+        ('in_28_days', 'Completed PMTCT intervention within stipulated '
+                                 'prophylaxis time (28 days)'),
+        ('after_28_days', 'Completed PMTCT intervention with prophylaxis '
                                     'greater than 28 days '),
         ('incomplete', 'Incomplete, did not finish within stipulated prophylaxis time.')
     ],
