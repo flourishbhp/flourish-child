@@ -179,6 +179,10 @@ DASHBOARD_URL_NAMES = {}
 
 BASE_FORMAT = ''
 
+REDCAP_API_URL = 'https://redcap-dev.bhp.org.bw/api/'
+
+REDCAP_API_TOKEN = 'B7F721F715DBDBC60FBEA0A38F061DCE'
+
 if 'test' in sys.argv:
     class DisableMigrations:
 

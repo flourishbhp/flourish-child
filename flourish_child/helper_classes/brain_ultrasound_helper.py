@@ -1,0 +1,92 @@
+import logging
+
+import requests
+from django.apps import apps as django_apps
+from django.conf import settings
+from edc_base import get_utcnow
+from edc_visit_schedule import site_visit_schedules
+
+logger = logging.getLogger(__name__)
+
+
+class BrainUltrasoundHelper:
+    def __init__(self, child_subject_identifier, caregiver_subject_identifier):
+        self.child_subject_identifier = child_subject_identifier
+        self.caregiver_subject_identifier = caregiver_subject_identifier
+
+    def brain_ultrasound_enrolment(self, ):
+        """Enrols the child into the brain ultrasound schedule.
+        """
+        brain_ultrasound_schedules = [
+            {'schedule_name': 'caregiver_bu_schedule',
+             'subject_identifier': self.caregiver_subject_identifier,
+             'onschedule_model': 'flourish_caregiver.onschedulecaregiverbrainultrasound',
+             },
+            {'schedule_name': 'child_bu_schedule',
+             'subject_identifier': self.child_subject_identifier,
+             'onschedule_model': 'flourish_child.onschedulechildbrainultrasound',
+             },
+        ]
+        for schedule in brain_ultrasound_schedules:
+            onschedule_model_cls = django_apps.get_model(schedule.get('onschedule_model'))
+            schedule_name = schedule.get('schedule_name')
+            _, new_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                name=schedule.get('schedule_name'),
+                onschedule_model=schedule.get('onschedule_model'))
+
+            if not new_schedule.is_onschedule(
+                    subject_identifier=schedule.get('subject_identifier'),
+                    report_datetime=get_utcnow()
+            ):
+                new_schedule.put_on_schedule(
+                    subject_identifier=schedule.get('subject_identifier'),
+                    schedule_name=schedule.get('schedule_name'))
+
+            if len(schedule.get('subject_identifier').split('-')) == 3:
+                try:
+                    onschedule_model_cls.objects.get(
+                        subject_identifier=schedule.get('subject_identifier'),
+                        schedule_name=schedule_name,
+                        child_subject_identifier=self.child_subject_identifier)
+                except onschedule_model_cls.DoesNotExist:
+                    try:
+                        onschedule_obj = new_schedule.onschedule_model_cls.objects.get(
+                            subject_identifier=schedule.get('subject_identifier'),
+                            schedule_name=schedule_name,
+                            child_subject_identifier='')
+                    except new_schedule.onschedule_model_cls.DoesNotExist:
+                        pass
+                    else:
+                        onschedule_obj.child_subject_identifier = (
+                            self.child_subject_identifier)
+                        onschedule_obj.save()
+
+    def is_enrolled_brain_ultrasound(self):
+        """Returns True if the child is enrolled on the brain ultrasound schedule.
+        """
+        data = {
+            'token': settings.REDCAP_API_TOKEN,
+            'content': 'record',
+            'action': 'export',
+            'format': 'json',
+            'type': 'flat',
+            'csvDelimiter': '',
+            'records[0]': self.caregiver_subject_identifier,
+            'rawOrLabel': 'raw',
+            'rawOrLabelHeaders': 'raw',
+            'exportCheckboxLabel': 'false',
+            'exportSurveyFields': 'false',
+            'exportDataAccessGroups': 'false',
+            'returnFormat': 'json'
+        }
+
+        try:
+            results = requests.post(settings.REDCAP_API_URL, data=data)
+            results.raise_for_status()
+            if results.json():
+                return True
+            else:
+                return False
+        except requests.exceptions.RequestException as e:
+            logger.error(f'Error: {e}')
+            return False

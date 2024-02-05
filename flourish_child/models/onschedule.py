@@ -5,7 +5,8 @@ from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import CurrentSiteManager
 from edc_identifier.managers import SubjectIdentifierManager
-from edc_visit_schedule.model_mixins import OnScheduleModelMixin as BaseOnScheduleModelMixin
+from edc_visit_schedule.model_mixins import \
+    OnScheduleModelMixin as BaseOnScheduleModelMixin
 
 
 class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
@@ -49,7 +50,7 @@ class OnScheduleModelMixin(BaseOnScheduleModelMixin, BaseUuidModel):
             'flourish_child.childdummysubjectconsent')
 
         subject_consents = child_consent_cls.objects.filter(
-             subject_identifier=self.subject_identifier,)
+            subject_identifier=self.subject_identifier, )
         if subject_consents:
             latest_consent = subject_consents.latest('consent_datetime')
             return latest_consent.version
@@ -171,4 +172,8 @@ class OnScheduleChildTbAdolSchedule(OnScheduleModelMixin):
 
 
 class OnScheduleTbAdolFollowupSchedule(OnScheduleModelMixin):
+    pass
+
+
+class OnScheduleChildBrainUltrasound(OnScheduleModelMixin):
     pass
