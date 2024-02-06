@@ -6,6 +6,8 @@ from django.conf import settings
 from edc_base import get_utcnow
 from edc_visit_schedule import site_visit_schedules
 
+from flourish_child.helper_classes.utils import child_utils
+
 logger = logging.getLogger(__name__)
 
 
@@ -14,19 +16,29 @@ class BrainUltrasoundHelper:
         self.child_subject_identifier = child_subject_identifier
         self.caregiver_subject_identifier = caregiver_subject_identifier
 
+    @property
+    def get_child_number(self):
+        child_consnet = child_utils.caregiver_child_consent_obj(
+            self.child_subject_identifier)
+        return child_consnet.caregiver_visit_count if child_consnet else None
+
     def brain_ultrasound_enrolment(self, ):
         """Enrols the child into the brain ultrasound schedule.
         """
+
         brain_ultrasound_schedules = [
-            {'schedule_name': 'caregiver_bu_schedule',
-             'subject_identifier': self.caregiver_subject_identifier,
-             'onschedule_model': 'flourish_caregiver.onschedulecaregiverbrainultrasound',
-             },
+            {'schedule_name': 'caregiver_bu_schedule_{0}'.format(
+                self.get_child_number),
+                'subject_identifier': self.caregiver_subject_identifier,
+                'onschedule_model':
+                    'flourish_caregiver.onschedulecaregiverbrainultrasound',
+            },
             {'schedule_name': 'child_bu_schedule',
              'subject_identifier': self.child_subject_identifier,
              'onschedule_model': 'flourish_child.onschedulechildbrainultrasound',
              },
         ]
+
         for schedule in brain_ultrasound_schedules:
             onschedule_model_cls = django_apps.get_model(schedule.get('onschedule_model'))
             schedule_name = schedule.get('schedule_name')
