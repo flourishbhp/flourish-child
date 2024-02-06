@@ -127,8 +127,8 @@ class ChildRequisition(
     def initials(self):
         """Overrides senaite interface participant initials.
         """
-        first_name = self.consent_obj.first_name
-        last_name = self.consent_obj.last_name
+        first_name = getattr(self.consent_obj, 'first_name', None)
+        last_name = getattr(self.consent_obj, 'last_name', None)
         initials = ''
         if first_name and last_name:
             if (len(first_name.split(' ')) > 1):
