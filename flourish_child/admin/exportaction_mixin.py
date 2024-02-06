@@ -37,7 +37,7 @@ class ExportActionMixin(AdminExportHelper):
             queryset[0], 'child_visit') else False) or ('TB Adol' in queryset[0].verbose_name)
 
         for obj in queryset:
-            data = obj.__dict__
+            data = obj.__dict__.copy()
 
             subject_identifier = getattr(obj, 'subject_identifier', None)
             caregiver_sid = child_utils.caregiver_subject_identifier(
