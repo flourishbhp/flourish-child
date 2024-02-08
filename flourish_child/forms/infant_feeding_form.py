@@ -30,8 +30,10 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         previous_instance = getattr(self, 'previous_instance', None)
         prev_feeding_completed = getattr(
             previous_instance, 'formula_feedng_completd', None)
+
         dt_formula_introduced = getattr(
             previous_instance, 'dt_formula_introduced', None)
+
 
         if not instance and previous_instance:
             initial['last_att_sche_visit'] = getattr(
@@ -153,7 +155,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
             feeding_n_vaccine_obj = feeding_n_vaccine_objs.latest(
                 'report_datetime')
             key_value = getattr(feeding_n_vaccine_obj,
-                                key_map.get(key, key), None)
+                                key_map.get(key), None)
 
         return (key_value, True) if key_value else (key_value, False)
 
