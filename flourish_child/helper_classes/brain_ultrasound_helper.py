@@ -67,7 +67,8 @@ class BrainUltrasoundHelper:
                             schedule_name=schedule_name,
                             child_subject_identifier='')
                     except new_schedule.onschedule_model_cls.DoesNotExist:
-                        pass
+                        raise ValueError(Exception('Failed to put subject on '
+                                                   f'{schedule_name}'))
                     else:
                         onschedule_obj.child_subject_identifier = (
                             self.child_subject_identifier)
