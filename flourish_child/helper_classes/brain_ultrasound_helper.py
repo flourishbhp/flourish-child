@@ -22,7 +22,7 @@ class BrainUltrasoundHelper:
             self.child_subject_identifier)
         return child_consnet.caregiver_visit_count if child_consnet else None
 
-    def brain_ultrasound_enrolment(self, ):
+    def brain_ultrasound_enrolment(self):
         """Enrols the child into the brain ultrasound schedule.
         """
 
