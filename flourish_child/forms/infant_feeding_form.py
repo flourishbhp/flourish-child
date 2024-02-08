@@ -24,16 +24,23 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         required=False)
 
     def __init__(self, *args, **kwargs):
+
         initial = kwargs.pop('initial', {})
         instance = kwargs.get('instance')
         previous_instance = getattr(self, 'previous_instance', None)
         prev_feeding_completed = getattr(
             previous_instance, 'formula_feedng_completd', None)
+        dt_formula_introduced = getattr(
+            previous_instance, 'dt_formula_introduced', None)
+
         if not instance and previous_instance:
             initial['last_att_sche_visit'] = getattr(
                 previous_instance, 'report_datetime').date()
+
             for key in self.base_fields.keys():
+
                 if key == 'dt_formula_introduced' and prev_feeding_completed == YES:
+                    initial[key] = dt_formula_introduced
                     continue
                 if key in ['solid_foods', 'solid_foods_past_week']:
                     key_manager = getattr(previous_instance, key)
@@ -44,11 +51,15 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                                'legumes_intake_freq', 'dairy_intake_freq', 'flesh_foods_freq',
                                'eggs_intake_freq', 'porridge_intake_freq', 'vitamin_a_fruits_freq',
                                'other_fruits_vegies', 'other_fruits_freq', 'other_solids',
-                               'other_solids_freq']:
+                               'other_solids_freq', 'bf_start_dt', 'bf_start_dt_est',
+                               'dt_formula_introduced', 'dt_formula_est']:
                     initial[key] = getattr(previous_instance, key)
 
         subject_identifier = initial.get('subject_identifier', None)
         for key in ['bf_start_dt', 'bf_start_dt_est', 'dt_formula_introduced', 'dt_formula_est']:
+
+            # breakpoint()
+
             key_value, _exists = self.prefill_bf_dates(key, subject_identifier)
             if _exists:
                 initial[key] = key_value
@@ -65,6 +76,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                 attrs={'readonly': 'readonly'})
             self.fields['bf_start_dt'].widget = forms.DateInput(
                 attrs={'readonly': 'readonly'})
+
         if (initial.get('dt_weaned', None) and
                 initial.get('child_weaned', None) == YES):
             self.fields['child_weaned'].widget = forms.TextInput(
