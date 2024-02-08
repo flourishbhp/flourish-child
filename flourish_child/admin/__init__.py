@@ -69,7 +69,13 @@ from .infant_dev_screening_72_months_admin import InfantDevScreening72MonthsAdmi
 from .infant_dev_screening_9_months_admin import InfantDevScreening9MonthsAdmin
 from .infant_feeding_admin import InfantFeedingAdmin
 from .infant_feeding_practices_admin import InfantFeedingPracticesAdmin
-from .infant_hiv_testing_admin import InfantHIVTestingAdmin
+from .infant_hiv_testing_admin import (InfantHIVTesting18MonthsAdmin,
+                                       InfantHIVTesting9MonthsAdmin,
+                                       InfantHIVTestingAdmin,
+                                       InfantHIVTestingAfterBreastfeedingAdmin,
+                                       InfantHIVTestingAge6To8MonthsAdmin,
+                                       InfantHIVTestingBirthAdmin,
+                                       InfantHIVTestingOtherAdmin)
 from .offschedule_admin import ChildOffScheduleAdmin
 from .pre_flourish_birth_data_admin import PreFlourishBirthDataAdmin
 from .tb_adol_assent_admin import TbAdolAssentAdmin
