@@ -30,10 +30,8 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         previous_instance = getattr(self, 'previous_instance', None)
         prev_feeding_completed = getattr(
             previous_instance, 'formula_feedng_completd', None)
-
         dt_formula_introduced = getattr(
             previous_instance, 'dt_formula_introduced', None)
-
 
         if not instance and previous_instance:
             initial['last_att_sche_visit'] = getattr(
@@ -53,13 +51,11 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                                'legumes_intake_freq', 'dairy_intake_freq', 'flesh_foods_freq',
                                'eggs_intake_freq', 'porridge_intake_freq', 'vitamin_a_fruits_freq',
                                'other_fruits_vegies', 'other_fruits_freq', 'other_solids',
-                               'other_solids_freq', 'bf_start_dt', 'bf_start_dt_est',
-                               'dt_formula_introduced', 'dt_formula_est']:
+                               'other_solids_freq']:
                     initial[key] = getattr(previous_instance, key)
 
         subject_identifier = initial.get('subject_identifier', None)
         for key in ['bf_start_dt', 'bf_start_dt_est', 'dt_formula_introduced', 'dt_formula_est']:
-
             key_value, _exists = self.prefill_bf_dates(key, subject_identifier)
             if _exists:
                 initial[key] = key_value
@@ -153,7 +149,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
             feeding_n_vaccine_obj = feeding_n_vaccine_objs.latest(
                 'report_datetime')
             key_value = getattr(feeding_n_vaccine_obj,
-                                key_map.get(key), None)
+                                key_map.get(key, key), None)
 
         return (key_value, True) if key_value else (key_value, False)
 
