@@ -145,7 +145,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
             feeding_n_vaccine_obj = feeding_n_vaccine_objs.latest(
                 'report_datetime')
             key_value = getattr(feeding_n_vaccine_obj,
-                                key_map.get(key), None)
+                                key_map.get(key, key), None)
 
         return (key_value, True) if key_value else (key_value, False)
 
