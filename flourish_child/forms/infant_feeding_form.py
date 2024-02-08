@@ -60,8 +60,6 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         subject_identifier = initial.get('subject_identifier', None)
         for key in ['bf_start_dt', 'bf_start_dt_est', 'dt_formula_introduced', 'dt_formula_est']:
 
-            # breakpoint()
-
             key_value, _exists = self.prefill_bf_dates(key, subject_identifier)
             if _exists:
                 initial[key] = key_value
