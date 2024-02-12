@@ -49,9 +49,9 @@ class HivTestingModelMixin(models.Model):
         verbose_name='Where was the test done?',
         choices=DELIVERY_LOCATION,
         max_length=100,
-        null=True,
-        blank=True
     )
+
+    test_location_other = OtherCharField()
 
     pref_location = models.CharField(
         verbose_name='Do you prefer to go to the local clinic or to come to the FLOURISH'
@@ -67,24 +67,18 @@ class HivTestingModelMixin(models.Model):
 
     child_test_date = models.DateField(
         verbose_name='What was the date of this test?',
-        null=True,
-        blank=True
     )
 
     child_test_date_estimated = models.CharField(
         verbose_name='Was this date estimated?',
         choices=YES_NO,
         max_length=20,
-        null=True,
-        blank=True
     )
 
     results_received = models.CharField(
         verbose_name='Have you received the results of this test?',
         choices=YES_NO,
         max_length=20,
-        null=True,
-        blank=True,
         help_text='request participant to seek HIV Results from clinic'
     )
 

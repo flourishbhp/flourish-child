@@ -73,7 +73,7 @@ from .infant_hiv_testing_admin import (InfantHIVTesting18MonthsAdmin,
                                        InfantHIVTesting9MonthsAdmin,
                                        InfantHIVTestingAdmin,
                                        InfantHIVTestingAfterBreastfeedingAdmin,
-                                       InfantHIVTestingAge6To8MonthsAdmin,
+                                       InfantHIVTestingAge6To8WeeksAdmin,
                                        InfantHIVTestingBirthAdmin,
                                        InfantHIVTestingOtherAdmin)
 from .offschedule_admin import ChildOffScheduleAdmin

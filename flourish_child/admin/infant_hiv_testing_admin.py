@@ -5,11 +5,11 @@ from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import InfantHIVTesting18MonthsForm, InfantHIVTesting9MonthsForm, \
     InfantHIVTestingAfterBreastfeedingForm, \
-    InfantHIVTestingAge6To8MonthsForm, InfantHIVTestingBirthForm, InfantHIVTestingForm
+    InfantHIVTestingAge6To8WeeksForm, InfantHIVTestingBirthForm, InfantHIVTestingForm
 from ..models import (InfantHIVTesting, InfantHIVTesting18Months,
                       InfantHIVTesting9Months, \
                       InfantHIVTestingAfterBreastfeeding, \
-                      InfantHIVTestingAge6To8Months, InfantHIVTestingBirth,
+                      InfantHIVTestingAge6To8Weeks, InfantHIVTestingBirth,
                       InfantHIVTestingOther)
 
 
@@ -52,8 +52,8 @@ class InfantHIVTestingAdminMixin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'child_test_date',
                 'child_test_date_estimated',
-                'test_reason',
                 'test_location',
+                'test_location_other',
                 'results_received',
                 'recall_result_date',
                 'received_date',
@@ -83,9 +83,9 @@ class InfantHIVTestingAfterBreastfeedingAdmin(InfantHIVTestingAdminMixin,
     form = InfantHIVTestingAfterBreastfeedingForm
 
 
-@admin.register(InfantHIVTestingAge6To8Months, site=flourish_child_admin)
-class InfantHIVTestingAge6To8MonthsAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
-    form = InfantHIVTestingAge6To8MonthsForm
+@admin.register(InfantHIVTestingAge6To8Weeks, site=flourish_child_admin)
+class InfantHIVTestingAge6To8WeeksAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
+    form = InfantHIVTestingAge6To8WeeksForm
 
 
 @admin.register(InfantHIVTesting9Months, site=flourish_child_admin)
