@@ -19,7 +19,7 @@ class InfantHIVTestingAfterBreastfeeding(ChildCrfModelMixin, HivTestingModelMixi
             'Breastfeeding')
 
 
-class InfantHIVTestingAge6To8Months(ChildCrfModelMixin, HivTestingModelMixin):
+class InfantHIVTestingAge6To8Weeks(ChildCrfModelMixin, HivTestingModelMixin):
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'HIV Infant Testing and Results – 6 TO 8 WEEKS OF AGE'

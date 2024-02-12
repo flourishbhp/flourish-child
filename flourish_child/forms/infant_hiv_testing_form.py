@@ -1,10 +1,11 @@
 from django import forms
 
 from flourish_caregiver.forms.form_mixins import SubjectModelFormMixin
-from flourish_child_validations.form_validators import InfantHIVTestingFormValidator
+from flourish_child_validations.form_validators import \
+    InfantHIVTestingAdminFormValidatorRepeat, InfantHIVTestingFormValidator
 from ..models import (InfantHIVTesting, InfantHIVTesting18Months,
-                      InfantHIVTesting9Months, \
-                      InfantHIVTestingAfterBreastfeeding, InfantHIVTestingAge6To8Months,
+                      InfantHIVTesting9Months,
+                      InfantHIVTestingAfterBreastfeeding, InfantHIVTestingAge6To8Weeks,
                       InfantHIVTestingBirth,
                       InfantHIVTestingOther)
 
@@ -18,22 +19,23 @@ class InfantHIVTestingForm(SubjectModelFormMixin, forms.ModelForm):
 
 
 class InfantHIVTestingAfterBreastfeedingForm(SubjectModelFormMixin, forms.ModelForm):
-    form_validator_cls = InfantHIVTestingFormValidator
+    form_validator_cls = InfantHIVTestingAdminFormValidatorRepeat
 
     class Meta:
         model = InfantHIVTestingAfterBreastfeeding
         fields = '__all__'
 
-class InfantHIVTestingAge6To8MonthsForm(SubjectModelFormMixin, forms.ModelForm):
-    form_validator_cls = InfantHIVTestingFormValidator
+
+class InfantHIVTestingAge6To8WeeksForm(SubjectModelFormMixin, forms.ModelForm):
+    form_validator_cls = InfantHIVTestingAdminFormValidatorRepeat
 
     class Meta:
-        model = InfantHIVTestingAge6To8Months
+        model = InfantHIVTestingAge6To8Weeks
         fields = '__all__'
 
 
 class InfantHIVTesting9MonthsForm(SubjectModelFormMixin, forms.ModelForm):
-    form_validator_cls = InfantHIVTestingFormValidator
+    form_validator_cls = InfantHIVTestingAdminFormValidatorRepeat
 
     class Meta:
         model = InfantHIVTesting9Months
@@ -41,7 +43,7 @@ class InfantHIVTesting9MonthsForm(SubjectModelFormMixin, forms.ModelForm):
 
 
 class InfantHIVTesting18MonthsForm(SubjectModelFormMixin, forms.ModelForm):
-    form_validator_cls = InfantHIVTestingFormValidator
+    form_validator_cls = InfantHIVTestingAdminFormValidatorRepeat
 
     class Meta:
         model = InfantHIVTesting18Months
@@ -49,7 +51,7 @@ class InfantHIVTesting18MonthsForm(SubjectModelFormMixin, forms.ModelForm):
 
 
 class InfantHIVTestingBirthForm(SubjectModelFormMixin, forms.ModelForm):
-    form_validator_cls = InfantHIVTestingFormValidator
+    form_validator_cls = InfantHIVTestingAdminFormValidatorRepeat
 
     class Meta:
         model = InfantHIVTestingBirth
@@ -57,7 +59,7 @@ class InfantHIVTestingBirthForm(SubjectModelFormMixin, forms.ModelForm):
 
 
 class InfantHIVTestingOtherForm(SubjectModelFormMixin, forms.ModelForm):
-    form_validator_cls = InfantHIVTestingFormValidator
+    form_validator_cls = InfantHIVTestingAdminFormValidatorRepeat
 
     class Meta:
         model = InfantHIVTestingOther
