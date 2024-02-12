@@ -9,11 +9,14 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import configparser
 import os
 import sys
-
 from pathlib import Path
 
+from django.core.management.color import color_style
+
+style = color_style()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,6 +28,8 @@ REVIEWER_SITE_ID = 2
 APP_NAME = 'flourish'
 
 ETC_DIR = os.path.join('/etc/', APP_NAME)
+
+CONFIG_FILE = f'{APP_NAME}.ini'
 
 APP_NAME = 'flourish_child'
 
@@ -44,6 +49,11 @@ ALLOWED_HOSTS = []
 DEVICE_ID = 20
 
 DEVICE_ROLE = 'Client'
+
+CONFIG_PATH = os.path.join(ETC_DIR, CONFIG_FILE)
+sys.stdout.write(style.SUCCESS(f'  * Reading config from {CONFIG_FILE}\n'))
+config = configparser.ConfigParser()
+config.read(CONFIG_PATH)
 
 # Application definition
 
@@ -179,9 +189,9 @@ DASHBOARD_URL_NAMES = {}
 
 BASE_FORMAT = ''
 
-REDCAP_API_URL = 'https://redcap-dev.bhp.org.bw/api/'
+REDCAP_API_URL = config['redcap_server'].get('redcap_url')
 
-REDCAP_API_TOKEN = 'B7F721F715DBDBC60FBEA0A38F061DCE'
+REDCAP_API_TOKEN = config['redcap_server'].get('token')
 
 if 'test' in sys.argv:
     class DisableMigrations:
