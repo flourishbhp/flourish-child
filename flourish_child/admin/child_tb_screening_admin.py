@@ -69,3 +69,5 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         "child_on_tb_preventive_therapy": admin.VERTICAL,
     }
 
+    filter_horizontal = ('tb_tests',)
+
