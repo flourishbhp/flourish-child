@@ -1,6 +1,8 @@
 import json
 
+from django.apps import apps as django_apps
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -9,6 +11,7 @@ from ..forms import ChildCBCLSection1Form, ChildCBCLSection2Form, ChildCBCLSecti
     ChildCBCLSection4Form
 from ..models import ChildCBCLSection1, ChildCBCLSection2, ChildCBCLSection3, \
     ChildCBCLSection4
+from ..helper_classes.utils import child_utils
 
 
 @admin.register(ChildCBCLSection1, site=flourish_child_admin)
@@ -87,6 +90,80 @@ class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'fearful': admin.VERTICAL,
                     'fears_school': admin.VERTICAL, }
 
+    def export_as_csv(self, request, queryset):
+        if request and request.POST.get('action', None) == 'export_as_csv':
+            return super().export_as_csv(request, queryset)
+        return self.export_combined_csv(request, queryset)
+
+    def export_combined_csv(self, request, queryset):
+        records = []
+        combined_records = self.combine_crf_data(queryset)
+        for record in combined_records:
+            subject_identifier = record.get('childpid', None)
+            caregiver_sid = child_utils.caregiver_subject_identifier(
+                subject_identifier=subject_identifier)
+            screening_identifier = self.screening_identifier(
+                subject_identifier=caregiver_sid)
+            previous_study = self.previous_bhp_study(
+                subject_identifier=subject_identifier)
+            study_maternal_identifier = self.study_maternal_identifier(
+                    screening_identifier=screening_identifier)
+            child_exposure_status = self.child_hiv_exposure(
+                    study_maternal_identifier, study_maternal_identifier, caregiver_sid)
+
+            enrol_cohort, current_cohort = self.get_cohort_details(subject_identifier)
+
+            record.update(matpid=caregiver_sid,
+                          old_matpid=study_maternal_identifier,
+                          previous_study=previous_study,
+                          child_exposure_status=child_exposure_status,
+                          enrol_cohort=enrol_cohort,
+                          current_cohort=current_cohort)
+    
+            # Exclude identifying values
+            record = self.remove_exclude_fields(record)
+            # Correct date formats
+            record = self.fix_date_formats(record)
+            records.append(record)
+
+        response = self.write_to_excel(records)
+        return response
+
+    export_as_csv.short_description = _(
+        'Export selected %(verbose_name_plural)s')
+
+    actions = [export_as_csv]
+
+    def combine_crf_data(self, queryset):
+        """ Combine the CBCL crf forms data
+        """
+        combined_data = []
+        crf_list = ['childcbclsection2', 'childcbclsection3', 'childcbclsection4']
+
+        for crf_obj in queryset:
+            visit = getattr(crf_obj, 'visit', None)
+
+            data = dict(subject_identifier=getattr(visit, 'subject_identifier', None))
+            # Update variable names for study identifiers
+            data = self.update_variables(data)
+
+            data.update(visit_code=getattr(visit, 'visit_code', None),
+                        **crf_obj.__dict__.copy())
+
+            visit_attr = crf_obj.visit_model_attr()
+
+            for crf_name in crf_list:
+                crf_cls = django_apps.get_model('flourish_child', crf_name)
+                try:
+                    obj = crf_cls.objects.get(**{f'{visit_attr}': visit})
+                except crf_cls.DoesNotExist:
+                    continue
+                else:
+                    combine_data = obj.__dict__.copy()
+                    data.update(combine_data)
+            combined_data.append(data)
+        return combined_data
+
 
 @admin.register(ChildCBCLSection2, site=flourish_child_admin)
 class ChildCBCLSection2Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
@@ -151,6 +228,15 @@ class ChildCBCLSection2Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'overeating': admin.VERTICAL,
                     'overtired_noreason': admin.VERTICAL,
                     'overweight': admin.VERTICAL, }
+
+    def export_as_csv(self, request, queryset):
+        if request and request.POST.get('action', None) == 'export_as_csv':
+            return super().export_as_csv(request, queryset)
+
+    export_as_csv.short_description = _(
+        'Export selected %(verbose_name_plural)s')
+
+    actions = [export_as_csv]
 
 
 @admin.register(ChildCBCLSection3, site=flourish_child_admin)
@@ -232,6 +318,15 @@ class ChildCBCLSection3Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'sleeps_more': admin.VERTICAL,
                     'inattentive': admin.VERTICAL,
                     'speech_prob': admin.VERTICAL, }
+
+    def export_as_csv(self, request, queryset):
+        if request and request.POST.get('action', None) == 'export_as_csv':
+            return super().export_as_csv(request, queryset)
+
+    export_as_csv.short_description = _(
+        'Export selected %(verbose_name_plural)s')
+
+    actions = [export_as_csv]
 
 
 @admin.register(ChildCBCLSection4, site=flourish_child_admin)
@@ -341,3 +436,12 @@ class ChildCBCLSection4Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'impact_on_responses',
         ])
         return super().changeform_view(request, object_id, form_url, extra_context)
+
+    def export_as_csv(self, request, queryset):
+        if request and request.POST.get('action', None) == 'export_as_csv':
+            return super().export_as_csv(request, queryset)
+
+    export_as_csv.short_description = _(
+        'Export selected %(verbose_name_plural)s')
+
+    actions = [export_as_csv]
