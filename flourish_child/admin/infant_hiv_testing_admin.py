@@ -38,7 +38,6 @@ class InfantHIVTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     radio_fields = {
         'pref_location': admin.VERTICAL,
         'child_tested_for_hiv': admin.VERTICAL,
-        'test_location': admin.VERTICAL,
     }
 
     search_fields = ('subject_identifier',)

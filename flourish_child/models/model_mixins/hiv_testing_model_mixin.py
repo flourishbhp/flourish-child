@@ -1,9 +1,8 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
-from edc_constants.choices import YES_NO, YES_NO_DONT_KNOW
+from edc_constants.choices import YES_NO_DONT_KNOW
 
-from flourish_child.choices import DELIVERY_LOCATION, NOT_TESTED_REASON, \
-    POS_NEG_PENDING_UNKNOWN, \
+from flourish_child.choices import NOT_TESTED_REASON, \
     PREFERRED_CLINIC
 from flourish_child.models.list_models import ChildHIVNotTestedReason, ChildHIVTestVisits
 
@@ -33,25 +32,11 @@ class HivTestingModelMixin(models.Model):
         blank=True
     )
 
-    test_reason = models.TextField(
-        verbose_name='Reason for this test',
-        null=True,
-        blank=True
-    )
-
     not_tested_reason_other = models.TextField(
         verbose_name='If “Other”, please specify:',
         null=True,
         blank=True
     )
-
-    test_location = models.CharField(
-        verbose_name='Where was the test done?',
-        choices=DELIVERY_LOCATION,
-        max_length=100,
-    )
-
-    test_location_other = OtherCharField()
 
     pref_location = models.CharField(
         verbose_name='Do you prefer to go to the local clinic or to come to the FLOURISH'
@@ -64,54 +49,6 @@ class HivTestingModelMixin(models.Model):
     )
 
     pref_location_other = OtherCharField()
-
-    child_test_date = models.DateField(
-        verbose_name='What was the date of this test?',
-    )
-
-    child_test_date_estimated = models.CharField(
-        verbose_name='Was this date estimated?',
-        choices=YES_NO,
-        max_length=20,
-    )
-
-    results_received = models.CharField(
-        verbose_name='Have you received the results of this test?',
-        choices=YES_NO,
-        max_length=20,
-        help_text='request participant to seek HIV Results from clinic'
-    )
-
-    recall_result_date = models.CharField(
-        verbose_name='Do you recall the date you received this test result, or even the '
-                     'month?',
-        choices=YES_NO,
-        max_length=20,
-        null=True,
-        blank=True
-    )
-
-    received_date = models.DateField(
-        verbose_name='What date did you receive this test?',
-        null=True,
-        blank=True
-    )
-
-    result_date_estimated = models.CharField(
-        verbose_name='Was this date estimated?',
-        choices=YES_NO,
-        max_length=20,
-        null=True,
-        blank=True
-    )
-
-    hiv_test_result = models.CharField(
-        verbose_name='What is the result of the HIV test?',
-        choices=POS_NEG_PENDING_UNKNOWN,
-        max_length=20,
-        null=True,
-        blank=True
-    )
 
     reason_child_not_tested = models.CharField(
         verbose_name='Was there a reason your child was not tested for HIV?',
