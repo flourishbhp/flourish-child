@@ -2,6 +2,7 @@ from django.db import transaction
 from django.db.models import Q
 from edc_visit_tracking.visit_sequence import VisitSequence
 from .helper_classes.utils import child_utils
+from django.core.exceptions import MultipleObjectsReturned
 
 
 class VisitSequence(VisitSequence):
@@ -48,7 +49,7 @@ class VisitSequence(VisitSequence):
                         visit_schedule_name=self.visit_schedule_name,
                         schedule_name=self.appointment.schedule_name,
                         visit_code=self.previous_visit_code)
-                except self.model_cls.DoesNotExist:
+                except (self.model_cls.DoesNotExist, MultipleObjectsReturned):
                     previous_appointment = self.appointment_model_cls.objects.filter(
                         self.sequence_query,
                         subject_identifier=self.subject_identifier,
