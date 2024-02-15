@@ -1,3 +1,4 @@
+import json
 import logging
 
 import requests
@@ -75,8 +76,8 @@ class BrainUltrasoundHelper:
                         onschedule_obj.save()
 
     def is_enrolled_brain_ultrasound(self):
-        """Returns True if the child is enrolled on the brain ultrasound schedule.
-        """
+        """Returns True if the child is enrolled on the brain ultrasound schedule."""
+
         data = {
             'token': settings.REDCAP_API_TOKEN,
             'content': 'record',
@@ -96,10 +97,13 @@ class BrainUltrasoundHelper:
         try:
             results = requests.post(settings.REDCAP_API_URL, data=data)
             results.raise_for_status()
-            if results.json():
-                return True
-            else:
-                return False
-        except requests.exceptions.RequestException as e:
+        except (requests.exceptions.RequestException, ValueError) as e:
             logger.error(f'Error: {e}')
-            return False
+        else:
+            try:
+                json_result = results.json()
+                if json_result:
+                    return True
+            except json.JSONDecodeError:
+                logger.error('Invalid JSON response: {}'.format(results.text))
+        return False
