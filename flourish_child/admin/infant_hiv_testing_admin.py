@@ -49,7 +49,7 @@ class InfantHIVTestingAdminMixin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             "fields": (
                 'child_visit',
                 'report_datetime',
-                'child_test_date',
+                'child_tested_for_hiv',
                 'child_test_date_estimated',
                 'test_location',
                 'test_location_other',
