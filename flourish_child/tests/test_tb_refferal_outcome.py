@@ -106,7 +106,7 @@ class TestTBReferralOutcome(TestCase):
         mommy.make_recipe(
             'flourish_child.childtbreferral',
             child_visit=self.child_visit_2001,
-            referred_for_screening=YES)
+        )
 
         self.assertEqual(CrfMetadata.objects.get(
             subject_identifier=self.caregiver_child_consent.subject_identifier,
@@ -122,7 +122,7 @@ class TestTBReferralOutcome(TestCase):
         mommy.make_recipe(
             'flourish_child.childtbreferral',
             child_visit=self.child_visit_2001,
-            referred_for_screening=NO)
+        )
 
         self.assertEqual(CrfMetadata.objects.get(
             subject_identifier=self.caregiver_child_consent.subject_identifier,
