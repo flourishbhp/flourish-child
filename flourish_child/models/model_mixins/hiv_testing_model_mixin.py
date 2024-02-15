@@ -1,9 +1,9 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
-from edc_constants.choices import YES_NO_DONT_KNOW
+from edc_constants.choices import YES_NO, YES_NO_DONT_KNOW
 
 from flourish_child.choices import NOT_TESTED_REASON, \
-    PREFERRED_CLINIC
+    POS_NEG_PENDING_UNKNOWN, PREFERRED_CLINIC
 from flourish_child.models.list_models import ChildHIVNotTestedReason, ChildHIVTestVisits
 
 
@@ -13,6 +13,59 @@ class HivTestingModelMixin(models.Model):
         choices=YES_NO_DONT_KNOW,
         max_length=20,
         help_text='Do not include the HIV test completed at the FLOURISH visit'
+    )
+
+    child_test_date = models.DateField(
+        verbose_name='What was the date of this test?',
+        null=True,
+        blank=True
+    )
+
+    child_test_date_estimated = models.CharField(
+        verbose_name='Was this date estimated?',
+        choices=YES_NO,
+        max_length=20,
+        null=True,
+        blank=True
+    )
+
+    results_received = models.CharField(
+        verbose_name='Have you received the results of this test?',
+        choices=YES_NO,
+        max_length=20,
+        null=True,
+        blank=True
+    )
+
+    recall_result_date = models.CharField(
+        verbose_name='Do you recall the date you received this test result, or even the '
+                     'month?',
+        choices=YES_NO,
+        max_length=20,
+        null=True,
+        blank=True
+    )
+
+    received_date = models.DateField(
+        verbose_name='What date did you receive this test?',
+        null=True,
+        blank=True
+    )
+
+    result_date_estimated = models.CharField(
+        verbose_name='Was this date estimated?',
+        choices=YES_NO,
+        max_length=20,
+        null=True,
+        blank=True
+    )
+
+    hiv_test_result = models.CharField(
+        verbose_name='What is the result of the HIV test?',
+        choices=POS_NEG_PENDING_UNKNOWN,
+        max_length=20,
+        null=True,
+        blank=True
     )
 
     test_visit = models.ManyToManyField(
