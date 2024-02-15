@@ -25,16 +25,10 @@ class HivTestingModelMixin(models.Model):
 
     test_visit_other = OtherCharField()
 
-    not_tested_reason = models.ManyToManyField(
+    reason_child_not_tested = models.ManyToManyField(
         ChildHIVNotTestedReason,
         verbose_name='Was there a reason your child was not tested for HIV? ',
         max_length=100,
-        blank=True
-    )
-
-    not_tested_reason_other = models.TextField(
-        verbose_name='If “Other”, please specify:',
-        null=True,
         blank=True
     )
 
@@ -49,14 +43,6 @@ class HivTestingModelMixin(models.Model):
     )
 
     pref_location_other = OtherCharField()
-
-    reason_child_not_tested = models.CharField(
-        verbose_name='Was there a reason your child was not tested for HIV?',
-        choices=NOT_TESTED_REASON,
-        max_length=100,
-        null=True,
-        blank=True
-    )
 
     reason_child_not_tested_other = models.TextField(
         verbose_name='If “Other”, please specify:',
