@@ -3,7 +3,6 @@ from django.db import models
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins.hiv_testing_and_resulting_mixin import HIVTestingAndResultingMixin
 from .model_mixins.hiv_testing_model_mixin import HivTestingModelMixin
-from ..choices import YES_NO_DONT_KNOW
 
 
 class InfantHIVTesting(ChildCrfModelMixin, HivTestingModelMixin):
@@ -14,10 +13,8 @@ class InfantHIVTesting(ChildCrfModelMixin, HivTestingModelMixin):
 
 
 class InfantHIVTestingAfterBreastfeeding(ChildCrfModelMixin, HIVTestingAndResultingMixin):
-    child_tested_for_hiv = models.CharField(
+    child_tested_for_hiv = models.DateField(
         verbose_name='Date of the HIV test at 3 Months after Cessation of Breastfeeding',
-        choices=YES_NO_DONT_KNOW,
-        max_length=20,
     )
 
     class Meta(ChildCrfModelMixin.Meta):
@@ -30,10 +27,8 @@ class InfantHIVTestingAfterBreastfeeding(ChildCrfModelMixin, HIVTestingAndResult
 
 
 class InfantHIVTestingAge6To8Weeks(ChildCrfModelMixin, HIVTestingAndResultingMixin):
-    child_tested_for_hiv = models.CharField(
+    child_tested_for_hiv = models.DateField(
         verbose_name='Date of the HIV test at 6 to 8 Weeks',
-        choices=YES_NO_DONT_KNOW,
-        max_length=20,
     )
 
     class Meta(ChildCrfModelMixin.Meta):
@@ -43,10 +38,8 @@ class InfantHIVTestingAge6To8Weeks(ChildCrfModelMixin, HIVTestingAndResultingMix
 
 
 class InfantHIVTesting9Months(ChildCrfModelMixin, HIVTestingAndResultingMixin):
-    child_tested_for_hiv = models.CharField(
+    child_tested_for_hiv = models.DateField(
         verbose_name='Date of the HIV test at 9 Months',
-        choices=YES_NO_DONT_KNOW,
-        max_length=20,
     )
 
     class Meta(ChildCrfModelMixin.Meta):
@@ -56,10 +49,8 @@ class InfantHIVTesting9Months(ChildCrfModelMixin, HIVTestingAndResultingMixin):
 
 
 class InfantHIVTesting18Months(ChildCrfModelMixin, HIVTestingAndResultingMixin):
-    child_tested_for_hiv = models.CharField(
+    child_tested_for_hiv = models.DateField(
         verbose_name='Date of the HIV test at 18 Months',
-        choices=YES_NO_DONT_KNOW,
-        max_length=20,
     )
 
     class Meta(ChildCrfModelMixin.Meta):
@@ -69,10 +60,8 @@ class InfantHIVTesting18Months(ChildCrfModelMixin, HIVTestingAndResultingMixin):
 
 
 class InfantHIVTestingBirth(ChildCrfModelMixin, HIVTestingAndResultingMixin):
-    child_tested_for_hiv = models.CharField(
+    child_tested_for_hiv = models.DateField(
         verbose_name='Date of the HIV test at birth',
-        choices=YES_NO_DONT_KNOW,
-        max_length=20,
         help_text='Not from FLOURISH Birth visit – Rather from local clinic/hospital'
     )
 
