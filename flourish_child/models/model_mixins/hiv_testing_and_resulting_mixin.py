@@ -6,9 +6,6 @@ from flourish_child.choices import DELIVERY_LOCATION, POS_NEG_PENDING_UNKNOWN
 
 
 class HIVTestingAndResultingMixin(models.Model):
-    child_test_date = models.DateField(
-        verbose_name='What was the date of this test?',
-    )
 
     child_test_date_estimated = models.CharField(
         verbose_name='Was this date estimated?',
