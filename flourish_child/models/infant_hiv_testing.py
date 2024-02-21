@@ -75,7 +75,6 @@ class InfantHIVTestingBirth(ChildCrfModelMixin, HIVTestingAndResultingMixin):
 class InfantHIVTestingOther(ChildCrfModelMixin, HIVTestingAndResultingMixin):
     child_tested_for_hiv = models.DateField(
         verbose_name='Date of the HIV test',
-        default=get_utcnow(),
     )
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
