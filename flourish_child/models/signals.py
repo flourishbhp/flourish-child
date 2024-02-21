@@ -5,14 +5,14 @@ from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.forms import model_to_dict
+from django.forms import model_to_dict, ValidationError
 from edc_appointment.constants import COMPLETE_APPT
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import IND, MALE, NEG, NO, UNKNOWN, YES
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 from edc_visit_tracking.constants import MISSED_VISIT
-
+from edc_visit_schedule.subject_schedule import InvalidOffscheduleDate
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_tb_presence_household_member import \
@@ -465,21 +465,24 @@ def child_take_off_schedule(sender, instance, raw, created, **kwargs):
 @receiver(post_save, weak=False, sender=ChildContinuedConsent,
           dispatch_uid='child_continued_consent_on_post_save')
 def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
-    subject_identifier = instance.subject_identifier
+    child_subject_identifier = instance.subject_identifier
+
+    caregiver_subject_identifier = child_utils.caregiver_subject_identifier(
+        child_subject_identifier)
 
     if instance.include_contact_details == NO:
 
         trigger_action_item(
             model_cls=YoungAdultLocator,
             action_name=YOUNG_ADULT_LOCATOR_ACTION,
-            subject_identifier=subject_identifier,
+            subject_identifier=child_subject_identifier,
             repeat=False
         )
 
     else:
 
         caregiver_subject_identifier = child_utils.caregiver_subject_identifier(
-            subject_identifier)
+            child_subject_identifier)
 
         caregiver_locator_cls = django_apps.get_model(
             'flourish_caregiver.caregiverlocator')
@@ -492,7 +495,7 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
             pass
         else:
 
-            assent = child_utils.child_assent_obj(subject_identifier)
+            assent = child_utils.child_assent_obj(child_subject_identifier)
 
             fields = [
                 'indirect_contact_cell',
@@ -523,8 +526,42 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
                 caregiver_locator_obj, fields=fields
             )
 
-            locator_dict['subject_identifier'] = subject_identifier
+            locator_dict['subject_identifier'] = child_subject_identifier
             locator_dict['first_name'] = assent.first_name
             locator_dict['last_name'] = assent.last_name
 
             YoungAdultLocator.objects.update_or_create(**locator_dict)
+
+    if instance.along_side_caregiver == NO:
+
+        flourish_models = django_apps.all_models['flourish_caregiver']
+
+        # get all the models
+        for model_name, model_cls in flourish_models.items():
+
+            '''Get only on schedule model so we can filter by caregiver_subject_identifier
+            and child_subject_identifier, that in turn will give us the correct schedule name a
+            child is associated with'''
+
+            if 'onschedule' in model_name:
+
+                schedule_objs = model_cls.objects.filter(
+                    subject_identifier=caregiver_subject_identifier,
+                    child_subject_identifier=child_subject_identifier,
+                )
+
+                for schedule_obj in schedule_objs:
+
+                    _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                        onschedule_model=schedule_obj._meta.label_lower,
+                        name=schedule_obj.schedule_name)
+
+                    try:
+
+                        # offschedule_datetime is equal to the crf consent_datetime
+                        schedule.take_off_schedule(
+                            subject_identifier=caregiver_subject_identifier,
+                            offschedule_datetime=instance.consent_datetime,
+                            schedule_name=schedule_obj.schedule_name)
+                    except InvalidOffscheduleDate:
+                        pass
