@@ -1,4 +1,5 @@
 from django.db import models
+from edc_base import get_utcnow
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins.hiv_testing_and_resulting_mixin import HIVTestingAndResultingMixin
@@ -72,6 +73,10 @@ class InfantHIVTestingBirth(ChildCrfModelMixin, HIVTestingAndResultingMixin):
 
 
 class InfantHIVTestingOther(ChildCrfModelMixin, HIVTestingAndResultingMixin):
+    child_tested_for_hiv = models.DateField(
+        verbose_name='Date of the HIV test',
+        default=get_utcnow(),
+    )
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'HIV Infant Testing and Results – OTHER'
