@@ -536,16 +536,28 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
         flourish_models = django_apps.all_models['flourish_caregiver']
 
+        subject_history_cls = django_apps.get_model(
+            'edc_visit_schedule.subjectschedulehistory')
+
+        onschedule_models = subject_history_cls.objects.filter(
+            subject_identifier=caregiver_subject_identifier,
+        ).values_list('onschedule_model', flat=True)
+
         # get all the models
-        for model_name, model_cls in flourish_models.items():
+        for onschedule_model in onschedule_models:
+
+            onschedule_model_cls = django_apps.get_model(onschedule_model)
+
+            schedule_exists = onschedule_model_cls.objects.filter(
+                subject_identifier=caregiver_subject_identifier).exists()
 
             '''Get only on schedule model so we can filter by caregiver_subject_identifier
             and child_subject_identifier, that in turn will give us the correct schedule name a
             child is associated with'''
 
-            if 'onschedule' in model_name:
+            if schedule_exists:
 
-                schedule_objs = model_cls.objects.filter(
+                schedule_objs = onschedule_model_cls.objects.filter(
                     subject_identifier=caregiver_subject_identifier,
                     child_subject_identifier=child_subject_identifier,
                 )
