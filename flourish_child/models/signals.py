@@ -481,9 +481,6 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
     else:
 
-        caregiver_subject_identifier = child_utils.caregiver_subject_identifier(
-            child_subject_identifier)
-
         caregiver_locator_cls = django_apps.get_model(
             'flourish_caregiver.caregiverlocator')
 
@@ -534,8 +531,6 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
     if instance.along_side_caregiver == NO:
 
-        flourish_models = django_apps.all_models['flourish_caregiver']
-
         subject_history_cls = django_apps.get_model(
             'edc_visit_schedule.subjectschedulehistory')
 
@@ -548,32 +543,27 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
             onschedule_model_cls = django_apps.get_model(onschedule_model)
 
-            schedule_exists = onschedule_model_cls.objects.filter(
-                subject_identifier=caregiver_subject_identifier).exists()
-
             '''Get only on schedule model so we can filter by caregiver_subject_identifier
             and child_subject_identifier, that in turn will give us the correct schedule name a
             child is associated with'''
 
-            if schedule_exists:
+            schedule_objs = onschedule_model_cls.objects.filter(
+                subject_identifier=caregiver_subject_identifier,
+                child_subject_identifier=child_subject_identifier,
+            )
 
-                schedule_objs = onschedule_model_cls.objects.filter(
-                    subject_identifier=caregiver_subject_identifier,
-                    child_subject_identifier=child_subject_identifier,
-                )
+            for schedule_obj in schedule_objs:
 
-                for schedule_obj in schedule_objs:
+                _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+                    onschedule_model=schedule_obj._meta.label_lower,
+                    name=schedule_obj.schedule_name)
 
-                    _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-                        onschedule_model=schedule_obj._meta.label_lower,
-                        name=schedule_obj.schedule_name)
+                try:
 
-                    try:
-
-                        # offschedule_datetime is equal to the crf consent_datetime
-                        schedule.take_off_schedule(
-                            subject_identifier=caregiver_subject_identifier,
-                            offschedule_datetime=instance.consent_datetime,
-                            schedule_name=schedule_obj.schedule_name)
-                    except InvalidOffscheduleDate:
-                        pass
+                    # offschedule_datetime is equal to the crf consent_datetime
+                    schedule.take_off_schedule(
+                        subject_identifier=caregiver_subject_identifier,
+                        offschedule_datetime=instance.consent_datetime,
+                        schedule_name=schedule_obj.schedule_name)
+                except InvalidOffscheduleDate:
+                    pass
