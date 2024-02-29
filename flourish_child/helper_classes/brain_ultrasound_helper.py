@@ -40,14 +40,13 @@ class BrainUltrasoundHelper:
 
     @property
     def is_onschedule(self):
-        return all(
-            django_apps.get_model(schedule.get('onschedule_model')).objects.filter(
+        for schedule in self.brain_ultrasound_schedules:
+            return django_apps.get_model(schedule.get(
+                'onschedule_model')).objects.filter(
                 subject_identifier=schedule.get('subject_identifier'),
                 schedule_name=schedule.get('schedule_name'),
-            ).exists()
-            for schedule in self.brain_ultrasound_schedules if schedule.get(
-                'subject_identifier') == self.child_subject_identifier
-        )
+            ).exists() if (schedule.get('subject_identifier') ==
+                           self.child_subject_identifier) else False
 
     def brain_ultrasound_enrolment(self):
         """Enrols the child into the brain ultrasound schedule.
