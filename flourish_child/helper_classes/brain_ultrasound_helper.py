@@ -23,11 +23,9 @@ class BrainUltrasoundHelper:
             self.child_subject_identifier)
         return child_consnet.caregiver_visit_count if child_consnet else None
 
-    def brain_ultrasound_enrolment(self):
-        """Enrols the child into the brain ultrasound schedule.
-        """
-
-        brain_ultrasound_schedules = [
+    @property
+    def brain_ultrasound_schedules(self):
+        return [
             {'schedule_name': 'caregiver_bu_schedule_{0}'.format(
                 self.get_child_number),
                 'subject_identifier': self.caregiver_subject_identifier,
@@ -40,7 +38,22 @@ class BrainUltrasoundHelper:
              },
         ]
 
-        for schedule in brain_ultrasound_schedules:
+    @property
+    def is_onschedule(self):
+        return all(
+            django_apps.get_model(schedule.get('onschedule_model')).objects.filter(
+                subject_identifier=schedule.get('subject_identifier'),
+                schedule_name=schedule.get('schedule_name'),
+            ).exists()
+            for schedule in self.brain_ultrasound_schedules if schedule.get(
+                'subject_identifier') == self.child_subject_identifier
+        )
+
+    def brain_ultrasound_enrolment(self):
+        """Enrols the child into the brain ultrasound schedule.
+        """
+
+        for schedule in self.brain_ultrasound_schedules:
             onschedule_model_cls = django_apps.get_model(schedule.get('onschedule_model'))
             schedule_name = schedule.get('schedule_name')
             _, new_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
@@ -91,7 +104,8 @@ class BrainUltrasoundHelper:
             'exportCheckboxLabel': 'false',
             'exportSurveyFields': 'false',
             'exportDataAccessGroups': 'false',
-            'returnFormat': 'json'
+            'returnFormat': 'json',
+            'forms[0]': 'ultrasound_consent_form_version_40',
         }
 
         try:
@@ -103,7 +117,9 @@ class BrainUltrasoundHelper:
             try:
                 json_result = results.json()
                 if json_result:
-                    return True
+                    return any(isinstance(obj, dict) and any(
+                        value != '' for value in obj.values()) for obj in
+                               json_result)
             except json.JSONDecodeError:
                 logger.error('Invalid JSON response: {}'.format(results.text))
         return False
