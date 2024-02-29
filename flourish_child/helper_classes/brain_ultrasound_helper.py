@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class BrainUltrasoundHelper:
+
+    child_bu_onschedule_model = 'flourish_child.onschedulechildbrainultrasound'
+    child_bu_schedule_name = 'child_bu_schedule'
     def __init__(self, child_subject_identifier, caregiver_subject_identifier):
         self.child_subject_identifier = child_subject_identifier
         self.caregiver_subject_identifier = caregiver_subject_identifier
@@ -32,21 +35,18 @@ class BrainUltrasoundHelper:
                 'onschedule_model':
                     'flourish_caregiver.onschedulecaregiverbrainultrasound',
             },
-            {'schedule_name': 'child_bu_schedule',
+            {'schedule_name': self.child_bu_schedule_name,
              'subject_identifier': self.child_subject_identifier,
-             'onschedule_model': 'flourish_child.onschedulechildbrainultrasound',
+             'onschedule_model': self.child_bu_onschedule_model,
              },
         ]
 
     @property
     def is_onschedule(self):
-        for schedule in self.brain_ultrasound_schedules:
-            return django_apps.get_model(schedule.get(
-                'onschedule_model')).objects.filter(
-                subject_identifier=schedule.get('subject_identifier'),
-                schedule_name=schedule.get('schedule_name'),
-            ).exists() if (schedule.get('subject_identifier') ==
-                           self.child_subject_identifier) else False
+        return django_apps.get_model(self.child_bu_onschedule_model).objects.filter(
+            subject_identifier=self.child_subject_identifier,
+            schedule_name=self.child_bu_schedule_name,
+        ).exists()
 
     def brain_ultrasound_enrolment(self):
         """Enrols the child into the brain ultrasound schedule.
