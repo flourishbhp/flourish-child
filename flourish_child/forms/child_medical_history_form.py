@@ -68,7 +68,7 @@ class ChildMedicalHistoryForm(ChildModelFormMixin, forms.ModelForm):
                           'hostname_created', 'hostname_modified', 'device_created',
                           'device_modified', 'report_datetime', 'child_visit',
                           'med_history_changed', ]
-        m2m_fields = ['child_chronic', ]
+        m2m_fields = ['child_chronic', 'current_symptoms', 'current_medications', ]
         if prev_instance:
             other_values = self.model_to_dict(prev_instance, exclude=exclude_fields)
             values = {key: self.data.get(key) or None if key not in m2m_fields else
