@@ -96,8 +96,7 @@ class HivTestingModelMixin(models.Model):
                      ' CLINIC for testing your child?',
         choices=PREFERRED_CLINIC,
         max_length=100,
-        null=True,
-        blank=True,
+        default='',
         help_text='Not application would be selected if the child is not due for testing'
     )
 
