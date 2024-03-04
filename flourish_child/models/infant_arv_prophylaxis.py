@@ -89,6 +89,8 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
 
     missed_dose_count = models.PositiveIntegerField(
         verbose_name='How many doses missed?',
+        null=True,
+        blank=True,
         default=0)
 
     reason_missed = models.TextField(
