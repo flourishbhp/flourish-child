@@ -98,13 +98,14 @@ class BrainUltrasoundHelper:
             'type': 'flat',
             'csvDelimiter': '',
             'records[0]': self.caregiver_subject_identifier,
+            'forms[0]': 'ultrasound_consent_form_version_40',
+            'events[0]': 'reconsent_arm_1',
             'rawOrLabel': 'raw',
             'rawOrLabelHeaders': 'raw',
             'exportCheckboxLabel': 'false',
             'exportSurveyFields': 'false',
             'exportDataAccessGroups': 'false',
             'returnFormat': 'json',
-            'forms[0]': 'ultrasound_consent_form_version_40',
         }
 
         try:
@@ -113,12 +114,11 @@ class BrainUltrasoundHelper:
         except (requests.exceptions.RequestException, ValueError) as e:
             logger.error(f'Error: {e}')
         else:
+            fields = ['reviewed_v4', 'answered_v4', 'asked_v4', 'verified_v4', 'copy_v4']
             try:
                 json_result = results.json()
-                if json_result:
-                    return any(isinstance(obj, dict) and any(
-                        value != '' for value in obj.values()) for obj in
-                               json_result)
+                if json_result and isinstance(json_result[0], dict):
+                    return all(json_result[0].get(field) == '1' for field in fields)
             except json.JSONDecodeError:
                 logger.error('Invalid JSON response: {}'.format(results.text))
         return False
