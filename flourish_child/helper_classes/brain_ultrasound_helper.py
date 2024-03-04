@@ -13,6 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class BrainUltrasoundHelper:
+
+    child_bu_onschedule_model = 'flourish_child.onschedulechildbrainultrasound'
+    child_bu_schedule_name = 'child_bu_schedule'
     def __init__(self, child_subject_identifier, caregiver_subject_identifier):
         self.child_subject_identifier = child_subject_identifier
         self.caregiver_subject_identifier = caregiver_subject_identifier
@@ -23,24 +26,33 @@ class BrainUltrasoundHelper:
             self.child_subject_identifier)
         return child_consnet.caregiver_visit_count if child_consnet else None
 
-    def brain_ultrasound_enrolment(self):
-        """Enrols the child into the brain ultrasound schedule.
-        """
-
-        brain_ultrasound_schedules = [
+    @property
+    def brain_ultrasound_schedules(self):
+        return [
             {'schedule_name': 'caregiver_bu_schedule_{0}'.format(
                 self.get_child_number),
                 'subject_identifier': self.caregiver_subject_identifier,
                 'onschedule_model':
                     'flourish_caregiver.onschedulecaregiverbrainultrasound',
             },
-            {'schedule_name': 'child_bu_schedule',
+            {'schedule_name': self.child_bu_schedule_name,
              'subject_identifier': self.child_subject_identifier,
-             'onschedule_model': 'flourish_child.onschedulechildbrainultrasound',
+             'onschedule_model': self.child_bu_onschedule_model,
              },
         ]
 
-        for schedule in brain_ultrasound_schedules:
+    @property
+    def is_onschedule(self):
+        return django_apps.get_model(self.child_bu_onschedule_model).objects.filter(
+            subject_identifier=self.child_subject_identifier,
+            schedule_name=self.child_bu_schedule_name,
+        ).exists()
+
+    def brain_ultrasound_enrolment(self):
+        """Enrols the child into the brain ultrasound schedule.
+        """
+
+        for schedule in self.brain_ultrasound_schedules:
             onschedule_model_cls = django_apps.get_model(schedule.get('onschedule_model'))
             schedule_name = schedule.get('schedule_name')
             _, new_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
@@ -86,12 +98,14 @@ class BrainUltrasoundHelper:
             'type': 'flat',
             'csvDelimiter': '',
             'records[0]': self.caregiver_subject_identifier,
+            'forms[0]': 'ultrasound_consent_form_version_40',
+            'events[0]': 'reconsent_arm_1',
             'rawOrLabel': 'raw',
             'rawOrLabelHeaders': 'raw',
             'exportCheckboxLabel': 'false',
             'exportSurveyFields': 'false',
             'exportDataAccessGroups': 'false',
-            'returnFormat': 'json'
+            'returnFormat': 'json',
         }
 
         try:
@@ -100,10 +114,11 @@ class BrainUltrasoundHelper:
         except (requests.exceptions.RequestException, ValueError) as e:
             logger.error(f'Error: {e}')
         else:
+            fields = ['reviewed_v4', 'answered_v4', 'asked_v4', 'verified_v4', 'copy_v4']
             try:
                 json_result = results.json()
-                if json_result:
-                    return True
+                if json_result and isinstance(json_result[0], dict):
+                    return all(json_result[0].get(field) == '1' for field in fields)
             except json.JSONDecodeError:
                 logger.error('Invalid JSON response: {}'.format(results.text))
         return False
