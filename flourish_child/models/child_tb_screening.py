@@ -8,6 +8,30 @@ from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
 
 
 class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
+    cough = models.CharField(
+        verbose_name='Does your child currently have any cough?',
+        choices=YES_NO,
+        max_length=3)
+
+    fever = models.CharField(
+        verbose_name='Does your child currently have a fever?',
+        choices=YES_NO,
+        max_length=3)
+
+    sweats = models.CharField(
+        verbose_name='Is your child currently experiencing night sweats?',
+        choices=YES_NO,
+        help_text='Night sweats is defined as waking up with your bed clothing soaked – '
+                  'enough to require the bed clothing to be changed',
+        max_length=3)
+
+    weight_loss = models.CharField(
+        verbose_name='Since the last time you spoke with FLOURISH staff, has your child '
+                     'had any weight loss (or no weight gain for a child who is less '
+                     'than 12 years of age)?',
+        choices=YES_NO,
+        max_length=3, )
+
     fatigue_or_reduced_playfulness = models.CharField(
         verbose_name='Does your child have fatigue or reduced playfulness that has '
                      'lasted ≥2 weeks?',

@@ -26,7 +26,7 @@ from .models import (ChildAssent, ChildBirth, ChildClinicalMeasurements, ChildDa
                      TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent)
 from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
     ChildSocioDemographic, ChildTBReferral, InfantArvProphylaxis, InfantFeeding, \
-    InfantHIVTesting
+    InfantHIVTesting, ChildTBScreening
 
 fake = Faker()
 
@@ -272,4 +272,8 @@ relationshipfatherinvolvement = Recipe(
 
 childtbreferral = Recipe(
     ChildTBReferral,
+)
+
+childtbscreening = Recipe(
+    ChildTBScreening,
 )

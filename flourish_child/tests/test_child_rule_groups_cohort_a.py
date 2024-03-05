@@ -1,12 +1,10 @@
-from django.utils.datetime_safe import datetime
-from flourish_caregiver.models import CaregiverChildConsent
-
 from dateutil.relativedelta import relativedelta
-from django.test import TestCase, tag
+from django.test import tag, TestCase
+from django.utils.datetime_safe import datetime
 from edc_base.utils import get_utcnow
-from edc_constants.constants import YES, POS, NEG, NO
+from edc_constants.constants import NEG, NO, POS, YES
 from edc_facility.import_holidays import import_holidays
-from edc_metadata.constants import REQUIRED, NOT_REQUIRED
+from edc_metadata.constants import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata, RequisitionMetadata
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
@@ -83,7 +81,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             is_present=YES,
             report_datetime=get_utcnow(),
@@ -92,7 +91,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.birthexam',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D').entry_status, REQUIRED)
 
     @tag('bexm')
@@ -128,7 +128,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             is_present=NO,
             report_datetime=get_utcnow(),
@@ -137,7 +138,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.birthexam',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D').entry_status, NOT_REQUIRED)
 
     @tag('bdt')
@@ -173,7 +175,8 @@ class TestRuleGroups(TestCase):
         visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -181,7 +184,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.birthdata',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D').entry_status, REQUIRED)
 
         mommy.make_recipe(
@@ -192,7 +196,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -200,7 +205,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.birthdata',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001').entry_status, NOT_REQUIRED)
 
     @tag('fsc1')
@@ -227,7 +233,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -239,7 +246,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -247,7 +255,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.childfoodsecurityquestionnaire',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001').entry_status, NOT_REQUIRED)
 
     def test_arv_exposure_required_if_pos(self):
@@ -272,7 +281,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -280,7 +290,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infantarvexposure',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D',
                 visit_code_sequence='0').entry_status, REQUIRED)
 
@@ -306,7 +317,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -314,7 +326,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infantarvexposure',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D',
                 visit_code_sequence='0').entry_status, NOT_REQUIRED)
 
@@ -340,7 +353,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -348,7 +362,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             RequisitionMetadata.objects.get(
                 model='flourish_child.childrequisition',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D',
                 panel_name='dna_pcr',
                 visit_code_sequence='0').entry_status, NOT_REQUIRED)
@@ -375,7 +390,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -383,7 +399,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -391,7 +408,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infanthivtesting',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001', ).entry_status, REQUIRED)
 
     def test_infant_hiv_test_infant_feeding_required(self):
@@ -416,7 +434,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -424,7 +443,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -432,7 +452,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -440,7 +461,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2003'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -448,7 +470,8 @@ class TestRuleGroups(TestCase):
         child_visit_4 = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2004'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -462,13 +485,15 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infanthivtesting',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2004', ).entry_status, REQUIRED)
 
+    @tag('tihtifht')
     def test_infant_hiv_test_infant_feeding_hiv_test(self):
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
-            current_hiv_status=NEG,
+            enrollment_hiv_status=POS,
             child_subject_identifier=self.preg_caregiver_child_consent_obj
             .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
@@ -487,7 +512,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -495,7 +521,8 @@ class TestRuleGroups(TestCase):
         child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -510,30 +537,25 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.infanthivtesting',
             child_visit=child_visit,
-            received_date=datetime(2023, 6, 5)
+            received_date=datetime(2023, 6, 5),
+            child_tested_for_hiv=NO,
         )
 
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
-            report_datetime=get_utcnow(),
-            reason=SCHEDULED)
-
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-                visit_code='2003'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
 
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infanthivtesting',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-                visit_code='2003', ).entry_status, REQUIRED)
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
+                visit_code='2002', ).entry_status, REQUIRED)
 
     def test_infant_hiv_test_infant_feeding_not_required(self):
         mommy.make_recipe(
@@ -557,7 +579,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -565,7 +588,8 @@ class TestRuleGroups(TestCase):
         child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -586,7 +610,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -594,7 +619,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2003'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -602,7 +628,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infanthivtesting',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2003', ).entry_status, NOT_REQUIRED)
 
     def test_skip_infant_hiv_test_q2_if_tested_q1(self):
@@ -627,7 +654,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -635,7 +663,8 @@ class TestRuleGroups(TestCase):
         child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -650,7 +679,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -658,7 +688,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infanthivtesting',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002', ).entry_status, NOT_REQUIRED)
 
     def test_require_infant_hiv_test_q2_if_not_tested_q1(self):
@@ -683,7 +714,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -691,7 +723,8 @@ class TestRuleGroups(TestCase):
         child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -705,7 +738,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -713,7 +747,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infanthivtesting',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002', ).entry_status, REQUIRED)
 
     def test_arv_proph_not_required_2000d(self):
@@ -740,7 +775,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -748,7 +784,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.filter(
                 model='flourish_child.infantarvprophylaxis',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D', ).exists(), False)
 
     def test_arv_proph_2001_preg_pos_required(self):
@@ -776,7 +813,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -784,7 +822,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -792,7 +831,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infantarvprophylaxis',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001', ).entry_status, REQUIRED)
 
     def test_arv_proph_if_missed_at_2001(self):
@@ -819,7 +859,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -827,7 +868,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -835,7 +877,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -843,7 +886,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infantarvprophylaxis',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002', ).entry_status, REQUIRED)
 
     def test_arv_proph_if_completed_at_2001(self):
@@ -871,7 +915,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -879,7 +924,8 @@ class TestRuleGroups(TestCase):
         child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -893,7 +939,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -901,7 +948,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infantarvprophylaxis',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002', ).entry_status, NOT_REQUIRED)
 
     def test_arv_proph_status_in_progress(self):
@@ -928,7 +976,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -936,7 +985,8 @@ class TestRuleGroups(TestCase):
         child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -950,7 +1000,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -958,7 +1009,8 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infantarvprophylaxis',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002', ).entry_status, REQUIRED)
 
     def test_arv_proph_status_in_progress_2003(self):
@@ -985,7 +1037,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2000D'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -993,7 +1046,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2001'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -1001,7 +1055,8 @@ class TestRuleGroups(TestCase):
         child_visit = mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2002'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -1015,7 +1070,8 @@ class TestRuleGroups(TestCase):
         mommy.make_recipe(
             'flourish_child.childvisit',
             appointment=Appointment.objects.get(
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2003'),
             report_datetime=get_utcnow(),
             reason=SCHEDULED)
@@ -1023,5 +1079,6 @@ class TestRuleGroups(TestCase):
         self.assertEqual(
             CrfMetadata.objects.get(
                 model='flourish_child.infantarvprophylaxis',
-                subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier,
                 visit_code='2003', ).entry_status, REQUIRED)

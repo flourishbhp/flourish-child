@@ -16,7 +16,6 @@ class ChildTBReferralAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             'fields': [
                 'child_visit',
                 'report_datetime',
-                'referred_for_screening',
                 'date_of_referral',
                 'reason_for_referral',
                 'reason_for_referral_other',

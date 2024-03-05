@@ -3,7 +3,8 @@ import uuid
 import xlwt
 
 from django.apps import apps as django_apps
-from django.db.models import ManyToManyField, ForeignKey, OneToOneField, ManyToOneRel
+from django.db.models import (ManyToManyField, ForeignKey, OneToOneField, ManyToOneRel,
+                              FileField, ImageField)
 from django.db.models.fields.reverse_related import OneToOneRel
 from django.http import HttpResponse
 from django.utils import timezone
@@ -51,6 +52,17 @@ class ExportActionMixin:
         is_tb_adol_model = ('tb' in queryset[0].child_visit.schedule_name if hasattr(
             queryset[0], 'child_visit') else False) or ('TB Adol' in queryset[0].verbose_name)
 
+        replace_idx = {'subject_identifier': 'childpid',
+                       'study_maternal_identifier': 'old_matpid',
+                       'study_child_identifier': 'old_childpid'}
+        for old_idx, new_idx in replace_idx.items():
+            try:
+                idx_index = field_names.index(old_idx)
+            except ValueError:
+                continue
+            else:
+                field_names[idx_index] = new_idx
+
         if queryset and self.is_non_crf(queryset[0]):
             field_names.insert(0, 'previous_study')
             field_names.insert(1, 'child_exposure_status')
@@ -58,9 +70,9 @@ class ExportActionMixin:
                 field_names.insert(2, 'tb_enrollment')
 
         if queryset and getattr(queryset[0], 'child_visit', None):
-            field_names.insert(0, 'subject_identifier')
-            field_names.insert(1, 'new_maternal_study_subject_identifier')
-            field_names.insert(2, 'old_study_maternal_identifier')
+            field_names.insert(0, 'childpid')
+            field_names.insert(1, 'matpid')
+            field_names.insert(2, 'old_matpid')
 
             if is_tb_adol_model:
                 field_names.insert(6, 'visit_code')
@@ -118,7 +130,7 @@ class ExportActionMixin:
                 study_maternal_identifier = self.study_maternal_identifier(
                     screening_identifier=screening_identifier)
                 child_exposure_status = self.child_hiv_exposure(
-                    study_maternal_identifier, caregiver_sid)
+                    subject_identifier, study_maternal_identifier, caregiver_sid)
 
                 tb_age = self.tb_age_at_enrollment(subject_identifier)
 
@@ -138,6 +150,10 @@ class ExportActionMixin:
             inline_objs = []
             for field in self.get_model_fields:
 
+                if isinstance(field, (FileField, ImageField,)):
+                    file_obj = getattr(obj, field.name, '')
+                    data.append(getattr(file_obj, 'name', ''))
+                    continue
                 if isinstance(field, ManyToManyField):
                     m2m_values = self.get_m2m_values(obj, m2m_field=field)
                     data.extend(m2m_values)
@@ -149,7 +165,8 @@ class ExportActionMixin:
                 if isinstance(field, OneToOneRel):
                     continue
                 if isinstance(field, ManyToOneRel):
-                    key_manager = getattr(obj, f'{field.name}_set')
+                    key_manager = getattr(obj, f'{field.name}_set',
+                                          getattr(obj, f'{field.related_name}', None))
                     inline_values = key_manager.all()
                     fields = field.related_model._meta.get_fields()
                     for field in fields:
@@ -182,6 +199,10 @@ class ExportActionMixin:
                         inline_data = []
                         inline_data.extend(data)
                         for field in inline_obj._meta.get_fields():
+                            if isinstance(field, (FileField, ImageField,)):
+                                file_obj = getattr(inline_obj, field.name, '')
+                                inline_data.append(getattr(file_obj, 'name', ''))
+                                continue
                             if field.name in inline_field_names:
                                 inline_data.append(
                                     getattr(inline_obj, field.name, ''))
@@ -269,7 +290,8 @@ class ExportActionMixin:
             else:
                 return dataset_obj.study_maternal_identifier
 
-    def child_hiv_exposure(self, study_maternal_identifier=None,
+    def child_hiv_exposure(self, subject_identifier=None,
+                           study_maternal_identifier=None,
                            caregiver_subject_identifier=None):
 
         child_dataset_cls = django_apps.get_model(
@@ -300,7 +322,8 @@ class ExportActionMixin:
                     'flourish_caregiver.antenatalenrollment')
                 try:
                     antenatal_enrollment = antenatal_enrollment_cls.objects.get(
-                        subject_identifier=caregiver_subject_identifier)
+                        subject_identifier=caregiver_subject_identifier,
+                        child_subject_identifier=subject_identifier)
                 except antenatal_enrollment_cls.DoesNotExist:
                     # To refactor to include new enrollees
                     maternal_hiv_status = 'UNK'
@@ -369,7 +392,8 @@ class ExportActionMixin:
                 'packed_datetime', 'shipped', 'shipped_datetime', 'received_datetime',
                 'identifier_prefix', 'primary_aliquot_identifier', 'clinic_verified',
                 'clinic_verified_datetime', 'drawn_datetime', 'related_tracking_identifier',
-                'parent_tracking_identifier', 'interview_file', 'interview_transcription']
+                'parent_tracking_identifier', 'interview_file', 'interview_transcription',
+                'slug', 'confirm_identity', 'site', 'subject_consent_id', '_django_version']
 
     def inline_exclude(self, field_names=[]):
         return [field_name for field_name in field_names
