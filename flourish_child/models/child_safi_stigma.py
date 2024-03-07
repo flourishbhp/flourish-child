@@ -43,7 +43,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     child_home_discrimination_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED_DONT_KNOW,
         blank=True,
@@ -57,7 +57,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     child_neighborhood_discrimination_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED_DONT_KNOW,
         blank=True,
@@ -71,7 +71,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     child_religious_place_discrimination_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED_DONT_KNOW,
         blank=True,
@@ -85,7 +85,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     child_clinic_discrimination_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED_DONT_KNOW,
         blank=True,
@@ -99,7 +99,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     child_school_discrimination_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED_DONT_KNOW,
         blank=True,
@@ -115,9 +115,11 @@ class ChildSafiStigma(ChildCrfModelMixin):
     child_other_discrimination_other = OtherCharField()
 
     child_other_discrimination_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
-        choices=PERIOD_HAPPENED_DONT_KNOW
+        choices=PERIOD_HAPPENED_DONT_KNOW,
+        blank=True,
+        null=True,
     )
 
     lose_finacial_support = models.CharField(
@@ -127,7 +129,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     lose_finacial_support_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED,
         blank=True,
@@ -141,7 +143,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     lose_social_support_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED,
         blank=True,
@@ -149,14 +151,14 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     stressed_or_anxious = models.CharField(
-        verbose_name='Lose Social Support',
+        verbose_name='Stressed or anxious',
         max_length=20,
         choices=HAPPENED,
 
     )
 
     stressed_or_anxious_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED,
         blank=True,
@@ -170,7 +172,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     )
 
     depressed_or_saddened_period = models.CharField(
-        verbose_name='If “Even Happened”: When?',
+        verbose_name='If “Ever Happened”: When?',
         max_length=20,
         choices=PERIOD_HAPPENED,
         blank=True,
