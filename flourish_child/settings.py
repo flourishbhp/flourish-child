@@ -72,6 +72,7 @@ INSTALLED_APPS = [
     'edc_visit_schedule.apps.AppConfig',
     'edc_model_admin.apps.AppConfig',
     'flourish_prn.apps.AppConfig',
+    'flourish_export.apps.AppConfig',
     'flourish_reference.apps.AppConfig',
     'flourish_metadata_rules.apps.AppConfig',
     'flourish_follow.apps.AppConfig',
