@@ -19,48 +19,42 @@ class ChildSafiStigmaAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'lost_friends',
                 'lost_friends_period',
-                'discriminated',
-                'discriminated_period',
-
-
-
-            ]}),
-        ('Because someone else in my family has HIV, I have experienced discrimination at', {
+                'bullied',
+                'bullied_period',
+            ]},
+        ),
+        ('Because someone else in my family has HIV, I have experienced discrimination at:', {
             'fields': [
-
-                'child_home_discrimination',
-                'child_home_discrimination_period',
-                'child_neighborhood_discrimination',
-                'child_neighborhood_discrimination_period',
-                'child_religious_place_discrimination',
-                'child_religious_place_discrimination_period',
-                'child_clinic_discrimination',
-                'child_clinic_discrimination_period',
-                'child_school_discrimination',
-                'child_school_discrimination_period',
-                'child_other_discrimination',
-                'child_other_discrimination_other',
-                'child_other_discrimination_period',
-
-
-            ]}
+                'home_discr',
+                'home_discr_period',
+                'neighborhood_discr',
+                'neighborhood_discr_period',
+                'religious_place_discr',
+                'religious_place_discr_period',
+                'clinic_discr',
+                'clinic_discr_period',
+                'school_discr',
+                'school_discr_period',
+                'other_place_discr',
+                'other_place_discr_period',
+            ]},
          ),
-        ('Because someone else in my family has HIV, discrimination has led to my family to', {
+        ('Because someone else in my family has HIV, discrimination has led to my family to:', {
             'fields': [
-                'lose_finacial_support',
-                'lose_finacial_support_period',
+                'lose_fin_support',
+                'lose_fin_support_period',
                 'lose_social_support',
                 'lose_social_support_period',
 
             ]}
          ),
 
-        ('Because someone else in my family has HIV, discrimination has made me feel', {
+        ('Because someone else in my family has HIV, discrimination has made me feel:', {
             'fields': [
                 'stressed_or_anxious',
                 'stressed_or_anxious_period',
-                'depressed_or_saddened',
-                'depressed_or_saddened_period'
+                'depressed_or_sad',
+                'depressed_or_sad_period'
 
             ]}
          ), audit_fieldset_tuple)
@@ -68,26 +62,25 @@ class ChildSafiStigmaAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     radio_fields = {
         'lost_friends': admin.VERTICAL,
         'lost_friends_period': admin.VERTICAL,
-        'discriminated': admin.VERTICAL,
-        'discriminated_period': admin.VERTICAL,
-        'child_home_discrimination': admin.VERTICAL,
-        'child_home_discrimination_period': admin.VERTICAL,
-        'child_neighborhood_discrimination': admin.VERTICAL,
-        'child_neighborhood_discrimination_period': admin.VERTICAL,
-        'child_religious_place_discrimination': admin.VERTICAL,
-        'child_religious_place_discrimination_period': admin.VERTICAL,
-        'child_clinic_discrimination': admin.VERTICAL,
-        'child_clinic_discrimination_period': admin.VERTICAL,
-        'child_school_discrimination': admin.VERTICAL,
-        'child_school_discrimination_period': admin.VERTICAL,
-        'child_other_discrimination': admin.VERTICAL,
-        'child_other_discrimination_period': admin.VERTICAL,
-        'lose_finacial_support': admin.VERTICAL,
-        'lose_finacial_support_period': admin.VERTICAL,
+        'bullied': admin.VERTICAL,
+        'bullied_period': admin.VERTICAL,
+        'home_discr': admin.VERTICAL,
+        'home_discr_period': admin.VERTICAL,
+        'neighborhood_discr': admin.VERTICAL,
+        'neighborhood_discr_period': admin.VERTICAL,
+        'religious_place_discr': admin.VERTICAL,
+        'religious_place_discr_period': admin.VERTICAL,
+        'clinic_discr': admin.VERTICAL,
+        'clinic_discr_period': admin.VERTICAL,
+        'school_discr': admin.VERTICAL,
+        'school_discr_period': admin.VERTICAL,
+        'other_place_discr_period': admin.VERTICAL,
+        'lose_fin_support': admin.VERTICAL,
+        'lose_fin_support_period': admin.VERTICAL,
         'lose_social_support': admin.VERTICAL,
         'lose_social_support_period': admin.VERTICAL,
         'stressed_or_anxious': admin.VERTICAL,
         'stressed_or_anxious_period': admin.VERTICAL,
-        'depressed_or_saddened': admin.VERTICAL,
-        'depressed_or_saddened_period': admin.VERTICAL
+        'depressed_or_sad': admin.VERTICAL,
+        'depressed_or_sad_period': admin.VERTICAL
     }

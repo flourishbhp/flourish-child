@@ -91,7 +91,7 @@ class BrainUltrasoundHelper:
         """Returns True if the child is enrolled on the brain ultrasound schedule."""
 
         data = {
-            'token': settings.REDCAP_API_TOKEN,
+            'token': getattr(settings, 'REDCAP_API_TOKEN', None),
             'content': 'record',
             'action': 'export',
             'format': 'json',
@@ -109,7 +109,7 @@ class BrainUltrasoundHelper:
         }
 
         try:
-            results = requests.post(settings.REDCAP_API_URL, data=data)
+            results = requests.post(getattr(settings, 'REDCAP_API_URL', ''), data=data)
             results.raise_for_status()
         except (requests.exceptions.RequestException, ValueError) as e:
             logger.error(f'Error: {e}')
