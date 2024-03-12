@@ -152,7 +152,7 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
                 consent_version_obj = self.consent_version_cls.objects.get(
                     screening_identifier=latest_consent.screening_identifier)
             except self.consent_version_cls.DoesNotExist:
-                version = str(child_app.consent_version)
+                version = '1'
             else:
                 version = getattr(consent_version_obj, 'version', None)
             return version
