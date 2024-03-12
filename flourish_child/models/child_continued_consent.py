@@ -3,20 +3,22 @@ from django.db import models
 from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
-from edc_base.model_validators import eligible_if_yes, datetime_not_future
+from edc_base.model_validators import datetime_not_future, eligible_if_yes
 from edc_base.sites.site_model_mixin import SiteModelMixin
-from edc_consent.field_mixins import (IdentityFieldsMixin, PersonalFieldsMixin,
-                                      ReviewFieldsMixin, VulnerabilityFieldsMixin,
-                                      CitizenFieldsMixin)
-from edc_constants.choices import YES_NO, GENDER, YES_NO_NA
+from edc_consent.field_mixins import (CitizenFieldsMixin, IdentityFieldsMixin,
+                                      PersonalFieldsMixin, ReviewFieldsMixin,
+                                      VulnerabilityFieldsMixin)
+from edc_constants.choices import GENDER, YES_NO, YES_NO_NA
 from edc_protocol.validators import datetime_not_before_study_start
 from edc_search.model_mixins import SearchSlugManager
 
+from .eligibility import ContinuedConsentEligibility
+from .model_mixins import SearchSlugModelMixin
 from ..action_items import CHILDCONTINUEDCONSENT_STUDY_ACTION
 from ..choices import IDENTITY_TYPE
 from ..helper_classes.utils import child_utils
-from .eligibility import ContinuedConsentEligibility
-from .model_mixins import SearchSlugModelMixin
+
+child_app = django_apps.get_app_config('flourish_child')
 
 
 class ChildContinuedConsentManager(SearchSlugManager, models.Manager):
@@ -30,7 +32,6 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
                             ReviewFieldsMixin, VulnerabilityFieldsMixin,
                             CitizenFieldsMixin, SearchSlugModelMixin,
                             ActionModelMixin, BaseUuidModel):
-
     tracking_identifier_prefix = 'CC'
 
     action_name = CHILDCONTINUEDCONSENT_STUDY_ACTION
@@ -49,7 +50,7 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
     gender = models.CharField(
         verbose_name='Gender',
         choices=GENDER,
-        max_length=1,)
+        max_length=1, )
 
     identity_type = models.CharField(
         verbose_name='What type of identity number is this?',
@@ -77,17 +78,20 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
 
     specimen_consent = models.CharField(
         max_length=3,
-        verbose_name='Do you give us permission to use your blood samples for future studies?',
+        verbose_name='Do you give us permission to use your blood samples for future '
+                     'studies?',
         choices=YES_NO)
 
     along_side_caregiver = models.CharField(
-        verbose_name='Do you feel comfortable with continuing on the FLOURISH study alongside your caregiver?',
+        verbose_name='Do you feel comfortable with continuing on the FLOURISH study '
+                     'alongside your caregiver?',
         max_length=3,
         choices=YES_NO,
     )
 
     include_contact_details = models.CharField(
-        verbose_name='Will your contact information, including phone numbers and physical address, remain the same',
+        verbose_name='Will your contact information, including phone numbers and '
+                     'physical address, remain the same',
         max_length=3,
         choices=YES_NO,
     )
@@ -139,7 +143,8 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
         version = None
         try:
             latest_consent = self.subject_consent_cls.objects.filter(
-                subject_identifier=caregiver_subject_identifier).latest('consent_datetime')
+                subject_identifier=caregiver_subject_identifier).latest(
+                'consent_datetime')
         except self.subject_consent_cls.ObjectDoesNotExist:
             return None
         else:
