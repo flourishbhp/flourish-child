@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from dateutil.tz import gettz
 from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
@@ -12,6 +13,8 @@ class AppConfig(DjangoAppConfig):
         2022, 7, 1, 0, 0, 0, tzinfo=gettz('UTC')).date()
     end_date_year_5 = datetime(
         2024, 6, 30, 0, 0, 0, tzinfo=gettz('UTC')).date()
+
+    consent_version = 4
 
     def ready(self):
         from .models import child_consent_on_post_save
@@ -52,7 +55,7 @@ if settings.APP_NAME == 'flourish_child':
             AppointmentConfig(
                 model='flourish_facet.appointment',
                 related_visit_model='flourish_facet.facetvisit',
-                appt_type='clinic'),]
+                appt_type='clinic'), ]
 
 
     class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
