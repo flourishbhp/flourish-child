@@ -126,7 +126,7 @@ class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             record = self.fix_date_formats(record)
             records.append(record)
 
-        response = self.write_to_excel(records)
+        response = self.write_to_csv(records)
         return response
 
     export_as_csv.short_description = _(
