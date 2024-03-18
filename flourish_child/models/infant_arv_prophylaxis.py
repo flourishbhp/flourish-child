@@ -2,6 +2,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from edc_base.model_fields.custom_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
+from edc_base.model_validators import date_not_future, dob_not_today
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from .child_crf_model_mixin import ChildCrfModelMixin
@@ -113,7 +114,10 @@ class ChildArvProphDates(CrfInlineModelMixin, BaseUuidModel):
         choices=CHILD_ARV_PROPH,
         max_length=15)
 
-    arv_start_date = models.DateField(verbose_name='Start date')
+    arv_start_date = models.DateField(
+        verbose_name='Start date',
+        validators=[date_not_future, dob_not_today]
+    )
 
     arv_stop_date = models.DateField(
         verbose_name='Stop date',
