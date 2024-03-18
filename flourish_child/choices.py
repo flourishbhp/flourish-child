@@ -1396,7 +1396,6 @@ PERIOD_HAPPENED = (
 HAPPENED = (
     ('never_happened', 'Never Happened'),
     ('ever_happened', 'Ever Happened'),
-    (NOT_APPLICABLE, 'Not Applicable')
 )
 
 PERIOD_HAPPENED_DONT_KNOW = (
