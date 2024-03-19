@@ -19,16 +19,9 @@ class ChildVisitForm(
 
     def clean(self):
         super().clean()
-        self.subject_identifier = self.cleaned_data.get('appointment').subject_identifier
+        self.subject_identifier = self.cleaned_data.get(
+            'appointment').subject_identifier
         self.validate_against_onschedule_datetime()
-
-        # Validate incomplete continued consent form if child >= 18 years of age..
-        self.validate_incomplete_required_model(
-            subject_identifier=self.subject_identifier,
-            model='flourish_child.childcontinuedconsent',
-            action_name=CHILDCONTINUEDCONSENT_STUDY_ACTION,
-            msg=('Participant is 18 years of age, cannot edit visit until '
-                 'participant has given their continued consent for participation.'))
 
         # Validate incomplete child assent form if child >= 7 years of age.
         if not any(item in self.cleaned_data.get('appointment').schedule_name for item in [
