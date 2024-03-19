@@ -1,4 +1,5 @@
 import logging
+
 from celery.app import shared_task
 from celery.signals import worker_process_init
 from django.utils import timezone
