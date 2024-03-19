@@ -1,13 +1,24 @@
+import arrow
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.timezone import get_default_timezone
 from edc_base.model_fields.custom_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
-from edc_base.model_validators import date_not_future, dob_not_today
+from edc_base.model_validators import date_not_future
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from ..choices import (ART_PROPH_STATUS, CHILD_ARV_PROPH, NO_ART_REASON, REASON_MODIFIED,
                        YES_NO_DN_RECALL)
+
+
+def dob_not_today(value):
+    value_utc = arrow.Arrow.fromdate(
+        value, tzinfo=get_default_timezone()).to('utc').date()
+    if value_utc == arrow.utcnow().date:
+        raise ValidationError(
+            u'Date cannot be today. You entered {}.'.format(value))
 
 
 class InfantArvProphylaxis(ChildCrfModelMixin):
