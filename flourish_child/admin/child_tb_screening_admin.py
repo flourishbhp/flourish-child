@@ -58,7 +58,6 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         "fatigue_or_reduced_playfulness": admin.VERTICAL,
         "household_diagnosed_with_tb": admin.VERTICAL,
         "evaluated_for_tb": admin.VERTICAL,
-        "tb_tests": admin.VERTICAL,
         "chest_xray_results": admin.VERTICAL,
         "sputum_sample_results": admin.VERTICAL,
         "stool_sample_results": admin.VERTICAL,
@@ -69,4 +68,6 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         "child_on_tb_treatment": admin.VERTICAL,
         "child_on_tb_preventive_therapy": admin.VERTICAL,
     }
+
+    filter_horizontal = ('tb_tests',)
 

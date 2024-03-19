@@ -1,11 +1,13 @@
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
-from django.test import TestCase
-from edc_base.utils import get_utcnow
-from edc_constants.constants import NOT_APPLICABLE, YES
-from edc_facility.import_holidays import import_holidays
-from edc_visit_tracking.constants import SCHEDULED
+from django.test import TestCase, tag
 from model_mommy import mommy
+from edc_visit_schedule.models import SubjectScheduleHistory
+from edc_base.utils import get_utcnow
+from edc_constants.constants import NOT_APPLICABLE, YES, NO
+from edc_facility.import_holidays import import_holidays
+from edc_visit_schedule import site_visit_schedules
+from edc_visit_tracking.constants import SCHEDULED
 
 from ..models import ChildDummySubjectConsent, Appointment, \
     OnScheduleChildCohortCSecQuart
@@ -19,6 +21,7 @@ from ..models import OnScheduleChildCohortCQuarterly
 from ..models import OnScheduleChildCohortCSec
 
 
+@tag('schedule')
 class TestVisitScheduleSetup(TestCase):
 
     def setUp(self):
@@ -589,3 +592,153 @@ class TestVisitScheduleSetup(TestCase):
 
         self.assertNotEqual(Appointment.objects.filter(
             subject_identifier=dummy_consent2.subject_identifier).count(), 0)
+
+    def test_cohort_c_caregiver_offschedule(self):
+
+        child_dob = get_utcnow().date() - relativedelta(years=18)
+
+        screening_preg = mommy.make_recipe(
+            'flourish_caregiver.screeningpregwomen', )
+
+        self.options.update(version=3)
+
+        caregiver_onschedule_model = 'flourish_caregiver.onschedulecohortcenrollment'
+
+        child_dataset = mommy.make_recipe(
+            'flourish_child.childdataset',
+            dob=child_dob,
+            **self.child_dataset_options)
+
+        subject_consent = mommy.make_recipe(
+            'flourish_caregiver.subjectconsent',
+            screening_identifier=screening_preg.screening_identifier,
+            breastfeed_intent=YES,
+            biological_caregiver=YES,
+            **self.options)
+
+        caregiver_child_consent = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            study_child_identifier=child_dataset.study_child_identifier,
+            child_dob=child_dob,)
+
+        caregiver_child_consent.save()
+
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model=caregiver_onschedule_model,
+            name='c_enrol1_schedule1'
+        )
+
+        schedule.put_on_schedule(
+            subject_identifier=subject_consent.subject_identifier,
+            schedule_name='c_enrol1_schedule1'
+        )
+
+        caregiver_onschedule_cls = django_apps.get_model(
+            caregiver_onschedule_model)
+
+        caregiver_onschedule_cls.objects.filter(
+            subject_identifier=subject_consent.subject_identifier,
+            schedule_name='c_enrol1_schedule1',
+        ).update(child_subject_identifier=caregiver_child_consent.subject_identifier)
+
+        _, child_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model='flourish_child.onschedulechildcohortcenrollment',
+            name='child_c_enrol_schedule1'
+        )
+
+        child_schedule.put_on_schedule(
+            subject_identifier=caregiver_child_consent.subject_identifier,
+            schedule_name='child_c_enrol_schedule1'
+        )
+
+        continued_consent = mommy.make_recipe(
+            'flourish_child.childcontinuedconsent',
+            subject_identifier=caregiver_child_consent.subject_identifier,
+            consent_datetime=get_utcnow(),
+            along_side_caregiver=NO,)
+
+        continued_consent.save()
+
+        is_off_schedule = SubjectScheduleHistory.objects.filter(
+            subject_identifier=subject_consent.subject_identifier,
+            schedule_status='offschedule',
+            schedule_name='c_enrol1_schedule1'
+        )
+
+        self.assertTrue(is_off_schedule)
+
+    def test_cohort_b_caregiver_offschedule(self):
+
+        child_dob = get_utcnow().date() - relativedelta(years=18)
+
+        screening_preg = mommy.make_recipe(
+            'flourish_caregiver.screeningpregwomen', )
+
+        self.options.update(version=3)
+
+        caregiver_onschedule_model = 'flourish_caregiver.onschedulecohortbenrollment'
+
+        child_dataset = mommy.make_recipe(
+            'flourish_child.childdataset',
+            dob=child_dob,
+            **self.child_dataset_options)
+
+        subject_consent = mommy.make_recipe(
+            'flourish_caregiver.subjectconsent',
+            screening_identifier=screening_preg.screening_identifier,
+            breastfeed_intent=YES,
+            biological_caregiver=YES,
+            **self.options)
+
+        caregiver_child_consent = mommy.make_recipe(
+            'flourish_caregiver.caregiverchildconsent',
+            subject_consent=subject_consent,
+            study_child_identifier=child_dataset.study_child_identifier,
+            child_dob=child_dob,)
+
+        caregiver_child_consent.save()
+
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model=caregiver_onschedule_model,
+            name='b_enrol1_schedule1'
+        )
+
+        schedule.put_on_schedule(
+            subject_identifier=subject_consent.subject_identifier,
+            schedule_name='b_enrol1_schedule1'
+        )
+
+        caregiver_onschedule_cls = django_apps.get_model(
+            caregiver_onschedule_model)
+
+        caregiver_onschedule_cls.objects.filter(
+            subject_identifier=subject_consent.subject_identifier,
+            schedule_name='b_enrol1_schedule1',
+        ).update(child_subject_identifier=caregiver_child_consent.subject_identifier)
+
+        _, child_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model='flourish_child.onschedulechildcohortbenrollment',
+            name='child_b_enrol_schedule1'
+        )
+
+        child_schedule.put_on_schedule(
+            subject_identifier=caregiver_child_consent.subject_identifier,
+            schedule_name='child_c_enrol_schedule1'
+        )
+
+        continued_consent = mommy.make_recipe(
+            'flourish_child.childcontinuedconsent',
+            subject_identifier=caregiver_child_consent.subject_identifier,
+            consent_datetime=get_utcnow(),
+            along_side_caregiver=NO,)
+
+        continued_consent.save()
+
+        is_off_schedule = SubjectScheduleHistory.objects.filter(
+            subject_identifier=subject_consent.subject_identifier,
+            schedule_status='offschedule',
+            schedule_name='b_enrol1_schedule1'
+        )
+
+        self.assertTrue(is_off_schedule)

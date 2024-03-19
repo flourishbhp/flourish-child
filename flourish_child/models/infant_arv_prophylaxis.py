@@ -13,7 +13,7 @@ from ..choices import (ART_PROPH_STATUS, CHILD_ARV_PROPH, NO_ART_REASON, REASON_
                        YES_NO_DN_RECALL)
 
 
-def dob_not_today(value):
+def date_not_today(value):
     value_utc = arrow.Arrow.fromdate(
         value, tzinfo=get_default_timezone()).to('utc').date()
     if value_utc == arrow.utcnow().date:
@@ -127,7 +127,7 @@ class ChildArvProphDates(CrfInlineModelMixin, BaseUuidModel):
 
     arv_start_date = models.DateField(
         verbose_name='Start date',
-        validators=[date_not_future, dob_not_today]
+        validators=[date_not_future, date_not_today]
     )
 
     arv_stop_date = models.DateField(

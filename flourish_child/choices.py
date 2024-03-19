@@ -1164,6 +1164,8 @@ PREFERRED_CLINIC = (
     ('local', 'Local Clinic'),
     ('flourish', 'FLOURISH Clinic'),
     ('no_testing', 'I do not wish to have my infant tested at this time'),
+    (NOT_APPLICABLE, 'Not Applicable, because under Botswana Guidelines, not currently '
+                     'due for testing '),
     (OTHER, 'Other'),
 )
 
@@ -1235,7 +1237,6 @@ CHILD_TYPE = [
     ('twin', 'Twin'),
     ('triplet', 'Triplet')
 ]
-
 
 YES_NO_DOESNT_WORK_NA = (
     (YES, YES),
@@ -1387,7 +1388,6 @@ YES_NO_DN_RECALL = (
     ('do_not_recall', 'Do not recall'),
 )
 
-
 PERIOD_HAPPENED = (
     ('past_6_months', 'Past 6 months'),
     ('more_than_6_months', 'Longer than 6 months ago')
@@ -1396,7 +1396,6 @@ PERIOD_HAPPENED = (
 HAPPENED = (
     ('never_happened', 'Never Happened'),
     ('ever_happened', 'Ever Happened'),
-    (NOT_APPLICABLE, 'Not Applicable')
 )
 
 PERIOD_HAPPENED_DONT_KNOW = (
