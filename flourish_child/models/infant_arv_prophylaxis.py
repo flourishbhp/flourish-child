@@ -1,8 +1,7 @@
-import arrow
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.timezone import get_default_timezone
+from edc_base import get_utcnow
 from edc_base.model_fields.custom_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import date_not_future
@@ -14,9 +13,7 @@ from ..choices import (ART_PROPH_STATUS, CHILD_ARV_PROPH, NO_ART_REASON, REASON_
 
 
 def date_not_today(value):
-    value_utc = arrow.Arrow.fromdate(
-        value, tzinfo=get_default_timezone()).to('utc').date()
-    if value_utc == arrow.utcnow().date:
+    if value == get_utcnow().date():
         raise ValidationError(
             u'Date cannot be today. You entered {}.'.format(value))
 
