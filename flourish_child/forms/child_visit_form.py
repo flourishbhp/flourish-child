@@ -52,7 +52,7 @@ class ChildVisitForm(
 
         child_age = age(caregiver_child_consent_obj.child_dob, get_utcnow()).years
 
-        if 6 < child_age > 17:
+        if 6 < child_age < 17:
             try:
                 model_obj = model_cls.objects.get(
                     subject_identifier=subject_identifier,
