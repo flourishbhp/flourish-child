@@ -52,7 +52,7 @@ class ChildVisitForm(
 
         child_age = age(caregiver_child_consent_obj.child_dob, get_utcnow()).years
 
-        if child_age > 17:
+        if 6 < child_age > 17:
             try:
                 model_obj = model_cls.objects.get(
                     subject_identifier=subject_identifier,
@@ -65,7 +65,6 @@ class ChildVisitForm(
                         'Participant is not eligible for study participation '
                         f'on the {model_cls._meta.verbose_name}. Can not edit '
                         'visit, should be taken off study.')
-
 
     def validate_against_onschedule_datetime(self):
         onschedule_model_cls = self.cleaned_data.get(
