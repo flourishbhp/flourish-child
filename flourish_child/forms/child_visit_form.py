@@ -17,7 +17,8 @@ class ChildVisitForm(
 
     def clean(self):
         super().clean()
-        self.subject_identifier = self.cleaned_data.get('appointment').subject_identifier
+        self.subject_identifier = self.cleaned_data.get(
+            'appointment').subject_identifier
         self.validate_against_onschedule_datetime()
 
         caregiver_child_consent_obj = child_utils.caregiver_child_consent_obj(
