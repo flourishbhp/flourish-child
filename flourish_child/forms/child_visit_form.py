@@ -20,24 +20,32 @@ class ChildVisitForm(
         self.subject_identifier = self.cleaned_data.get('appointment').subject_identifier
         self.validate_against_onschedule_datetime()
 
-        # Validate incomplete continued consent form if child >= 18 years of age..
-        self.validate_incomplete_required_model(
-            subject_identifier=self.subject_identifier,
-            model='flourish_child.childcontinuedconsent',
-            action_name=CHILDCONTINUEDCONSENT_STUDY_ACTION,
-            msg=('Participant is 18 years of age, cannot edit visit until '
-                 'participant has given their continued consent for participation.'))
+        caregiver_child_consent_obj = child_utils.caregiver_child_consent_obj(
+            subject_identifier=self.subject_identifier
+        )
 
-        # Validate incomplete child assent form if child >= 7 years of age.
-        if not any(
-                item in self.cleaned_data.get('appointment').schedule_name for item in [
-                    'quart', 'qt']):
+        child_age = age(caregiver_child_consent_obj.child_dob, get_utcnow()).years
+
+        if child_age > 17:
+            # Validate incomplete continued consent form if child >= 18 years of age..
             self.validate_incomplete_required_model(
                 subject_identifier=self.subject_identifier,
-                model='flourish_child.childassent',
-                action_name=CHILDASSENT_ACTION,
-                msg=('Participant is older than 7 years, please complete the child'
-                     ' assent form before continuing with the visits.'))
+                model='flourish_child.childcontinuedconsent',
+                action_name=CHILDCONTINUEDCONSENT_STUDY_ACTION,
+                msg=('Participant is 18 years of age, cannot edit visit until '
+                     'participant has given their continued consent for participation.'))
+
+        if child_age >= 7:
+            # Validate incomplete child assent form if child >= 7 years of age.
+            if not any(
+                    item in self.cleaned_data.get('appointment').schedule_name for item in [
+                        'quart', 'qt']):
+                self.validate_incomplete_required_model(
+                    subject_identifier=self.subject_identifier,
+                    model='flourish_child.childassent',
+                    action_name=CHILDASSENT_ACTION,
+                    msg=('Participant is older than 7 years, please complete the child'
+                         ' assent form before continuing with the visits.'))
 
     def validate_incomplete_required_model(
             self, subject_identifier=None, model=None, action_name=None, msg=None):
@@ -46,26 +54,18 @@ class ChildVisitForm(
         consent_version = child_utils.consent_version(
             subject_identifier=subject_identifier)
 
-        caregiver_child_consent_obj = child_utils.caregiver_child_consent_obj(
-            subject_identifier=subject_identifier
-        )
-
-        child_age = age(caregiver_child_consent_obj.child_dob, get_utcnow()).years
-
-        if child_age > 17:
-            try:
-                model_obj = model_cls.objects.get(
-                    subject_identifier=subject_identifier,
-                    version=consent_version)
-            except model_cls.DoesNotExist:
-                raise forms.ValidationError(msg)
-            else:
-                if not model_obj.is_eligible:
-                    raise forms.ValidationError(
-                        'Participant is not eligible for study participation '
-                        f'on the {model_cls._meta.verbose_name}. Can not edit '
-                        'visit, should be taken off study.')
-
+        try:
+            model_obj = model_cls.objects.get(
+                subject_identifier=subject_identifier,
+                version=consent_version)
+        except model_cls.DoesNotExist:
+            raise forms.ValidationError(msg)
+        else:
+            if not model_obj.is_eligible:
+                raise forms.ValidationError(
+                    'Participant is not eligible for study participation '
+                    f'on the {model_cls._meta.verbose_name}. Can not edit '
+                    'visit, should be taken off study.')
 
     def validate_against_onschedule_datetime(self):
         onschedule_model_cls = self.cleaned_data.get(
