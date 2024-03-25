@@ -23,6 +23,8 @@ class ChildSocialWorkReferralAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_exposure_status',
                 'referral_reason',
                 'reason_other',
+                'referral_loc',
+                'referral_loc_other',
                 'comment',
 
             ),
@@ -33,6 +35,7 @@ class ChildSocialWorkReferralAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'referral_for': admin.VERTICAL,
         'is_preg': admin.VERTICAL,
         'current_hiv_status': admin.VERTICAL,
-        'child_exposure_status': admin.VERTICAL}
+        'child_exposure_status': admin.VERTICAL,
+        'referral_loc': admin.VERTICAL}
 
     filter_horizontal = ('referral_reason',)
