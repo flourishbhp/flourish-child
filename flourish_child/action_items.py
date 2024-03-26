@@ -9,15 +9,6 @@ CHILDASSENT_ACTION = 'submit-childassent'
 YOUNG_ADULT_LOCATOR_ACTION = 'submit-child-locator'
 
 
-class ChildContinuedConsentAction(Action):
-    name = CHILDCONTINUEDCONSENT_STUDY_ACTION
-    display_name = 'Submit Child Continued Consent'
-    reference_model = 'flourish_child.childcontinuedconsent'
-    admin_site_name = 'flourish_child_admin'
-    priority = HIGH_PRIORITY
-    singleton = True
-
-
 class ChildAssentAction(Action):
     name = CHILDASSENT_ACTION
     display_name = 'Submit Child Assent'
@@ -34,6 +25,5 @@ class YoungAdultLocatorAction(Action):
     priority = HIGH_PRIORITY
 
 
-site_action_items.register(ChildContinuedConsentAction)
 site_action_items.register(ChildAssentAction)
 site_action_items.register(YoungAdultLocatorAction)
