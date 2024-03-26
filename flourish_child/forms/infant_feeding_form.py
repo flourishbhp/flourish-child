@@ -82,6 +82,9 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         if initial.get('dt_formula_introduced', None):
             self.fields['dt_formula_introduced'].widget = forms.DateInput(
                 attrs={'readonly': 'readonly'})
+        if initial.get('solid_foods_dt', None):
+            self.fields['solid_foods_dt'].widget = forms.DateInput(
+                attrs={'readonly': 'readonly'})
 
     def clean(self):
         previous_instance = getattr(self, 'previous_instance', None)

@@ -49,6 +49,7 @@ from .child_previous_hospitalization import ChildPreHospitalizationInline, \
     ChildPreviousHospitalization
 from .child_requisition import ChildRequisition
 from .child_requisition_result import ChildRequisitionResult, ChildResultValue
+from .child_social_work_referral import ChildSocialWorkReferral
 from .child_socio_demographic import ChildSocioDemographic
 from .child_tanner_staging import ChildTannerStaging
 from .child_tb_referral import ChildTBReferral
@@ -77,7 +78,7 @@ from .infant_dev_screening_72_months import InfantDevScreening72Months
 from .infant_dev_screening_9_months import InfantDevScreening9Months
 from .infant_feeding import InfantFeeding
 from .infant_feeding_practices import InfantFeedingPractices
-from .infant_hiv_testing import InfantHIVTesting
+from .infant_hiv_testing import *
 from .list_models import *
 from .model_mixins import intv_users_mixin
 from .offschedule import ChildOffSchedule
