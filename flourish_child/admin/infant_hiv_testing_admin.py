@@ -105,3 +105,24 @@ class InfantHIVTestingBirthAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
 @admin.register(InfantHIVTestingOther, site=flourish_child_admin)
 class InfantHIVTestingOtherAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
     form = InfantHIVTestingForm
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                'child_visit',
+                'report_datetime',
+                'child_tested_for_hiv',
+                'child_test_date_estimated',
+                'test_location',
+                'test_location_other',
+                'results_received',
+                'recall_result_date',
+                'received_date',
+                'result_date_estimated',
+                'hiv_test_result',
+                'child_age',
+                'additional_comments',
+            ),
+        }),
+        audit_fieldset_tuple,
+    )
