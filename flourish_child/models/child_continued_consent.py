@@ -1,6 +1,5 @@
 from django.apps import apps as django_apps
 from django.db import models
-from edc_action_item.model_mixins import ActionModelMixin
 from edc_base.model_managers import HistoricalRecords
 from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_validators import datetime_not_future, eligible_if_yes
@@ -14,11 +13,8 @@ from edc_search.model_mixins import SearchSlugManager
 
 from .eligibility import ContinuedConsentEligibility
 from .model_mixins import SearchSlugModelMixin
-from ..action_items import CHILDCONTINUEDCONSENT_STUDY_ACTION
 from ..choices import IDENTITY_TYPE
 from ..helper_classes.utils import child_utils
-
-child_app = django_apps.get_app_config('flourish_child')
 
 
 class ChildContinuedConsentManager(SearchSlugManager, models.Manager):
@@ -30,12 +26,7 @@ class ChildContinuedConsentManager(SearchSlugManager, models.Manager):
 
 class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsMixin,
                             ReviewFieldsMixin, VulnerabilityFieldsMixin,
-                            CitizenFieldsMixin, SearchSlugModelMixin,
-                            ActionModelMixin, BaseUuidModel):
-    tracking_identifier_prefix = 'CC'
-
-    action_name = CHILDCONTINUEDCONSENT_STUDY_ACTION
-
+                            CitizenFieldsMixin, SearchSlugModelMixin, BaseUuidModel):
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
         max_length=50)
@@ -66,7 +57,7 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
 
     hiv_testing = models.CharField(
         max_length=3,
-        verbose_name=('Are you willing to be tested for HIV ?'),
+        verbose_name='Are you willing to be tested for HIV ?',
         choices=YES_NO,
         help_text='If no, participant is not eligible.')
 
