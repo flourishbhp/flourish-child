@@ -10,7 +10,7 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from edc_action_item.site_action_items import site_action_items
-from edc_base.utils import get_utcnow
+from edc_base.utils import age, get_utcnow
 from edc_constants.constants import NEW, OPEN
 from edc_data_manager.models import DataActionItem
 from PIL import Image
@@ -155,6 +155,11 @@ class ChildUtils:
             return appointment.previous_by_timepoint
         else:
             return previous_appt
+
+    def child_age(self, subject_identifier=None, report_datetime=None):
+        if self.caregiver_child_consent_obj(subject_identifier):
+            _age = age(caregiver_child_consent_obj.child_dob, report_datetime)
+            return _age.years + (_age.months / 12)
 
 
 child_utils = ChildUtils()
