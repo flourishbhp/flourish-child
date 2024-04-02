@@ -157,7 +157,8 @@ class ChildUtils:
             return previous_appt
 
     def child_age(self, subject_identifier=None, report_datetime=None):
-        if self.caregiver_child_consent_obj(subject_identifier):
+        caregiver_child_consent_obj = self.caregiver_child_consent_obj(subject_identifier)
+        if caregiver_child_consent_obj:
             _age = age(caregiver_child_consent_obj.child_dob, report_datetime)
             return _age.years + (_age.months / 12)
 

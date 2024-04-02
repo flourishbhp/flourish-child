@@ -86,12 +86,13 @@ class InfantHIVTestingOther(ChildCrfModelMixin, HIVTestingAndResultingMixin):
     )
 
     def save(self, *args, **kwargs):
+        super().save(args, kwargs)
+
         if not self.child_age:
             self.child_age = child_utils.child_age(
                 subject_identifier=self.subject_identifier,
                 report_datetime=self.report_datetime)
 
-        super().save(args, kwargs)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
