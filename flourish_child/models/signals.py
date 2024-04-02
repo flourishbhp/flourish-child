@@ -3,9 +3,9 @@ from datetime import datetime
 import pytz
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
-from django.forms import model_to_dict, ValidationError
+from django.forms import model_to_dict
 from edc_appointment.constants import COMPLETE_APPT
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import IND, MALE, NEG, NO, UNKNOWN, YES
@@ -36,7 +36,7 @@ from ..helper_classes import ChildFollowUpBookingHelper, ChildOnScheduleHelper
 from ..helper_classes.utils import (child_utils, notification, stamp_image,
                                     trigger_action_item)
 from ..models import AcademicPerformance, ChildOffSchedule, ChildSocioDemographic
-from ..models import ChildPreHospitalizationInline
+from ..models import ChildPreHospitalizationInline, InfantHIVTesting
 from ..models.child_clinical_measurements import ChildClinicalMeasurements
 from ..models.child_continued_consent import ChildContinuedConsent
 from ..models.young_adult_locator import YoungAdultLocator
@@ -44,6 +44,23 @@ from ..models.young_adult_locator import YoungAdultLocator
 
 class CaregiverConsentError(Exception):
     pass
+
+
+@receiver(m2m_changed, sender=InfantHIVTesting.test_visit.through)
+def infant_hiv_testing_test_visit_changed(sender, instance, action, **kwargs):
+    """ Update meta data when m2m field `test_visit` changes to add selections to
+        the relation, since there is predicate functions dependant on the field
+        selections.
+    """
+    if action in ['post_add', 'post_remove']:
+        try:
+            instance.metadata_update()
+        except AttributeError as e:
+            if 'metadata_create' not in str(e):
+                raise
+        else:
+            if django_apps.get_app_config('edc_metadata_rules').metadata_rules_enabled:
+                instance.run_metadata_rules_for_crf()
 
 
 @receiver(post_save, weak=False, sender=ChildSocioDemographic,

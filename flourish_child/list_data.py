@@ -285,7 +285,7 @@ list_data = {
     ],
     'flourish_child.childhivtestvisits': [
         ('birth', 'Birth '),
-        ('6_to_8_weeks ', '6 to 8 weeks'),
+        ('6_to_8_weeks', '6 to 8 weeks'),
         ('9_months', '9-months'),
         ('18_months', '18-months'),
         ('after_breastfeeding', 'Three months after cessation of breastfeeding'),
