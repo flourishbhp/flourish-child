@@ -22,7 +22,7 @@ class ChildVisitForm(
         self.validate_against_onschedule_datetime()
 
         caregiver_child_consent_obj = child_utils.caregiver_child_consent_obj(
-            subject_identifier=subject_identifier
+            subject_identifier=self.subject_identifier
         )
 
         child_age = age(caregiver_child_consent_obj.child_dob, get_utcnow()).years

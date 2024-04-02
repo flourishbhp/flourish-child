@@ -2,8 +2,7 @@ from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO, YES_NO_DONT_KNOW
 
-from flourish_child.choices import NOT_TESTED_REASON, \
-    POS_NEG_PENDING_UNKNOWN, PREFERRED_CLINIC
+from flourish_child.choices import POS_NEG_PENDING_UNKNOWN, PREFERRED_CLINIC
 from flourish_child.models.list_models import ChildHIVNotTestedReason, ChildHIVTestVisits
 
 

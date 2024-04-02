@@ -1,5 +1,4 @@
 from django.db import models
-from edc_base import get_utcnow
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins.hiv_testing_and_resulting_mixin import HIVTestingAndResultingMixin
