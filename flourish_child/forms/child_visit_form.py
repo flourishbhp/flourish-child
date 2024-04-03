@@ -17,8 +17,7 @@ class ChildVisitForm(
 
     def clean(self):
         super().clean()
-        self.subject_identifier = self.cleaned_data.get(
-            'appointment').subject_identifier
+        self.subject_identifier = self.cleaned_data.get('appointment').subject_identifier
         self.validate_against_onschedule_datetime()
 
         caregiver_child_consent_obj = child_utils.caregiver_child_consent_obj(
@@ -36,7 +35,7 @@ class ChildVisitForm(
                 msg=('Participant is 18 years of age, cannot edit visit until '
                      'participant has given their continued consent for participation.'))
 
-        if child_age >= 7:
+        if child_age >= 7 and child_age < 18:
             # Validate incomplete child assent form if child >= 7 years of age.
             if not any(
                     item in self.cleaned_data.get('appointment').schedule_name for item in [
