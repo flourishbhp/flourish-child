@@ -1236,7 +1236,6 @@ CHILD_TYPE = [
     ('triplet', 'Triplet')
 ]
 
-
 YES_NO_DOESNT_WORK_NA = (
     (YES, YES),
     (NO, NO),
@@ -1381,6 +1380,11 @@ YES_NO_OTHER = (
     (OTHER, 'Other, specify'),
 )
 
+YES_NO_DN_RECALL = (
+    (YES, YES),
+    (NO, NO),
+    ('do_not_recall', 'Do not recall'),
+)
 
 PERIOD_HAPPENED = (
     ('past_6_months', 'Past 6 months'),
