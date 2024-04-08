@@ -1,11 +1,11 @@
 from django.contrib import admin
-from edc_constants.constants import PENDING
-from edc_fieldsets import Insert
+from edc_fieldsets import Remove
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import ChildTBScreeningForm
+from ..helper_classes.utils import child_utils
 from ..models.child_tb_screening import ChildTBScreening
 
 
@@ -71,3 +71,18 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     filter_horizontal = ('tb_tests',)
 
+    def get_key(self, request, obj=None):
+        try:
+            visit_obj = self.visit_model.objects.get(id=request.GET.get('child_visit'))
+        except self.visit_model.DoesNotExist:
+            return None
+        else:
+            subject_identifier = visit_obj.subject_identifier
+            child_age = child_utils.child_age(subject_identifier,
+                                              visit_obj.report_datetime)
+
+            return 'not_adol' if child_age < 12 else None
+
+    conditional_fieldlists = {
+        'not_adol': Remove('fatigue_or_reduced_playfulness', ),
+    }
