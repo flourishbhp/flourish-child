@@ -5,7 +5,8 @@ from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import InfantHIVTesting18MonthsForm, InfantHIVTesting9MonthsForm, \
     InfantHIVTestingAfterBreastfeedingForm, \
-    InfantHIVTestingAge6To8WeeksForm, InfantHIVTestingBirthForm, InfantHIVTestingForm
+    InfantHIVTestingAge6To8WeeksForm, InfantHIVTestingBirthForm, InfantHIVTestingForm, \
+    InfantHIVTestingOtherForm
 from ..models import (InfantHIVTesting, InfantHIVTesting18Months,
                       InfantHIVTesting9Months, \
                       InfantHIVTestingAfterBreastfeeding, \
@@ -106,4 +107,25 @@ class InfantHIVTestingBirthAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
 
 @admin.register(InfantHIVTestingOther, site=flourish_child_admin)
 class InfantHIVTestingOtherAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
-    form = InfantHIVTestingForm
+    form = InfantHIVTestingOtherForm
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                'child_visit',
+                'report_datetime',
+                'child_tested_for_hiv',
+                'child_test_date_estimated',
+                'test_location',
+                'test_location_other',
+                'results_received',
+                'recall_result_date',
+                'received_date',
+                'result_date_estimated',
+                'hiv_test_result',
+                'child_age',
+                'additional_comments',
+            ),
+        }),
+        audit_fieldset_tuple,
+    )

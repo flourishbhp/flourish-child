@@ -3,6 +3,7 @@ from django.db import models
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins.hiv_testing_and_resulting_mixin import HIVTestingAndResultingMixin
 from .model_mixins.hiv_testing_model_mixin import HivTestingModelMixin
+from ..helper_classes.utils import child_utils
 
 
 class InfantHIVTesting(ChildCrfModelMixin, HivTestingModelMixin):
@@ -75,6 +76,22 @@ class InfantHIVTestingOther(ChildCrfModelMixin, HIVTestingAndResultingMixin):
     child_tested_for_hiv = models.DateField(
         verbose_name='Date of the HIV test',
     )
+
+    child_age = models.DecimalField(
+        verbose_name='Child age',
+        blank=True,
+        null=True,
+        decimal_places=1,
+        max_digits=10
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.child_age:
+            self.child_age = child_utils.child_age(
+                subject_identifier=self.subject_identifier,
+                report_datetime=self.child_tested_for_hiv)
+        super().save(*args, **kwargs)
+
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'HIV Infant Testing and Results – OTHER'
