@@ -89,7 +89,7 @@ class InfantHIVTestingOther(ChildCrfModelMixin, HIVTestingAndResultingMixin):
         if not self.child_age:
             self.child_age = child_utils.child_age(
                 subject_identifier=self.subject_identifier,
-                report_datetime=self.report_datetime)
+                report_datetime=self.child_tested_for_hiv)
         super().save(*args, **kwargs)
 
     class Meta(ChildCrfModelMixin.Meta):
