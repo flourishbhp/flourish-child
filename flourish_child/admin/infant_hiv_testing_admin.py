@@ -1,15 +1,21 @@
 from django.contrib import admin
 from edc_model_admin import audit_fieldset_tuple
 
-from ..admin_site import flourish_child_admin
-from ..forms import InfantHIVTestingForm
-from ..models import InfantHIVTesting
 from .model_admin_mixins import ChildCrfModelAdminMixin
+from ..admin_site import flourish_child_admin
+from ..forms import InfantHIVTesting18MonthsForm, InfantHIVTesting9MonthsForm, \
+    InfantHIVTestingAfterBreastfeedingForm, \
+    InfantHIVTestingAge6To8WeeksForm, InfantHIVTestingBirthForm, InfantHIVTestingForm, \
+    InfantHIVTestingOtherForm
+from ..models import (InfantHIVTesting, InfantHIVTesting18Months,
+                      InfantHIVTesting9Months, \
+                      InfantHIVTestingAfterBreastfeeding, \
+                      InfantHIVTestingAge6To8Weeks, InfantHIVTestingBirth,
+                      InfantHIVTestingOther)
 
 
 @admin.register(InfantHIVTesting, site=flourish_child_admin)
 class InfantHIVTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = InfantHIVTestingForm
 
     fieldsets = (
@@ -18,16 +24,12 @@ class InfantHIVTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_visit',
                 'report_datetime',
                 'child_tested_for_hiv',
-                'child_test_date',
-                'child_test_date_estimated',
-                'results_received',
-                'recall_result_date',
-                'received_date',
-                'result_date_estimated',
-                'hiv_test_result',
+                'test_visit',
+                'test_visit_other',
                 'reason_child_not_tested',
                 'reason_child_not_tested_other',
-                'preferred_clinic_for_testing',
+                'pref_location',
+                'pref_location_other',
                 'additional_comments',
             ),
         }),
@@ -35,14 +37,95 @@ class InfantHIVTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     )
 
     radio_fields = {
+        'pref_location': admin.VERTICAL,
         'child_tested_for_hiv': admin.VERTICAL,
+    }
+
+    search_fields = ('subject_identifier',)
+
+    filter_horizontal = ('reason_child_not_tested', 'test_visit')
+
+
+class InfantHIVTestingAdminMixin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+    fieldsets = (
+        (None, {
+            "fields": (
+                'child_visit',
+                'report_datetime',
+                'child_tested_for_hiv',
+                'child_test_date_estimated',
+                'test_location',
+                'test_location_other',
+                'results_received',
+                'recall_result_date',
+                'received_date',
+                'result_date_estimated',
+                'hiv_test_result',
+                'additional_comments',
+            ),
+        }),
+        audit_fieldset_tuple,
+    )
+
+    radio_fields = {
         'child_test_date_estimated': admin.VERTICAL,
+        'test_location': admin.VERTICAL,
         'results_received': admin.VERTICAL,
         'recall_result_date': admin.VERTICAL,
         'result_date_estimated': admin.VERTICAL,
         'hiv_test_result': admin.VERTICAL,
-        'reason_child_not_tested': admin.VERTICAL,
-        'preferred_clinic_for_testing': admin.VERTICAL,
     }
 
     search_fields = ('subject_identifier',)
+
+
+@admin.register(InfantHIVTestingAfterBreastfeeding, site=flourish_child_admin)
+class InfantHIVTestingAfterBreastfeedingAdmin(InfantHIVTestingAdminMixin,
+                                              admin.ModelAdmin):
+    form = InfantHIVTestingAfterBreastfeedingForm
+
+
+@admin.register(InfantHIVTestingAge6To8Weeks, site=flourish_child_admin)
+class InfantHIVTestingAge6To8WeeksAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
+    form = InfantHIVTestingAge6To8WeeksForm
+
+
+@admin.register(InfantHIVTesting9Months, site=flourish_child_admin)
+class InfantHIVTesting9MonthsAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
+    form = InfantHIVTesting9MonthsForm
+
+
+@admin.register(InfantHIVTesting18Months, site=flourish_child_admin)
+class InfantHIVTesting18MonthsAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
+    form = InfantHIVTesting18MonthsForm
+
+
+@admin.register(InfantHIVTestingBirth, site=flourish_child_admin)
+class InfantHIVTestingBirthAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
+    form = InfantHIVTestingBirthForm
+
+
+@admin.register(InfantHIVTestingOther, site=flourish_child_admin)
+class InfantHIVTestingOtherAdmin(InfantHIVTestingAdminMixin, admin.ModelAdmin):
+    form = InfantHIVTestingOtherForm
+
+    fieldsets = (
+        (None, {
+            "fields": (
+                'child_visit',
+                'report_datetime',
+                'child_tested_for_hiv',
+                'child_test_date_estimated',
+                'test_location',
+                'test_location_other',
+                'results_received',
+                'recall_result_date',
+                'received_date',
+                'result_date_estimated',
+                'hiv_test_result',
+                'child_age',
+                'additional_comments',
+            ),
+        }),
+        audit_fieldset_tuple,
+    )

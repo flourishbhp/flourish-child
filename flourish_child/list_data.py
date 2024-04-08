@@ -282,7 +282,30 @@ list_data = {
         ('skin_test', 'Skin test (TST/Mantoux)'),
         ('blood_test', 'Blood test (quantiferon)'),
         (OTHER, 'other')
-    ]
+    ],
+    'flourish_child.childhivtestvisits': [
+        ('birth', 'Birth '),
+        ('6_to_8_weeks', '6 to 8 weeks'),
+        ('9_months', '9-months'),
+        ('18_months', '18-months'),
+        ('after_breastfeeding', 'Three months after cessation of breastfeeding'),
+        (OTHER, 'Other, specify')
+    ],
+    'flourish_child.childhivnottestedreason': [
+        ('missed_visit', 'Missed clinic visit due to time constraints'),
+        ('no_transport', 'Did not have transport fare to clinic visit '),
+        ('not_offered', 'When at the clinic, the healthcare worker did not offer HIV '
+                        'testing'),
+        ('formula_fed', 'I did not think further testing was needed because I formula '
+                        'fed from birth and my child had a negative test at birth'),
+        ('neg_at_birth', 'I did not think further testing was needed because my child '
+                         'had a negative test at birth and they have been healthy'),
+        ('due_18_months', 'I did not think my child was due for further testing until 18 '
+                          'months'),
+        ('no_test_kits', 'Test kits out of stock '),
+        ('unknown', 'Unknown'),
+        (OTHER, 'Other, specify')
+    ],
 }
 
 preload_data = PreloadData(

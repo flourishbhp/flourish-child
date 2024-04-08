@@ -1164,6 +1164,8 @@ PREFERRED_CLINIC = (
     ('local', 'Local Clinic'),
     ('flourish', 'FLOURISH Clinic'),
     ('no_testing', 'I do not wish to have my infant tested at this time'),
+    (NOT_APPLICABLE, 'Not Applicable, because under Botswana Guidelines, not currently '
+                     'due for testing '),
     (OTHER, 'Other'),
 )
 
