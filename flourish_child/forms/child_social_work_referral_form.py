@@ -1,5 +1,6 @@
 from django import forms
-from flourish_child_validations.form_validators.child_social_work_referral_form_validator import ChildSocialWorkReferralValidator
+from flourish_child_validations.form_validators.child_social_work_referral_form_validator import (
+    ChildSocialWorkReferralValidator)
 
 from .child_form_mixin import ChildModelFormMixin
 from ..models import ChildSocialWorkReferral
@@ -25,6 +26,8 @@ class ChildSocialWorkReferralForm(ChildModelFormMixin, forms.ModelForm):
 
         super().__init__(*args, **kwargs)
 
+        self.fields['referral_for'].disabled = True
+
         child_subject_identifier = self.initial.get('subject_identifier', None)
 
         if child_subject_identifier:
@@ -37,7 +40,8 @@ class ChildSocialWorkReferralForm(ChildModelFormMixin, forms.ModelForm):
                 if antenatal_enrol_obj.current_hiv_status == 'POS':
                     self.initial['child_exposure_status'] = 'heu'
             elif caregiver_child_consent_obj.child_dataset:
-                if caregiver_child_consent_obj.child_dataset.infant_hiv_exposed == 'Exposed' or caregiver_child_consent_obj.child_dataset.infant_hiv_exposed == 'exposed':
+                if (caregiver_child_consent_obj.child_dataset.infant_hiv_exposed == 'Exposed'
+                        or caregiver_child_consent_obj.child_dataset.infant_hiv_exposed == 'exposed'):
                     self.initial['child_exposure_status'] = 'heu'
             else:
                 self.initial['child_exposure_status'] = 'huu'

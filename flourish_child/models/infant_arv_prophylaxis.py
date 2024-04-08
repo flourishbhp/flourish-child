@@ -1,22 +1,29 @@
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
-
+from edc_base import get_utcnow
 from edc_base.model_fields.custom_fields import OtherCharField
 from edc_base.model_mixins import BaseUuidModel
-from edc_constants.choices import YES_NO
+from edc_base.model_validators import date_not_future
 from edc_visit_tracking.model_mixins import CrfInlineModelMixin
 
-from ..choices import (NO_ART_REASON, ART_PROPH_STATUS, REASON_MODIFIED,
-                       CHILD_ARV_PROPH)
 from .child_crf_model_mixin import ChildCrfModelMixin
+from ..choices import (ART_PROPH_STATUS, CHILD_ARV_PROPH, NO_ART_REASON, REASON_MODIFIED,
+                       YES_NO_DN_RECALL)
+
+
+def date_not_today(value):
+    if value == get_utcnow().date():
+        raise ValidationError(
+            u'Date cannot be today. You entered {}.'.format(value))
 
 
 class InfantArvProphylaxis(ChildCrfModelMixin):
     """  """
 
     took_art_proph = models.CharField(
-        max_length=3,
-        choices=YES_NO,
+        max_length=20,
+        choices=YES_NO_DN_RECALL,
         verbose_name=('Did the baby take prophylactic antiretroviral '
                       'medication for any period since the last '
                       'attended scheduled visit?'))
@@ -48,18 +55,17 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
         blank=True,
         help_text='(range 29 - 90)')
 
-    reason_incomplete = models.CharField(
+    reason_incomplete = models.TextField(
         verbose_name=('Reason participant did not finish within '
                       'stipulated prophylaxis time'),
-        max_length=100,
         null=True,
         blank=True)
 
     arvs_modified = models.CharField(
         verbose_name=('Was there any modification occurred since '
                       'the baby was started on ARV prophylaxis?'),
-        choices=YES_NO,
-        max_length=3,
+        choices=YES_NO_DN_RECALL,
+        max_length=20,
         null=True,
         blank=True)
 
@@ -85,15 +91,17 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
 
     missed_dose = models.CharField(
         verbose_name='Has the baby missed any dose since last scheduled visit?',
-        choices=YES_NO,
-        max_length=3,
+        choices=YES_NO_DN_RECALL,
+        max_length=20,
         blank=True,
         null=True)
 
     missed_dose_count = models.PositiveIntegerField(
         verbose_name='How many doses missed?',
+        null=True,
+        blank=True,
         default=0)
-    
+
     reason_missed = models.TextField(
         verbose_name='Reason for missing doses',
         null=True,
@@ -106,7 +114,6 @@ class InfantArvProphylaxis(ChildCrfModelMixin):
 
 
 class ChildArvProphDates(CrfInlineModelMixin, BaseUuidModel):
-
     infant_arv_proph = models.ForeignKey(
         InfantArvProphylaxis, on_delete=models.PROTECT)
 
@@ -115,7 +122,10 @@ class ChildArvProphDates(CrfInlineModelMixin, BaseUuidModel):
         choices=CHILD_ARV_PROPH,
         max_length=15)
 
-    arv_start_date = models.DateField(verbose_name='Start date')
+    arv_start_date = models.DateField(
+        verbose_name='Start date',
+        validators=[date_not_future, date_not_today]
+    )
 
     arv_stop_date = models.DateField(
         verbose_name='Stop date',

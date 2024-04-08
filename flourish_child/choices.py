@@ -1236,7 +1236,6 @@ CHILD_TYPE = [
     ('triplet', 'Triplet')
 ]
 
-
 YES_NO_DOESNT_WORK_NA = (
     (YES, YES),
     (NO, NO),
@@ -1379,4 +1378,40 @@ YES_NO_OTHER = (
     (YES, _(YES)),
     (NO, _(NO)),
     (OTHER, 'Other, specify'),
+)
+
+YES_NO_DN_RECALL = (
+    (YES, YES),
+    (NO, NO),
+    ('do_not_recall', 'Do not recall'),
+)
+
+PERIOD_HAPPENED = (
+    ('past_6_months', 'Past 6 months'),
+    ('more_than_6_months', 'Longer than 6 months ago')
+)
+
+HAPPENED = (
+    ('never_happened', 'Never Happened'),
+    ('ever_happened', 'Ever Happened'),
+)
+
+PERIOD_HAPPENED_DONT_KNOW = (
+    ('past_6_months', 'Past 6 months'),
+    ('more_than_6_months', 'Longer than 6 months ago'),
+    (DONT_KNOW, "Don't know")
+)
+
+HAPPENED_DONT_KNOW = (
+    ('never_happened', 'Never Happened'),
+    ('ever_happened', 'Ever Happened'),
+    (DONT_KNOW, "Don't know")
+)
+
+
+HIV_PERSPECTIVE = (
+    ('no_one_thinks_that', 'No one thinks that'),
+    ('a_few_people_think_that', 'A few people think that'),
+    ('most_people_think_that', 'Most people think that'),
+    (NOT_APPLICABLE, 'Not Applicable')
 )

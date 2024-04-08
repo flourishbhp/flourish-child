@@ -24,16 +24,23 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
         required=False)
 
     def __init__(self, *args, **kwargs):
+
         initial = kwargs.pop('initial', {})
         instance = kwargs.get('instance')
         previous_instance = getattr(self, 'previous_instance', None)
         prev_feeding_completed = getattr(
             previous_instance, 'formula_feedng_completd', None)
+        dt_formula_introduced = getattr(
+            previous_instance, 'dt_formula_introduced', None)
+
         if not instance and previous_instance:
             initial['last_att_sche_visit'] = getattr(
                 previous_instance, 'report_datetime').date()
+
             for key in self.base_fields.keys():
+
                 if key == 'dt_formula_introduced' and prev_feeding_completed == YES:
+                    initial[key] = dt_formula_introduced
                     continue
                 if key in ['solid_foods', 'solid_foods_past_week']:
                     key_manager = getattr(previous_instance, key)
@@ -65,6 +72,7 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                 attrs={'readonly': 'readonly'})
             self.fields['bf_start_dt'].widget = forms.DateInput(
                 attrs={'readonly': 'readonly'})
+
         if (initial.get('dt_weaned', None) and
                 initial.get('child_weaned', None) == YES):
             self.fields['child_weaned'].widget = forms.TextInput(
