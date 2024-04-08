@@ -1,4 +1,19 @@
-from edc_base.model_mixins import BaseUuidModel, ListModelMixin
+
+from django.db import models
+from edc_base.model_mixins import BaseUuidModel
+from edc_base.model_mixins import ListModelMixin as BaseListModelMixin
+
+
+class ListModelMixin(BaseListModelMixin):
+    name = models.CharField(
+        verbose_name='Name',
+        max_length=250,
+        db_index=True,
+        help_text='(suggest 40 characters max.)',
+    )
+
+    class Meta:
+        abstract = True
 
 
 class ChronicConditions(ListModelMixin, BaseUuidModel):
