@@ -61,6 +61,13 @@ class InfantHIVTestingBirthForm(SubjectModelFormMixin, forms.ModelForm):
 class InfantHIVTestingOtherForm(SubjectModelFormMixin, forms.ModelForm):
     form_validator_cls = InfantHIVTestingAdminFormValidatorRepeat
 
+    child_age = forms.DecimalField(
+        label='Child age',
+        max_digits=10,
+        required=False,
+        widget=forms.NumberInput(attrs={'readonly': True}),
+        decimal_places=1, )
+
     class Meta:
         model = InfantHIVTestingOther
         fields = '__all__'
