@@ -13,18 +13,6 @@ class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAd
 
     instructions = ''
 
-    additional_instructions = (
-        '***INSTRUCTIONS CLINIC STAFF: The questions about food security are part of '
-        'our data collection efforts aimed at understanding various aspects of this '
-        'critical issue. Your responses will help us gather valuable insights into the '
-        'challenges people face regarding access to nutritious food and the factors '
-        'influencing food security in different communities.\n\nIt\'s important to note '
-        'that your responses will be used solely for research and study purposes.We are '
-        'not providing direct assistance or support based on the information you '
-        'provide in these questions.Instead, the data collected will be analyzed to '
-        'identify patterns, trends, and areas where interventions may be needed to '
-        'improve food security outcomes.')
-
     fieldsets = (
         (None, {
             'fields': [
@@ -51,3 +39,20 @@ class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAd
                     "how_often": admin.VERTICAL,
                     "eat_less": admin.VERTICAL,
                     "didnt_eat": admin.VERTICAL, }
+
+    def add_view(self, request, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+
+        extra_context['special_instructions'] = (
+            '***INSTRUCTIONS CLINIC STAFF: The questions about food security are part of '
+            'our data collection efforts aimed at understanding various aspects of this '
+            'critical issue. Your responses will help us gather valuable insights into '
+            'the challenges people face regarding access to nutritious food and the '
+            'factors influencing food security in different communities.\n\nIt\'s '
+            'important to note that your responses will be used solely for research and '
+            'study purposes.We are not providing direct assistance or support based on '
+            'the information you provide in these questions.Instead, the data collected '
+            'will be analyzed to identify patterns, trends, and areas where '
+            'interventions may be needed to improve food security outcomes.')
+
+        return super().add_view(request, form_url, extra_context)
