@@ -99,3 +99,4 @@ from .tb_screen_adol_form import TbVisitScreeningAdolescentForm
 from .young_adult_locator_form import YoungAdultLocatorForm
 from .child_social_work_referral_form import ChildSocialWorkReferralForm
 from .child_safi_stigma_form import ChildSafiStigmaForm
+from .cage_aid_crf_form import ChildCageAidForm
