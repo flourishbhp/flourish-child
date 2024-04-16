@@ -65,7 +65,8 @@ class ChildUtils:
 
     def caregiver_subject_consent_obj(self, subject_identifier=None):
         if len(subject_identifier.split('-')) == 4:
-            subject_identifier = self.caregiver_subject_identifier(subject_identifier)
+            subject_identifier = self.caregiver_subject_identifier(
+                subject_identifier)
         try:
             return self.caregiver_consent_cls.objects.filter(
                 subject_identifier=subject_identifier).latest('consent_datetime')
@@ -157,7 +158,8 @@ class ChildUtils:
             return previous_appt
 
     def child_age(self, subject_identifier=None, report_datetime=None):
-        caregiver_child_consent_obj = self.caregiver_child_consent_obj(subject_identifier)
+        caregiver_child_consent_obj = self.caregiver_child_consent_obj(
+            subject_identifier)
         if caregiver_child_consent_obj:
             _age = age(caregiver_child_consent_obj.child_dob, report_datetime)
             return _age.years + (_age.months / 12)
