@@ -1354,7 +1354,8 @@ TB_TEST_CHOICES = (
     ('urine_test', 'Urine test (LAM)'),
     ('skin_test', 'Skin test (TST/Mantoux)'),
     ('blood_test', 'Blood test (quantiferon)'),
-    (OTHER, 'other')
+    (OTHER, 'Other'),
+    ('None', 'None')
 )
 
 TEST_RESULTS_CHOICES = (
@@ -1416,4 +1417,14 @@ HIV_PERSPECTIVE = (
     ('a_few_people_think_that', 'A few people think that'),
     ('most_people_think_that', 'Most people think that'),
     (NOT_APPLICABLE, 'Not Applicable')
+)
+
+TB_REFERRAL_REASON_CHOICES = (
+    ('cough', 'Cough'),
+    ('fever', 'Fever'),
+    ('night_sweats', 'Night sweats'),
+    ('weight_loss', 'Weight loss'),
+    ('fatigue', 'Fatigue'),
+    ('household_Contact_with_TB', 'Household Contact with TB'),
+    ('other', 'Other'),
 )
