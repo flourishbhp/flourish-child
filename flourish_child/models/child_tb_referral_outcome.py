@@ -2,7 +2,8 @@ from django.db import models
 from edc_constants.choices import YES_NO
 from flourish_caregiver.models.model_mixins.flourish_tb_referral_outcome_mixin import \
     FlourishTbReferralOutcomeMixin
-from flourish_child.choices import TEST_RESULTS_CHOICES
+from flourish_child.choices import TB_TREATMENT_CHOICES, TEST_RESULTS_CHOICES, \
+    YES_NO_OTHER
 from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
 from flourish_child.models.list_models import ChildTBTests
 from flourish_caregiver.choices import NO_EVALUATION_REASONS

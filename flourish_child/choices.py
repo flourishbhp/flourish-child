@@ -1354,7 +1354,8 @@ TB_TEST_CHOICES = (
     ('urine_test', 'Urine test (LAM)'),
     ('skin_test', 'Skin test (TST/Mantoux)'),
     ('blood_test', 'Blood test (quantiferon)'),
-    (OTHER, 'other')
+    (OTHER, 'Other'),
+    ('None', 'None')
 )
 
 TEST_RESULTS_CHOICES = (
