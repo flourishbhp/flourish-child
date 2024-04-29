@@ -6,13 +6,12 @@ from django.db import models
 
 
 class ChildTBReferral(ChildCrfModelMixin, TBReferralMixin):
-    class ChildTBReferral(ChildCrfModelMixin, TBReferralMixin):
-        reason_for_referral = models.CharField(
-            verbose_name='Reason for referral:',
-            choices=TB_REFERRAL_REASON_CHOICES,
-            max_length=50,
-            blank=True,
-            null=True)
+    reason_for_referral = models.CharField(
+        verbose_name='Reason for referral:',
+        choices=TB_REFERRAL_REASON_CHOICES,
+        max_length=50,
+        blank=True,
+        null=True)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
