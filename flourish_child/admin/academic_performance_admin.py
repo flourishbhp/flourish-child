@@ -18,6 +18,20 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     instructions = ''
 
+    add_instructions = (
+        '<p><b>***INSTRUCTIONS CLINIC STAFF: These questions are '
+        'designed only to gather data about you or your child’s '
+        'academic background and achievements for research '
+        'purposes. They are not intended to evaluate or judge you '
+        'or your child’s performance in any way.<br/>Your '
+        'responses to these questions will help us better '
+        'understand the factors that contribute to academic '
+        'success and identify potential areas for improvement in '
+        'educational settings at government or private school '
+        'levels. All information provided will be kept strictly'
+        ' confidential and used only for research purposes in '
+        'the FLOURISH study.</b></p>')
+
     fieldsets = (
         (None, {
             'fields': (
@@ -188,20 +202,6 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             })
 
             request.GET = g
-
-        extra_context['special_instructions'] = (
-            '***INSTRUCTIONS CLINIC STAFF: These questions are '
-            'designed only to gather data about you or your child’s '
-            'academic background and achievements for research '
-            'purposes. They are not intended to evaluate or judge you '
-            'or your child’s performance in any way.\n\n Your '
-            'responses to these questions will help us better '
-            'understand the factors that contribute to academic '
-            'success and identify potential areas for improvement in '
-            'educational settings at government or private school '
-            'levels. All information provided will be kept strictly'
-            ' confidential and used only for research purposes in '
-            'the FLOURISH study.')
 
         return super().add_view(request, form_url, extra_context)
 
