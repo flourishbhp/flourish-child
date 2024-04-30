@@ -21,15 +21,17 @@ class ExportActionMixin(AdminExportHelper):
     def update_variables(self, data={}):
         """ Update study identifiers to desired variable name(s).
         """
+        new_data_dict = {}
         replace_idx = {'subject_identifier': 'childpid',
                        'study_maternal_identifier': 'old_matpid',
                        'study_child_identifier': 'old_childpid'}
         for old_idx, new_idx in replace_idx.items():
             try:
-                data[new_idx] = data.pop(old_idx)
+                new_data_dict[new_idx] = data.pop(old_idx)
             except KeyError:
                 continue
-        return data
+        new_data_dict.update(data)
+        return new_data_dict
 
     def export_as_csv(self, request, queryset):
         records = []
@@ -50,13 +52,19 @@ class ExportActionMixin(AdminExportHelper):
                     screening_identifier=screening_identifier)
             child_exposure_status = self.child_hiv_exposure(
                     study_maternal_identifier, study_maternal_identifier, caregiver_sid)
+            visit_cohort = None
     
             # Add subject identifier and visit code
             if hasattr(obj, 'child_visit'): 
+                data_copy = data.copy()
+                data.clear()
+                visit_cohort = self.get_cohort_by_date(
+                    subject_identifier, obj.child_visit.report_datetime)
                 data.update(childpid=subject_identifier,
                             matpid=caregiver_sid,
                             old_matpid=study_maternal_identifier,
-                            visit_code=obj.child_visit.visit_code)
+                            visit_code=obj.child_visit.visit_code,
+                            **data_copy)
 
             # Update variable names for study identifiers
             data = self.update_variables(data)
@@ -92,7 +100,9 @@ class ExportActionMixin(AdminExportHelper):
             # Update current and enrollment cohort
             enrol_cohort, current_cohort = self.get_cohort_details(subject_identifier)
             data.update(enrol_cohort=enrol_cohort,
-                        current_cohort=current_cohort) 
+                        current_cohort=current_cohort)
+            if visit_cohort:
+                data.update(visit_cohort=visit_cohort)
 
             # Exclude identifying values
             data = self.remove_exclude_fields(data)
@@ -243,13 +253,16 @@ class ExportActionMixin(AdminExportHelper):
                 'slug', 'confirm_identity', 'site', 'subject_consent_id', '_django_version',
                 'child_visit_id']
 
+    @property
+    def cohort_model_cls(self):
+        return django_apps.get_model('flourish_caregiver.cohort')
+
     def get_cohort_details(self, subject_identifier):
-        cohort_model_cls = django_apps.get_model('flourish_caregiver.cohort')
-        enrol_cohort = cohort_model_cls.objects.filter(
+        enrol_cohort = self.cohort_model_cls.objects.filter(
             subject_identifier=subject_identifier,
             enrollment_cohort=True).order_by('-assign_datetime').first()
         
-        current_cohort = cohort_model_cls.objects.filter(
+        current_cohort = self.cohort_model_cls.objects.filter(
             subject_identifier=subject_identifier,
             current_cohort=True).order_by('-assign_datetime').first()
 
@@ -257,3 +270,19 @@ class ExportActionMixin(AdminExportHelper):
         current_name = getattr(current_cohort, 'name', None)
 
         return enrol_name, current_name
+
+    def get_cohort_by_date(self, subject_identifier, report_datetime):
+        """ Query cohort instances to get cohort details for a particular date.
+            i.e. cohort participant was enrolled on at a specificied date.
+            @param subject_identifier: child subject_identifier
+            @param report_datetime: datetime to query for
+            @return: cohort name
+        """
+        try:
+            child_cohort = self.cohort_model_cls.objects.filter(
+                subject_identifier=subject_identifier,
+                assign_datetime__date__lte=report_datetime.date()).latest('assign_datetime')
+        except self.cohort_model_cls.DoesNotExist:
+            return ''
+        else:
+            return child_cohort.name
