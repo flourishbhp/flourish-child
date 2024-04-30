@@ -75,9 +75,7 @@ class InfantArvExposure(ChildCrfModelMixin):
         verbose_name=('Is NVP being prescribed for the infant to go '
                       'home on (continued dosing)'),
         choices=YES_NO_UNKNOWN,
-        max_length=10,
-        null=True,
-        blank=True)
+        max_length=10,)
 
     additional_arvs = models.CharField(
          verbose_name=('Did the infant receive any additional ARVs within '
@@ -102,5 +100,5 @@ class InfantArvExposure(ChildCrfModelMixin):
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = "Infant ARV Exposure"
-        verbose_name_plural = "Infant ARV Exposure"
+        verbose_name = "Infant ARV Exposure at Delivery"
+        verbose_name_plural = "Infant ARV Exposure at Deliveries"
