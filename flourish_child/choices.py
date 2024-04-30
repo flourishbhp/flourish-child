@@ -1398,6 +1398,12 @@ HAPPENED = (
     ('never_happened', 'Never Happened'),
     ('ever_happened', 'Ever Happened'),
 )
+HAPPENED_APP = (
+    ('never_happened', 'Never Happened'),
+    ('ever_happened', 'Ever Happened'),
+    (NOT_APPLICABLE, 'Not Applicable')
+)
+
 
 PERIOD_HAPPENED_DONT_KNOW = (
     ('past_6_months', 'Past 6 months'),
