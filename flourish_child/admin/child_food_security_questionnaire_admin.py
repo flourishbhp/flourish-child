@@ -11,9 +11,7 @@ from ..models import ChildFoodSecurityQuestionnaire
 class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = ChildFoodSecurityQuestionnaireForm
 
-    instructions = None
-
-    add_instructions = (
+    instructions = (
         '<p><b>***INSTRUCTIONS CLINIC STAFF: The questions about food security are part '
         'of our data collection efforts aimed at understanding various aspects of this '
         'critical issue. Your responses will help us gather valuable insights into '

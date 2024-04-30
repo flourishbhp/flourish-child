@@ -16,9 +16,7 @@ from ..models import AcademicPerformance
 class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = AcademicPerformanceForm
 
-    instructions = ''
-
-    add_instructions = (
+    instructions = (
         '<p><b>***INSTRUCTIONS CLINIC STAFF: These questions are '
         'designed only to gather data about you or your child’s '
         'academic background and achievements for research '
