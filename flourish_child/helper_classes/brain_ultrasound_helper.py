@@ -138,4 +138,4 @@ class BrainUltrasoundHelper:
         child_age = child_utils.child_age(
             self.child_subject_identifier, datetime.today().date())
 
-        return not self.is_onschedule and antenatal_enrollment_obj and 0.4 <= child_age <= 0.5
+        return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
