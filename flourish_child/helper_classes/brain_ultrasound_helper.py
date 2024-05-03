@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import logging
 
@@ -122,3 +123,11 @@ class BrainUltrasoundHelper:
             except json.JSONDecodeError:
                 logger.error('Invalid JSON response: {}'.format(results.text))
         return False
+
+    def show_brain_ultrasound_button(self):
+        antenatal_enrollment_obj = self.antenatal_enrollment_cls.objects.filter(
+            child_subject_identifier=self.child_subject_identifier).exists()
+        child_age = child_utils.child_age(
+            self.child_subject_identifier, datetime.today().date())
+
+        return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
