@@ -1,6 +1,6 @@
 from django.db import models
 from .child_crf_model_mixin import ChildCrfModelMixin
-from ..choices import (PERIOD_HAPPENED, HAPPENED,
+from ..choices import (PERIOD_HAPPENED, HAPPENED, HAPPENED_APP,
                        PERIOD_HAPPENED_DONT_KNOW, HAPPENED_DONT_KNOW)
 
 
@@ -122,7 +122,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     lose_fin_support = models.CharField(
         verbose_name='Lose Financial Support/Work',
         max_length=20,
-        choices=HAPPENED
+        choices=HAPPENED_APP
     )
 
     lose_fin_support_period = models.CharField(
@@ -136,7 +136,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     lose_social_support = models.CharField(
         verbose_name='Lose Social Support',
         max_length=20,
-        choices=HAPPENED
+        choices=HAPPENED_APP
     )
 
     lose_social_support_period = models.CharField(
@@ -150,7 +150,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     stressed_or_anxious = models.CharField(
         verbose_name='Stressed or anxious',
         max_length=20,
-        choices=HAPPENED,
+        choices=HAPPENED_APP,
     )
 
     stressed_or_anxious_period = models.CharField(
@@ -164,7 +164,7 @@ class ChildSafiStigma(ChildCrfModelMixin):
     depressed_or_sad = models.CharField(
         verbose_name='Depressed, feeling down, saddened ',
         max_length=20,
-        choices=HAPPENED,
+        choices=HAPPENED_APP,
     )
 
     depressed_or_sad_period = models.CharField(
