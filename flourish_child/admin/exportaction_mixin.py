@@ -53,9 +53,9 @@ class ExportActionMixin(AdminExportHelper):
             child_exposure_status = self.child_hiv_exposure(
                     study_maternal_identifier, study_maternal_identifier, caregiver_sid)
             visit_cohort = None
-    
+
             # Add subject identifier and visit code
-            if hasattr(obj, 'child_visit'): 
+            if hasattr(obj, 'child_visit'):
                 data_copy = data.copy()
                 data.clear()
                 visit_cohort = self.get_cohort_by_date(
@@ -261,7 +261,7 @@ class ExportActionMixin(AdminExportHelper):
         enrol_cohort = self.cohort_model_cls.objects.filter(
             subject_identifier=subject_identifier,
             enrollment_cohort=True).order_by('-assign_datetime').first()
-        
+
         current_cohort = self.cohort_model_cls.objects.filter(
             subject_identifier=subject_identifier,
             current_cohort=True).order_by('-assign_datetime').first()
