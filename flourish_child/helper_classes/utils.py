@@ -26,6 +26,7 @@ class ChildUtils:
     child_assent_model = 'flourish_child.childassent'
     caregiver_consent_model = 'flourish_caregiver.subjectconsent'
     caregiver_child_consent_model = 'flourish_caregiver.caregiverchildconsent'
+    participant_note_model = 'flourish_calendar.participantnote'
 
     @property
     def child_assent_model_cls(self):
@@ -62,6 +63,10 @@ class ChildUtils:
     @property
     def caregiver_child_consent_cls(self):
         return django_apps.get_model(self.caregiver_child_consent_model)
+
+    @property
+    def participant_note_model_cls(self):
+        return django_apps.get_model(self.participant_note_model)
 
     def caregiver_subject_consent_obj(self, subject_identifier=None):
         if len(subject_identifier.split('-')) == 4:
@@ -163,6 +168,12 @@ class ChildUtils:
         if caregiver_child_consent_obj:
             _age = age(caregiver_child_consent_obj.child_dob, report_datetime)
             return _age.years + (_age.months / 12)
+
+    def get_child_fu_schedule(self, subject_identifier):
+        latest_scheduled = self.participant_note_model_cls.objects.filter(
+            subject_identifier=subject_identifier,
+            title='Follow Up Schedule').order_by('date').last()
+        return latest_scheduled
 
 
 child_utils = ChildUtils()
