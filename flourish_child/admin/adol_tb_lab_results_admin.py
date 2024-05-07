@@ -22,7 +22,7 @@ class TbLabResultAdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'quantiferon_result',
                 'quantiferon_date']}
          ), audit_fieldset_tuple)
-    
+
     radio_fields = {
         'quantiferon_result': admin.VERTICAL
     }

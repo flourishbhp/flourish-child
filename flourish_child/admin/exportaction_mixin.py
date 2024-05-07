@@ -81,7 +81,7 @@ class ExportActionMixin(AdminExportHelper):
                 if is_tb_adol_model:
                     data.update(infant_sex=infant_sex)
                 else:
-                    data.update(infant_sex=infant_sex) 
+                    data.update(infant_sex=infant_sex)
 
             for field in self.get_model_fields:
                 field_name = field.name
@@ -96,7 +96,7 @@ class ExportActionMixin(AdminExportHelper):
                     continue
                 if isinstance(field, ManyToOneRel):
                     data.update(self.inline_data_dict(obj, field))
-                    continue  
+                    continue
             # Update current and enrollment cohort
             enrol_cohort, current_cohort = self.get_cohort_details(subject_identifier)
             data.update(enrol_cohort=enrol_cohort,

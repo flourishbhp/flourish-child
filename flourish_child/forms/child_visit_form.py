@@ -12,7 +12,7 @@ from ..models import ChildVisit
 
 
 class ChildVisitForm(
-    SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
+        SiteModelFormMixin, FormValidatorMixin, forms.ModelForm):
     form_validator_cls = ChildVisitFormValidator
 
     def clean(self):
@@ -82,9 +82,9 @@ class ChildVisitForm(
             onschedule_datetime = onschedule_obj.onschedule_datetime
             if report_datetime < onschedule_datetime:
                 msg = {'report_datetime':
-                           'Report datetime cannot be before Onschedule datetime.'
-                           f'Got Report datetime: {report_datetime}, and Onschedule '
-                           f'datetime: {onschedule_datetime}'}
+                       'Report datetime cannot be before Onschedule datetime.'
+                       f'Got Report datetime: {report_datetime}, and Onschedule '
+                       f'datetime: {onschedule_datetime}'}
                 raise ValidationError(msg)
 
     class Meta:

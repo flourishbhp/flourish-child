@@ -9,11 +9,11 @@ class TbLabResultsAdol(ChildCrfModelMixin):
     quantiferon_result = models.CharField(
         verbose_name='Quentiferon test results',
         choices=POS_NEG_IND_INVALID, max_length=8)
-    
+
     quantiferon_date = models.DateField(
         verbose_name='Quentiferon test date'
     )
-    
+
     class Meta:
         app_label = 'flourish_child'
         verbose_name = 'Quantiferon Result'

@@ -1,4 +1,3 @@
-# from flourish_child_validations.form_validators import Brief2ParentFormValidator
 from flourish_child_validations.form_validators.child_cbl_form_validators import \
     ChildCBCLSection4FormValidator
 from .child_form_mixin import ChildModelFormMixin
@@ -6,8 +5,6 @@ from ..models import ChildCBCLSection1, ChildCBCLSection2, ChildCBCLSection3, Ch
 
 
 class ChildCBCLSection1Form(ChildModelFormMixin):
-
-#     form_validator_cls = Brief2ParentFormValidator
 
     class Meta:
         model = ChildCBCLSection1

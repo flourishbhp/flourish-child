@@ -2,7 +2,7 @@ from django.db import models
 
 from ..choices import (YES_NO_UNK_PNTA, VISIT_NUMBER, YES_NO_DN_PNTA,
                        TB_SYMPTOM, TB_DIAGONISTIC_TYPE, YES_NO_PENDING_UNK)
-    
+
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .list_models import TbRoutineScreenAdolMedium
 from edc_base.model_fields import OtherCharField
@@ -83,7 +83,7 @@ class TbHealthVisitAdol(BaseUuidModel):
         null=True,
         blank=True,
         choices=YES_NO_UNK_PNTA)
-    
+
     diagnostic_studies = models.CharField(
         verbose_name='What diagnostic studies were performed?',
         choices=TB_DIAGONISTIC_TYPE,
@@ -91,11 +91,11 @@ class TbHealthVisitAdol(BaseUuidModel):
         null=True,
         blank=True,
     )
-    
+
     diagnostic_studies_other = OtherCharField(
         verbose_name='other, specify'
     )
-    
+
     tb_diagnostic = models.CharField(
         verbose_name='Where any of the TB diagnostic studies positive?',
         max_length=20,
@@ -103,7 +103,7 @@ class TbHealthVisitAdol(BaseUuidModel):
         null=True,
         blank=True,
     )
-    
+
     specify_tests = models.TextField(
         verbose_name='Specify test and test results',
         null=True,

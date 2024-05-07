@@ -112,7 +112,7 @@ class ChildSocioDemographicMixin(models.Model):
         choices=SCHOOL_TYPE,
         max_length=30,
         default=NOT_APPLICABLE)
-    
+
     months_in_boarding = models.PositiveSmallIntegerField(
         verbose_name='How many months of the year does your child stay at boarding school?',
         validators=[MinValueValidator(1), MaxValueValidator(12)],

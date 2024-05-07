@@ -41,4 +41,3 @@ class ChildContinuedConsentForm(SiteModelFormMixin, FormValidatorMixin, forms.Mo
     class Meta:
         model = ChildContinuedConsent
         fields = '__all__'
-        

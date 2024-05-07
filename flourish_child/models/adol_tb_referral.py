@@ -1,7 +1,7 @@
 from django.db import models
 from edc_base.utils import get_utcnow
 from ..choices import LOCATION_REFERRAL
-    
+
 from .child_crf_model_mixin import ChildCrfModelMixin
 from edc_base.model_fields import OtherCharField
 
@@ -13,7 +13,6 @@ class TbReferalAdol(ChildCrfModelMixin):
         null=True,
         default=get_utcnow,)
 
-
     referral_date = models.DateField(
         verbose_name="Date of referral",)
 
@@ -22,7 +21,7 @@ class TbReferalAdol(ChildCrfModelMixin):
         choices=LOCATION_REFERRAL,
         max_length=15
     )
-    
+
     location_other = OtherCharField()
 
     class Meta:

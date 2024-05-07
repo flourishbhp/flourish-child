@@ -10,8 +10,8 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from edc_action_item.site_action_items import site_action_items
-from edc_base.utils import get_utcnow, age
-from edc_constants.constants import NEW, OPEN
+from edc_base.utils import age, get_utcnow
+from edc_constants.constants import NEW, OPEN, YES
 from edc_data_manager.models import DataActionItem
 from PIL import Image
 
@@ -173,6 +173,10 @@ class ChildUtils:
             subject_identifier=subject_identifier,
             title='Follow Up Schedule').order_by('date').last()
         return latest_scheduled
+
+    def is_bio_mother(self, subject_identifier=None):
+        consent_obj = self.caregiver_subject_consent_obj(subject_identifier)
+        return getattr(consent_obj, 'biological_caregiver', None) == YES
 
 
 child_utils = ChildUtils()

@@ -10,7 +10,6 @@ from .child_crf_model_mixin import ChildCrfModelMixin
 class ChildClinicianNotes(VerificationFieldsMixin, ChildCrfModelMixin):
     crf_date_validator_cls = None
 
-
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'Infant/Child/Adolescent Clinician Notes'

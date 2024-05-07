@@ -39,7 +39,7 @@ class ChildPregTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                       'child_b_quart_schedule1',
                       'child_c_sec_qt_schedule1',
                       'child_c_quart_schedule1', ]
-        
+
     @property
     def quarterly_schedules(self):
         schedules = self.cohort_schedules_cls.objects.filter(
@@ -81,12 +81,12 @@ class ChildPregTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'is_lmp_date_estimated', after='report_datetime')})
 
         return conditional_fieldlists
-        
+
     def get_key(self, request, obj=None):
         """ Return schedule name for current appointment instance.
         """
         schedule_name = None
-   
+
         try:
             model_obj = self.get_instance(request)
         except ObjectDoesNotExist:

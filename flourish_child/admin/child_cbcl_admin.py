@@ -119,7 +119,7 @@ class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                           child_exposure_status=child_exposure_status,
                           enrol_cohort=enrol_cohort,
                           current_cohort=current_cohort)
-    
+
             # Exclude identifying values
             record = self.remove_exclude_fields(record)
             # Correct date formats
