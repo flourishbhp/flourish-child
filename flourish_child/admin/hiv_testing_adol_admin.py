@@ -10,7 +10,7 @@ from ..models import HivTestingAdol
 @admin.register(HivTestingAdol, site=flourish_child_admin)
 class HivTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = HIVTestingAdolForm
-    
+
     fieldsets = (
         (None, {
             'fields': [
@@ -26,11 +26,10 @@ class HivTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             ]}),
         audit_fieldset_tuple
     )
-    
+
     radio_fields = {"times_tested": admin.VERTICAL,
                     "last_result": admin.VERTICAL,
                     "referred_for_treatment": admin.VERTICAL,
                     "initiated_treatment": admin.VERTICAL,
                     "seen_by_healthcare": admin.VERTICAL,
                     "test_for_hiv": admin.VERTICAL}
-

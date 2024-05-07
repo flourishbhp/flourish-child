@@ -84,7 +84,6 @@ class InfantDevScreening3Months(ChildCrfModelMixin):
         blank=True
         )
 
-
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
         verbose_name = 'Infant Developmental Screening for 3 Months'

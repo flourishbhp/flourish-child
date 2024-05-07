@@ -4,6 +4,7 @@ from .model_mixins.child_socio_demographic_mixin import ChildSocioDemographicMix
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 
+
 class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):
 
     """ A model completed by the user on Demographics form for all infants.

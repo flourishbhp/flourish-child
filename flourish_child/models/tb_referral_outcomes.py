@@ -58,7 +58,7 @@ class TbAdolReferralOutcomes(ChildCrfModelMixin):
     tb_diagnostics_other_results = models.CharField(
         verbose_name='If Other specified, what are the results?',
         max_length=50,
-        blank=True, 
+        blank=True,
         null=True)
 
     sputum_sample = models.CharField(

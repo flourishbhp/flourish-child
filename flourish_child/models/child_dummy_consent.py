@@ -42,8 +42,8 @@ class ChildDummySubjectConsentManager(SearchSlugManager, models.Manager):
 
 
 class ChildDummySubjectConsent(
-    ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin, SearchSlugModelMixin,
-    SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin, BaseUuidModel):
+        ConsentModelMixin, UpdatesOrCreatesRegistrationModelMixin, SearchSlugModelMixin,
+        SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin, BaseUuidModel):
     """ A dummy child model auto completed by the s. """
 
     consent_datetime = models.DateTimeField(

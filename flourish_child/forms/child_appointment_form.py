@@ -67,7 +67,7 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
                 prev_appt = child_utils.get_previous_appt_instance(self.instance)
             except Appointment.DoesNotExist:
                 pass
-            
+
             if not getattr(prev_appt, 'childvisit', None):
                 last_visit = self.appointment_model_cls.visit_model_cls().objects.filter(
                     appointment__subject_identifier=self.instance.subject_identifier,
@@ -85,7 +85,7 @@ class AppointmentForm(SiteModelFormMixin, FormValidatorMixin, AppointmentFormVal
                             f'A previous visit report is required. Enter the visit report for '
                             f'appointment {next_visit.visit_code} before '
                             'starting with this appointment.')
- 
+
             # appointment sequence
             try:
                 prev_appt = child_utils.get_previous_appt_instance(self.instance)

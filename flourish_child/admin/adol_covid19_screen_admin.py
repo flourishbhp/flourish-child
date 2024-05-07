@@ -22,7 +22,7 @@ class Covid19AdolAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'result_of_test',
             ]}
          ), audit_fieldset_tuple)
-    
+
     radio_fields = {
         'test_for_covid': admin.VERTICAL,
         'receive_test_result': admin.VERTICAL,

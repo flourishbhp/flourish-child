@@ -1,4 +1,3 @@
-from django.db import models
 from flourish_caregiver.models.model_mixins import CageAidFieldsMixin
 from .child_crf_model_mixin import ChildCrfModelMixin
 

@@ -9,7 +9,7 @@ from ..models import ChildPregTesting
 class ChildPregTestingForm(ChildModelFormMixin, forms.ModelForm):
 
     form_validator_cls = ChildPregTestingFormValidator
-    
+
     @property
     def tanner_staging_model_cls(self):
         return django_apps.get_model('flourish_child.childtannerstaging')
