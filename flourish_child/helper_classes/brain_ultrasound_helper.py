@@ -1,11 +1,13 @@
 import json
 import logging
-
+from datetime import datetime
+from flourish_caregiver.helper_classes.maternal_status_helper import MaternalStatusHelper
 import requests
 from django.apps import apps as django_apps
 from django.conf import settings
 from edc_base import get_utcnow
 from edc_visit_schedule import site_visit_schedules
+from edc_constants.constants import POS
 
 from flourish_child.helper_classes.utils import child_utils
 
@@ -16,6 +18,7 @@ class BrainUltrasoundHelper:
 
     child_bu_onschedule_model = 'flourish_child.onschedulechildbrainultrasound'
     child_bu_schedule_name = 'child_bu_schedule'
+
     def __init__(self, child_subject_identifier, caregiver_subject_identifier):
         self.child_subject_identifier = child_subject_identifier
         self.caregiver_subject_identifier = caregiver_subject_identifier
@@ -34,7 +37,7 @@ class BrainUltrasoundHelper:
                 'subject_identifier': self.caregiver_subject_identifier,
                 'onschedule_model':
                     'flourish_caregiver.onschedulecaregiverbrainultrasound',
-            },
+             },
             {'schedule_name': self.child_bu_schedule_name,
              'subject_identifier': self.child_subject_identifier,
              'onschedule_model': self.child_bu_onschedule_model,
@@ -53,21 +56,24 @@ class BrainUltrasoundHelper:
         """
 
         for schedule in self.brain_ultrasound_schedules:
-            onschedule_model_cls = django_apps.get_model(schedule.get('onschedule_model'))
+            onschedule_model_cls = django_apps.get_model(
+                schedule.get('onschedule_model'))
             schedule_name = schedule.get('schedule_name')
             _, new_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
                 name=schedule.get('schedule_name'),
                 onschedule_model=schedule.get('onschedule_model'))
 
+            is_mom_pos = len(schedule.get('subject_identifier').split(
+                '-')) == 3 and self.func_hiv_positive(schedule.get('subject_identifier'))
             if not new_schedule.is_onschedule(
                     subject_identifier=schedule.get('subject_identifier'),
                     report_datetime=get_utcnow()
-            ):
+            ) and (len(schedule.get('subject_identifier').split('-')) == 4 or is_mom_pos):
                 new_schedule.put_on_schedule(
                     subject_identifier=schedule.get('subject_identifier'),
                     schedule_name=schedule.get('schedule_name'))
 
-            if len(schedule.get('subject_identifier').split('-')) == 3:
+            if is_mom_pos:
                 try:
                     onschedule_model_cls.objects.get(
                         subject_identifier=schedule.get('subject_identifier'),
@@ -76,7 +82,8 @@ class BrainUltrasoundHelper:
                 except onschedule_model_cls.DoesNotExist:
                     try:
                         onschedule_obj = new_schedule.onschedule_model_cls.objects.get(
-                            subject_identifier=schedule.get('subject_identifier'),
+                            subject_identifier=schedule.get(
+                                'subject_identifier'),
                             schedule_name=schedule_name,
                             child_subject_identifier='')
                     except new_schedule.onschedule_model_cls.DoesNotExist:
@@ -109,12 +116,14 @@ class BrainUltrasoundHelper:
         }
 
         try:
-            results = requests.post(getattr(settings, 'REDCAP_API_URL', ''), data=data)
+            results = requests.post(
+                getattr(settings, 'REDCAP_API_URL', ''), data=data)
             results.raise_for_status()
         except (requests.exceptions.RequestException, ValueError) as e:
             logger.error(f'Error: {e}')
         else:
-            fields = ['reviewed_v4', 'answered_v4', 'asked_v4', 'verified_v4', 'copy_v4']
+            fields = ['reviewed_v4', 'answered_v4',
+                      'asked_v4', 'verified_v4', 'copy_v4']
             try:
                 json_result = results.json()
                 if json_result and isinstance(json_result[0], dict):
@@ -122,3 +131,19 @@ class BrainUltrasoundHelper:
             except json.JSONDecodeError:
                 logger.error('Invalid JSON response: {}'.format(results.text))
         return False
+
+    def show_brain_ultrasound_button(self):
+        antenatal_enrollment_obj = self.antenatal_enrollment_cls.objects.filter(
+            child_subject_identifier=self.child_subject_identifier).exists()
+        child_age = child_utils.child_age(
+            self.child_subject_identifier, datetime.today().date())
+
+        return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
+
+    def func_hiv_positive(self, subject_identifier):
+        """
+        Get HIV Status from the rapid test results
+        """
+        maternal_status_helper = MaternalStatusHelper(
+            maternal_visit=None, subject_identifier=subject_identifier)
+        return maternal_status_helper.hiv_status == POS
