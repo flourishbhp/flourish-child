@@ -1,11 +1,13 @@
 import json
 import logging
 from datetime import datetime
+from flourish_caregiver.helper_classes.maternal_status_helper import MaternalStatusHelper
 import requests
 from django.apps import apps as django_apps
 from django.conf import settings
 from edc_base import get_utcnow
 from edc_visit_schedule import site_visit_schedules
+from edc_constants.constants import POS
 
 from flourish_child.helper_classes.utils import child_utils
 
@@ -65,15 +67,17 @@ class BrainUltrasoundHelper:
                 name=schedule.get('schedule_name'),
                 onschedule_model=schedule.get('onschedule_model'))
 
+            is_mom_pos = len(schedule.get('subject_identifier').split(
+                '-')) == 3 and self.func_hiv_positive(schedule.get('subject_identifier'))
             if not new_schedule.is_onschedule(
                     subject_identifier=schedule.get('subject_identifier'),
                     report_datetime=get_utcnow()
-            ):
+            ) and (len(schedule.get('subject_identifier').split('-')) == 4 or is_mom_pos):
                 new_schedule.put_on_schedule(
                     subject_identifier=schedule.get('subject_identifier'),
                     schedule_name=schedule.get('schedule_name'))
 
-            if len(schedule.get('subject_identifier').split('-')) == 3:
+            if is_mom_pos:
                 try:
                     onschedule_model_cls.objects.get(
                         subject_identifier=schedule.get('subject_identifier'),
@@ -139,3 +143,11 @@ class BrainUltrasoundHelper:
             self.child_subject_identifier, datetime.today().date())
 
         return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
+
+    def func_hiv_positive(self, subject_identifier):
+        """
+        Get HIV Status from the rapid test results
+        """
+        maternal_status_helper = MaternalStatusHelper(
+            maternal_visit=None, subject_identifier=subject_identifier)
+        return maternal_status_helper.hiv_status == POS
