@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -11,8 +12,8 @@ from ..models import ChildFoodSecurityQuestionnaire
 class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = ChildFoodSecurityQuestionnaireForm
 
-    instructions = (
-        '<p><b>***INSTRUCTIONS CLINIC STAFF: The questions about food security are part '
+    additional_instructions = mark_safe(
+        '<b>***INSTRUCTIONS CLINIC STAFF: The questions about food security are part '
         'of our data collection efforts aimed at understanding various aspects of this '
         'critical issue. Your responses will help us gather valuable insights into '
         'the challenges people face regarding access to nutritious food and the '
@@ -21,7 +22,7 @@ class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAd
         'study purposes.We are not providing direct assistance or support based on '
         'the information you provide in these questions.Instead, the data collected '
         'will be analyzed to identify patterns, trends, and areas where '
-        'interventions may be needed to improve food security outcomes.</b></p>')
+        'interventions may be needed to improve food security outcomes.</b>')
 
     fieldsets = (
         (None, {
