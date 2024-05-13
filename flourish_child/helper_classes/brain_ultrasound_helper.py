@@ -31,18 +31,24 @@ class BrainUltrasoundHelper:
 
     @property
     def brain_ultrasound_schedules(self):
-        return [
-            {'schedule_name': 'caregiver_bu_schedule_{0}'.format(
-                self.get_child_number),
-                'subject_identifier': self.caregiver_subject_identifier,
-                'onschedule_model':
-                    'flourish_caregiver.onschedulecaregiverbrainultrasound',
-             },
+
+        caregiver_schedule = {'schedule_name': 'caregiver_bu_schedule_{0}'.format(
+            self.get_child_number),
+            'subject_identifier': self.caregiver_subject_identifier,
+            'onschedule_model':
+            'flourish_caregiver.onschedulecaregiverbrainultrasound',
+        },
+        schedules_list = [
+
             {'schedule_name': self.child_bu_schedule_name,
              'subject_identifier': self.child_subject_identifier,
              'onschedule_model': self.child_bu_onschedule_model,
              },
         ]
+        if self.func_hiv_positive(self.caregiver_subject_identifier):
+            schedules_list.append(caregiver_schedule)
+        breakpoint()
+        return schedules_list
 
     @property
     def is_onschedule(self):
@@ -67,17 +73,15 @@ class BrainUltrasoundHelper:
                 name=schedule.get('schedule_name'),
                 onschedule_model=schedule.get('onschedule_model'))
 
-            is_mom_pos = len(schedule.get('subject_identifier').split(
-                '-')) == 3 and self.func_hiv_positive(schedule.get('subject_identifier'))
             if not new_schedule.is_onschedule(
                     subject_identifier=schedule.get('subject_identifier'),
                     report_datetime=get_utcnow()
-            ) and (len(schedule.get('subject_identifier').split('-')) == 4 or is_mom_pos):
+            ):
                 new_schedule.put_on_schedule(
                     subject_identifier=schedule.get('subject_identifier'),
                     schedule_name=schedule.get('schedule_name'))
 
-            if is_mom_pos:
+            if len(schedule.get('subject_identifier').split('-')) == 3:
                 try:
                     onschedule_model_cls.objects.get(
                         subject_identifier=schedule.get('subject_identifier'),
