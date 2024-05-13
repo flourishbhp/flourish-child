@@ -31,23 +31,22 @@ class BrainUltrasoundHelper:
 
     @property
     def brain_ultrasound_schedules(self):
-
-        caregiver_schedule = {'schedule_name': 'caregiver_bu_schedule_{0}'.format(
-            self.get_child_number),
+        caregiver_schedule = {
+            'schedule_name': 'caregiver_bu_schedule_{0}'.format(self.get_child_number),
             'subject_identifier': self.caregiver_subject_identifier,
-            'onschedule_model':
-            'flourish_caregiver.onschedulecaregiverbrainultrasound',
-        },
-        schedules_list = [
+            'onschedule_model': 'flourish_caregiver.onschedulecaregiverbrainultrasound',
+        }
 
-            {'schedule_name': self.child_bu_schedule_name,
-             'subject_identifier': self.child_subject_identifier,
-             'onschedule_model': self.child_bu_onschedule_model,
-             },
+        schedules_list = [
+            {
+                'schedule_name': self.child_bu_schedule_name,
+                'subject_identifier': self.child_subject_identifier,
+                'onschedule_model': self.child_bu_onschedule_model,
+            },
         ]
         if self.func_hiv_positive(self.caregiver_subject_identifier):
             schedules_list.append(caregiver_schedule)
-        breakpoint()
+
         return schedules_list
 
     @property
