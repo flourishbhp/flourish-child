@@ -1,6 +1,7 @@
 from django.apps import apps as django_apps
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.safestring import mark_safe
 from edc_fieldsets.fieldlist import Insert
 from edc_fieldsets.fieldsets import Fieldsets
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
@@ -16,8 +17,8 @@ from ..models import AcademicPerformance
 class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = AcademicPerformanceForm
 
-    instructions = (
-        '<p><b>***INSTRUCTIONS CLINIC STAFF: These questions are '
+    additional_instructions = mark_safe(
+        '<b>***INSTRUCTIONS CLINIC STAFF: These questions are '
         'designed only to gather data about you or your child’s '
         'academic background and achievements for research '
         'purposes. They are not intended to evaluate or judge you '
@@ -28,7 +29,7 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         'educational settings at government or private school '
         'levels. All information provided will be kept strictly'
         ' confidential and used only for research purposes in '
-        'the FLOURISH study.</b></p>')
+        'the FLOURISH study.</b>')
 
     fieldsets = (
         (None, {
