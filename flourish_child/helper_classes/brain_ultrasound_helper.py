@@ -1,14 +1,15 @@
 import json
 import logging
-from datetime import datetime
-from flourish_caregiver.helper_classes.maternal_status_helper import MaternalStatusHelper
 import requests
+from datetime import datetime
+
 from django.apps import apps as django_apps
 from django.conf import settings
 from edc_base import get_utcnow
 from edc_visit_schedule import site_visit_schedules
 from edc_constants.constants import POS
 
+from flourish_caregiver.helper_classes.maternal_status_helper import MaternalStatusHelper
 from flourish_child.helper_classes.utils import child_utils
 
 logger = logging.getLogger(__name__)
@@ -55,6 +56,10 @@ class BrainUltrasoundHelper:
             subject_identifier=self.child_subject_identifier,
             schedule_name=self.child_bu_schedule_name,
         ).exists()
+
+    @property
+    def antenatal_enrollment_cls(self):
+        return django_apps.get_model('flourish_caregiver.antenatalenrollment')
 
     def brain_ultrasound_enrolment(self):
         """Enrols the child into the brain ultrasound schedule.
