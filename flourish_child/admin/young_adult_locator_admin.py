@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.http import HttpResponseRedirect
-from edc_fieldsets import Fieldsets
 from edc_model_admin import audit_fieldset_tuple
 
 from .model_admin_mixins import ModelAdminMixin

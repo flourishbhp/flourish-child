@@ -128,4 +128,4 @@ class TbAdolAssentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         return (super().get_readonly_fields(request, obj=obj)
-                +audit_fields)
+                + audit_fields)

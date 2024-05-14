@@ -22,13 +22,13 @@ class InfantArvProphylaxisForm(ChildModelFormMixin):
 
         if took_art_proph == YES and not arvs_took_name:
             message = {'took_art_proph':
-                           'The baby took some ARVs please complete table for each'
-                           ' ARV, start date and stop date.'}
+                       'The baby took some ARVs please complete table for each'
+                       ' ARV, start date and stop date.'}
             raise forms.ValidationError(message)
         elif took_art_proph == NO and arvs_took_name:
             message = {'took_art_proph':
-                           'The baby did not take any ARVs do not complete table'
-                           ' for ARVs, start date and stop date.'}
+                       'The baby did not take any ARVs do not complete table'
+                       ' for ARVs, start date and stop date.'}
             raise forms.ValidationError(message)
 
     class Meta:

@@ -10,8 +10,8 @@ from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from edc_action_item.site_action_items import site_action_items
-from edc_base.utils import get_utcnow
-from edc_constants.constants import NEW, OPEN
+from edc_base.utils import age, get_utcnow
+from edc_constants.constants import NEW, OPEN, YES
 from edc_data_manager.models import DataActionItem
 from PIL import Image
 
@@ -26,6 +26,7 @@ class ChildUtils:
     child_assent_model = 'flourish_child.childassent'
     caregiver_consent_model = 'flourish_caregiver.subjectconsent'
     caregiver_child_consent_model = 'flourish_caregiver.caregiverchildconsent'
+    participant_note_model = 'flourish_calendar.participantnote'
 
     @property
     def child_assent_model_cls(self):
@@ -62,6 +63,10 @@ class ChildUtils:
     @property
     def caregiver_child_consent_cls(self):
         return django_apps.get_model(self.caregiver_child_consent_model)
+
+    @property
+    def participant_note_model_cls(self):
+        return django_apps.get_model(self.participant_note_model)
 
     def caregiver_subject_consent_obj(self, subject_identifier=None):
         if len(subject_identifier.split('-')) == 4:
@@ -155,6 +160,23 @@ class ChildUtils:
             return appointment.previous_by_timepoint
         else:
             return previous_appt
+
+    def child_age(self, subject_identifier=None, report_datetime=None):
+        caregiver_child_consent_obj = self.caregiver_child_consent_obj(
+            subject_identifier)
+        if caregiver_child_consent_obj and caregiver_child_consent_obj.child_dob:
+            _age = age(caregiver_child_consent_obj.child_dob, report_datetime)
+            return _age.years + (_age.months / 12)
+
+    def get_child_fu_schedule(self, subject_identifier):
+        latest_scheduled = self.participant_note_model_cls.objects.filter(
+            subject_identifier=subject_identifier,
+            title='Follow Up Schedule').order_by('date').last()
+        return latest_scheduled
+
+    def is_bio_mother(self, subject_identifier=None):
+        consent_obj = self.caregiver_subject_consent_obj(subject_identifier)
+        return getattr(consent_obj, 'biological_caregiver', None) == YES
 
 
 child_utils = ChildUtils()

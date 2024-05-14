@@ -78,8 +78,8 @@ class InfantArvExposure(ChildCrfModelMixin):
         max_length=10,)
 
     additional_arvs = models.CharField(
-         verbose_name=('Did the infant receive any additional ARVs within '
-                       '72 hours of life?'),
+        verbose_name=('Did the infant receive any additional ARVs within '
+                      '72 hours of life?'),
         choices=YES_NO_UNKNOWN,
         max_length=10, )
 

@@ -1,12 +1,15 @@
 import json
 import logging
-
 import requests
+from datetime import datetime
+
 from django.apps import apps as django_apps
 from django.conf import settings
 from edc_base import get_utcnow
 from edc_visit_schedule import site_visit_schedules
+from edc_constants.constants import POS
 
+from flourish_caregiver.helper_classes.maternal_status_helper import MaternalStatusHelper
 from flourish_child.helper_classes.utils import child_utils
 
 logger = logging.getLogger(__name__)
@@ -16,6 +19,7 @@ class BrainUltrasoundHelper:
 
     child_bu_onschedule_model = 'flourish_child.onschedulechildbrainultrasound'
     child_bu_schedule_name = 'child_bu_schedule'
+
     def __init__(self, child_subject_identifier, caregiver_subject_identifier):
         self.child_subject_identifier = child_subject_identifier
         self.caregiver_subject_identifier = caregiver_subject_identifier
@@ -28,18 +32,23 @@ class BrainUltrasoundHelper:
 
     @property
     def brain_ultrasound_schedules(self):
-        return [
-            {'schedule_name': 'caregiver_bu_schedule_{0}'.format(
-                self.get_child_number),
-                'subject_identifier': self.caregiver_subject_identifier,
-                'onschedule_model':
-                    'flourish_caregiver.onschedulecaregiverbrainultrasound',
+        caregiver_schedule = {
+            'schedule_name': 'caregiver_bu_schedule_{0}'.format(self.get_child_number),
+            'subject_identifier': self.caregiver_subject_identifier,
+            'onschedule_model': 'flourish_caregiver.onschedulecaregiverbrainultrasound',
+        }
+
+        schedules_list = [
+            {
+                'schedule_name': self.child_bu_schedule_name,
+                'subject_identifier': self.child_subject_identifier,
+                'onschedule_model': self.child_bu_onschedule_model,
             },
-            {'schedule_name': self.child_bu_schedule_name,
-             'subject_identifier': self.child_subject_identifier,
-             'onschedule_model': self.child_bu_onschedule_model,
-             },
         ]
+        if self.func_hiv_positive(self.caregiver_subject_identifier):
+            schedules_list.append(caregiver_schedule)
+
+        return schedules_list
 
     @property
     def is_onschedule(self):
@@ -48,12 +57,17 @@ class BrainUltrasoundHelper:
             schedule_name=self.child_bu_schedule_name,
         ).exists()
 
+    @property
+    def antenatal_enrollment_cls(self):
+        return django_apps.get_model('flourish_caregiver.antenatalenrollment')
+
     def brain_ultrasound_enrolment(self):
         """Enrols the child into the brain ultrasound schedule.
         """
 
         for schedule in self.brain_ultrasound_schedules:
-            onschedule_model_cls = django_apps.get_model(schedule.get('onschedule_model'))
+            onschedule_model_cls = django_apps.get_model(
+                schedule.get('onschedule_model'))
             schedule_name = schedule.get('schedule_name')
             _, new_schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
                 name=schedule.get('schedule_name'),
@@ -76,7 +90,8 @@ class BrainUltrasoundHelper:
                 except onschedule_model_cls.DoesNotExist:
                     try:
                         onschedule_obj = new_schedule.onschedule_model_cls.objects.get(
-                            subject_identifier=schedule.get('subject_identifier'),
+                            subject_identifier=schedule.get(
+                                'subject_identifier'),
                             schedule_name=schedule_name,
                             child_subject_identifier='')
                     except new_schedule.onschedule_model_cls.DoesNotExist:
@@ -109,12 +124,14 @@ class BrainUltrasoundHelper:
         }
 
         try:
-            results = requests.post(getattr(settings, 'REDCAP_API_URL', ''), data=data)
+            results = requests.post(
+                getattr(settings, 'REDCAP_API_URL', ''), data=data)
             results.raise_for_status()
         except (requests.exceptions.RequestException, ValueError) as e:
             logger.error(f'Error: {e}')
         else:
-            fields = ['reviewed_v4', 'answered_v4', 'asked_v4', 'verified_v4', 'copy_v4']
+            fields = ['reviewed_v4', 'answered_v4',
+                      'asked_v4', 'verified_v4', 'copy_v4']
             try:
                 json_result = results.json()
                 if json_result and isinstance(json_result[0], dict):
@@ -122,3 +139,19 @@ class BrainUltrasoundHelper:
             except json.JSONDecodeError:
                 logger.error('Invalid JSON response: {}'.format(results.text))
         return False
+
+    def show_brain_ultrasound_button(self):
+        antenatal_enrollment_obj = self.antenatal_enrollment_cls.objects.filter(
+            child_subject_identifier=self.child_subject_identifier).exists()
+        child_age = child_utils.child_age(
+            self.child_subject_identifier, datetime.today().date())
+
+        return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
+
+    def func_hiv_positive(self, subject_identifier):
+        """
+        Get HIV Status from the rapid test results
+        """
+        maternal_status_helper = MaternalStatusHelper(
+            maternal_visit=None, subject_identifier=subject_identifier)
+        return maternal_status_helper.hiv_status == POS

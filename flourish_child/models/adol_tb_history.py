@@ -24,7 +24,7 @@ class TbHistoryAdol(ChildCrfModelMixin):
         help_text='This is generally a medication taken for several '
         'months to prevent TB disease, such as isoniazid.',
         max_length=30)
-    
+
     reason_for_therapy = models.CharField(
         verbose_name='What was the reason for taking TB preventative therapy (TPT)?',
         choices=TB_THERAPY_REASONS,
@@ -32,10 +32,9 @@ class TbHistoryAdol(ChildCrfModelMixin):
         blank=True,
         null=True,
     )
-    
+
     reason_for_therapy_other = OtherCharField()
-    
-    
+
     therapy_prescribed_age = models.CharField(
         verbose_name='How old were you when you were prescribed TB preventative therapy (TPT)?',
         choices=TB_PRESCRIPTION_AGE,
@@ -43,7 +42,6 @@ class TbHistoryAdol(ChildCrfModelMixin):
         blank=True,
         null=True,
     )
-    
 
     tbt_completed = models.CharField(
         verbose_name='Did you complete your TB preventative therapy (TPT)?',

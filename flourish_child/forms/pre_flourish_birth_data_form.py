@@ -13,6 +13,10 @@ class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
     child_dataset_cls = django_apps.get_model('flourish_child.childdataset')
     huu_pre_enrollment_cls = django_apps.get_model('pre_flourish.HuuPreEnrollment')
 
+    subject_identifier = forms.CharField(
+        label='Subject Identifier',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.subject_identifier = None
@@ -54,19 +58,6 @@ class PreFlourishBirthDataForm(FormValidatorMixin, forms.ModelForm):
                 .study_child_identifier)
         except self.huu_pre_enrollment_cls.DoesNotExist:
             return None
-
-
-    def get_caregiver_child_consent(self, subject_identifier=None):
-        child_consent_cls = django_apps.get_model(
-            'flourish_caregiver.caregiverchildconsent')
-        if subject_identifier:
-            try:
-                consents = child_consent_cls.objects.filter(
-                    subject_identifier=subject_identifier).latest('consent_datetime')
-            except child_consent_cls.DoesNotExist:
-                pass
-            else:
-                return consents
 
     class Meta:
         model = PreFlourishBirthData

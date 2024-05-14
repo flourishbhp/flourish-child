@@ -21,11 +21,12 @@ class AssentEligibility:
             self.error_message.append(
                 'Participant is not will to undergo pregnancy testing.')
         self.is_eligible = False if self.error_message else True
-        
+
+
 class TbAdolAssentEligibility:
     def __init__(self, *args, **kwargs):
         self.error_message = []
-        
+
         self.child_age = kwargs['child_age']
         self.citizen = kwargs['citizen']
         self.tb_testing = kwargs['tb_testing']
@@ -33,22 +34,22 @@ class TbAdolAssentEligibility:
         self.study_questions = kwargs['study_questions']
         self.assessment_score = kwargs['assessment_score']
         self.consent_signature = kwargs['consent_signature']
-        
+
         if self.child_age < 10 or self.child_age > 17:
             self.error_message.append(f'Participint is {self.child_age} old')
-        
+
         if self.citizen == NO:
             self.error_message.append('The paticipant is not a citizen')
-            
+
         if self.tb_testing == NO:
             self.error_message.append('The paticipant is not willing to be tested for TB')
-            
+
         if self.consent_reviewed == NO:
             self.error_message.append('Did not review the consent with participant')
-        
+
         if self.study_questions == NO:
             self.error_message.append('Did not answer all participant questions about the study')
-            
+
         if self.assessment_score == NO:
             self.error_message.append('The participant did not understand demostrate some understanding'
                                       ' about the study')
@@ -56,8 +57,6 @@ class TbAdolAssentEligibility:
             self.error_message.append('The participant did not sign the consent')
 
         self.is_eligible = False if self.error_message else True
-        
-            
 
 
 class ContinuedConsentEligibility:

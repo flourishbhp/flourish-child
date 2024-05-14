@@ -55,7 +55,7 @@ class ChildMedicalHistoryForm(ChildModelFormMixin, forms.ModelForm):
                 'op_visit_count':
                 (f'Child has had {visit_count} out-patient visit(s). Please complete '
                  'the outpatient visit section for all visits.')})
-        
+
         return cleaned_data
 
     def validate_med_history_changed(self, med_history_changed):
