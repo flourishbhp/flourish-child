@@ -1367,7 +1367,7 @@ TEST_RESULTS_CHOICES = (
 
 DURATION_OPTIONS = (
     ('< 2 weeks', '< 2 weeks'),
-    ('≥ 2 weeks', '≥ 2 weeks')
+    ('>= 2 weeks', '≥ 2 weeks')
 )
 
 TB_TREATMENT_CHOICES = (
@@ -1432,5 +1432,5 @@ TB_REFERRAL_REASON_CHOICES = (
     ('weight_loss', 'Weight loss'),
     ('fatigue', 'Fatigue'),
     ('household_Contact_with_TB', 'Household Contact with TB'),
-    ('other', 'Other'),
+    (OTHER, 'Other'),
 )
