@@ -1366,7 +1366,7 @@ TEST_RESULTS_CHOICES = (
 
 DURATION_OPTIONS = (
     ('< 2 weeks', '< 2 weeks'),
-    ('≥ 2 weeks', '≥ 2 weeks')
+    ('>= 2 weeks', '≥ 2 weeks')
 )
 
 TB_TREATMENT_CHOICES = (
