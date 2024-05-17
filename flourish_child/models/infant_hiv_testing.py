@@ -15,15 +15,15 @@ class InfantHIVTesting(ChildCrfModelMixin, HivTestingModelMixin):
 
 class InfantHIVTestingAfterBreastfeeding(ChildCrfModelMixin, HIVTestingAndResultingMixin):
     child_tested_for_hiv = models.DateField(
-        verbose_name='Date of the HIV test at 3 Months after Cessation of Breastfeeding',
+        verbose_name='Date of the HIV test at 6 weeks after Cessation of Breastfeeding',
     )
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = ('HIV Infant Testing and Results, Three Months After Cessation of '
+        verbose_name = ('HIV Infant Testing and Results, 6 Weeks After Cessation of '
                         'Breastfeeding')
         verbose_name_plural = (
-            'HIV Infant Testing and Results, Three Months After Cessation of '
+            'HIV Infant Testing and Results, 6 Weeks After Cessation of '
             'Breastfeeding')
 
 
