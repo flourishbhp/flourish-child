@@ -2,9 +2,11 @@ from django.db import models
 from edc_constants.choices import YES_NO
 
 from flourish_caregiver.choices import YES_NO_UKN_CHOICES
+from flourish_caregiver.helper_classes.tb_diagnosis import TBDiagnosis
 from flourish_caregiver.models.model_mixins.flourish_tb_screening_mixin import \
     TBScreeningMixin
-from flourish_child.choices import TEST_RESULTS_CHOICES, YES_NO_UNKNOWN, TB_TEST_CHOICES
+from flourish_child.choices import TEST_RESULTS_CHOICES, YES_NO_UNKNOWN
+from flourish_child.helper_classes.utils import child_utils
 from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
 
 
@@ -68,6 +70,14 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         choices=YES_NO,
         max_length=3,
     )
+
+    def save(self, *args, **kwargs):
+        child_age = child_utils.child_age(self.child_visit.subject_identifier,
+                                          self.report_datetime)
+        tb_diagnoses = TBDiagnosis(child_age=child_age)
+        self.tb_diagnoses = tb_diagnoses.evaluate_for_tb(self)
+
+        super().save(*args, **kwargs)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
