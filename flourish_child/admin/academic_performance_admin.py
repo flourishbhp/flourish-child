@@ -1,23 +1,35 @@
 from django.apps import apps as django_apps
 from django.contrib import admin
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils.safestring import mark_safe
 from edc_fieldsets.fieldlist import Insert
 from edc_fieldsets.fieldsets import Fieldsets
 from edc_fieldsets.fieldsets_modeladmin_mixin import FormLabel
 from edc_model_admin import audit_fieldset_tuple
 
+from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import AcademicPerformanceForm
 from ..models import AcademicPerformance
-from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 @admin.register(AcademicPerformance, site=flourish_child_admin)
 class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     form = AcademicPerformanceForm
 
-    additional_instructions = ('If participant states the level of school is not correct, '
-                               'return to Socio-demographic form to update the class level')
+    additional_instructions = mark_safe(
+        '<b>***INSTRUCTIONS CLINIC STAFF: These questions are '
+        'designed only to gather data about you or your child’s '
+        'academic background and achievements for research '
+        'purposes. They are not intended to evaluate or judge you '
+        'or your child’s performance in any way.<br/>Your '
+        'responses to these questions will help us better '
+        'understand the factors that contribute to academic '
+        'success and identify potential areas for improvement in '
+        'educational settings at government or private school '
+        'levels. All information provided will be kept strictly'
+        ' confidential and used only for research purposes in '
+        'the FLOURISH study.</b>')
 
     fieldsets = (
         (None, {
@@ -87,17 +99,18 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     custom_form_labels = [
         FormLabel(
             field='academic_perf_changed',
-            label=('Since the last scheduled visit in {previous}, has any of your subject '
-                   'marks or overall performance in your last examination changed?'),
+            label=(
+                'Since the last scheduled visit in {previous}, has any of your subject '
+                'marks or overall performance in your last examination changed?'),
             previous_appointment=True)
-        ]
+    ]
 
     @property
     def quarterly_schedules(self):
         schedules = self.cohort_schedules_cls.objects.filter(
             schedule_type__icontains='quarterly',
             onschedule_model__startswith='flourish_child').values_list(
-                'schedule_name', flat=True)
+            'schedule_name', flat=True)
         return schedules
 
     @property
@@ -125,7 +138,7 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                              'physics_marks',
                              'double_scie_marks',
                              after='education_level'),
-            }
+        }
 
         for schedule in self.quarterly_schedules:
             conditional_fieldlists.update(
@@ -133,7 +146,8 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         return conditional_fieldlists
 
     def get_socio_demographic_object(self, request):
-        socio_demographic_cls = django_apps.get_model('flourish_child.childsociodemographic')
+        socio_demographic_cls = django_apps.get_model(
+            'flourish_child.childsociodemographic')
 
         try:
             visit_obj = self.visit_model.objects.get(id=request.GET.get('child_visit'))
@@ -177,6 +191,7 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         return keys
 
     def add_view(self, request, form_url='', extra_context=None):
+        extra_context = extra_context or {}
         socio_demographic_obj = self.get_socio_demographic_object(request)
 
         if socio_demographic_obj is not None:
@@ -193,4 +208,3 @@ class AcademicPerformanceAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         form = super().get_form(request, *args, **kwargs)
         form.previous_instance = self.get_previous_instance(request)
         return form
-

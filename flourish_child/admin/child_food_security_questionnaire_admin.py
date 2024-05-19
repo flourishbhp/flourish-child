@@ -1,25 +1,28 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 from edc_model_admin import audit_fieldset_tuple
 
+from .model_admin_mixins import ChildCrfModelAdminMixin
 from ..admin_site import flourish_child_admin
 from ..forms import ChildFoodSecurityQuestionnaireForm
 from ..models import ChildFoodSecurityQuestionnaire
-from .model_admin_mixins import ChildCrfModelAdminMixin
 
 
 @admin.register(ChildFoodSecurityQuestionnaire, site=flourish_child_admin)
 class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
-
     form = ChildFoodSecurityQuestionnaireForm
 
-    additional_instructions = ('Please state for participant “I’m going to '
-                               'read you several statements that people have '
-                               'made about their food situation. For these '
-                               'statements, please tell me whether the '
-                               'statement was often true, sometimes true, '
-                               'or never true for (you/your household) in the'
-                               ' last 12 months—that is, since last (name of '
-                               'current month).”')
+    additional_instructions = mark_safe(
+        '<b>***INSTRUCTIONS CLINIC STAFF: The questions about food security are part '
+        'of our data collection efforts aimed at understanding various aspects of this '
+        'critical issue. Your responses will help us gather valuable insights into '
+        'the challenges people face regarding access to nutritious food and the '
+        'factors influencing food security in different communities.<br/>It\'s '
+        'important to note that your responses will be used solely for research and '
+        'study purposes.We are not providing direct assistance or support based on '
+        'the information you provide in these questions.Instead, the data collected '
+        'will be analyzed to identify patterns, trends, and areas where '
+        'interventions may be needed to improve food security outcomes.</b>')
 
     fieldsets = (
         (None, {
@@ -39,11 +42,11 @@ class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAd
                     'answerer',
                     'how_often')
     list_filter = ('report_datetime', 'how_often')
-    search_fields = ('how_often', )
+    search_fields = ('how_often',)
     radio_fields = {"answerer": admin.VERTICAL,
                     "did_food_last": admin.VERTICAL,
                     "balanced_meals": admin.VERTICAL,
                     "cut_meals": admin.VERTICAL,
                     "how_often": admin.VERTICAL,
                     "eat_less": admin.VERTICAL,
-                    "didnt_eat": admin.VERTICAL,}
+                    "didnt_eat": admin.VERTICAL, }
