@@ -290,7 +290,7 @@ list_data = {
         ('6_to_8_weeks', '6 to 8 weeks'),
         ('9_months', '9-months'),
         ('18_months', '18-months'),
-        ('after_breastfeeding', '3 weeks after cessation of breastfeeding'),
+        ('after_breastfeeding', '6 weeks after cessation of breastfeeding'),
         (OTHER, 'Other, specify')
     ],
     'flourish_child.childhivnottestedreason': [
