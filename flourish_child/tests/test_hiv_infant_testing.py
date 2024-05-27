@@ -1,5 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from django.test import tag, TestCase
+from edc_appointment.constants import COMPLETE_APPT
 from edc_appointment.models import Appointment as CaregiverAppointment
 from edc_base import get_utcnow
 from edc_constants.constants import MALE, PENDING, POS, YES
@@ -259,6 +260,15 @@ class TestHivInfantTesting(TestCase):
     def test_infant_hiv_testing_results_pending(self):
         visit = self.create_2000_2001_visits()
         self.create_test_visit(visit=visit)
+
+        app = Appointment.objects.get(
+            visit_code='2001',
+            visit_code_sequence=0,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier)
+
+        app.appt_status = COMPLETE_APPT
+        app.save()
 
         mommy.make_recipe(
             'flourish_child.infanthivtestingafterbreastfeeding',
