@@ -1,13 +1,10 @@
-from decimal import Decimal
-
 from django.db import models
-from edc_appointment.constants import UNSCHEDULED_APPT
+from edc_appointment.creators import UnscheduledAppointmentCreator
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
 from edc_constants.constants import IND, PENDING, UNKNOWN
 
 from flourish_child.choices import DELIVERY_LOCATION, POS_NEG_PENDING_UNKNOWN
-from flourish_child.models import Appointment
 
 
 class HIVTestingAndResultingMixin(models.Model):
@@ -73,17 +70,15 @@ class HIVTestingAndResultingMixin(models.Model):
         super().save(*args, **kwargs)
         no_results = [IND, PENDING, UNKNOWN]
         if self.hiv_test_result in no_results:
-            obj, _ = Appointment.objects.get_or_create(
+            appointment_creator = UnscheduledAppointmentCreator(
                 subject_identifier=self.child_visit.subject_identifier,
-                visit_code=self.child_visit.appointment.visit_code,
-                visit_code_sequence=self.child_visit.appointment.visit_code_sequence + 1,
-                appt_datetime=self.child_visit.appointment.appt_datetime,
                 visit_schedule_name=self.child_visit.appointment.visit_schedule_name,
                 schedule_name=self.child_visit.appointment.schedule_name,
-                appt_reason=UNSCHEDULED_APPT,
-                timepoint=self.child_visit.appointment.timepoint + Decimal('0.1'),
+                visit_code=self.child_visit.appointment.visit_code,
+                facility=self.child_visit.appointment.facility,
                 timepoint_datetime=self.child_visit.appointment.timepoint_datetime,
             )
+            obj = appointment_creator.appointment
             obj.save()
 
     class Meta:
