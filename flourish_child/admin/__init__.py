@@ -47,6 +47,7 @@ from .child_previous_hospitalization_admin import \
     ChildPreviousHospitalizationAdmin
 from .child_requisition_admin import ChildRequisitionAdmin
 from .child_requisition_result_admin import ChildRequisitionResultAdmin
+from .child_safi_stigma_admin import ChildSafiStigmaAdmin
 from .child_social_work_referral_admin import ChildSocialWorkReferralAdmin
 from .child_socio_demographic_admin import ChildSocioDemographicAdmin
 from .child_tanner_staging_admin import ChildTannerStagingAdmin
@@ -55,6 +56,7 @@ from .child_tb_referral_outcome_admin import ChildTBReferralOutcomeAdmin
 from .child_tb_screening_admin import ChildTBScreeningAdmin
 from .child_visit_admin import ChildVisitAdmin
 from .child_working_status_admin import ChildWorkingStatusAdmin
+from .childhood_lead_exposure_risk_admin import ChildhoodLeadExposureRiskAdmin
 from .hiv_testing_adol_admin import HivTestingAdmin
 from .infant_arv_exposure_admin import InfantArvExposureAdmin
 from .infant_arv_prophylaxis_admin import InfantArvProphylaxisAdmin
@@ -86,4 +88,3 @@ from .tb_interview_admin import TbInterviewAdmin
 from .tb_referral_outcomes_admin import TbReferralOutcomesAdmin
 from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
 from .young_adult_locator_admin import YoungAdultLocatorAdmin
-from .child_safi_stigma_admin import ChildSafiStigmaAdmin
