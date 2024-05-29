@@ -18,6 +18,7 @@ class AppConfig(DjangoAppConfig):
 
     def ready(self):
         from .models import child_consent_on_post_save
+        import flourish_child.models.signals
 
 
 if settings.APP_NAME == 'flourish_child':

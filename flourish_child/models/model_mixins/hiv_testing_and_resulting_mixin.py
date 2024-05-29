@@ -1,5 +1,6 @@
 from django.db import models
-from edc_appointment.creators import UnscheduledAppointmentCreator
+from edc_appointment.creators import UnscheduledAppointmentCreator, \
+    UnscheduledAppointmentError
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
 from edc_constants.constants import IND, PENDING, UNKNOWN
@@ -66,27 +67,6 @@ class HIVTestingAndResultingMixin(models.Model):
         blank=True,
     )
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        no_results = [IND, PENDING, UNKNOWN]
-        if self.hiv_test_result in no_results:
-            if not self.child_visit:
-                raise RuntimeError("Error while creating the Unscheduled Appointment. "
-                                   "The visit seems invalid.")
-
-            appointment_creator = UnscheduledAppointmentCreator(
-                subject_identifier=self.child_visit.subject_identifier,
-                visit_schedule_name=self.child_visit.appointment.visit_schedule_name,
-                schedule_name=self.child_visit.appointment.schedule_name,
-                visit_code=self.child_visit.appointment.visit_code,
-                facility=self.child_visit.appointment.facility,
-                timepoint_datetime=self.child_visit.appointment.timepoint_datetime,
-            )
-            obj = appointment_creator.appointment
-
-            if not obj:
-                RuntimeError("Unscheduled appointment not created")
-            obj.save()
 
     class Meta:
         abstract = True

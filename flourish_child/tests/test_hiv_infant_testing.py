@@ -1,9 +1,11 @@
 from dateutil.relativedelta import relativedelta
+from django.contrib.auth.models import User
 from django.test import tag, TestCase
-from edc_appointment.constants import COMPLETE_APPT
+from edc_appointment.constants import INCOMPLETE_APPT
 from edc_appointment.models import Appointment as CaregiverAppointment
 from edc_base import get_utcnow
 from edc_constants.constants import MALE, PENDING, POS, YES
+from edc_data_manager.models import DataActionItem
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
@@ -18,6 +20,8 @@ from flourish_child.models import Appointment, ChildDummySubjectConsent, \
 class TestHivInfantTesting(TestCase):
     def setUp(self):
         import_holidays()
+
+        User.objects.get_or_create(username='imosweu')
 
         self.options = {
             'consent_datetime': get_utcnow(),
@@ -261,15 +265,6 @@ class TestHivInfantTesting(TestCase):
         visit = self.create_2000_2001_visits()
         self.create_test_visit(visit=visit)
 
-        app = Appointment.objects.get(
-            visit_code='2001',
-            visit_code_sequence=0,
-            subject_identifier=self.preg_caregiver_child_consent_obj
-            .subject_identifier)
-
-        app.appt_status = COMPLETE_APPT
-        app.save()
-
         mommy.make_recipe(
             'flourish_child.infanthivtestingafterbreastfeeding',
             child_visit=visit,
@@ -293,6 +288,43 @@ class TestHivInfantTesting(TestCase):
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
             visit_code_sequence=1,
             visit_code='2001').entry_status, REQUIRED)
+
+    @tag('tihtcn')
+    def test_infant_hiv_testing_creates_notification(self):
+        visit = self.create_2000_2001_visits()
+        self.create_test_visit(visit=visit)
+
+        app = Appointment.objects.get(
+            visit_code='2002',
+            visit_code_sequence=0,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier)
+
+        app.appt_status = INCOMPLETE_APPT
+        app.save()
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=app,
+            is_present=YES,
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        app.appt_status = INCOMPLETE_APPT
+        app.save()
+
+        mommy.make_recipe(
+            'flourish_child.infanthivtestingafterbreastfeeding',
+            child_visit=visit,
+            report_datetime=get_utcnow(),
+            hiv_test_result=PENDING,
+            user_created='imosweu'
+        )
+        subject = f'Pending hiv results at visit {visit.visit_code}'
+
+        self.assertEqual(DataActionItem.objects.filter(
+            subject_identifier=visit.subject_identifier,
+            subject=subject).count(), 1)
 
     def create_test_visit(self, visit):
         options = ['after_breastfeeding', '18_months', '6_to_8_weeks', '9_months',
