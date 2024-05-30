@@ -5,8 +5,8 @@ from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
 
 from flourish_child.choices import (
-    BUILT_DATES, CARETAKERS, COOKING_METHOD, ETHNICITY, HIGHEST_EDUCATION,
-    HOUSE_TYPE, SCHOOL_TYPE, TOILET_FACILITY, WATER_SOURCE, YES_NO_DONT_KNOW)
+    COOKING_METHOD, ETHNICITY, HIGHEST_EDUCATION,
+    HOUSE_TYPE, SCHOOL_TYPE, TOILET_FACILITY, WATER_SOURCE)
 
 
 class ChildSocioDemographicMixin(models.Model):
@@ -132,65 +132,6 @@ class ChildSocioDemographicMixin(models.Model):
         max_length=3,
         choices=YES_NO,
         null=True)
-
-    primary_caretaker = models.CharField(
-        verbose_name=('Which of the following people would be considered the child\'s '
-                      'primary caretaker:'),
-        max_length=50,
-        choices=CARETAKERS,
-        default=''
-    )
-
-    primary_caretaker_other = OtherCharField()
-
-    secondary_caretaker = models.CharField(
-        verbose_name=('Who provides the second most caretaking responsibilities of the '
-                      'child enrolled in FLOURISH:'),
-        max_length=50,
-        choices=CARETAKERS,
-        null=True,
-        blank=True
-    )
-
-    secondary_caretaker_other = OtherCharField()
-
-    house_painted = models.CharField(
-        verbose_name='Is the house the child lives in currently painted on the outside '
-                     'or inside?',
-        max_length=7,
-        choices=YES_NO,
-        default=''
-    )
-
-    paint_peeling = models.CharField(
-        verbose_name='Is there any peeling, shipping or cracking paint in your home?',
-        max_length=15,
-        choices=YES_NO_DONT_KNOW,
-        blank=True,
-        null=True,
-    )
-
-    building_date = models.CharField(
-        verbose_name='When was the house you live in now built?',
-        max_length=25,
-        choices=BUILT_DATES,
-        default=''
-    )
-
-    near_busy_road = models.CharField(
-        verbose_name='Does the child currently live close to a busy road?',
-        choices=YES_NO,
-        max_length=7,
-        default=''
-    )
-
-    busy_road_before = models.CharField(
-        verbose_name='Since this child was born, have you ever lived next to a busy '
-                     'road?',
-        max_length=7,
-        choices=YES_NO,
-        default=''
-    )
 
     class Meta:
         abstract = True
