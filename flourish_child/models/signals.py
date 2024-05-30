@@ -6,7 +6,7 @@ from django.apps import apps as django_apps
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 from django.forms import model_to_dict
-from edc_appointment.constants import COMPLETE_APPT
+from edc_appointment.constants import COMPLETE_APPT, NEW_APPT
 from edc_appointment.creators import UnscheduledAppointmentCreator, \
     UnscheduledAppointmentError
 from edc_base.utils import age, get_utcnow
@@ -406,23 +406,32 @@ def hiv_testing_and_resulting_on_post_save(sender, instance, raw, created, **kwa
         no_results = [IND, PENDING, UNKNOWN]
         if instance.hiv_test_result in no_results:
             try:
-                appointment_creator = UnscheduledAppointmentCreator(
+                ChildAppointment.objects.get(
                     subject_identifier=instance.child_visit.subject_identifier,
                     visit_schedule_name=instance.child_visit.appointment
                     .visit_schedule_name,
                     schedule_name=instance.child_visit.appointment.schedule_name,
-                    visit_code=instance.child_visit.appointment.visit_code,
-                    facility=instance.child_visit.appointment.facility,
-                    timepoint_datetime=instance.child_visit.appointment
-                    .timepoint_datetime,
-                    check_appointment=False
+                    visit_code_sequence=instance.child_visit.appointment
+                    .visit_code_sequence + 1,
                 )
-                obj = appointment_creator.appointment
-                obj.save()
-            except UnscheduledAppointmentError as e:
-                child_visit = instance.child_visit
-                subject = f'Pending hiv results at visit {child_visit.visit_code}'
-                handle_notification(child_visit, instance, subject)
+            except ChildAppointment.DoesNotExist:
+                try:
+                    UnscheduledAppointmentCreator(
+                        subject_identifier=instance.child_visit.subject_identifier,
+                        visit_schedule_name=instance.child_visit.appointment
+                        .visit_schedule_name,
+                        schedule_name=instance.child_visit.appointment.schedule_name,
+                        visit_code=instance.child_visit.appointment.visit_code,
+                        facility=instance.child_visit.appointment.facility,
+                        timepoint_datetime=instance.child_visit.appointment
+                        .timepoint_datetime,
+                        check_appointment=False,
+                        appt_status=NEW_APPT,
+                    )
+                except UnscheduledAppointmentError as e:
+                    child_visit = instance.child_visit
+                    subject = f'Pending hiv results at visit {child_visit.visit_code}'
+                    handle_notification(child_visit, instance, subject)
 
 
 hiv_testing_models = [InfantHIVTestingAfterBreastfeeding, InfantHIVTestingAge6To8Weeks,

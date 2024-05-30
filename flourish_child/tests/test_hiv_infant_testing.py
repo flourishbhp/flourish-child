@@ -320,11 +320,80 @@ class TestHivInfantTesting(TestCase):
             hiv_test_result=PENDING,
             user_created='imosweu'
         )
+
         subject = f'Pending hiv results at visit {visit.visit_code}'
 
         self.assertEqual(DataActionItem.objects.filter(
             subject_identifier=visit.subject_identifier,
             subject=subject).count(), 1)
+
+    @tag('csupa')
+    def test_create_single_unschedule_per_appt(self):
+        visit = self.create_2000_2001_visits()
+        self.create_test_visit(visit=visit)
+
+        app = Appointment.objects.get(
+            visit_code='2001',
+            visit_code_sequence=0,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier)
+
+        app.appt_status = INCOMPLETE_APPT
+        app.save()
+
+        mommy.make_recipe(
+            'flourish_child.infanthivtestingafterbreastfeeding',
+            child_visit=visit,
+            report_datetime=get_utcnow(),
+            hiv_test_result=PENDING,
+            user_created='imosweu'
+        )
+
+        self.assertEqual(Appointment.objects.filter(
+            visit_code=visit.visit_code,
+            visit_code_sequence=1,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier).count(), 1)
+
+        mommy.make_recipe(
+            'flourish_child.infanthivtestingage6to8weeks',
+            child_visit=visit,
+            report_datetime=get_utcnow(),
+            hiv_test_result=PENDING,
+            user_created='imosweu'
+        )
+
+        self.assertEqual(Appointment.objects.filter(
+            visit_code=visit.visit_code,
+            visit_code_sequence=1,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier).count(), 1)
+
+        self.assertEqual(Appointment.objects.filter(
+            visit_code=visit.visit_code,
+            visit_code_sequence=2,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier).count(), 0)
+
+        mommy.make_recipe(
+            'flourish_child.infanthivtesting9months',
+            child_visit=visit,
+            report_datetime=get_utcnow(),
+            hiv_test_result=PENDING,
+            user_created='imosweu'
+        )
+
+        self.assertEqual(Appointment.objects.filter(
+            visit_code=visit.visit_code,
+            visit_code_sequence=1,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier).count(), 1)
+
+        self.assertEqual(Appointment.objects.filter(
+            visit_code=visit.visit_code,
+            visit_code_sequence=2,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier).count(), 0)
 
     def create_test_visit(self, visit):
         options = ['after_breastfeeding', '18_months', '6_to_8_weeks', '9_months',
