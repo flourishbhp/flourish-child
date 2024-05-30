@@ -4,6 +4,7 @@ from edc_constants.choices import YES_NO
 from edc_constants.constants import YES
 
 from .child_crf_model_mixin import ChildCrfModelMixin
+from ..helper_classes.utils import child_utils
 
 
 class BirthData(ChildCrfModelMixin):
@@ -96,6 +97,14 @@ class BirthData(ChildCrfModelMixin):
         verbose_name="Other birth information ",
         blank=True,
         null=True)
+
+    def save(self, *args, **kwargs):
+        subject_identifier = getattr(
+            self.child_visit, 'subject_identifier', None)
+        if not self.gestational_age:
+            self.gestational_age = child_utils.get_gestational_age(
+                subject_identifier)
+        super().save(*args, **kwargs)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
