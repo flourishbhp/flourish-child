@@ -1433,6 +1433,29 @@ TB_REFERRAL_REASON_CHOICES = (
     (OTHER, 'Other'),
 )
 
+CARETAKERS = [
+    ('bio_mother', 'Biological Mother'),
+    ('caregiver', 'Caregiver'),
+    ('bio_father', 'Biological Father'),
+    ('grandmother', 'Grandmother'),
+    ('grandfather', 'Grandfather'),
+    ('uncle', 'Uncle'),
+    ('aunt', 'Aunt'),
+    ('sister', 'Sister'),
+    ('brother', 'Brother'),
+    ('guardian', 'Guardian'),
+    (OTHER, 'Other'),
+]
+
+BUILT_DATES = (
+    ('before_1980', 'Before 1980'),
+    ('1980-1990', '1980-1990'),
+    ('1991-2000', '1991-2000'),
+    ('2001-2010', '2001-2010'),
+    ('2011-2019', '2011-2019'),
+    ('after_2019', 'After 2019'),
+    ('i_dont_know', 'I don’t know'))
+
 CAREGIVER_EDUCATION_LEVEL_CHOICES = (
     ('no_prim_male_caregiver', 'No primary male caregiver'),
     ('not_educated', 'Not educated'),
