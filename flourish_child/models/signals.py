@@ -3,16 +3,19 @@ from datetime import datetime
 import pytz
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
 from django.forms import model_to_dict
-from edc_appointment.constants import COMPLETE_APPT
+from edc_appointment.constants import COMPLETE_APPT, NEW_APPT
+from edc_appointment.creators import UnscheduledAppointmentCreator, \
+    UnscheduledAppointmentError
 from edc_base.utils import age, get_utcnow
-from edc_constants.constants import IND, MALE, NEG, NO, UNKNOWN, YES
+from edc_constants.constants import IND, MALE, NEG, NO, PENDING, UNKNOWN, YES
 from edc_data_manager.models import DataActionItem
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-from edc_visit_tracking.constants import MISSED_VISIT
 from edc_visit_schedule.subject_schedule import InvalidOffscheduleDate
+from edc_visit_tracking.constants import MISSED_VISIT
+
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_tb_presence_household_member import \
@@ -27,13 +30,17 @@ from flourish_prn.action_items import CHILD_DEATH_REPORT_ACTION, \
 from flourish_prn.models import TBAdolOffStudy
 from flourish_prn.models.child_death_report import ChildDeathReport
 from pre_flourish.helper_classes import MatchHelper
+from . import InfantHIVTesting18Months, InfantHIVTesting9Months, \
+    InfantHIVTestingAfterBreastfeeding, \
+    InfantHIVTestingAge6To8Weeks, InfantHIVTestingBirth, InfantHIVTestingOther
 from .child_assent import ChildAssent
 from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
 from ..action_items import YOUNG_ADULT_LOCATOR_ACTION
 from ..helper_classes import ChildFollowUpBookingHelper, ChildOnScheduleHelper
-from ..helper_classes.utils import (child_utils, notification, stamp_image,
+from ..helper_classes.utils import (child_utils, handle_notification, notification,
+                                    stamp_image,
                                     trigger_action_item)
 from ..models import AcademicPerformance, ChildOffSchedule, ChildSocioDemographic
 from ..models import ChildPreHospitalizationInline, InfantHIVTesting
@@ -391,16 +398,49 @@ def academic_performance_on_post_save(sender, instance, raw, created, **kwargs):
         if overall_performance and overall_performance == 'pending':
             child_visit = instance.child_visit
             subject = f'Pending academic results at visit {child_visit.visit_code}'
+            handle_notification(child_visit, instance, subject)
+
+
+def hiv_testing_and_resulting_on_post_save(sender, instance, raw, created, **kwargs):
+    if created:
+        no_results = [IND, PENDING, UNKNOWN]
+        if instance.hiv_test_result in no_results:
             try:
-                DataActionItem.objects.get(
-                    subject_identifier=child_visit.subject_identifier,
-                    subject=subject)
-            except DataActionItem.DoesNotExist:
-                notification(
-                    subject_identifier=child_visit.subject_identifier,
-                    user_created=instance.user_created,
-                    subject=subject,
-                    comment=f'{subject}. Please capture results once available.')
+                ChildAppointment.objects.get(
+                    subject_identifier=instance.child_visit.subject_identifier,
+                    visit_schedule_name=instance.child_visit.appointment
+                    .visit_schedule_name,
+                    schedule_name=instance.child_visit.appointment.schedule_name,
+                    visit_code_sequence=instance.child_visit.appointment
+                    .visit_code_sequence + 1,
+                )
+            except ChildAppointment.DoesNotExist:
+                try:
+                    UnscheduledAppointmentCreator(
+                        subject_identifier=instance.child_visit.subject_identifier,
+                        visit_schedule_name=instance.child_visit.appointment
+                        .visit_schedule_name,
+                        schedule_name=instance.child_visit.appointment.schedule_name,
+                        visit_code=instance.child_visit.appointment.visit_code,
+                        facility=instance.child_visit.appointment.facility,
+                        timepoint_datetime=instance.child_visit.appointment
+                        .timepoint_datetime,
+                        check_appointment=False,
+                        appt_status=NEW_APPT,
+                    )
+                except UnscheduledAppointmentError as e:
+                    child_visit = instance.child_visit
+                    subject = f'Pending hiv results at visit {child_visit.visit_code}'
+                    handle_notification(child_visit, instance, subject)
+
+
+hiv_testing_models = [InfantHIVTestingAfterBreastfeeding, InfantHIVTestingAge6To8Weeks,
+                      InfantHIVTesting9Months, InfantHIVTesting18Months,
+                      InfantHIVTestingBirth, InfantHIVTestingOther]
+
+for model_class in hiv_testing_models:
+    post_save.connect(hiv_testing_and_resulting_on_post_save, sender=model_class,
+                      weak=False, dispatch_uid='hiv_testing_and_resulting_on_post_save')
 
 
 @receiver(post_save, weak=False, sender=ChildPreHospitalizationInline,
@@ -561,7 +601,8 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
             onschedule_model_cls = django_apps.get_model(onschedule_model)
 
             '''Get only on schedule model so we can filter by caregiver_subject_identifier
-            and child_subject_identifier, that in turn will give us the correct schedule name a
+            and child_subject_identifier, that in turn will give us the correct 
+            schedule name a
             child is associated with'''
 
             schedule_objs = onschedule_model_cls.objects.filter(
