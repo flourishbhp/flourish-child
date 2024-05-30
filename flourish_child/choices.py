@@ -1404,7 +1404,6 @@ HAPPENED_APP = (
     (NOT_APPLICABLE, 'Not Applicable')
 )
 
-
 PERIOD_HAPPENED_DONT_KNOW = (
     ('past_6_months', 'Past 6 months'),
     ('more_than_6_months', 'Longer than 6 months ago'),
@@ -1416,7 +1415,6 @@ HAPPENED_DONT_KNOW = (
     ('ever_happened', 'Ever Happened'),
     (DONT_KNOW, "Don't know")
 )
-
 
 HIV_PERSPECTIVE = (
     ('no_one_thinks_that', 'No one thinks that'),
@@ -1432,5 +1430,31 @@ TB_REFERRAL_REASON_CHOICES = (
     ('weight_loss', 'Weight loss'),
     ('fatigue', 'Fatigue'),
     ('household_Contact_with_TB', 'Household Contact with TB'),
+    (OTHER, 'Other'),
+)
+
+CAREGIVER_EDUCATION_LEVEL_CHOICES = (
+    ('no_prim_male_caregiver', 'No primary male caregiver'),
+    ('not_educated', 'Not educated'),
+    ('primary', 'Primary'),
+    ('secondary', 'Secondary'),
+    ('tertiary', 'Tertiary')
+)
+
+HOUSE_YEAR_BUILT_CHOICES = (
+    ('before_1980', 'Before 1980'),
+    ('1980-1990', '1980-1990'),
+    ("1991-2000", '1991-2000'),
+    ("2001-2010", '2001-2010'),
+    ("2011-2019", '2011-2019')
+)
+
+BUSINESSES_RUN = (
+    ('seamstress', 'Seamstress'),
+    ('welding', 'Welding'),
+    ('vehicle_repair', 'Vehicle repair'),
+    ('furniture_construction', 'Furniture construction/repair'),
+    ('selling', 'Selling'),
+    ('painting', 'Painting'),
     (OTHER, 'Other'),
 )

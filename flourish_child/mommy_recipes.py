@@ -23,10 +23,11 @@ from .models import (ChildAssent, ChildBirth, ChildClinicalMeasurements, ChildDa
                      InfantDevScreening18Months, InfantDevScreening36Months,
                      TbAdolAssent, TbAdolEngagement, TbAdolInterview, TbLabResultsAdol,
                      TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent)
+
 from .models import (ChildContinuedConsent, ChildGadAnxietyScreening,
                      ChildPhqDepressionScreening, ChildSocioDemographic, ChildTBReferral,
                      ChildTBScreening, InfantArvProphylaxis, InfantFeeding,
-                     InfantHIVTesting, InfantHIVTestingAfterBreastfeeding)
+                     InfantHIVTesting, InfantHIVTestingAfterBreastfeeding, ChildhoodLeadExposureRisk)
 
 fake = Faker()
 
@@ -289,4 +290,8 @@ childcontinuedconsent = Recipe(
     identity=seq('123425679'),
     confirm_identity=seq('123425679'),
     identity_type='OMANG',
+)
+
+childhoodleadexposurerisk=Recipe(
+ChildhoodLeadExposureRisk
 )
