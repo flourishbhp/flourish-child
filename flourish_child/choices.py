@@ -1455,3 +1455,29 @@ BUILT_DATES = (
     ('2011-2019', '2011-2019'),
     ('after_2019', 'After 2019'),
     ('i_dont_know', 'I don’t know'))
+
+CAREGIVER_EDUCATION_LEVEL_CHOICES = (
+    ('no_prim_male_caregiver', 'No primary male caregiver'),
+    ('not_educated', 'Not educated'),
+    ('primary', 'Primary'),
+    ('secondary', 'Secondary'),
+    ('tertiary', 'Tertiary')
+)
+
+HOUSE_YEAR_BUILT_CHOICES = (
+    ('before_1980', 'Before 1980'),
+    ('1980-1990', '1980-1990'),
+    ("1991-2000", '1991-2000'),
+    ("2001-2010", '2001-2010'),
+    ("2011-2019", '2011-2019')
+)
+
+BUSINESSES_RUN = (
+    ('seamstress', 'Seamstress'),
+    ('welding', 'Welding'),
+    ('vehicle_repair', 'Vehicle repair'),
+    ('furniture_construction', 'Furniture construction/repair'),
+    ('selling', 'Selling'),
+    ('painting', 'Painting'),
+    (OTHER, 'Other'),
+)
