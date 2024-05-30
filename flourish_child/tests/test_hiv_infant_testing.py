@@ -1,7 +1,11 @@
 from dateutil.relativedelta import relativedelta
+from django.contrib.auth.models import User
 from django.test import tag, TestCase
+from edc_appointment.constants import INCOMPLETE_APPT
+from edc_appointment.models import Appointment as CaregiverAppointment
 from edc_base import get_utcnow
-from edc_constants.constants import MALE, POS, YES
+from edc_constants.constants import MALE, PENDING, POS, YES
+from edc_data_manager.models import DataActionItem
 from edc_facility.import_holidays import import_holidays
 from edc_metadata import NOT_REQUIRED, REQUIRED
 from edc_metadata.models import CrfMetadata
@@ -17,9 +21,11 @@ class TestHivInfantTesting(TestCase):
     def setUp(self):
         import_holidays()
 
+        User.objects.get_or_create(username='imosweu')
+
         self.options = {
             'consent_datetime': get_utcnow(),
-            'version': '1'
+            'version': '4'
         }
 
         self.maternal_dataset_options = {
@@ -69,7 +75,7 @@ class TestHivInfantTesting(TestCase):
             confirm_identity=None,
             study_child_identifier=None,
             child_dob=None,
-            version='2')
+            version='4')
 
         self.preg_subject_identifier = self.preg_subject_consent.subject_identifier
 
@@ -79,6 +85,20 @@ class TestHivInfantTesting(TestCase):
             child_subject_identifier=self.preg_caregiver_child_consent_obj
             .subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        caregiver_visit = mommy.make_recipe(
+            'flourish_caregiver.maternalvisit',
+            appointment=CaregiverAppointment.objects.get(
+                subject_identifier=self.preg_subject_consent.subject_identifier,
+                visit_code='1000M'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_caregiver.ultrasound',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
+            maternal_visit=caregiver_visit, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
@@ -196,24 +216,7 @@ class TestHivInfantTesting(TestCase):
 
     @tag('ihtb')
     def test_infant_hiv_testing_birth(self):
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2000D',
-                subject_identifier=self.preg_caregiver_child_consent_obj
-                .subject_identifier),
-            is_present=YES,
-            report_datetime=get_utcnow(),
-            reason=SCHEDULED)
-
-        visit = mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2001',
-                subject_identifier=self.preg_caregiver_child_consent_obj
-                .subject_identifier),
-            report_datetime=get_utcnow(),
-            reason=SCHEDULED)
+        visit = self.create_2000_2001_visits()
 
         self.assertEqual(CrfMetadata.objects.get(
             model='flourish_child.infanthivtestingbirth',
@@ -235,6 +238,95 @@ class TestHivInfantTesting(TestCase):
             subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
             visit_code='2001').entry_status, NOT_REQUIRED)
 
+        self.create_test_visit(visit=visit)
+
+        self.assertEqual(CrfMetadata.objects.get(
+            model='flourish_child.infanthivtestingbirth',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            visit_code='2001').entry_status, REQUIRED)
+
+        self.assertEqual(CrfMetadata.objects.get(
+            model='flourish_child.infanthivtestingafterbreastfeeding',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            visit_code='2001').entry_status, REQUIRED)
+
+        self.assertEqual(CrfMetadata.objects.get(
+            model='flourish_child.infanthivtesting18months',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            visit_code='2001').entry_status, REQUIRED)
+
+        self.assertEqual(CrfMetadata.objects.get(
+            model='flourish_child.infanthivtestingage6to8weeks',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            visit_code='2001').entry_status, REQUIRED)
+
+    @tag('ihtrp')
+    def test_infant_hiv_testing_results_pending(self):
+        visit = self.create_2000_2001_visits()
+        self.create_test_visit(visit=visit)
+
+        mommy.make_recipe(
+            'flourish_child.infanthivtestingafterbreastfeeding',
+            child_visit=visit,
+            report_datetime=get_utcnow(),
+            hiv_test_result=PENDING
+        )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2001',
+                visit_code_sequence=1,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier),
+            is_present=YES,
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(CrfMetadata.objects.get(
+            model='flourish_child.infanthivtestingafterbreastfeeding',
+            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            visit_code_sequence=1,
+            visit_code='2001').entry_status, REQUIRED)
+
+    @tag('tihtcn')
+    def test_infant_hiv_testing_creates_notification(self):
+        visit = self.create_2000_2001_visits()
+        self.create_test_visit(visit=visit)
+
+        app = Appointment.objects.get(
+            visit_code='2002',
+            visit_code_sequence=0,
+            subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier)
+
+        app.appt_status = INCOMPLETE_APPT
+        app.save()
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=app,
+            is_present=YES,
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        app.appt_status = INCOMPLETE_APPT
+        app.save()
+
+        mommy.make_recipe(
+            'flourish_child.infanthivtestingafterbreastfeeding',
+            child_visit=visit,
+            report_datetime=get_utcnow(),
+            hiv_test_result=PENDING,
+            user_created='imosweu'
+        )
+        subject = f'Pending hiv results at visit {visit.visit_code}'
+
+        self.assertEqual(DataActionItem.objects.filter(
+            subject_identifier=visit.subject_identifier,
+            subject=subject).count(), 1)
+
+    def create_test_visit(self, visit):
         options = ['after_breastfeeding', '18_months', '6_to_8_weeks', '9_months',
                    'birth']
         option_list = []
@@ -256,22 +348,25 @@ class TestHivInfantTesting(TestCase):
             hiv_test.test_visit.add(option)
         hiv_test.save()
 
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.infanthivtestingbirth',
-            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            visit_code='2001').entry_status, REQUIRED)
+    def create_2000_2001_visits(self):
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2000D',
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier),
+            is_present=YES,
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
 
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.infanthivtestingafterbreastfeeding',
-            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            visit_code='2001').entry_status, REQUIRED)
+        visit = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='2001',
+                visit_code_sequence=0,
+                subject_identifier=self.preg_caregiver_child_consent_obj
+                .subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
 
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.infanthivtesting18months',
-            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            visit_code='2001').entry_status, REQUIRED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.infanthivtestingage6to8weeks',
-            subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
-            visit_code='2001').entry_status, REQUIRED)
+        return visit

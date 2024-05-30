@@ -18,6 +18,7 @@ class AppConfig(DjangoAppConfig):
 
     def ready(self):
         from .models import child_consent_on_post_save
+        import flourish_child.models.signals
 
 
 if settings.APP_NAME == 'flourish_child':
@@ -59,9 +60,11 @@ if settings.APP_NAME == 'flourish_child':
 
 
     class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
-        reason_field = {'flourish_child.childvisit': 'reason',
-                        'pre_flourish.preflourishvisit': 'reason',
-                        'flourish_facet.facetvisit': 'reason', }
+        reason_field = {
+            'pre_flourish.preflourishvisit': 'reason',
+            'flourish_caregiver.maternalvisit': 'reason',
+            'flourish_child.childvisit': 'reason',
+            'flourish_facet.facetvisit': 'reason', }
         create_on_reasons = [SCHEDULED, UNSCHEDULED, COMPLETED_PROTOCOL_VISIT]
         delete_on_reasons = [LOST_VISIT, MISSED_VISIT, FAILED_ELIGIBILITY]
 
