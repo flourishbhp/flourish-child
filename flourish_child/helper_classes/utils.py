@@ -209,6 +209,19 @@ def notification(subject_identifier, subject, user_created,
                     comment=comment)
 
 
+def handle_notification(visit, instance, subject):
+    try:
+        DataActionItem.objects.get(
+            subject_identifier=visit.subject_identifier,
+            subject=subject)
+    except DataActionItem.DoesNotExist:
+        notification(
+            subject_identifier=visit.subject_identifier,
+            user_created=instance.user_created,
+            subject=subject,
+            comment=f'{subject}. Please capture results once available.')
+
+
 def trigger_action_item(model_cls, action_name, subject_identifier, repeat=False):
     action_cls = site_action_items.get(
         model_cls.action_name)
