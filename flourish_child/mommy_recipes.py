@@ -27,6 +27,7 @@ from .models import (ChildAssent, ChildBirth, ChildClinicalMeasurements, ChildDa
 from .models import (ChildContinuedConsent, ChildGadAnxietyScreening,
                      ChildPhqDepressionScreening, ChildSocioDemographic, ChildTBReferral,
                      ChildTBScreening, InfantArvProphylaxis, InfantFeeding,
+                     InfantHIVTestingAge6To8Weeks, InfantHIVTesting9Months,
                      InfantHIVTesting, InfantHIVTestingAfterBreastfeeding, ChildhoodLeadExposureRisk)
 
 fake = Faker()
@@ -281,6 +282,14 @@ childtbscreening = Recipe(
 
 infanthivtestingafterbreastfeeding = Recipe(
     InfantHIVTestingAfterBreastfeeding,
+)
+
+infanthivtestingage6to8weeks = Recipe(
+    InfantHIVTestingAge6To8Weeks,
+)
+
+infanthivtesting9months = Recipe(
+    InfantHIVTesting9Months,
 )
 
 childcontinuedconsent = Recipe(
