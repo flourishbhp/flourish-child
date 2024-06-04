@@ -1,12 +1,17 @@
 from dateutil.relativedelta import relativedelta
+from django.apps import apps as django_apps
 from django.test import tag, TestCase
+from edc_appointment.models import Appointment as CaregiverAppointment
 from edc_base import get_utcnow
 from edc_constants.constants import NEG, YES
 from edc_facility.import_holidays import import_holidays
+from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
 
 from flourish_child.models import ChildDummySubjectConsent, \
     OnScheduleChildCohortABirth, OnScheduleChildCohortAEnrollment
+
+app_config = django_apps.get_app_config('flourish_child')
 
 
 @tag('aaeas')
@@ -16,7 +21,7 @@ class TestAntenatalEnrolmentSchedules(TestCase):
 
         self.options = {
             'consent_datetime': get_utcnow(),
-            'version': '2'
+            'version': app_config.consent_version
         }
 
         self.screening_preg = mommy.make_recipe(
@@ -45,14 +50,30 @@ class TestAntenatalEnrolmentSchedules(TestCase):
 
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
-            child_subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             current_hiv_status=NEG,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        caregiver_visit = mommy.make_recipe(
+            'flourish_caregiver.maternalvisit',
+            appointment=CaregiverAppointment.objects.get(
+                subject_identifier=self.preg_subject_consent.subject_identifier,
+                visit_code='1000M'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_caregiver.ultrasound',
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
+            maternal_visit=caregiver_visit, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=self.preg_subject_consent.subject_identifier,
-            child_subject_identifier=self.preg_caregiver_child_consent_obj.subject_identifier,
+            child_subject_identifier=self.preg_caregiver_child_consent_obj
+            .subject_identifier,
             delivery_datetime=get_utcnow(),
             live_infants_to_register=1)
 

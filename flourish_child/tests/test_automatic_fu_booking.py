@@ -1,15 +1,23 @@
-from dateutil.relativedelta import relativedelta
-from django.test import TestCase, tag
-from edc_base import get_utcnow
-from edc_constants.constants import MALE, YES, NOT_APPLICABLE, NEG, FEMALE
-from edc_facility.import_holidays import import_holidays
-from model_mommy import mommy
+import datetime
 from unittest.case import skip
-from flourish_calendar.models import ParticipantNote
 
+from dateutil.relativedelta import relativedelta
+from django.apps import apps as django_apps
+from django.test import tag, TestCase
+from django.utils import timezone
+from edc_appointment.models import Appointment as CaregiverAppointment
+from edc_base import get_utcnow
+from edc_constants.constants import FEMALE, MALE, NEG, NOT_APPLICABLE, YES
+from edc_facility.import_holidays import import_holidays
+from edc_visit_tracking.constants import SCHEDULED
+from model_mommy import mommy
+
+from flourish_calendar.models import ParticipantNote
 from ..helper_classes import ChildFollowUpBookingHelper
-from ..models import (ChildDummySubjectConsent, OnScheduleChildCohortAEnrollment,
-                      OnScheduleChildCohortCSec, OnScheduleChildCohortABirth)
+from ..models import (ChildDummySubjectConsent, OnScheduleChildCohortABirth,
+                      OnScheduleChildCohortAEnrollment, OnScheduleChildCohortCSec)
+
+app_config = django_apps.get_app_config('flourish_child')
 
 
 @tag('booking')
@@ -21,15 +29,15 @@ class TestFuBooking(TestCase):
 
         self.options = {
             'consent_datetime': get_utcnow(),
-            'version': '1'
-            }
+            'version': app_config.consent_version
+        }
 
         self.maternal_dataset_options = {
             'mom_enrolldate': get_utcnow(),
             'mom_hivstatus': 'HIV-infected',
             'study_maternal_identifier': '12345',
             'protocol': 'Tshilo Dikotla'
-            }
+        }
 
         self.child_dataset_options = {
             'infant_hiv_exposed': 'Exposed',
@@ -37,7 +45,7 @@ class TestFuBooking(TestCase):
             'study_maternal_identifier': '12345',
             'study_child_identifier': '1234',
             'infant_sex': MALE
-            }
+        }
 
         self.child_assent_options = {
             'gender': MALE,
@@ -49,7 +57,7 @@ class TestFuBooking(TestCase):
             'confirm_identity': '123425678',
             'preg_testing': YES,
             'citizen': YES
-            }
+        }
 
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',
@@ -64,13 +72,13 @@ class TestFuBooking(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.flourishconsentversion',
             screening_identifier=maternal_dataset_obj.screening_identifier,
-            version='1',
-            child_version='1')
+            version=app_config.consent_version,
+            child_version=app_config.consent_version)
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
             screening_identifier=maternal_dataset_obj.screening_identifier,
-            )
+        )
 
         self.subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -86,10 +94,16 @@ class TestFuBooking(TestCase):
             study_child_identifier=child_dataset.study_child_identifier,
             child_dob=maternal_dataset_obj.delivdt.date(), )
 
+        naive_datetime = datetime.datetime.combine(
+            datetime.date(2025, 4, 30) - relativedelta(years=2), datetime.time())
+        self.aware_datetime = timezone.make_aware(naive_datetime)
+
         mommy.make_recipe(
             'flourish_caregiver.caregiverpreviouslyenrolled',
+            report_datetime=self.aware_datetime,
             subject_identifier=self.subject_consent.subject_identifier)
 
+    @tag('fub')
     def test_fu_booking(self):
         self.assertEqual(ChildDummySubjectConsent.objects.filter(
             identity=self.caregiver_child_consent.identity).count(), 1)
@@ -112,7 +126,7 @@ class TestFuBooking(TestCase):
     def test_fu_booking_birth(self):
         screening_preg = mommy.make_recipe(
             'flourish_caregiver.screeningpregwomen',
-            )
+        )
 
         preg_subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -131,25 +145,38 @@ class TestFuBooking(TestCase):
             confirm_identity=None,
             study_child_identifier=None,
             child_dob=None,
-            version='2')
+            version=app_config.consent_version)
 
         mommy.make_recipe(
             'flourish_caregiver.antenatalenrollment',
             current_hiv_status=NEG,
             child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
-            subject_identifier=preg_subject_consent.subject_identifier,)
+            subject_identifier=preg_subject_consent.subject_identifier, )
+
+        caregiver_visit = mommy.make_recipe(
+            'flourish_caregiver.maternalvisit',
+            appointment=CaregiverAppointment.objects.get(
+                subject_identifier=preg_subject_consent.subject_identifier,
+                visit_code='1000M'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_caregiver.ultrasound',
+            child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
+            maternal_visit=caregiver_visit, )
 
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=preg_subject_consent.subject_identifier,
             child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
-            delivery_datetime=get_utcnow(),
+            delivery_datetime=self.aware_datetime,
             live_infants_to_register=1)
 
         mommy.make_recipe(
             'flourish_child.childbirth',
             subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
-            dob=(get_utcnow() - relativedelta(days=1)).date(),
+            dob=self.aware_datetime.date(),
             gender=MALE)
 
         self.assertEqual(OnScheduleChildCohortABirth.objects.filter(
@@ -182,7 +209,7 @@ class TestFuBooking(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
             screening_identifier=maternal_dataset_obj.screening_identifier,
-            )
+        )
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -222,6 +249,7 @@ class TestFuBooking(TestCase):
         self.assertEqual(child1.date, rescheduled_dt.date())
         self.assertEqual(child2.date, booking_dt.date())
 
+    @tag('sans')
     def test_sec_aims_not_scheduled(self):
         self.maternal_dataset_options.update(
             study_maternal_identifier='4321',
@@ -244,12 +272,12 @@ class TestFuBooking(TestCase):
         mommy.make_recipe(
             'flourish_caregiver.flourishconsentversion',
             screening_identifier=maternal_dataset_obj.screening_identifier,
-            version='1',
-            child_version='1')
+            version=app_config.consent_version,
+            child_version=app_config.consent_version)
 
         mommy.make_recipe(
             'flourish_caregiver.screeningpriorbhpparticipants',
-            screening_identifier=maternal_dataset_obj.screening_identifier,)
+            screening_identifier=maternal_dataset_obj.screening_identifier, )
 
         subject_consent = mommy.make_recipe(
             'flourish_caregiver.subjectconsent',
@@ -263,7 +291,7 @@ class TestFuBooking(TestCase):
             subject_consent=subject_consent,
             gender=MALE,
             study_child_identifier=child_dataset.study_child_identifier,
-            child_dob=maternal_dataset_obj.delivdt.date(),)
+            child_dob=maternal_dataset_obj.delivdt.date(), )
 
         child_assent = mommy.make_recipe(
             'flourish_child.childassent',
@@ -286,7 +314,6 @@ class TestFuBooking(TestCase):
 
         self.assertEqual(ParticipantNote.objects.filter(
             subject_identifier=child_assent.subject_identifier).count(), 0)
-
 
     @skip("Only showing notification, no longer scheduling from signals")
     def test_aging_out_scheduling(self):

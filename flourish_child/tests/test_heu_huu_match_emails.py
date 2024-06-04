@@ -69,7 +69,7 @@ class TestHEUHUUMatchEmails(TestCase):
             subject_consent=self.subject_consent,
             gender=MALE,
             study_child_identifier=self.child_dataset_options['study_child_identifier'],
-            child_dob=maternal_dataset_obj.delivdt, )
+            child_dob=maternal_dataset_obj.delivdt.date(), )
 
         mommy.make_recipe(
             'flourish_child.childassent',
@@ -95,7 +95,7 @@ class TestHEUHUUMatchEmails(TestCase):
             reason=SCHEDULED)
 
         self.bmi_group = '>18'
-        self.age_range = '(9.5, 13)'
+        self.age_range = '(9.5, 14)'
         self.gender = 'female'
         self.subject_identifiers = '[\'123\', \'456\']'
         self.matrix_pool = MatrixPool.objects.create(
@@ -146,7 +146,7 @@ class TestHEUHUUMatchEmails(TestCase):
         """Test that a new matrix pool is created when a new child clinical
         measurement is saved."""
         self.bmi_group = '<14.9'
-        self.age_range = '(9.5, 13)'
+        self.age_range = '(9.5, 14)'
         self.gender = 'female'
         subject_identifier = self.child_visit.subject_identifier
         self.matrix_pool = MatrixPool.objects.create(
