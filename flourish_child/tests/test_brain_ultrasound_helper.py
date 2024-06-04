@@ -81,12 +81,14 @@ class TestBrainUltrasoundHelper(TestCase):
     @mock.patch('flourish_child.helper_classes.brain_ultrasound_helper.requests')
     @mock.patch('flourish_child.helper_classes.brain_ultrasound_helper.settings')
     def test_is_enrolled_brain_ultrasound_success(self, mock_settings, mock_requests):
-        mock_requests.post.return_value.json.return_value = True
+        mock_requests.post.return_value.json.return_value = [
+            {'reviewed_v4': '1', 'answered_v4': '1', 'asked_v4': '1', 'verified_v4': '1',
+             'copy_v4': '1'}]
         brain_ultrasound_helper = BrainUltrasoundHelper(
             self.child_consent.subject_identifier,
             self.subject_consent.subject_identifier)
 
-        self.assertEqual(brain_ultrasound_helper.is_enrolled_brain_ultrasound(), True)
+        self.assertTrue(brain_ultrasound_helper.is_enrolled_brain_ultrasound())
 
     @mock.patch('flourish_child.helper_classes.brain_ultrasound_helper.logger')
     @patch('requests.post')

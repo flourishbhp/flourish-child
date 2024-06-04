@@ -1,4 +1,5 @@
 from dateutil.relativedelta import relativedelta
+from django.apps import apps as django_apps
 from django.test import tag, TestCase
 from edc_base import get_utcnow
 from edc_constants.constants import MALE, YES
@@ -12,6 +13,10 @@ from flourish_child.helper_classes.child_fu_onschedule_helper import \
     ChildFollowUpEnrolmentHelper
 from flourish_child.models import Appointment, ChildDummySubjectConsent
 
+app_config = django_apps.get_app_config('flourish_child')
+
+edc_protocol = django_apps.get_app_config('edc_protocol')
+
 
 @tag('cler')
 class TestChildhoodLeadExposureRisk(TestCase):
@@ -21,7 +26,7 @@ class TestChildhoodLeadExposureRisk(TestCase):
 
         self.options = {
             'consent_datetime': get_utcnow(),
-            'version': '1'}
+            'version': app_config.consent_version}
 
         self.maternal_dataset_options = {
             'delivdt': get_utcnow() - relativedelta(years=2, months=0),
@@ -165,3 +170,63 @@ class TestChildhoodLeadExposureRisk(TestCase):
             model='flourish_child.childhoodleadexposurerisk',
             subject_identifier=self.caregiver_child_consent.subject_identifier,
             visit_code='3001').entry_status, NOT_REQUIRED)
+
+    @tag('ryl')
+    def test_required_year_later(self, ):
+        visit = mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='3000',
+                subject_identifier=self.caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childhoodleadexposurerisk',
+            child_visit=visit
+        )
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='3001',
+                subject_identifier=self.caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='3002',
+                subject_identifier=self.caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='3003',
+                subject_identifier=self.caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='3004',
+                subject_identifier=self.caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_child.childvisit',
+            appointment=Appointment.objects.get(
+                visit_code='3005',
+                subject_identifier=self.caregiver_child_consent.subject_identifier),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        self.assertEqual(CrfMetadata.objects.get(
+            model='flourish_child.childhoodleadexposurerisk',
+            subject_identifier=self.caregiver_child_consent.subject_identifier,
+            visit_code='3005').entry_status, REQUIRED)
