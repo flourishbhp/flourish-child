@@ -72,5 +72,5 @@ class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
-        verbose_name = "Child Sociodemographic Data"
-        verbose_name_plural = "Child Sociodemographic Data"
+        verbose_name = "Child Sociodemographic Data Version 2"
+        verbose_name_plural = "Child Sociodemographic Data Version 2"
