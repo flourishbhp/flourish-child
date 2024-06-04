@@ -43,7 +43,7 @@ class ChildFollowUpEnrolmentHelper(object):
         appts = Appointment.objects.filter(
             ~Q(appt_status=NEW_APPT) & ~Q(schedule_name__icontains='sec'),
             subject_identifier=subject_identifier).exclude(
-                schedule_name__icontains='tb')
+            schedule_name__icontains='tb')
 
         if appts:
             latest = appts.order_by('timepoint').last()
@@ -94,6 +94,7 @@ class ChildFollowUpEnrolmentHelper(object):
             onschedule_model=onschedule_model_cls._meta.label_lower)
 
         new_schedule.put_on_schedule(
+            onschedule_datetime=self.onschedule_datetime,
             subject_identifier=subject_identifier,
             schedule_name=schedule_name)
 
@@ -110,13 +111,12 @@ class ChildFollowUpEnrolmentHelper(object):
                                           latest_child_appt.subject_identifier)
 
             if self.update_mother:
-
                 cohort = latest_child_appt.schedule_name.split('_')[1]
                 schedule_number = latest_child_appt.schedule_name[-1]
                 caregiver_pid = child_utils.caregiver_subject_identifier(
                     subject_identifier=self.subject_identifier)
                 schedule_enrol_helper = FollowUpEnrolmentHelper(
-                            subject_identifier=caregiver_pid,
-                            cohort=cohort,
-                            schedule_number=schedule_number)
+                    subject_identifier=caregiver_pid,
+                    cohort=cohort,
+                    schedule_number=schedule_number)
                 schedule_enrol_helper.activate_fu_schedule()

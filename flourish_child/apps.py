@@ -12,7 +12,7 @@ class AppConfig(DjangoAppConfig):
     start_date_year_3 = datetime(
         2022, 7, 1, 0, 0, 0, tzinfo=gettz('UTC')).date()
     end_date_year_5 = datetime(
-        2024, 6, 30, 0, 0, 0, tzinfo=gettz('UTC')).date()
+        2025, 6, 30, 0, 0, 0, tzinfo=gettz('UTC')).date()
 
     consent_version = 4
 
@@ -77,7 +77,7 @@ if settings.APP_NAME == 'flourish_child':
         study_open_datetime = datetime(
             2020, 8, 14, 0, 0, 0, tzinfo=gettz('UTC'))
         study_close_datetime = datetime(
-            2025, 8, 13, 23, 59, 59, tzinfo=gettz('UTC'))
+            2026, 8, 13, 23, 59, 59, tzinfo=gettz('UTC'))
 
 
     class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
