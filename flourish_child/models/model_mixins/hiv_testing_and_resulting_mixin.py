@@ -57,8 +57,7 @@ class HIVTestingAndResultingMixin(models.Model):
         verbose_name='What is the result of the HIV test?',
         choices=POS_NEG_PENDING_UNKNOWN,
         max_length=20,
-        null=True,
-        blank=True
+        default=''
     )
 
     additional_comments = models.TextField(
