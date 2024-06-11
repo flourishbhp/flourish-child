@@ -1,11 +1,11 @@
 from django.db import models
-from edc_constants.choices import YES_NO
+from edc_base.model_fields import OtherCharField
 
-from flourish_caregiver.choices import YES_NO_UKN_CHOICES
+from flourish_caregiver.choices import YES_NO_AR_OTHER, YES_NO_UKN_CHOICES
 from flourish_caregiver.helper_classes.tb_diagnosis import TBDiagnosis
 from flourish_caregiver.models.model_mixins.flourish_tb_screening_mixin import \
     TBScreeningMixin
-from flourish_child.choices import TEST_RESULTS_CHOICES, YES_NO_UNKNOWN
+from flourish_child.choices import TEST_RESULTS_CHOICES, YES_NO_OTHER, YES_NO_UNKNOWN
 from flourish_child.helper_classes.utils import child_utils
 from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
 
@@ -48,27 +48,36 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
 
     child_diagnosed_with_tb = models.CharField(
         verbose_name='Was your child diagnosed with TB?',
-        choices=YES_NO_UKN_CHOICES,
+        choices=YES_NO_AR_OTHER,
         max_length=20,
         blank=True, null=True)
+
+    child_diagnosed_with_tb_other = OtherCharField(
+        verbose_name='If other, specify', )
 
     child_on_tb_treatment = models.CharField(
         verbose_name='Was your child started on TB treatment?',
-        choices=YES_NO_UKN_CHOICES,
+        choices=YES_NO_OTHER,
         max_length=20,
         blank=True, null=True)
 
+    child_on_tb_treatment_other = OtherCharField(
+        verbose_name='If other, specify', )
+
     child_on_tb_preventive_therapy = models.CharField(
         verbose_name='Was your child started on TB preventative therapy?',
-        choices=YES_NO_UKN_CHOICES,
+        choices=YES_NO_OTHER,
         max_length=20,
         blank=True, null=True)
+
+    child_on_tb_preventive_therapy_other = OtherCharField(
+        verbose_name='If other, specify', )
 
     evaluated_for_tb = models.CharField(
         verbose_name='Since the last time you spoke with FLOURISH staff, has your child '
                      'been evaluated in a clinic for TB? ',
-        choices=YES_NO,
-        max_length=3,
+        choices=YES_NO_UKN_CHOICES,
+        max_length=20,
     )
 
     def save(self, *args, **kwargs):
