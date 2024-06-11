@@ -19,14 +19,15 @@ from flourish_child.models.child_phq_referral_fu import ChildPhqReferralFU
 from flourish_prn.models.tb_adol_off_study import TBAdolOffStudy
 from .models import (ChildAssent, ChildBirth, ChildClinicalMeasurements, ChildDataset,
                      ChildDummySubjectConsent, ChildFoodSecurityQuestionnaire, ChildVisit,
-                     HivTestingAdol,
-                     InfantDevScreening12Months, InfantDevScreening18Months,
-                     InfantDevScreening36Months,
+                     HivTestingAdol, InfantDevScreening12Months,
+                     InfantDevScreening18Months, InfantDevScreening36Months,
                      TbAdolAssent, TbAdolEngagement, TbAdolInterview, TbLabResultsAdol,
                      TbPresenceHouseholdMembersAdol, TbVisitScreeningAdolescent)
-from .models import ChildGadAnxietyScreening, ChildPhqDepressionScreening, \
-    ChildSocioDemographic, ChildTBReferral, InfantArvProphylaxis, InfantFeeding, \
-    InfantHIVTesting, ChildTBScreening, ChildContinuedConsent
+from .models import (ChildContinuedConsent, ChildGadAnxietyScreening,
+                     ChildPhqDepressionScreening, ChildSocioDemographic, ChildTBReferral,
+                     ChildTBScreening, InfantArvProphylaxis, InfantFeeding,
+                     InfantHIVTesting, InfantHIVTestingAfterBreastfeeding,
+                     InfantHIVTestingAge6To8Weeks)
 
 fake = Faker()
 
@@ -278,6 +279,17 @@ childtbscreening = Recipe(
     ChildTBScreening,
 )
 
+infanthivtestingafterbreastfeeding = Recipe(
+    InfantHIVTestingAfterBreastfeeding,
+)
+
+infanthivtestingage6to8weeks = Recipe(
+    InfantHIVTestingAge6To8Weeks,
+)
+
+infanthivtesting9months = Recipe(
+    InfantHIVTesting9Months,
+)
 
 childcontinuedconsent = Recipe(
     ChildContinuedConsent,
