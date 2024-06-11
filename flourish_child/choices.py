@@ -1164,6 +1164,8 @@ PREFERRED_CLINIC = (
     ('local', 'Local Clinic'),
     ('flourish', 'FLOURISH Clinic'),
     ('no_testing', 'I do not wish to have my infant tested at this time'),
+    (NOT_APPLICABLE, 'Not Applicable, because under Botswana Guidelines, not currently '
+                     'due for testing '),
     (OTHER, 'Other'),
 )
 
@@ -1414,10 +1416,42 @@ HAPPENED_DONT_KNOW = (
     (DONT_KNOW, "Don't know")
 )
 
-
 HIV_PERSPECTIVE = (
     ('no_one_thinks_that', 'No one thinks that'),
     ('a_few_people_think_that', 'A few people think that'),
     ('most_people_think_that', 'Most people think that'),
     (NOT_APPLICABLE, 'Not Applicable')
 )
+
+TB_REFERRAL_REASON_CHOICES = (
+    ('cough', 'Cough'),
+    ('fever', 'Fever'),
+    ('night_sweats', 'Night sweats'),
+    ('weight_loss', 'Weight loss'),
+    ('fatigue', 'Fatigue'),
+    ('household_Contact_with_TB', 'Household Contact with TB'),
+    (OTHER, 'Other'),
+)
+
+CARETAKERS = [
+    ('bio_mother', 'Biological Mother'),
+    ('caregiver', 'Caregiver'),
+    ('bio_father', 'Biological Father'),
+    ('grandmother', 'Grandmother'),
+    ('grandfather', 'Grandfather'),
+    ('uncle', 'Uncle'),
+    ('aunt', 'Aunt'),
+    ('sister', 'Sister'),
+    ('brother', 'Brother'),
+    ('guardian', 'Guardian'),
+    (OTHER, 'Other'),
+]
+
+BUILT_DATES = (
+    ('before_1980', 'Before 1980'),
+    ('1980-1990', '1980-1990'),
+    ('1991-2000', '1991-2000'),
+    ('2001-2010', '2001-2010'),
+    ('2011-2019', '2011-2019'),
+    ('after_2019', 'After 2019'),
+    ('i_dont_know', 'I don’t know'))

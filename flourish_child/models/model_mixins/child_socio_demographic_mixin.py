@@ -1,13 +1,12 @@
-from flourish_child.choices import (
-    COOKING_METHOD, ETHNICITY, HIGHEST_EDUCATION,
-    HOUSE_TYPE, SCHOOL_TYPE, TOILET_FACILITY, WATER_SOURCE)
-
-
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NOT_APPLICABLE
+
+from flourish_child.choices import (
+    COOKING_METHOD, ETHNICITY, HIGHEST_EDUCATION,
+    HOUSE_TYPE, SCHOOL_TYPE, TOILET_FACILITY, WATER_SOURCE)
 
 
 class ChildSocioDemographicMixin(models.Model):
@@ -20,7 +19,7 @@ class ChildSocioDemographicMixin(models.Model):
         max_length=35,
         verbose_name="if other specify...",
         blank=True,
-        null=True,)
+        null=True, )
 
     stay_with_caregiver = models.CharField(
         verbose_name='Is the infant/child/adolescent currently living with '
@@ -64,7 +63,7 @@ class ChildSocioDemographicMixin(models.Model):
         max_length=35,
         verbose_name='If other specify...',
         blank=True,
-        null=True,)
+        null=True, )
 
     house_people_number = models.IntegerField(
         verbose_name='How many household members live in the child\'s primary'
@@ -88,7 +87,7 @@ class ChildSocioDemographicMixin(models.Model):
                      'older than 18?',
         validators=[
             MinValueValidator(1),
-            MaxValueValidator(25), ],)
+            MaxValueValidator(25), ], )
 
     attend_school = models.CharField(
         verbose_name='Is the infant/child/adolescent attending school?',
@@ -114,7 +113,8 @@ class ChildSocioDemographicMixin(models.Model):
         default=NOT_APPLICABLE)
 
     months_in_boarding = models.PositiveSmallIntegerField(
-        verbose_name='How many months of the year does your child stay at boarding school?',
+        verbose_name='How many months of the year does your child stay at boarding '
+                     'school?',
         validators=[MinValueValidator(1), MaxValueValidator(12)],
         null=True,
         blank=True)

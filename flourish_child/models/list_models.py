@@ -98,3 +98,11 @@ class ChildSocialWorkReferralList(ListModelMixin, BaseUuidModel):
 
 class ChildTBTests(ListModelMixin, BaseUuidModel):
     pass
+
+
+class ChildHIVTestVisits(ListModelMixin, BaseUuidModel):
+    pass
+
+
+class ChildHIVNotTestedReason(ListModelMixin, BaseUuidModel):
+    pass
