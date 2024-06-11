@@ -178,6 +178,24 @@ class ChildUtils:
         consent_obj = self.caregiver_subject_consent_obj(subject_identifier)
         return getattr(consent_obj, 'biological_caregiver', None) == YES
 
+    def get_gestational_age(self, subject_identifier):
+        """ Query the antenatal enrolment object, to get the child's current
+            gestational age using the child PID.
+        """
+        caregiver_identifier = child_utils.caregiver_subject_identifier(
+            subject_identifier)
+        antenatal_enrol = django_apps.get_model(
+            'flourish_caregiver.antenatalenrollment')
+
+        try:
+            antenatal_enrol_obj = antenatal_enrol.objects.get(
+                child_subject_identifier=subject_identifier,
+                subject_identifier=caregiver_identifier)
+        except antenatal_enrol.DoesNotExist:
+            return None
+        else:
+            return antenatal_enrol_obj.real_time_ga
+
 
 child_utils = ChildUtils()
 
@@ -206,6 +224,19 @@ def notification(subject_identifier, subject, user_created,
                     assigned=user.username,
                     subject=subject,
                     comment=comment)
+
+
+def handle_notification(visit, instance, subject):
+    try:
+        DataActionItem.objects.get(
+            subject_identifier=visit.subject_identifier,
+            subject=subject)
+    except DataActionItem.DoesNotExist:
+        notification(
+            subject_identifier=visit.subject_identifier,
+            user_created=instance.user_created,
+            subject=subject,
+            comment=f'{subject}. Please capture results once available.')
 
 
 def trigger_action_item(model_cls, action_name, subject_identifier, repeat=False):
