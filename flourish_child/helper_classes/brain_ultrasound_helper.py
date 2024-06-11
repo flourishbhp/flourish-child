@@ -32,23 +32,19 @@ class BrainUltrasoundHelper:
 
     @property
     def brain_ultrasound_schedules(self):
-        caregiver_schedule = {
-            'schedule_name': 'caregiver_bu_schedule_{0}'.format(self.get_child_number),
-            'subject_identifier': self.caregiver_subject_identifier,
-            'onschedule_model': 'flourish_caregiver.onschedulecaregiverbrainultrasound',
-        }
 
-        schedules_list = [
+        return [
             {
                 'schedule_name': self.child_bu_schedule_name,
                 'subject_identifier': self.child_subject_identifier,
                 'onschedule_model': self.child_bu_onschedule_model,
             },
+            {
+                'schedule_name': 'caregiver_bu_schedule_{0}'.format(self.get_child_number),
+                'subject_identifier': self.caregiver_subject_identifier,
+                'onschedule_model': 'flourish_caregiver.onschedulecaregiverbrainultrasound',
+            }
         ]
-        if self.func_hiv_positive(self.caregiver_subject_identifier):
-            schedules_list.append(caregiver_schedule)
-
-        return schedules_list
 
     @property
     def is_onschedule(self):
@@ -147,11 +143,3 @@ class BrainUltrasoundHelper:
             self.child_subject_identifier, datetime.today().date())
 
         return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
-
-    def func_hiv_positive(self, subject_identifier):
-        """
-        Get HIV Status from the rapid test results
-        """
-        maternal_status_helper = MaternalStatusHelper(
-            maternal_visit=None, subject_identifier=subject_identifier)
-        return maternal_status_helper.hiv_status == POS
