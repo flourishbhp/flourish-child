@@ -23,8 +23,13 @@ class ChildPregTestingForm(ChildModelFormMixin, forms.ModelForm):
                     initial, _exists = self.prefill_menarche_dates(key, initial)
                     if _exists:
                         continue
+
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
+
+        if initial.get('menarche_start_dt', None):
+            self.fields['menarche_start_dt'].widget = forms.DateInput(
+                attrs={'readonly': 'readonly'})
 
     def prefill_menarche_dates(self, key=None, initial={}):
         key_map = {'menarche': 'manarche_dt_avail',

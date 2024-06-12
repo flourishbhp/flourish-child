@@ -1,9 +1,6 @@
 from django.db import models
-from edc_appointment.creators import UnscheduledAppointmentCreator, \
-    UnscheduledAppointmentError
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
-from edc_constants.constants import IND, PENDING, UNKNOWN
 
 from flourish_child.choices import DELIVERY_LOCATION, POS_NEG_PENDING_UNKNOWN
 
@@ -57,8 +54,7 @@ class HIVTestingAndResultingMixin(models.Model):
         verbose_name='What is the result of the HIV test?',
         choices=POS_NEG_PENDING_UNKNOWN,
         max_length=20,
-        null=True,
-        blank=True
+        default=''
     )
 
     additional_comments = models.TextField(
