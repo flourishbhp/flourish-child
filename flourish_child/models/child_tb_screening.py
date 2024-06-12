@@ -1,5 +1,4 @@
 from django.db import models
-from edc_base.model_fields import OtherCharField
 
 from flourish_caregiver.choices import YES_NO_AR_OTHER, YES_NO_UKN_CHOICES
 from flourish_caregiver.helper_classes.tb_diagnosis import TBDiagnosis
@@ -52,8 +51,9 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         max_length=20,
         blank=True, null=True)
 
-    child_diagnosed_with_tb_other = OtherCharField(
-        verbose_name='If other, specify', )
+    child_diagnosed_with_tb_other = models.TextField(
+        verbose_name='If Other, please specify',
+        blank=True, null=True)
 
     child_on_tb_treatment = models.CharField(
         verbose_name='Was your child started on TB treatment?',
@@ -61,8 +61,9 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         max_length=20,
         blank=True, null=True)
 
-    child_on_tb_treatment_other = OtherCharField(
-        verbose_name='If other, specify', )
+    child_on_tb_treatment_other = models.TextField(
+        verbose_name='If Other, please specify',
+        blank=True, null=True)
 
     child_on_tb_preventive_therapy = models.CharField(
         verbose_name='Was your child started on TB preventative therapy?',
@@ -70,8 +71,9 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         max_length=20,
         blank=True, null=True)
 
-    child_on_tb_preventive_therapy_other = OtherCharField(
-        verbose_name='If other, specify', )
+    child_on_tb_preventive_therapy_other = models.TextField(
+        verbose_name='If Other, please specify',
+        blank=True, null=True)
 
     evaluated_for_tb = models.CharField(
         verbose_name='Since the last time you spoke with FLOURISH staff, has your child '
