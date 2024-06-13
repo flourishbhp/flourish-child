@@ -70,7 +70,8 @@ class ChildUtils:
 
     def caregiver_subject_consent_obj(self, subject_identifier=None):
         if len(subject_identifier.split('-')) == 4:
-            subject_identifier = self.caregiver_subject_identifier(subject_identifier)
+            subject_identifier = self.caregiver_subject_identifier(
+                subject_identifier)
         try:
             return self.caregiver_consent_cls.objects.filter(
                 subject_identifier=subject_identifier).latest('consent_datetime')
