@@ -54,7 +54,7 @@ from .child_socio_demographic_admin import ChildSocioDemographicAdmin
 from .child_tanner_staging_admin import ChildTannerStagingAdmin
 from .child_tb_referral_admin import ChildTBReferralAdmin
 from .child_tb_referral_outcome_admin import ChildTBReferralOutcomeAdmin
-from .child_tb_screening_admin import ChildTBScreeningAdmin
+from .child_tb_screening_admin import ChildTBScreeningAdmin, PreviousResultsAdminMixin
 from .child_visit_admin import ChildVisitAdmin
 from .child_working_status_admin import ChildWorkingStatusAdmin
 from .childhood_lead_exposure_risk_admin import ChildhoodLeadExposureRiskAdmin
