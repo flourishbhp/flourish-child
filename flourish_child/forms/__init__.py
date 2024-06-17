@@ -55,7 +55,6 @@ from .child_requisition_form import ChildRequisitionForm
 from .child_requisition_result_form import ChildRequisitionResultForm
 from .child_safi_stigma_form import ChildSafiStigmaForm
 from .child_social_work_referral_form import ChildSocialWorkReferralForm
-from .child_social_work_referral_form import ChildSocialWorkReferralForm
 from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_tanner_staging_form import ChildTannerStagingForm
 from .child_tb_referral_form import ChildTBReferralForm

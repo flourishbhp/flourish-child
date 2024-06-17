@@ -1454,7 +1454,8 @@ BUILT_DATES = (
     ('2001-2010', '2001-2010'),
     ('2011-2019', '2011-2019'),
     ('after_2019', 'After 2019'),
-    ('i_dont_know', 'I don’t know'))
+    ('i_dont_know', 'I don’t know'),
+)
 
 CAREGIVER_EDUCATION_LEVEL_CHOICES = (
     ('no_prim_male_caregiver', 'No primary male caregiver'),
