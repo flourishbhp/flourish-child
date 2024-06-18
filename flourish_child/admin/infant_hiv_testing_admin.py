@@ -28,8 +28,8 @@ class InfantHIVTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'child_tested_for_hiv',
                 'test_visit',
                 'test_visit_other',
-                'not_tested_reason',
-                'not_tested_reason_other',
+                'reason_child_not_tested',
+                'reason_child_not_tested_other',
                 'pref_location',
                 'pref_location_other',
                 'additional_comments',
@@ -44,6 +44,8 @@ class InfantHIVTestingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
     }
 
     search_fields = ('subject_identifier',)
+
+    filter_horizontal = ('reason_child_not_tested', 'test_visit')
 
 
 class InfantHIVTestingAdminMixin(ChildCrfModelAdminMixin, admin.ModelAdmin):
