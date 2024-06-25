@@ -199,7 +199,11 @@ list_data = {
         ('boitshepo', 'Boitshepo'),
         ('gaontebale', 'Gaontebale'),
         ('olebogeng', 'Olebogeng'),
-        ('pearl', 'Pearl')
+        ('pearl', 'Pearl'),
+        ('kago','Kago'),
+        ('fanta','Fanta'),
+        ('lebogang','Lebogang'),
+
     ],
     'flourish_child.tbdiagnostics': [
         ('sputum', 'Sputum sample'),

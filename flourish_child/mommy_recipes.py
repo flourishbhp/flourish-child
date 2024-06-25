@@ -301,6 +301,6 @@ childcontinuedconsent = Recipe(
     identity_type='OMANG',
 )
 
-childhoodleadexposurerisk=Recipe(
-ChildhoodLeadExposureRisk
+childhoodleadexposurerisk = Recipe(
+    ChildhoodLeadExposureRisk
 )
