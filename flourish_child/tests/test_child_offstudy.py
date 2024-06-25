@@ -1,5 +1,8 @@
+import datetime
+
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
+from django.utils import timezone
 from edc_base import get_utcnow
 from edc_constants.constants import MALE, YES, INCOMPLETE
 from edc_facility.import_holidays import import_holidays
@@ -83,8 +86,13 @@ class TestChildOffstudy(TestCase):
             study_child_identifier=child_dataset.study_child_identifier,
             child_dob=maternal_dataset_obj.delivdt.date(), )
 
+        naive_datetime = datetime.datetime.combine(
+            datetime.date(2025, 4, 30) - relativedelta(years=2), datetime.time())
+        self.aware_datetime = timezone.make_aware(naive_datetime)
+
         mommy.make_recipe(
             'flourish_caregiver.caregiverpreviouslyenrolled',
+            report_datetime=self.aware_datetime,
             subject_identifier=subject_consent.subject_identifier)
 
         onschedule_obj = OnScheduleChildCohortAEnrollment.objects.filter(

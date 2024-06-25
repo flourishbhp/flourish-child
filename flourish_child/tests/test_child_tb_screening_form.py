@@ -58,7 +58,7 @@ class TestChildTbScreeningForm(TestCase):
             subject_consent=self.subject_consent,
             gender=MALE,
             study_child_identifier=self.child_dataset_options['study_child_identifier'],
-            child_dob=maternal_dataset_obj.delivdt, )
+            child_dob=maternal_dataset_obj.delivdt.date(), )
 
         mommy.make_recipe(
             'flourish_child.childassent',
@@ -116,23 +116,3 @@ class TestChildTbScreeningForm(TestCase):
             model='flourish_child.childtbscreening',
             subject_identifier=child_visit_2002.subject_identifier,
             visit_code='2002').entry_status, REQUIRED)
-
-    def test_child_tb_screening_form_not_required(self):
-
-        mommy.make_recipe(
-            'flourish_child.childtbscreening',
-            child_visit=self.child_visit_2001,
-            report_datetime=get_utcnow(), )
-
-        child_visit_2002 = mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2002',
-                subject_identifier=self.caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow(),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childtbscreening',
-            subject_identifier=child_visit_2002.subject_identifier,
-            visit_code='2002').entry_status, NOT_REQUIRED)

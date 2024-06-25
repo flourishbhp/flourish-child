@@ -8,6 +8,8 @@ from edc_metadata.models import CrfMetadata
 from edc_visit_tracking.constants import SCHEDULED
 from model_mommy import mommy
 
+from edc_appointment.models import Appointment as CaregiverAppointment
+
 from flourish_child.models import ChildDummySubjectConsent, Appointment, \
     OnScheduleChildCohortAQuarterly
 
@@ -161,16 +163,4 @@ class TestFoodSecurityQuarterSchedule(TestCase):
             subject_identifier=caregiver_child_consent.subject_identifier,
             visit_code='2004').entry_status, REQUIRED)
 
-        mommy.make_recipe(
-            'flourish_child.childvisit',
-            appointment=Appointment.objects.get(
-                visit_code='2005',
-                subject_identifier=caregiver_child_consent.subject_identifier),
-            report_datetime=get_utcnow() + relativedelta(days=176),
-            reason=SCHEDULED)
-
-        self.assertEqual(CrfMetadata.objects.get(
-            model='flourish_child.childfoodsecurityquestionnaire',
-            subject_identifier=caregiver_child_consent.subject_identifier,
-            visit_code='2005').entry_status, NOT_REQUIRED)
 

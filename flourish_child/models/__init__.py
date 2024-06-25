@@ -49,6 +49,8 @@ from .child_previous_hospitalization import ChildPreHospitalizationInline, \
     ChildPreviousHospitalization
 from .child_requisition import ChildRequisition
 from .child_requisition_result import ChildRequisitionResult, ChildResultValue
+from .child_safi_stigma import ChildSafiStigma
+from .child_social_work_referral import ChildSocialWorkReferral
 from .child_social_work_referral import ChildSocialWorkReferral
 from .child_socio_demographic import ChildSocioDemographic
 from .child_tanner_staging import ChildTannerStaging
@@ -57,6 +59,7 @@ from .child_tb_referral_outcome import ChildTBReferralOutcome
 from .child_tb_screening import ChildTBScreening
 from .child_visit import ChildVisit
 from .child_working_status import ChildWorkingStatus
+from .childhood_lead_exposure_risk import ChildhoodLeadExposureRisk
 from .infant_arv_exposure import InfantArvExposure
 from .infant_arv_prophylaxis import ChildArvProphDates, InfantArvProphylaxis
 from .infant_congenital_anomalies import BaseCnsItem, InfantCongenitalAnomalies
@@ -113,5 +116,3 @@ from .tb_interview import TbAdolInterview
 from .tb_referral_outcomes import TbAdolReferralOutcomes
 from .tb_visit_screen_adol import TbVisitScreeningAdolescent
 from .young_adult_locator import YoungAdultLocator
-from .child_social_work_referral import ChildSocialWorkReferral
-from .child_safi_stigma import ChildSafiStigma

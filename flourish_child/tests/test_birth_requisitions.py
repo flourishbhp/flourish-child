@@ -1,6 +1,7 @@
 from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from django.test import tag, TestCase
+from edc_appointment.models import Appointment as CaregiverAppointment
 from edc_base.utils import get_utcnow
 from edc_constants.constants import NEG, YES
 from edc_facility.import_holidays import import_holidays
@@ -11,6 +12,8 @@ from model_mommy import mommy
 
 from ..models import Appointment, ChildDummySubjectConsent, OnScheduleChildCohortABirth
 
+app_config = django_apps.get_app_config('flourish_child')
+
 
 @tag('dev_screening')
 class TestBirthRequisitions(TestCase):
@@ -19,7 +22,7 @@ class TestBirthRequisitions(TestCase):
 
         self.options = {
             'consent_datetime': get_utcnow(),
-            'version': '2'
+            'version': app_config.consent_version
         }
 
         self.screening_preg = mommy.make_recipe(
@@ -52,6 +55,20 @@ class TestBirthRequisitions(TestCase):
             current_hiv_status=NEG,
             child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        caregiver_visit = mommy.make_recipe(
+            'flourish_caregiver.maternalvisit',
+            appointment=CaregiverAppointment.objects.get(
+                subject_identifier=self.preg_subject_consent.subject_identifier,
+                visit_code='1000M'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_caregiver.ultrasound',
+            child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
+            maternal_visit=caregiver_visit, )
+
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=self.preg_subject_consent.subject_identifier,
@@ -120,6 +137,20 @@ class TestBirthRequisitions(TestCase):
             current_hiv_status=NEG,
             child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
             subject_identifier=self.preg_subject_consent.subject_identifier, )
+
+        caregiver_visit = mommy.make_recipe(
+            'flourish_caregiver.maternalvisit',
+            appointment=CaregiverAppointment.objects.get(
+                subject_identifier=self.preg_subject_consent.subject_identifier,
+                visit_code='1000M'),
+            report_datetime=get_utcnow(),
+            reason=SCHEDULED)
+
+        mommy.make_recipe(
+            'flourish_caregiver.ultrasound',
+            child_subject_identifier=preg_caregiver_child_consent_obj.subject_identifier,
+            maternal_visit=caregiver_visit, )
+
         mommy.make_recipe(
             'flourish_caregiver.maternaldelivery',
             subject_identifier=self.preg_subject_consent.subject_identifier,
