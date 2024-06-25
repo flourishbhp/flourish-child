@@ -59,7 +59,6 @@ from .child_tb_referral_outcome import ChildTBReferralOutcome
 from .child_tb_screening import ChildTBScreening
 from .child_visit import ChildVisit
 from .child_working_status import ChildWorkingStatus
-from .childhood_lead_exposure_risk import ChildhoodLeadExposureRisk
 from .infant_arv_exposure import InfantArvExposure
 from .infant_arv_prophylaxis import ChildArvProphDates, InfantArvProphylaxis
 from .infant_congenital_anomalies import BaseCnsItem, InfantCongenitalAnomalies
