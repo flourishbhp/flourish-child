@@ -22,9 +22,17 @@ class ChildPregTestingForm(ChildModelFormMixin, forms.ModelForm):
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
 
-        for key in self.menarche_fields:
-            if initial.get(key, None):
-                self.fields[key].widget = forms.DateInput(attrs={'readonly': 'readonly'})
+        if initial.get('menarche_start_dt', None):
+            self.fields['menarche_start_dt'].widget = forms.DateInput(
+                attrs={'readonly': 'readonly'})
+
+        if initial.get('menarche_start_est', None):
+            self.fields['menarche_start_est'].widget = forms.CharField(
+                attrs={'readonly': 'readonly'})
+
+        if initial.get('menarche', None):
+            self.fields['menarche'].widget = forms.CharField(
+                attrs={'readonly': 'readonly'})
 
     @property
     def menarche_fields(self):
