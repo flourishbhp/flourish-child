@@ -167,7 +167,7 @@ class ChildUtils:
                 visit_code_sequence=0).latest('appt_datetime')
         except appointment.__class__.DoesNotExist:
             previous_appt = appointment.previous_by_timepoint
-            if previous_appt.schedule_name in self.exclude_schedules:
+            if getattr(previous_appt, 'schedule_name', None) in self.exclude_schedules:
                 return None
             return previous_appt
         else:
