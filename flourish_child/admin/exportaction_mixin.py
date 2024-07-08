@@ -249,14 +249,11 @@ class ExportActionMixin(AdminExportHelper):
                 'first_name', 'last_name', 'initials', 'guardian_name', 'identity',
                 'infant_visit_id', 'maternal_visit_id', 'processed', 'processed_datetime',
                 'packed', 'packed_datetime', 'shipped', 'shipped_datetime',
-                'received_datetime',
-                'identifier_prefix', 'primary_aliquot_identifier', 'clinic_verified',
-                'clinic_verified_datetime', 'drawn_datetime',
-                'related_tracking_identifier',
-                'parent_tracking_identifier', 'interview_file', 'interview_transcription',
-                'slug', 'confirm_identity', 'site', 'subject_consent_id',
-                '_django_version',
-                'child_visit_id']
+                'received_datetime', 'identifier_prefix', 'primary_aliquot_identifier',
+                'clinic_verified', 'clinic_verified_datetime', 'drawn_datetime',
+                'related_tracking_identifier', 'parent_tracking_identifier', 'interview_file',
+                'interview_transcription', 'slug', 'confirm_identity', 'site',
+                'subject_consent_id', '_django_version', 'child_visit_id']
 
     @property
     def cohort_model_cls(self):

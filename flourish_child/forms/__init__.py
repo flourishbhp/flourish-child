@@ -62,7 +62,6 @@ from .child_tb_referral_outcome_form import ChildTBReferralOutcomeForm
 from .child_tb_screening_form import ChildTBScreeningForm
 from .child_visit_form import ChildVisitForm
 from .child_working_status_form import ChildWorkingStatusForm
-from .childhood_lead_exposure_risk_form import ChildhoodLeadExposureRiskForm
 from .hiv_testing_adol_form import HIVTestingAdolForm
 from .infant_arv_exposure_form import InfantArvExposureForm
 from .infant_arv_prophylaxis_form import ChildArvProphDatesForm, InfantArvProphylaxisForm
