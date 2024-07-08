@@ -87,3 +87,4 @@ from .tb_referral_outcomes_admin import TbReferralOutcomesAdmin
 from .tb_screen_adol_admin import TbVisitScreeningAdolescentAdmin
 from .young_adult_locator_admin import YoungAdultLocatorAdmin
 from .child_safi_stigma_admin import ChildSafiStigmaAdmin
+from .cage_aid_crf_admin import ChildCageAidAdmin
