@@ -276,6 +276,7 @@ list_data = {
         ('refer_c_pedi_support', 'Pediatrician support'),
         ('refer_c_sch_support', 'Schooling support'),
         ('refer_c_eye_care', 'Ophthalmology/Eye care support'),
+        ('refer_c_substance_abuse', 'Substance abuse counselling'),
         ('refer_c_other', 'Other, specify')
     ],
     'flourish_child.childtbtests': [
