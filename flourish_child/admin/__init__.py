@@ -57,7 +57,6 @@ from .child_tb_referral_outcome_admin import ChildTBReferralOutcomeAdmin
 from .child_tb_screening_admin import ChildTBScreeningAdmin, PreviousResultsAdminMixin
 from .child_visit_admin import ChildVisitAdmin
 from .child_working_status_admin import ChildWorkingStatusAdmin
-from .childhood_lead_exposure_risk_admin import ChildhoodLeadExposureRiskAdmin
 from .hiv_testing_adol_admin import HivTestingAdmin
 from .infant_arv_exposure_admin import InfantArvExposureAdmin
 from .infant_arv_prophylaxis_admin import InfantArvProphylaxisAdmin

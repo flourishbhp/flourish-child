@@ -149,7 +149,15 @@ class ChildUtils:
             'schedule_name', flat=True)
         return list(onschedules)
 
+    @property
+    def exclude_schedules(self):
+        return ['child_bu_schedule']
+
     def get_previous_appt_instance(self, appointment):
+        """ Return previous appointment by appt_datetime for given
+            schedule_names, exclude stand-alone schedules for previous_by_timepoint
+            since timepoint is not sequential to flourish schedules.
+        """
         schedule_names = self.get_onschedule_names(appointment)
         try:
             previous_appt = appointment.__class__.objects.filter(
@@ -158,7 +166,10 @@ class ChildUtils:
                 schedule_name__in=schedule_names,
                 visit_code_sequence=0).latest('appt_datetime')
         except appointment.__class__.DoesNotExist:
-            return appointment.previous_by_timepoint
+            previous_appt = appointment.previous_by_timepoint
+            if getattr(previous_appt, 'schedule_name', None) in self.exclude_schedules:
+                return None
+            return previous_appt
         else:
             return previous_appt
 

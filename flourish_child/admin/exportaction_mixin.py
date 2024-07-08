@@ -1,17 +1,16 @@
 from django.apps import apps as django_apps
-from django.db.models import (ManyToManyField, ForeignKey, OneToOneField, ManyToOneRel,
-                              FileField, ImageField)
+from django.db.models import (FileField, ForeignKey, ImageField, ManyToManyField,
+                              ManyToOneRel, OneToOneField)
 from django.db.models.fields.reverse_related import OneToOneRel
 from django.utils.translation import ugettext_lazy as _
-from edc_constants.constants import NEG, POS, YES
 from edc_base.utils import age
-from flourish_export.admin_export_helper import AdminExportHelper
+from edc_constants.constants import NEG, POS, YES
 
+from flourish_export.admin_export_helper import AdminExportHelper
 from ..helper_classes.utils import child_utils
 
 
 class ExportActionMixin(AdminExportHelper):
-
     tb_adol_assent_model = 'flourish_child.tbadolassent'
 
     @property
@@ -36,7 +35,8 @@ class ExportActionMixin(AdminExportHelper):
     def export_as_csv(self, request, queryset):
         records = []
         is_tb_adol_model = ('tb' in queryset[0].child_visit.schedule_name if hasattr(
-            queryset[0], 'child_visit') else False) or ('TB Adol' in queryset[0].verbose_name)
+            queryset[0], 'child_visit') else False) or (
+                                   'TB Adol' in queryset[0].verbose_name)
 
         for obj in queryset:
             data = obj.__dict__.copy()
@@ -49,9 +49,11 @@ class ExportActionMixin(AdminExportHelper):
             previous_study = self.previous_bhp_study(
                 subject_identifier=subject_identifier)
             study_maternal_identifier = self.study_maternal_identifier(
-                    screening_identifier=screening_identifier)
+                screening_identifier=screening_identifier)
             child_exposure_status = self.child_hiv_exposure(
-                    study_maternal_identifier, study_maternal_identifier, caregiver_sid)
+                subject_identifier=subject_identifier,
+                study_maternal_identifier=study_maternal_identifier,
+                caregiver_subject_identifier=caregiver_sid)
             visit_cohort = None
 
             # Add subject identifier and visit code
@@ -167,7 +169,8 @@ class ExportActionMixin(AdminExportHelper):
             if child_dataset_objs:
                 if child_dataset_objs[0].infant_hiv_exposed in ['Exposed', 'exposed']:
                     return 'HEU'
-                elif child_dataset_objs[0].infant_hiv_exposed in ['Unexposed', 'unexposed']:
+                elif child_dataset_objs[0].infant_hiv_exposed in ['Unexposed',
+                                                                  'unexposed']:
                     return 'HUU'
         else:
             rapid_test_cls = django_apps.get_model(
@@ -209,7 +212,7 @@ class ExportActionMixin(AdminExportHelper):
 
         try:
             child_consent_obj = child_consent_cls.objects.filter(
-                subject_identifier=subject_identifier,).latest('consent_datetime')
+                subject_identifier=subject_identifier, ).latest('consent_datetime')
         except child_consent_cls.DoesNotExist:
             pass
         else:
@@ -222,7 +225,7 @@ class ExportActionMixin(AdminExportHelper):
 
         try:
             tb_assent_obj = tb_adol_assent_cls.objects.get(
-                subject_identifier=subject_identifier,)
+                subject_identifier=subject_identifier, )
 
         except tb_adol_assent_cls.DoesNotExist:
             pass
@@ -238,20 +241,19 @@ class ExportActionMixin(AdminExportHelper):
 
     @property
     def exclude_fields(self):
-        return ['created', '_state', 'hostname_created', 'hostname_modified',
+        return ['_state', 'hostname_created', 'hostname_modified',
                 'revision', 'device_created', 'device_modified', 'id', 'site_id',
-                'created_time', 'modified_time', 'report_datetime_time',
-                'registration_datetime_time', 'screening_datetime_time', 'modified',
-                'form_as_json', 'consent_model', 'randomization_datetime',
-                'registration_datetime', 'is_verified_datetime', 'first_name',
-                'last_name', 'initials', 'guardian_name', 'identity', 'infant_visit_id',
-                'maternal_visit_id', 'processed', 'processed_datetime', 'packed',
-                'packed_datetime', 'shipped', 'shipped_datetime', 'received_datetime',
-                'identifier_prefix', 'primary_aliquot_identifier', 'clinic_verified',
-                'clinic_verified_datetime', 'drawn_datetime', 'related_tracking_identifier',
-                'parent_tracking_identifier', 'interview_file', 'interview_transcription',
-                'slug', 'confirm_identity', 'site', 'subject_consent_id', '_django_version',
-                'child_visit_id']
+                'modified_time', 'report_datetime_time', 'registration_datetime_time',
+                'screening_datetime_time', 'modified', 'form_as_json', 'consent_model',
+                'randomization_datetime', 'registration_datetime', 'is_verified_datetime',
+                'first_name', 'last_name', 'initials', 'guardian_name', 'identity',
+                'infant_visit_id', 'maternal_visit_id', 'processed', 'processed_datetime',
+                'packed', 'packed_datetime', 'shipped', 'shipped_datetime',
+                'received_datetime', 'identifier_prefix', 'primary_aliquot_identifier',
+                'clinic_verified', 'clinic_verified_datetime', 'drawn_datetime',
+                'related_tracking_identifier', 'parent_tracking_identifier', 'interview_file',
+                'interview_transcription', 'slug', 'confirm_identity', 'site',
+                'subject_consent_id', '_django_version', 'child_visit_id']
 
     @property
     def cohort_model_cls(self):
@@ -281,7 +283,8 @@ class ExportActionMixin(AdminExportHelper):
         try:
             child_cohort = self.cohort_model_cls.objects.filter(
                 subject_identifier=subject_identifier,
-                assign_datetime__date__lte=report_datetime.date()).latest('assign_datetime')
+                assign_datetime__date__lte=report_datetime.date()).latest(
+                'assign_datetime')
         except self.cohort_model_cls.DoesNotExist:
             return ''
         else:
