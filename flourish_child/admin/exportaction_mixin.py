@@ -7,7 +7,6 @@ from edc_base.utils import age
 from edc_constants.constants import NEG, POS, YES
 
 from flourish_export.admin_export_helper import AdminExportHelper
-from ..helper_classes.utils import child_utils
 
 
 class ExportActionMixin(AdminExportHelper):
@@ -42,7 +41,7 @@ class ExportActionMixin(AdminExportHelper):
             data = obj.__dict__.copy()
 
             subject_identifier = getattr(obj, 'subject_identifier', None)
-            caregiver_sid = child_utils.caregiver_subject_identifier(
+            caregiver_sid = self.get_caregiver_sid(
                 subject_identifier=subject_identifier)
             screening_identifier = self.screening_identifier(
                 subject_identifier=caregiver_sid)
@@ -120,16 +119,27 @@ class ExportActionMixin(AdminExportHelper):
 
     actions = [export_as_csv]
 
+    def caregiver_subject_consents(self, subject_identifier):
+        consent_cls = django_apps.get_model(
+            'flourish_caregiver.subjectconsent')
+        return consent_cls.objects.filter(
+            subject_identifier__endswith=subject_identifier)
+
     def screening_identifier(self, subject_identifier=None):
         """Returns a screening identifier.
         """
-        consent_cls = django_apps.get_model(
-            'flourish_caregiver.subjectconsent')
-        consent = consent_cls.objects.filter(
-            subject_identifier=subject_identifier)
+        consent = self.caregiver_subject_consents(subject_identifier)
         if consent:
             return consent.last().screening_identifier
         return None
+
+    def get_caregiver_sid(self, subject_identifier):
+        sub_subject_identifier = subject_identifier[1:-3]
+        consent = self.caregiver_subject_consents(sub_subject_identifier)
+        if consent.exists():
+            return consent.earliest('consent_datetime').subject_identifier
+        else:
+            return None
 
     def previous_bhp_study(self, subject_identifier=None):
         caregiver_child_consent_cls = django_apps.get_model(
@@ -251,7 +261,8 @@ class ExportActionMixin(AdminExportHelper):
                 'packed', 'packed_datetime', 'shipped', 'shipped_datetime',
                 'received_datetime', 'identifier_prefix', 'primary_aliquot_identifier',
                 'clinic_verified', 'clinic_verified_datetime', 'drawn_datetime',
-                'related_tracking_identifier', 'parent_tracking_identifier', 'interview_file',
+                'related_tracking_identifier', 'parent_tracking_identifier',
+                'interview_file',
                 'interview_transcription', 'slug', 'confirm_identity', 'site',
                 'subject_consent_id', '_django_version', 'child_visit_id']
 
