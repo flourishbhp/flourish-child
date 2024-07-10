@@ -1,5 +1,6 @@
 from django.contrib import admin
-from edc_fieldsets import Remove
+from edc_constants.constants import PENDING
+from edc_fieldsets import Fieldsets, Insert
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -9,11 +10,109 @@ from ..helper_classes.utils import child_utils
 from ..models.child_tb_screening import ChildTBScreening
 
 
+class TbFieldsets(Fieldsets):
+    def _get_field_position(self, fields, insert_after):
+        try:
+            position = fields.index(insert_after) + 1
+        except ValueError:
+            position = 0
+        return position
+
+
+class PreviousResultsAdminMixin(admin.ModelAdmin):
+    def get_previous_results_keys(self, request, obj=None, keys=None):
+        if keys is None:
+            keys = []
+        previous_instance = self.get_previous_instance(request)
+        if not obj and previous_instance:
+            for result in self.update_fields:
+                if getattr(previous_instance, result) == PENDING:
+                    keys.append(result)
+        return keys
+
+    @property
+    def conditional_fieldlists(self):
+        conditional_fieldlists = {
+            'not_adol': Insert(('fatigue_or_reduced_playfulness',),
+                               after='weight_loss_duration'),
+        }
+        return self.get_previous_results_conditional_fieldlists(conditional_fieldlists)
+
+    def get_previous_results_conditional_fieldlists(self, conditional_fieldlists):
+        for update_field in self.update_fields:
+            field = f'{update_field}_previous'
+            fieldset = Insert((field,),
+                              section='Previous Test Results')
+            conditional_fieldlists[update_field] = fieldset
+        return conditional_fieldlists
+
+    def get_fieldsets(self, request, obj=None):
+        """Returns fieldsets after modifications declared in
+        "conditional" dictionaries.
+        """
+        fieldsets = super().get_fieldsets(request, obj=obj)
+        fieldsets = TbFieldsets(fieldsets=fieldsets)
+        keys = self.get_keys(request, obj)
+
+        for key in keys:
+            fieldlist = self.conditional_fieldlists.get(key)
+            if fieldlist:
+                try:
+                    fieldsets.insert_fields(
+                        *fieldlist.insert_fields,
+                        insert_after=fieldlist.insert_after,
+                        section=fieldlist.section)
+                except AttributeError:
+                    pass
+        self.remove_unused_section(fieldsets=fieldsets)
+        fieldsets = self.update_fieldset_for_form(
+            fieldsets, request)
+        fieldsets.move_to_end(self.fieldsets_move_to_end)
+        return fieldsets.fieldsets
+
+    def save_model(self, request, obj, form, change):
+        previous_instance = self.get_previous_instance(request)
+        if previous_instance:
+            changed = False
+            for field in form.cleaned_data:
+                if field.endswith('_previous'):
+                    original_field_name = field[:-9]
+                    previous_value = form.cleaned_data[field]
+                    if previous_value != getattr(previous_instance, original_field_name):
+                        setattr(previous_instance, original_field_name, previous_value)
+                        changed = True
+            if changed:
+                previous_instance.save()
+        super().save_model(request, obj, form, change)
+
+    def get_form(self, request, obj=None, *args, **kwargs):
+        form = super().get_form(request, *args, **kwargs)
+        form.previous_instance = self.get_previous_instance(request)
+        return form
+
+    def remove_unused_section(self, fieldsets):
+        if not fieldsets.fieldsets_asdict['Previous Test Results']['fields']:
+            del fieldsets.fieldsets_asdict['Previous Test Results']
+
+    update_fields = [
+        'chest_xray_results',
+        'sputum_sample_results',
+        'stool_sample_results',
+        'urine_test_results',
+        'skin_test_results',
+        'blood_test_results',
+    ]
+
+
 @admin.register(ChildTBScreening, site=flourish_child_admin)
-class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
+class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
+                            admin.ModelAdmin):
     form = ChildTBScreeningForm
 
     fieldsets = (
+        ('Previous Test Results', {
+            'fields': []
+        }),
         (None, {
             'fields': [
                 'child_visit',
@@ -26,7 +125,6 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'sweats_duration',
                 'weight_loss',
                 'weight_loss_duration',
-                'fatigue_or_reduced_playfulness',
                 'household_diagnosed_with_tb',
                 'evaluated_for_tb',
                 'clinic_visit_date',
@@ -40,8 +138,11 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'blood_test_results',
                 'other_test_results',
                 'child_diagnosed_with_tb',
+                'child_diagnosed_with_tb_other',
                 'child_on_tb_treatment',
+                'child_on_tb_treatment_other',
                 'child_on_tb_preventive_therapy',
+                'child_on_tb_preventive_therapy_other',
             ]}),
         audit_fieldset_tuple
     )
@@ -71,18 +172,16 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     filter_horizontal = ('tb_tests',)
 
-    def get_key(self, request, obj=None):
+    def get_keys(self, request, obj=None):
+        keys = []
         try:
             visit_obj = self.visit_model.objects.get(id=request.GET.get('child_visit'))
         except self.visit_model.DoesNotExist:
-            return None
+            pass
         else:
             subject_identifier = visit_obj.subject_identifier
             child_age = child_utils.child_age(subject_identifier,
                                               visit_obj.report_datetime)
-
-            return 'not_adol' if child_age < 12 else None
-
-    conditional_fieldlists = {
-        'not_adol': Remove('fatigue_or_reduced_playfulness', ),
-    }
+            if child_age and child_age < 12:
+                keys.append('not_adol')
+        return self.get_previous_results_keys(request, obj, keys)
