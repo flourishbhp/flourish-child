@@ -182,5 +182,6 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
             subject_identifier = visit_obj.subject_identifier
             child_age = child_utils.child_age(subject_identifier,
                                               visit_obj.report_datetime)
-            keys.append('not_adol')
+            if child_age and child_age < 12:
+                keys.append('not_adol')
         return self.get_previous_results_keys(request, obj, keys)
