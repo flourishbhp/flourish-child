@@ -1,5 +1,3 @@
-from typing import re
-
 from django.apps import apps as django_apps
 from django.db.models import (FileField, ForeignKey, ImageField, ManyToManyField,
                               ManyToOneRel, OneToOneField)
@@ -9,7 +7,6 @@ from edc_base.utils import age
 from edc_constants.constants import NEG, POS, YES
 
 from flourish_export.admin_export_helper import AdminExportHelper
-from ..helper_classes.utils import child_utils
 
 
 class ExportActionMixin(AdminExportHelper):
