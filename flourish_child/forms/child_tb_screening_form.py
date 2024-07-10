@@ -8,9 +8,7 @@ from flourish_child_validations.form_validators.child_tb_screening_form_validato
     ChildTBScreeningFormValidator
 
 
-class ChildTBScreeningForm(ChildModelFormMixin):
-    form_validator_cls = ChildTBScreeningFormValidator
-
+class PreviousResultsFormMixin(forms.Form):
     chest_xray_results_previous = forms.ChoiceField(
         choices=TEST_RESULTS_CHOICES,
         required=False,
@@ -44,19 +42,24 @@ class ChildTBScreeningForm(ChildModelFormMixin):
 
     def clean(self):
         clean_data = super().clean()
-        keys_before_child_visit = self.get_keys_before(clean_data, "child_visit")
+        keys_before_child_visit = self.get_keys_before(clean_data, )
         for field in keys_before_child_visit:
             field_value = clean_data.get(field)
             if field_value == '':
                 raise ValidationError({field: 'This field is required.'})
 
-    def get_keys_before(self, dict, key_stop):
+    def get_keys_before(self, dict):
+        key_stop = "child_visit"
         return_list = []
         for key in dict:
             if key == key_stop:
                 break
             return_list.append(key)
         return return_list
+
+
+class ChildTBScreeningForm(PreviousResultsFormMixin, ChildModelFormMixin):
+    form_validator_cls = ChildTBScreeningFormValidator
 
     class Meta:
         model = ChildTBScreening

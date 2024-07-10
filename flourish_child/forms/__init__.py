@@ -59,7 +59,7 @@ from .child_socio_demographic_form import ChildSocioDemographicForm
 from .child_tanner_staging_form import ChildTannerStagingForm
 from .child_tb_referral_form import ChildTBReferralForm
 from .child_tb_referral_outcome_form import ChildTBReferralOutcomeForm
-from .child_tb_screening_form import ChildTBScreeningForm
+from .child_tb_screening_form import ChildTBScreeningForm, PreviousResultsFormMixin
 from .child_visit_form import ChildVisitForm
 from .child_working_status_form import ChildWorkingStatusForm
 from .hiv_testing_adol_form import HIVTestingAdolForm
