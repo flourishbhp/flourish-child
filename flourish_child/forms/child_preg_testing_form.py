@@ -25,7 +25,8 @@ class ChildPregTestingForm(ChildModelFormMixin, forms.ModelForm):
         if initial.get('menarche_start_dt', None):
             self.fields['menarche_start_dt'].widget = forms.DateInput(
                 attrs={'readonly': 'readonly'})
-        if initial.get('menarche_start_est', None):
+        if (initial.get('menarche_start_est', None) and
+                initial.get('menarche_start_est', None) != NOT_APPLICABLE):
             self.fields['menarche_start_est'].widget = forms.TextInput(
                 attrs={'readonly': 'readonly'})
         if initial.get('menarche', None):
