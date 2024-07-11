@@ -77,16 +77,30 @@ class TestBrainUltrasoundHelper(TestCase):
 
         assert mock_apps.get_model.call_count == 2
         assert mock_schedules.get_by_onschedule_model_schedule_name.call_count == 2
-
+   
     @mock.patch('flourish_child.helper_classes.brain_ultrasound_helper.requests')
     @mock.patch('flourish_child.helper_classes.brain_ultrasound_helper.settings')
-    def test_is_enrolled_brain_ultrasound_success(self, mock_settings, mock_requests):
-        mock_requests.post.return_value.json.return_value = True
+    def test_is_enrolled_brain_ultrasound_success_reconsent(self, mock_settings, mock_requests):
+        mock_requests.post.return_value.json.return_value = [
+            {'reviewed_v4': '1', 'answered_v4': '1', 'asked_v4': '1', 'verified_v4': '1',
+             'copy_v4': '1'}]
         brain_ultrasound_helper = BrainUltrasoundHelper(
             self.child_consent.subject_identifier,
             self.subject_consent.subject_identifier)
 
         self.assertEqual(brain_ultrasound_helper.is_enrolled_brain_ultrasound(), True)
+
+    @mock.patch('flourish_child.helper_classes.brain_ultrasound_helper.requests')
+    @mock.patch('flourish_child.helper_classes.brain_ultrasound_helper.settings')
+    def test_is_enrolled_brain_ultrasound_success_consent(self, mock_settings, mock_requests):
+        mock_requests.post.return_value.json.return_value = [
+            {'reviewed': '1', 'answered': '1', 'asked': '1', 'verified': '1',
+             'copy': '1','consent_version' :'2'}]
+        brain_ultrasound_helper = BrainUltrasoundHelper(
+            self.child_consent.subject_identifier,
+            self.subject_consent.subject_identifier)
+
+        self.assertTrue(brain_ultrasound_helper.is_enrolled_brain_ultrasound())
 
     @mock.patch('flourish_child.helper_classes.brain_ultrasound_helper.logger')
     @patch('requests.post')
@@ -100,4 +114,6 @@ class TestBrainUltrasoundHelper(TestCase):
 
         self.assertFalse(result)
 
-        mock_logger.error.assert_called_once_with('Error: Mocked Exception')
+        mock_logger.error.assert_called_with('Error: Mocked Exception')
+        self.assertEqual(mock_logger.error.call_count, 2)
+

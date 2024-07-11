@@ -101,6 +101,22 @@ class BrainUltrasoundHelper:
     def is_enrolled_brain_ultrasound(self):
         """Returns True if the child is enrolled on the brain ultrasound schedule."""
 
+        
+        fields_v4 = ['reviewed_v4', 'answered_v4', 'asked_v4', 'verified_v4', 'copy_v4']
+        fields_consent= ['reviewed', 'answered', 'asked', 'verified', 'copy']
+        return (self.fetch_data('ultrasound_consent_form_version_40', 'reconsent_arm_1',fields_v4) or 
+                self.fetch_data('ultrasound_consent_form', 'consent_arm_1', fields_consent,consent_version=2))
+
+    def show_brain_ultrasound_button(self):
+        antenatal_enrollment_obj = self.antenatal_enrollment_cls.objects.filter(
+            child_subject_identifier=self.child_subject_identifier).exists()
+        child_age = child_utils.child_age(
+            self.child_subject_identifier, datetime.today().date())
+
+        return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
+    
+    def fetch_data(self,form,event,fields,consent_version=None):
+
         data = {
             'token': getattr(settings, 'REDCAP_API_TOKEN', None),
             'content': 'record',
@@ -109,8 +125,8 @@ class BrainUltrasoundHelper:
             'type': 'flat',
             'csvDelimiter': '',
             'records[0]': self.caregiver_subject_identifier,
-            'forms[0]': 'ultrasound_consent_form_version_40',
-            'events[0]': 'reconsent_arm_1',
+            'forms[0]': form,
+            'events[0]': event,
             'rawOrLabel': 'raw',
             'rawOrLabelHeaders': 'raw',
             'exportCheckboxLabel': 'false',
@@ -125,21 +141,18 @@ class BrainUltrasoundHelper:
             results.raise_for_status()
         except (requests.exceptions.RequestException, ValueError) as e:
             logger.error(f'Error: {e}')
+            return False
         else:
-            fields = ['reviewed_v4', 'answered_v4',
-                      'asked_v4', 'verified_v4', 'copy_v4']
             try:
                 json_result = results.json()
                 if json_result and isinstance(json_result[0], dict):
+                    if consent_version is not None:
+                        return (json_result[0].get('consent_version') == str(consent_version) and
+                                all(json_result[0].get(field) == '1' for field in fields))
                     return all(json_result[0].get(field) == '1' for field in fields)
             except json.JSONDecodeError:
                 logger.error('Invalid JSON response: {}'.format(results.text))
         return False
+    
+        
 
-    def show_brain_ultrasound_button(self):
-        antenatal_enrollment_obj = self.antenatal_enrollment_cls.objects.filter(
-            child_subject_identifier=self.child_subject_identifier).exists()
-        child_age = child_utils.child_age(
-            self.child_subject_identifier, datetime.today().date())
-
-        return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
