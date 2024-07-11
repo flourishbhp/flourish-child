@@ -99,11 +99,11 @@ class BrainUltrasoundHelper:
     def is_enrolled_brain_ultrasound(self):
         """Returns True if the child is enrolled on the brain ultrasound schedule."""
 
-        
-        fields_v4 = ['reviewed_v4', 'answered_v4', 'asked_v4', 'verified_v4', 'copy_v4']
-        fields_consent= ['reviewed', 'answered', 'asked', 'verified', 'copy']
-        return (self.fetch_data('ultrasound_consent_form_version_40', 'reconsent_arm_1',fields_v4) or 
-                self.fetch_data('ultrasound_consent_form', 'consent_arm_1', fields_consent,consent_version=2))
+        fields_v4 = ['reviewed_v4', 'answered_v4',
+                     'asked_v4', 'verified_v4', 'copy_v4']
+        fields_consent = ['reviewed', 'answered', 'asked', 'verified', 'copy']
+        return (self.fetch_data('ultrasound_consent_form_version_40', 'reconsent_arm_1', fields_v4) or
+                self.fetch_data('ultrasound_consent_form', 'consent_arm_1', fields_consent, consent_version=2))
 
     def show_brain_ultrasound_button(self):
         antenatal_enrollment_obj = self.antenatal_enrollment_cls.objects.filter(
@@ -112,8 +112,8 @@ class BrainUltrasoundHelper:
             self.child_subject_identifier, datetime.today().date())
 
         return not self.is_onschedule and antenatal_enrollment_obj and child_age and 0.4 <= child_age <= 0.5
-    
-    def fetch_data(self,form,event,fields,consent_version=None):
+
+    def fetch_data(self, form, event, fields, consent_version=None):
 
         data = {
             'token': getattr(settings, 'REDCAP_API_TOKEN', None),
@@ -151,6 +151,5 @@ class BrainUltrasoundHelper:
             except json.JSONDecodeError:
                 logger.error('Invalid JSON response: {}'.format(results.text))
         return False
-    
         
 
