@@ -1,6 +1,6 @@
 from django.contrib import admin
 from edc_constants.constants import PENDING
-from edc_fieldsets import Fieldsets, Insert
+from edc_fieldsets import Fieldsets, FieldsetsModelAdminMixin, Insert
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -19,7 +19,7 @@ class TbFieldsets(Fieldsets):
         return position
 
 
-class PreviousResultsAdminMixin(admin.ModelAdmin):
+class PreviousResultsAdminMixin(FieldsetsModelAdminMixin, admin.ModelAdmin):
     def get_previous_results_keys(self, request, obj=None, keys=None):
         if keys is None:
             keys = []
@@ -29,14 +29,6 @@ class PreviousResultsAdminMixin(admin.ModelAdmin):
                 if getattr(previous_instance, result) == PENDING:
                     keys.append(result)
         return keys
-
-    @property
-    def conditional_fieldlists(self):
-        conditional_fieldlists = {
-            'not_adol': Insert(('fatigue_or_reduced_playfulness',),
-                               after='weight_loss_duration'),
-        }
-        return self.get_previous_results_conditional_fieldlists(conditional_fieldlists)
 
     def get_previous_results_conditional_fieldlists(self, conditional_fieldlists):
         for update_field in self.update_fields:
@@ -185,3 +177,11 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
             if child_age and child_age < 12:
                 keys.append('not_adol')
         return self.get_previous_results_keys(request, obj, keys)
+
+    @property
+    def conditional_fieldlists(self):
+        conditional_fieldlists = {
+            'not_adol': Insert(('fatigue_or_reduced_playfulness',),
+                               after='weight_loss_duration'),
+        }
+        return self.get_previous_results_conditional_fieldlists(conditional_fieldlists)
