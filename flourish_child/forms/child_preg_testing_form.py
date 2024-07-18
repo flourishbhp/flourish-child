@@ -16,8 +16,10 @@ class ChildPregTestingForm(ChildModelFormMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         initial = kwargs.pop('initial', {})
+        instance = kwargs.get('instance', None)
         previous_instance = getattr(self, 'previous_instance', None)
-        initial = self.prefill_menarche_dates(initial, previous_instance)
+        if not instance:
+            initial = self.prefill_menarche_dates(initial, previous_instance)
 
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
