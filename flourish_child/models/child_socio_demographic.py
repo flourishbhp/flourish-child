@@ -4,7 +4,7 @@ from edc_constants.choices import YES_NO
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins.child_socio_demographic_mixin import ChildSocioDemographicMixin
-from ..choices import BUILT_DATES, CARETAKERS, YES_NO_DONT_KNOW
+from ..choices import CARETAKERS, BUILT_DATES, YES_NO_DONT_KNOW
 
 
 class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):

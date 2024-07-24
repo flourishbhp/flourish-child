@@ -1465,16 +1465,6 @@ CAREGIVER_EDUCATION_LEVEL_CHOICES = (
     ('tertiary', 'Tertiary')
 )
 
-HOUSE_YEAR_BUILT_CHOICES = (
-    ('before_1980', 'Before 1980'),
-    ('1980-1990', '1980-1990'),
-    ("1991-2000", '1991-2000'),
-    ("2001-2010", '2001-2010'),
-    ("2011-2019", '2011-2019'),
-    ("2019_above", '2019 and above'),
-    (DONT_KNOW, 'I don’t know'),
-)
-
 BUSINESSES_RUN = (
     ('seamstress', 'Seamstress'),
     ('welding', 'Welding'),
