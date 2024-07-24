@@ -4,7 +4,7 @@ from edc_constants.choices import YES_NO
 
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins.child_socio_demographic_mixin import ChildSocioDemographicMixin
-from ..choices import CARETAKERS, HOUSE_YEAR_BUILT_CHOICES, YES_NO_DONT_KNOW
+from ..choices import CARETAKERS, BUILT_DATES, YES_NO_DONT_KNOW
 
 
 class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):
@@ -51,7 +51,7 @@ class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):
     building_date = models.CharField(
         verbose_name='When was the house you live in now built?',
         max_length=25,
-        choices=HOUSE_YEAR_BUILT_CHOICES,
+        choices=BUILT_DATES,
         default=''
     )
 
