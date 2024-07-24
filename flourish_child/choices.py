@@ -1471,7 +1471,7 @@ HOUSE_YEAR_BUILT_CHOICES = (
     ("1991-2000", '1991-2000'),
     ("2001-2010", '2001-2010'),
     ("2011-2019", '2011-2019'),
-    ("2019_above", '2019 and After'),
+    ("2019_after", '2019 and After'),
     (DONT_KNOW, 'I don’t know'),
 )
 
