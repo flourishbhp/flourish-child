@@ -40,6 +40,8 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             ]}
          ), audit_fieldset_tuple)
 
+    filter_horizontal = ('tests_performed',)
+
     radio_fields = {'tb_evaluation': admin.VERTICAL,
                     'clinic_name': admin.VERTICAL,
                     'chest_xray_results': admin.VERTICAL,
