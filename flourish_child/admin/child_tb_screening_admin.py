@@ -20,6 +20,7 @@ class TbFieldsets(Fieldsets):
 
 
 class PreviousResultsAdminMixin(FieldsetsModelAdminMixin, admin.ModelAdmin):
+
     def get_previous_results_keys(self, request, obj=None, keys=None):
         if keys is None:
             keys = []
@@ -29,6 +30,21 @@ class PreviousResultsAdminMixin(FieldsetsModelAdminMixin, admin.ModelAdmin):
                 if getattr(previous_instance, result) == PENDING:
                     keys.append(result)
         return keys
+
+    def get_previous_instances(self, request):
+        previous_instances = []
+        current_instance = self.get_previous_instance(request)
+        while current_instance:
+            if self.has_pending_results(current_instance):
+                previous_instances.append(current_instance)
+            current_instance = self.get_previous_instance(request, current_instance)
+        return previous_instances
+
+    def has_pending_results(self, instance):
+        for result in self.update_fields:
+            if getattr(instance, result) == PENDING:
+                return True
+        return False
 
     def get_previous_results_conditional_fieldlists(self, conditional_fieldlists):
         for update_field in self.update_fields:
