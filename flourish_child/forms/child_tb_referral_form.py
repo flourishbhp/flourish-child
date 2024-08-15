@@ -19,7 +19,7 @@ class ChildTBReferralForm(ChildModelFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         subject_identifier = self.initial.get('subject_identifier', None)
-
+        child_visit = self.initial.get('child_visit', None)
         referral_reasons = []
 
         tb_screening_options = {
@@ -32,7 +32,7 @@ class ChildTBReferralForm(ChildModelFormMixin, forms.ModelForm):
             'household_diagnosed_with_tb': 'fatigue_or_reduced_playfulness'
         }
         tb_screening_obj = self.tb_screening_model_cls.objects.filter(
-            child_visit__subject_identifier=subject_identifier).first()
+            child_visit__subject_identifier=subject_identifier, child_visit_id=child_visit).first()
         if tb_screening_obj:
             for symptom, duration in tb_screening_options.items():
                 symptom_value = getattr(tb_screening_obj, symptom)
