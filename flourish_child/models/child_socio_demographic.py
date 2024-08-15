@@ -1,10 +1,10 @@
 from django.db import models
 from edc_base.model_fields import OtherCharField
-from edc_constants.choices import YES_NO
 
+from flourish_caregiver.choices import YES_NO_UNK_NO_CHILD
 from .child_crf_model_mixin import ChildCrfModelMixin
 from .model_mixins.child_socio_demographic_mixin import ChildSocioDemographicMixin
-from ..choices import CARETAKERS, BUILT_DATES, YES_NO_DONT_KNOW
+from ..choices import BUILT_DATES, CARETAKERS, YES_NO_DONT_KNOW
 
 
 class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):
@@ -36,7 +36,7 @@ class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):
         verbose_name='Is the house the child lives in currently painted on the outside '
                      'or inside?',
         max_length=7,
-        choices=YES_NO,
+        choices=YES_NO_UNK_NO_CHILD,
         default=''
     )
 
@@ -57,7 +57,7 @@ class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):
 
     near_busy_road = models.CharField(
         verbose_name='Does the child currently live close to a busy road?',
-        choices=YES_NO,
+        choices=YES_NO_UNK_NO_CHILD,
         max_length=7,
         default=''
     )
@@ -66,7 +66,7 @@ class ChildSocioDemographic(ChildSocioDemographicMixin, ChildCrfModelMixin):
         verbose_name='Since this child was born, have you ever lived next to a busy '
                      'road?',
         max_length=7,
-        choices=YES_NO,
+        choices=YES_NO_UNK_NO_CHILD,
         default=''
     )
 
