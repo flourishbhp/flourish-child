@@ -100,16 +100,19 @@ class ChildCBCLSection1Admin(ChildCrfModelAdminMixin, admin.ModelAdmin):
         combined_records = self.combine_crf_data(queryset)
         for record in combined_records:
             subject_identifier = record.get('childpid', None)
-            caregiver_sid = child_utils.caregiver_subject_identifier(
+            subject_identifier_pattern = subject_identifier[1:-3]
+            caregiver_sid, biological_caregiver_sid = self.get_caregiver_sid(
+                subject_identifier=subject_identifier_pattern)
+            study_child_identifier = self.study_child_identifier(
                 subject_identifier=subject_identifier)
-            screening_identifier = self.screening_identifier(
-                subject_identifier=caregiver_sid)
             previous_study = self.previous_bhp_study(
                 subject_identifier=subject_identifier)
             study_maternal_identifier = self.study_maternal_identifier(
-                    screening_identifier=screening_identifier)
+                study_child_identifier=study_child_identifier)
             child_exposure_status = self.child_hiv_exposure(
-                    study_maternal_identifier, study_maternal_identifier, caregiver_sid)
+                subject_identifier=subject_identifier,
+                study_child_identifier=study_child_identifier,
+                caregiver_subject_identifier=biological_caregiver_sid)
 
             enrol_cohort, current_cohort = self.get_cohort_details(subject_identifier)
 
