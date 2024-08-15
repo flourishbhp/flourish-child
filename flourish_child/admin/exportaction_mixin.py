@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 from edc_base.utils import age
 from edc_constants.constants import NEG, POS, YES
 
-from ..helper_classes.utils import child_utils
 from flourish_export.admin_export_helper import AdminExportHelper
 
 
@@ -186,27 +185,6 @@ class ExportActionMixin(AdminExportHelper):
         if child_dataset_objs.exists():
             return child_dataset_objs.first().study_maternal_identifier
 
-    def get_hiv_rapid_test_obj(self, subject_identifier, child_subject_identifier):
-        onschedule_obj = child_utils.get_onschedule_by_child_id(
-            'flourish_caregiver.onschedulecohortaantenatal',
-            subject_identifier,
-            child_subject_identifier)
-        schedule_name = getattr(onschedule_obj, 'schedule_name', None)
-
-        rapid_test_cls = django_apps.get_model(
-            'flourish_caregiver.hivrapidtestcounseling')
-        try:
-            rapid_test_obj = rapid_test_cls.objects.get(
-                    maternal_visit__visit_code='1000M',
-                    maternal_visit__visit_code_sequence=0,
-                    maternal_visit__schedule_name=schedule_name,
-                    maternal_visit__subject_identifier=subject_identifier,
-                    rapid_test_done=YES)
-        except rapid_test_cls.DoesNotExist:
-            return None
-        else:
-            return rapid_test_obj
-
     def child_hiv_exposure(self, subject_identifier=None,
                            study_child_identifier=None,
                            caregiver_subject_identifier=None):
@@ -221,12 +199,17 @@ class ExportActionMixin(AdminExportHelper):
                                                                   'unexposed']:
                     return 'HUU'
         else:
+            rapid_test_cls = django_apps.get_model(
+                'flourish_caregiver.hivrapidtestcounseling')
             maternal_hiv_status = None
 
-            rapid_test_obj = self.get_hiv_rapid_test_obj(
-                caregiver_subject_identifier, subject_identifier)
-
-            if not rapid_test_obj:
+            try:
+                rapid_test_obj = rapid_test_cls.objects.get(
+                    maternal_visit__visit_code='1000M',
+                    maternal_visit__visit_code_sequence=0,
+                    maternal_visit__subject_identifier=caregiver_subject_identifier,
+                    rapid_test_done=YES)
+            except rapid_test_cls.DoesNotExist:
                 antenatal_enrollment_cls = django_apps.get_model(
                     'flourish_caregiver.antenatalenrollment')
                 try:
