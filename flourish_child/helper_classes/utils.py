@@ -208,6 +208,16 @@ class ChildUtils:
         else:
             return antenatal_enrol_obj.real_time_ga
 
+    def get_onschedule_by_child_id(self, onschedule_model, subject_identifier,
+                                   child_subject_identifier):
+        onschedule_model_cls = django_apps.get_model(onschedule_model)
+        try:
+            return onschedule_model_cls.objects.get(
+                subject_identifier=subject_identifier,
+                child_subject_identifier=child_subject_identifier)
+        except onschedule_model_cls.DoesNotExist:
+            return None
+
 
 child_utils = ChildUtils()
 
