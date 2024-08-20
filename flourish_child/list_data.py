@@ -200,9 +200,9 @@ list_data = {
         ('gaontebale', 'Gaontebale'),
         ('olebogeng', 'Olebogeng'),
         ('pearl', 'Pearl'),
-        ('kago','Kago'),
-        ('fanta','Fanta'),
-        ('lebogang','Lebogang'),
+        ('kago', 'Kago'),
+        ('fanta', 'Fanta'),
+        ('lebogang', 'Lebogang'),
 
     ],
     'flourish_child.tbdiagnostics': [
@@ -312,6 +312,16 @@ list_data = {
         ('unknown', 'Unknown'),
         (OTHER, 'Other, specify')
     ],
+
+    'flourish_child.childtbreferralreasons': [
+        ('cough', 'Cough'),
+        ('fever', 'Fever'),
+        ('sweats', 'Sweats'),
+        ('weight_loss', 'Weight loss'),
+        ('fatigue_or_reduced_playfulness', 'Fatigue'),
+        ('household_diagnosed_with_tb', 'Household Contact with TB'),
+        (OTHER, 'Other, specify'),
+    ]
 }
 
 preload_data = PreloadData(
