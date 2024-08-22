@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from edc_constants.constants import PENDING
 from edc_fieldsets import Fieldsets, FieldsetsModelAdminMixin, Insert
@@ -23,68 +24,86 @@ class PreviousResultsAdminMixin(FieldsetsModelAdminMixin, admin.ModelAdmin):
     def get_previous_results_keys(self, request, obj=None, keys=None):
         if keys is None:
             keys = []
-        previous_instance = self.get_previous_instance(request)
-        if not obj and previous_instance:
-            for result in self.update_fields:
-                if getattr(previous_instance, result) == PENDING:
-                    keys.append(result)
+        previous_instances = self.get_previous_instances(request)
+        for previous_instance in previous_instances:
+            if not obj and previous_instance:
+                for result in self.update_fields:
+                    if getattr(previous_instance, result) == PENDING:
+                        keys.append(result)
         return keys
 
-    def get_previous_results_conditional_fieldlists(self, conditional_fieldlists):
-        for update_field in self.update_fields:
-            field = f'{update_field}_previous'
-            fieldset = Insert((field,),
-                              section='Previous Test Results')
-            conditional_fieldlists[update_field] = fieldset
-        return conditional_fieldlists
+    def get_previous_instances(self, request):
+        previous_instances = []
+        current_instance = self.get_previous_instance(request)
+        while current_instance:
+            if self.has_pending_results(current_instance):
+                previous_instances.append(current_instance)
+            ap = current_instance.child_visit.appointment
+            current_instance = self.get_previous_instance(request, ap)
+        return previous_instances
 
-    def get_fieldsets(self, request, obj=None):
-        """Returns fieldsets after modifications declared in
-        "conditional" dictionaries.
-        """
-        fieldsets = super().get_fieldsets(request, obj=obj)
-        fieldsets = TbFieldsets(fieldsets=fieldsets)
-        keys = self.get_keys(request, obj)
+    def has_pending_results(self, instance):
+        for result in self.update_fields:
+            if getattr(instance, result) == PENDING:
+                return True
+        return False
 
-        for key in keys:
-            fieldlist = self.conditional_fieldlists.get(key)
-            if fieldlist:
-                try:
-                    fieldsets.insert_fields(
-                        *fieldlist.insert_fields,
-                        insert_after=fieldlist.insert_after,
-                        section=fieldlist.section)
-                except AttributeError:
-                    pass
-        self.remove_unused_section(fieldsets=fieldsets)
-        fieldsets = self.update_fieldset_for_form(
-            fieldsets, request)
-        fieldsets.move_to_end(self.fieldsets_move_to_end)
-        return fieldsets.fieldsets
+    def add_view(self, request, form_url='', extra_context=None):
+        self.request = request
+        return self.changeform_view(request, None, form_url, extra_context)
 
     def save_model(self, request, obj, form, change):
-        previous_instance = self.get_previous_instance(request)
-        if previous_instance:
-            changed = False
-            for field in form.cleaned_data:
-                if field.endswith('_previous'):
-                    original_field_name = field[:-9]
-                    previous_value = form.cleaned_data[field]
-                    if previous_value != getattr(previous_instance, original_field_name):
-                        setattr(previous_instance, original_field_name, previous_value)
-                        changed = True
-            if changed:
-                previous_instance.save()
+        previous_instances = self.get_previous_instances(request)
+        if previous_instances:
+            for previous_instance in previous_instances:
+                changed = False
+                for field in form.cleaned_data:
+                    if field.endswith('_previous'):
+                        original_field_name = field[:-9]
+                        previous_value = form.cleaned_data[field]
+                        if previous_value != getattr(
+                                previous_instance, original_field_name):
+                            setattr(previous_instance,
+                                    original_field_name, previous_value)
+                            changed = True
+                if changed:
+                    previous_instance.save()
         super().save_model(request, obj, form, change)
 
-    def get_form(self, request, obj=None, *args, **kwargs):
-        form = super().get_form(request, *args, **kwargs)
-        form.previous_instance = self.get_previous_instance(request)
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj=obj, **kwargs)
+        previous_instances = self.get_previous_instances(request)
+
+        for i, instance in enumerate(previous_instances):
+            for field in self.update_fields:
+                visit_code = instance.child_visit.visit_code
+                new_field_name = f"{visit_code}_{field}_previous"
+
+                form.base_fields[new_field_name] = forms.ChoiceField(
+                    choices=TEST_RESULTS_CHOICES,
+                    required=False,
+                    label=f"{self.convert_case(field)} for visit {visit_code}",
+                    widget=forms.RadioSelect)
+
         return form
 
+    def convert_case(self, raw_string):
+        words = raw_string.split('_')
+        capitalized_words = [word.capitalize() for word in words]
+        return ' '.join(capitalized_words)
+
     def remove_unused_section(self, fieldsets):
-        if not fieldsets.fieldsets_asdict['Previous Test Results']['fields']:
-            del fieldsets.fieldsets_asdict['Previous Test Results']
+        fieldsets_list = list(fieldsets)
+
+        for index, fieldset in enumerate(fieldsets_list):
+            if fieldset[0] == 'Previous Test Results':
+                if len(fieldset[1]['fields']) == 0:
+                    del fieldsets_list[index]
+                    break
+
+        fieldsets = tuple(fieldsets_list)
+
+        return fieldsets
 
     update_fields = [
         'chest_xray_results',
@@ -185,3 +204,16 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
                                after='weight_loss_duration'),
         }
         return self.get_previous_results_conditional_fieldlists(conditional_fieldlists)
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj=obj)
+        fieldsets = self.add_or_remove_fieldsets(request, obj, fieldsets)
+        return fieldsets
+
+    def add_or_remove_fieldsets(self, request, obj, fieldsets):
+        keys = self.get_keys(request, obj)
+        for key in keys:
+            fieldset = self.conditional_fieldlists.get(key)
+            if fieldset:
+                fieldsets = self.add_fieldsets(fieldsets, fieldset)
+        return fieldsets
