@@ -1,5 +1,3 @@
-import copy
-
 from django import forms
 from django.contrib import admin
 from edc_constants.constants import PENDING
@@ -52,47 +50,9 @@ class PreviousResultsAdminMixin(FieldsetsModelAdminMixin, admin.ModelAdmin):
                 return True
         return False
 
-    def get_previous_results_conditional_fieldlists(self, conditional_fieldlists):
-        previous_instances = self.get_previous_instances(self.request)
-        if previous_instances:
-            for previous_instance in previous_instances:
-                visit_code = previous_instance.child_visit.visit_code
-                for update_field in self.update_fields:
-                    field = f'{visit_code}_{update_field}_previous'
-                    fieldset = Insert((field,),
-                                      section='Previous Test Results')
-                    conditional_fieldlists[update_field] = fieldset
-        return conditional_fieldlists
-
     def add_view(self, request, form_url='', extra_context=None):
         self.request = request
         return self.changeform_view(request, None, form_url, extra_context)
-
-    def get_fieldsets(self, request, obj=None):
-        fieldsets = copy.deepcopy(self.fieldsets)
-        keys = self.get_keys(request, obj)
-
-        for key in keys:
-            fieldset = self.conditional_fieldlists.get(key)
-            if fieldset:
-                fieldsets = self.add_fieldsets(fieldsets, fieldset)
-
-        self.remove_unused_section(fieldsets=fieldsets)
-        return fieldsets
-
-    def add_fieldsets(self, fieldsets, additional_fieldset):
-        for fieldset in fieldsets:
-            if fieldset[0] == additional_fieldset.section:
-                for new_field in additional_fieldset.insert_fields:
-                    if new_field not in fieldset[1]["fields"]:
-                        try:
-                            insert_position = fieldset[1]["fields"].index(
-                                additional_fieldset.insert_after) + 1
-                        except ValueError:
-                            insert_position = len(fieldset[1]["fields"])
-                        fieldset[1]["fields"].insert(insert_position, new_field)
-
-        return fieldsets
 
     def save_model(self, request, obj, form, change):
         previous_instances = self.get_previous_instances(request)
