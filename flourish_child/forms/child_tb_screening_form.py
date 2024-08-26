@@ -1,5 +1,4 @@
 from django import forms
-from django.core.exceptions import ValidationError
 
 from flourish_child.choices import TEST_RESULTS_CHOICES
 from flourish_child.forms.child_form_mixin import ChildModelFormMixin
@@ -8,60 +7,36 @@ from flourish_child_validations.form_validators.child_tb_screening_form_validato
     ChildTBScreeningFormValidator
 
 
-class PreviousResultsFormMixin(forms.Form):
-    chest_xray_results_previous = forms.ChoiceField(
-        choices=TEST_RESULTS_CHOICES,
-        required=False,
-        label="Previous Chest X-Ray Results",
-        widget=forms.RadioSelect)
-    sputum_sample_results_previous = forms.ChoiceField(
-        choices=TEST_RESULTS_CHOICES,
-        required=False,
-        label="Previous Sputum Sample Results",
-        widget=forms.RadioSelect)
+class PreviousFieldsForm(forms.Form):
 
-    urine_test_results_previous = forms.ChoiceField(
-        choices=TEST_RESULTS_CHOICES,
-        required=False,
-        label="Previous Urine Test Results",
-        widget=forms.RadioSelect)
-    skin_test_results_previous = forms.ChoiceField(
-        choices=TEST_RESULTS_CHOICES,
-        required=False,
-        label="Previous Skin Test Results",
-        widget=forms.RadioSelect)
-    blood_test_results_previous = forms.ChoiceField(
-        choices=TEST_RESULTS_CHOICES,
-        required=False,
-        label="Previous Blood Test Results",
-        widget=forms.RadioSelect)
+    def convert_case(self, raw_string):
+        words = raw_string.split('_')
+        capitalized_words = [word.capitalize() for word in words]
+        return ' '.join(capitalized_words)
 
-    def clean(self):
-        clean_data = super().clean()
-        keys_before_child_visit = self.get_keys_before(clean_data, )
-        for field in keys_before_child_visit:
-            field_value = clean_data.get(field)
-            if field_value == '':
-                raise ValidationError({field: 'This field is required.'})
+    def __init__(self, previous_instances=None, update_fields=None, visit_attr=None,
+                 *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if previous_instances:
+            for previous_instance in previous_instances:
+                visit = getattr(previous_instance, visit_attr)
+                visit_code = visit.visit_code
+                for result in update_fields:
+                    if getattr(previous_instance, result) == PENDING:
+                        self.fields[f'{visit_code}_{result}'] = forms.ChoiceField(
+                            choices=TEST_RESULTS_CHOICES,
+                            required=False,
+                            label=f"{self.convert_case(result)} for visit "
+                                  f"{visit_code}",
+                            widget=forms.RadioSelect,
+                            initial=getattr(previous_instance, result)
+                        )
 
-    def get_keys_before(self, dict):
-        key_stop = "child_visit"
-        return_list = []
-        for key in dict:
-            if key == key_stop:
-                break
-            return_list.append(key)
-        return return_list
+        fields_order = list(self.fields.keys())
+        self.order_fields(fields_order)
 
 
-class ChildTBScreeningForm(PreviousResultsFormMixin, ChildModelFormMixin):
-
-    stool_sample_results_previous = forms.ChoiceField(
-        choices=TEST_RESULTS_CHOICES,
-        required=False,
-        label="Previous Stool Sample Results",
-        widget=forms.RadioSelect)
-
+class ChildTBScreeningForm(ChildModelFormMixin):
     form_validator_cls = ChildTBScreeningFormValidator
 
     class Meta:
