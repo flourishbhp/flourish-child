@@ -6,15 +6,25 @@ from django.utils.translation import ugettext_lazy as _
 from edc_base.utils import age
 from edc_constants.constants import NEG, POS, YES
 
+from ..helper_classes.utils import child_utils
 from flourish_export.admin_export_helper import AdminExportHelper
 
 
 class ExportActionMixin(AdminExportHelper):
     tb_adol_assent_model = 'flourish_child.tbadolassent'
+    caregiver_child_consent_model = 'flourish_caregiver.caregiverchildconsent'
 
     @property
     def tb_adol_assent_cls(self):
         return django_apps.get_model(self.tb_adol_assent_model)
+
+    @property
+    def caregiver_child_consent_cls(self):
+        return django_apps.get_model(self.caregiver_child_consent_model)
+
+    @property
+    def child_dataset_cls(self):
+        return django_apps.get_model('flourish_child.childdataset')
 
     def update_variables(self, data={}):
         """ Update study identifiers to desired variable name(s).
@@ -41,18 +51,21 @@ class ExportActionMixin(AdminExportHelper):
             data = obj.__dict__.copy()
 
             subject_identifier = getattr(obj, 'subject_identifier', None)
-            caregiver_sid = self.get_caregiver_sid(
+
+            # using subject PID pattern to get related biological caregiver subject_identifier
+            subject_identifier_pattern = subject_identifier[1:-3]
+            caregiver_sid, biological_caregiver_sid = self.get_caregiver_sid(
+                subject_identifier=subject_identifier_pattern)
+            study_child_identifier = self.study_child_identifier(
                 subject_identifier=subject_identifier)
-            screening_identifier = self.screening_identifier(
-                subject_identifier=caregiver_sid)
             previous_study = self.previous_bhp_study(
                 subject_identifier=subject_identifier)
             study_maternal_identifier = self.study_maternal_identifier(
-                screening_identifier=screening_identifier)
+                study_child_identifier=study_child_identifier)
             child_exposure_status = self.child_hiv_exposure(
                 subject_identifier=subject_identifier,
-                study_maternal_identifier=study_maternal_identifier,
-                caregiver_subject_identifier=caregiver_sid)
+                study_child_identifier=study_child_identifier,
+                caregiver_subject_identifier=biological_caregiver_sid)
             visit_cohort = None
 
             # Add subject identifier and visit code
@@ -125,75 +138,95 @@ class ExportActionMixin(AdminExportHelper):
         return consent_cls.objects.filter(
             subject_identifier__endswith=subject_identifier)
 
-    def screening_identifier(self, subject_identifier=None):
-        """Returns a screening identifier.
+    def caregiver_child_consent(self, subject_identifier):
+        try:
+            caregiver_child_consent_obj = self.caregiver_child_consent_cls.objects.filter(
+                subject_identifier=subject_identifier).latest('consent_datetime')
+        except self.caregiver_child_consent_cls.DoesNotExist:
+            return None
+        else:
+            return caregiver_child_consent_obj
+
+    def child_dataset_objs(self, study_child_identifier):
+        return self.child_dataset_cls.objects.filter(
+            study_child_identifier=study_child_identifier)
+
+    def study_child_identifier(self, subject_identifier):
+        """ Returns a study_child_identifier for child subject_identifier
+            specified.
         """
-        consent = self.caregiver_subject_consents(subject_identifier)
-        if consent:
-            return consent.last().screening_identifier
-        return None
+        child_consent = self.caregiver_child_consent(subject_identifier)
+
+        return getattr(child_consent, 'study_child_identifier', None)
 
     def get_caregiver_sid(self, subject_identifier):
-        sub_subject_identifier = subject_identifier[1:-3]
-        consent = self.caregiver_subject_consents(sub_subject_identifier)
-        if consent.exists():
-            return consent.earliest('consent_datetime').subject_identifier
+        """ Returns a subject_identifier for the biological caregiver associated
+            to the child and the current associated subject_identifier incase
+            the two are different.
+            @param subject_identifier: subject_identifier pattern
+            @return: subject_identifier(s) as `str`
+        """
+        consents = self.caregiver_subject_consents(subject_identifier)
+
+        if consents.exists():
+            consent = consents.filter(biological_caregiver=YES).first()
+            biological_caregiver_sid = getattr(consent, 'subject_identifier', None)
+            caregiver_sid = consents.earliest('consent_datetime').subject_identifier
+            return caregiver_sid, biological_caregiver_sid
         else:
             return None
 
     def previous_bhp_study(self, subject_identifier=None):
-        caregiver_child_consent_cls = django_apps.get_model(
-            'flourish_caregiver.caregiverchildconsent')
-        if subject_identifier:
-            try:
-                caregiver_child_consent_obj = caregiver_child_consent_cls.objects.filter(
-                    subject_identifier=subject_identifier).latest('consent_datetime')
-            except caregiver_child_consent_cls.DoesNotExist:
-                return None
-            else:
-                return caregiver_child_consent_obj.get_protocol
+        return getattr(
+            self.caregiver_child_consent(subject_identifier), 'get_protocol', None)
 
-    def study_maternal_identifier(self, screening_identifier=None):
-        dataset_cls = django_apps.get_model(
-            'flourish_caregiver.maternaldataset')
-        if screening_identifier:
-            try:
-                dataset_obj = dataset_cls.objects.get(
-                    screening_identifier=screening_identifier)
-            except dataset_cls.DoesNotExist:
-                return None
-            else:
-                return dataset_obj.study_maternal_identifier
+    def study_maternal_identifier(self, study_child_identifier=None):
+        child_dataset_objs = self.child_dataset_objs(study_child_identifier)
+
+        if child_dataset_objs.exists():
+            return child_dataset_objs.first().study_maternal_identifier
+
+    def get_hiv_rapid_test_obj(self, subject_identifier, child_subject_identifier):
+        onschedule_obj = child_utils.get_onschedule_by_child_id(
+            'flourish_caregiver.onschedulecohortaantenatal',
+            subject_identifier,
+            child_subject_identifier)
+        schedule_name = getattr(onschedule_obj, 'schedule_name', None)
+
+        rapid_test_cls = django_apps.get_model(
+            'flourish_caregiver.hivrapidtestcounseling')
+        try:
+            rapid_test_obj = rapid_test_cls.objects.get(
+                    maternal_visit__visit_code='1000M',
+                    maternal_visit__visit_code_sequence=0,
+                    maternal_visit__schedule_name=schedule_name,
+                    maternal_visit__subject_identifier=subject_identifier,
+                    rapid_test_done=YES)
+        except rapid_test_cls.DoesNotExist:
+            return None
+        else:
+            return rapid_test_obj
 
     def child_hiv_exposure(self, subject_identifier=None,
-                           study_maternal_identifier=None,
+                           study_child_identifier=None,
                            caregiver_subject_identifier=None):
 
-        child_dataset_cls = django_apps.get_model(
-            'flourish_child.childdataset')
+        if study_child_identifier:
+            child_dataset_objs = self.child_dataset_objs(study_child_identifier)
 
-        if study_maternal_identifier:
-            child_dataset_objs = child_dataset_cls.objects.filter(
-                study_maternal_identifier=study_maternal_identifier)
-
-            if child_dataset_objs:
+            if child_dataset_objs.exists():
                 if child_dataset_objs[0].infant_hiv_exposed in ['Exposed', 'exposed']:
                     return 'HEU'
                 elif child_dataset_objs[0].infant_hiv_exposed in ['Unexposed',
                                                                   'unexposed']:
                     return 'HUU'
         else:
-            rapid_test_cls = django_apps.get_model(
-                'flourish_caregiver.hivrapidtestcounseling')
             maternal_hiv_status = None
 
-            try:
-                rapid_test_obj = rapid_test_cls.objects.get(
-                    maternal_visit__visit_code='1000M',
-                    maternal_visit__visit_code_sequence=0,
-                    maternal_visit__subject_identifier=caregiver_subject_identifier,
-                    rapid_test_done=YES)
-            except rapid_test_cls.DoesNotExist:
+            rapid_test_obj = self.get_hiv_rapid_test_obj(
+                caregiver_subject_identifier, subject_identifier)
+
+            if not rapid_test_obj:
                 antenatal_enrollment_cls = django_apps.get_model(
                     'flourish_caregiver.antenatalenrollment')
                 try:

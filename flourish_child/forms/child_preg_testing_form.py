@@ -1,6 +1,6 @@
 from django import forms
 from django.apps import apps as django_apps
-from edc_constants.constants import NO, NOT_APPLICABLE
+from edc_constants.constants import NO, NOT_APPLICABLE, YES
 
 from flourish_child_validations.form_validators import ChildPregTestingFormValidator
 from .child_form_mixin import ChildModelFormMixin
@@ -31,7 +31,7 @@ class ChildPregTestingForm(ChildModelFormMixin, forms.ModelForm):
                 initial.get('menarche_start_est', None) != NOT_APPLICABLE):
             self.fields['menarche_start_est'].widget = forms.TextInput(
                 attrs={'readonly': 'readonly'})
-        if initial.get('menarche', None):
+        if initial.get('menarche', None) and initial.get('menarche', None) == YES:
             self.fields['menarche'].widget = forms.TextInput(
                 attrs={'readonly': 'readonly'})
 
