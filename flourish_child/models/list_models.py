@@ -106,3 +106,7 @@ class ChildHIVTestVisits(ListModelMixin, BaseUuidModel):
 
 class ChildHIVNotTestedReason(ListModelMixin, BaseUuidModel):
     pass
+
+
+class ChildTbReferralReasons(ListModelMixin, BaseUuidModel):
+    pass
