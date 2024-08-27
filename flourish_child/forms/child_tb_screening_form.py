@@ -19,11 +19,7 @@ class PreviousResultsFormMixin(forms.Form):
         required=False,
         label="Previous Sputum Sample Results",
         widget=forms.RadioSelect)
-    stool_sample_results_previous = forms.ChoiceField(
-        choices=TEST_RESULTS_CHOICES,
-        required=False,
-        label="Previous Stool Sample Results",
-        widget=forms.RadioSelect)
+
     urine_test_results_previous = forms.ChoiceField(
         choices=TEST_RESULTS_CHOICES,
         required=False,
@@ -59,6 +55,13 @@ class PreviousResultsFormMixin(forms.Form):
 
 
 class ChildTBScreeningForm(PreviousResultsFormMixin, ChildModelFormMixin):
+
+    stool_sample_results_previous = forms.ChoiceField(
+        choices=TEST_RESULTS_CHOICES,
+        required=False,
+        label="Previous Stool Sample Results",
+        widget=forms.RadioSelect)
+
     form_validator_cls = ChildTBScreeningFormValidator
 
     class Meta:
