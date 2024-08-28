@@ -7,6 +7,7 @@ from flourish_caregiver.models.model_mixins.flourish_tb_screening_mixin import \
 from flourish_child.choices import TEST_RESULTS_CHOICES, YES_NO_OTHER, YES_NO_UNKNOWN
 from flourish_child.helper_classes.utils import child_utils
 from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
+from flourish_child.models.list_models import ChildTBTests
 
 
 class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
@@ -82,6 +83,12 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         default='',
         max_length=20,
     )
+
+    tb_tests = models.ManyToManyField(
+        ChildTBTests,
+        blank=True,
+        verbose_name='What diagnostic tests were performed for TB?',
+        default='', )
 
     def save(self, *args, **kwargs):
         child_age = child_utils.child_age(self.child_visit.subject_identifier,
