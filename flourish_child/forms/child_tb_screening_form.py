@@ -26,7 +26,7 @@ class PreviousFieldsForm(forms.Form):
                     if getattr(previous_instance, result) == PENDING:
                         self.fields[f'{visit_code}_{result}'] = forms.ChoiceField(
                             choices=TEST_RESULTS_CHOICES,
-                            required=False,
+                            required=True,
                             label=f"{self.convert_case(result)} for visit "
                                   f"{visit_code}",
                             widget=forms.RadioSelect,
