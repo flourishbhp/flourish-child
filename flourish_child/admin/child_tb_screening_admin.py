@@ -60,7 +60,7 @@ class PreviousResultsAdminMixin(FieldsetsModelAdminMixin, admin.ModelAdmin):
                                 result,
                                 previous_fields_form.cleaned_data[field_name]
                             )
-                    previous_instance.save()
+                    previous_instance.save_base(raw=True)
         super().save_model(request, obj, form, change)
 
     update_fields = [
