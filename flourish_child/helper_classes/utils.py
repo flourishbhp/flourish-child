@@ -11,7 +11,7 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
-from edc_constants.constants import NEW, OPEN, YES
+from edc_constants.constants import NEW, OPEN, YES, POS, NEG
 from edc_data_manager.models import DataActionItem
 from PIL import Image
 
@@ -77,6 +77,10 @@ class ChildUtils:
                 subject_identifier=subject_identifier).latest('consent_datetime')
         except self.caregiver_consent_cls.DoesNotExist:
             pass
+
+    @property
+    def child_dataset_cls(self):
+        return django_apps.get_model('flourish_child.childdataset')
 
     def caregiver_child_consent_obj(self, subject_identifier=None):
         try:
@@ -217,6 +221,72 @@ class ChildUtils:
                 child_subject_identifier=child_subject_identifier)
         except onschedule_model_cls.DoesNotExist:
             return None
+
+    def child_hiv_exposure(self, subject_identifier=None,
+                           study_child_identifier=None,
+                           caregiver_subject_identifier=None):
+
+        if study_child_identifier:
+            child_dataset_objs = self.child_dataset_objs(study_child_identifier)
+
+            if child_dataset_objs.exists():
+                if child_dataset_objs[0].infant_hiv_exposed in ['Exposed', 'exposed']:
+                    return 'HEU'
+                elif child_dataset_objs[0].infant_hiv_exposed in ['Unexposed',
+                                                                  'unexposed']:
+                    return 'HUU'
+        else:
+            maternal_hiv_status = None
+
+            rapid_test_obj = self.get_hiv_rapid_test_obj(
+                caregiver_subject_identifier, subject_identifier)
+
+            if not rapid_test_obj:
+                antenatal_enrollment_cls = django_apps.get_model(
+                    'flourish_caregiver.antenatalenrollment')
+                try:
+                    antenatal_enrollment = antenatal_enrollment_cls.objects.get(
+                        subject_identifier=caregiver_subject_identifier,
+                        child_subject_identifier=subject_identifier)
+                except antenatal_enrollment_cls.DoesNotExist:
+                    # To refactor to include new enrollees
+                    maternal_hiv_status = 'UNK'
+                else:
+                    maternal_hiv_status = antenatal_enrollment.enrollment_hiv_status
+            else:
+                maternal_hiv_status = rapid_test_obj.result
+
+            if maternal_hiv_status == POS:
+                return 'HEU'
+            elif maternal_hiv_status == NEG:
+                return 'HUU'
+            else:
+                return 'UNK'
+
+    def child_dataset_objs(self, study_child_identifier):
+        return self.child_dataset_cls.objects.filter(
+            study_child_identifier=study_child_identifier)
+
+    def get_hiv_rapid_test_obj(self, subject_identifier, child_subject_identifier):
+        onschedule_obj = child_utils.get_onschedule_by_child_id(
+            'flourish_caregiver.onschedulecohortaantenatal',
+            subject_identifier,
+            child_subject_identifier)
+        schedule_name = getattr(onschedule_obj, 'schedule_name', None)
+
+        rapid_test_cls = django_apps.get_model(
+            'flourish_caregiver.hivrapidtestcounseling')
+        try:
+            rapid_test_obj = rapid_test_cls.objects.get(
+                    maternal_visit__visit_code='1000M',
+                    maternal_visit__visit_code_sequence=0,
+                    maternal_visit__schedule_name=schedule_name,
+                    maternal_visit__subject_identifier=subject_identifier,
+                    rapid_test_done=YES)
+        except rapid_test_cls.DoesNotExist:
+            return None
+        else:
+            return rapid_test_obj
 
 
 child_utils = ChildUtils()
