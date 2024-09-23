@@ -232,6 +232,9 @@
     {% if vaccinesreceived or vaccinesmissed or childprehospitalizationInline %}
         <div class='clearfix'></div>
     {% endif %}
+    {% if previous_fields %}
+
+    {% endif %}
     {{ block.super }}
 {% endblock field_sets %}
 
