@@ -7,8 +7,9 @@ import pypdfium2 as pdfium
 from django.apps import apps as django_apps
 from django.conf import settings
 from django.contrib.auth.models import Group, User
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, MultipleObjectsReturned
 from django.db.models import Q
+from django.db.models.query import QuerySet
 from edc_action_item.site_action_items import site_action_items
 from edc_base.utils import age, get_utcnow
 from edc_constants.constants import NEW, OPEN, YES, POS, NEG
@@ -123,6 +124,10 @@ class ChildUtils:
                 subject_identifier=caregiver_sid)
         except self.prior_screening_model_cls.DoesNotExist:
             return None
+        except MultipleObjectsReturned:
+            prior_screenings = self.prior_screening_model_cls.objects.filter(
+                subject_identifier=caregiver_sid)
+            return prior_screenings
         else:
             return prior_screening
 
@@ -136,9 +141,16 @@ class ChildUtils:
                 'Missing Subject Screening form. Please complete '
                 'it before proceeding.')
 
+        if isinstance(subject_screening_obj, QuerySet):
+            screening_identifiers = subject_screening_obj.values_list(
+                'screening_identifier', flat=True)
+            qs = Q(screening_identifier__in=screening_identifiers)
+        else:
+            qs = Q(screening_identifier=subject_screening_obj.screening_identifier)
+
         try:
-            consent_version_obj = self.consent_version_cls.objects.get(
-                screening_identifier=subject_screening_obj.screening_identifier)
+            consent_version_obj = self.consent_version_cls.objects.filter(qs).latest(
+                'child_version')
         except self.consent_version_cls.DoesNotExist:
             raise ValidationError(
                 'Missing Consent Version form. Please complete '
