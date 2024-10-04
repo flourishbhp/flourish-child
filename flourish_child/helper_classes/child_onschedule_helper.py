@@ -22,6 +22,20 @@ class ChildOnScheduleHelper(object):
     def child_offschedule_cls(self):
         return django_apps.get_model(self.child_offschedule_model)
 
+    def put_on_fu_schedule(self):
+        cohort_schedules = django_apps.get_model('flourish_caregiver.cohortschedules')
+        try:
+            cohort_schedule = cohort_schedules.objects.get(
+                cohort_name=self.cohort,
+                schedule_type='followup',
+                child_count=None)
+        except cohort_schedules.DoesNotExist:
+            raise
+        else:
+            self.add_onschedule(self.subject_identifier,
+                                cohort_schedule.onschedule_model,
+                                cohort_schedule.schedule_name)
+
     def put_cohort_onschedule(self, instance, ):
         if self.cohort:
             instance.registration_update_or_create()
@@ -38,45 +52,36 @@ class ChildOnScheduleHelper(object):
         cohort = cohort or self.cohort
         if instance:
             subject_identifier = self.subject_identifier or instance.subject_identifier
-    
+
             cohort_label_lower = ''.join(cohort.split('_'))
-    
+
             if 'fuqt' in cohort_label_lower:
                 cohort_label_lower = cohort_label_lower.replace('fuqt', 'fuquart')
-    
+
             if 'enrol' in cohort:
                 cohort_label_lower = cohort_label_lower.replace(
                     'enrol', 'enrollment')
-    
+
             elif 'sec' in cohort:
                 cohort_label_lower = cohort_label_lower.replace('qt', 'quart')
-    
+
             if 'birth' in cohort:
                 onschedule_model = 'flourish_child.onschedule' + cohort_label_lower
                 schedule_name = cohort.replace('cohort_', '') + '_schedule1'
             else:
                 onschedule_model = 'flourish_child.onschedulechild' + cohort_label_lower
-    
+
                 schedule_name = cohort.replace('cohort', 'child') + '_schedule1'
-    
+
             if 'quarterly' in cohort:
                 schedule_name = schedule_name.replace('quarterly', 'quart')
-    
+
             if 'tb_adol' in cohort:
                 schedule_name = 'tb_adol_schedule'
                 onschedule_model = 'flourish_child.onschedulechildtbadolschedule'
-    
-            _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
-                onschedule_model=onschedule_model, name=schedule_name)
 
-            if not schedule.is_onschedule(subject_identifier=subject_identifier,
-                                          report_datetime=self.base_appt_datetime):    
-                schedule.put_on_schedule(
-                    subject_identifier=subject_identifier,
-                    onschedule_datetime=self.base_appt_datetime,
-                    schedule_name=schedule_name,
-                    base_appt_datetime=self.base_appt_datetime)
-    
+            self.add_onschedule(subject_identifier, onschedule_model, schedule_name)
+
             if 'enrol' in cohort and 'sec' not in cohort:
                 # book participant for followup
                 booking_helper = ChildFollowUpBookingHelper()
@@ -84,6 +89,17 @@ class ChildOnScheduleHelper(object):
                     booking_dt = self.base_appt_datetime + relativedelta(years=1)
                     booking_helper.schedule_fu_booking(subject_identifier, booking_dt)
 
+    def add_onschedule(self, subject_identifier, onschedule_model, schedule_name):
+        _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
+            onschedule_model=onschedule_model, name=schedule_name)
+
+        if not schedule.is_onschedule(subject_identifier=subject_identifier,
+                                      report_datetime=self.base_appt_datetime):
+            schedule.put_on_schedule(
+                subject_identifier=subject_identifier,
+                onschedule_datetime=self.base_appt_datetime,
+                schedule_name=schedule_name,
+                base_appt_datetime=self.base_appt_datetime)
 
     def get_onschedule_model_obj(self, schedule, query_key='subject_identifier',
                                  query_value=None):
@@ -97,7 +113,7 @@ class ChildOnScheduleHelper(object):
     def put_child_offschedule(self, schedule_name):
         if not (self.subject_identifier or schedule_name):
             raise Exception("Subject identifier or schedule name cannot be empty")
-    
+
         try:
             offschedule_obj = self.child_offschedule_cls.objects.get(
                 subject_identifier=self.subject_identifier,

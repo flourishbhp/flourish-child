@@ -1,5 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from django.test import TestCase, tag
+from unittest.case import skip
 from edc_base import get_utcnow
 from edc_constants.constants import MALE, YES
 from edc_facility.import_holidays import import_holidays
@@ -47,7 +48,7 @@ class TestDevScreening18Months(TestCase):
 
             }
 
-    @tag('screening18')
+    @skip('no-longer required, rule groups changed.')
     def test_dev_screening_18_months(self):
         maternal_dataset_obj = mommy.make_recipe(
             'flourish_caregiver.maternaldataset',

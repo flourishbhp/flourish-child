@@ -175,13 +175,13 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
 
         child_prev_enrolled = caregiver_child_consent_cls.objects.filter(
             subject_identifier=instance.subject_identifier,
-            study_child_identifier__isnull=False).exists()
+            study_child_identifier__isnull=False)
 
         helper_cls = ChildOnScheduleHelper(
             subject_identifier=instance.subject_identifier,
             cohort=instance.cohort)
 
-        if child_prev_enrolled:
+        if child_prev_enrolled.exists():
             # The criteria is for child from a previous study
             try:
                 prev_enrolled = caregiver_prev_enrolled_cls.objects.get(
@@ -190,7 +190,11 @@ def child_consent_on_post_save(sender, instance, raw, created, **kwargs):
                 pass
             else:
                 helper_cls.base_appt_datetime = prev_enrolled.report_datetime
-                helper_cls.put_cohort_onschedule(instance, )
+                _identifier = child_prev_enrolled.first().study_child_identifier or ''
+                if child_utils.pf_identifier_check(_identifier):
+                    helper_cls.put_on_fu_schedule()
+                else:
+                    helper_cls.put_cohort_onschedule(instance, )
 
         else:
 
