@@ -256,7 +256,7 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
         return schedule_name
 
-    def get_form(self, request, obj=None, *args, **kwargs):
-        form = super().get_form(request, *args, **kwargs)
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
         form.previous_instance = self.get_previous_instance(request)
         return form
