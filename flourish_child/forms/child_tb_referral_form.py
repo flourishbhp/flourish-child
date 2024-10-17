@@ -33,10 +33,10 @@ class ChildTBReferralForm(ChildModelFormMixin, forms.ModelForm):
         tb_screening_obj = self.tb_screening_model_cls.objects.filter(
             child_visit_id=child_visit).first()
         if tb_screening_obj:
-            for symptom, duration in tb_screening_options.items():
+            for symptom, _ in tb_screening_options.items():
                 symptom_value = getattr(tb_screening_obj, symptom)
-                duration_value = getattr(tb_screening_obj, duration)
-                if symptom_value == YES and duration_value == '>= 2 weeks':
+
+                if symptom_value == YES:
                     referral_reason = ChildTbReferralReasons.objects.filter(
                         short_name=symptom).first()
                     if referral_reason:
