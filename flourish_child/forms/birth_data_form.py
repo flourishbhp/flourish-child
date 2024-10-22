@@ -22,6 +22,8 @@ class BirthDataForm(ChildModelFormMixin):
         if not gestational_age:
             self.initial['gestational_age'] = child_utils.get_gestational_age(
                 subject_identifier)
+            self.fields['gestational_age'].widget = forms.TextInput(
+                attrs={'readonly': 'readonly'})
 
     @property
     def child_visit_obj(self):
