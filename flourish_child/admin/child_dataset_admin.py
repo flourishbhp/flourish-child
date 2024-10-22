@@ -1,13 +1,14 @@
 from django.contrib import admin
 from edc_model_admin import audit_fieldset_tuple
-from edc_base.sites.admin import ModelAdminSiteMixin
+
 from ..admin_site import flourish_child_admin
 from ..forms import ChildDatasetForm
 from ..models import ChildDataset
+from .model_admin_mixins import ModelAdminMixin
 
 
 @admin.register(ChildDataset, site=flourish_child_admin)
-class ChildDatasetAdmin(ModelAdminSiteMixin, admin.ModelAdmin):
+class ChildDatasetAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = ChildDatasetForm
 
