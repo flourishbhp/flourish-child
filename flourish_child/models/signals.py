@@ -263,8 +263,7 @@ def child_visit_on_post_save(sender, instance, raw, created, **kwargs):
     if getattr(instance, 'reason') == MISSED_VISIT and getattr(instance,
                                                                'visit_code') == '2000D':
         trigger_action_item(missed_birth_visit_cls, MISSED_BIRTH_VISIT_ACTION,
-                            instance.subject_identifier,
-                            repeat=True)
+                            instance.subject_identifier)
 
     """
     - Put subject on quarterly schedule at enrollment visit.
