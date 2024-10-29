@@ -38,8 +38,8 @@ class Appointment(AppointmentModelMixin, SiteModelMixin, BaseUuidModel):
 
     @property
     def next_by_timepoint(self):
-        """Returns the previous appointment or None of all appointments
-        for this subject for visit_code_sequence=0.
+        """ Returns the next appointment or None of all appointments
+            for this subject for visit_code_sequence=0.
         """
         return self.__class__.objects.filter(
             subject_identifier=self.subject_identifier,
@@ -47,6 +47,18 @@ class Appointment(AppointmentModelMixin, SiteModelMixin, BaseUuidModel):
             visit_code_sequence=0,
             schedule_name=self.schedule_name
         ).order_by('timepoint').first()
+
+    @property
+    def previous_by_timepoint(self):
+        """ Returns the previous appointment or None of all appointments
+            for this subject for visit_code_sequence=0.
+        """
+        return self.__class__.objects.filter(
+            subject_identifier=self.subject_identifier,
+            timepoint__lt=self.timepoint,
+            visit_code_sequence=0,
+            schedule_name=self.schedule_name
+        ).order_by('timepoint').last()
 
     class Meta(AppointmentModelMixin.Meta):
         pass

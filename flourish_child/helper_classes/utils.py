@@ -1,4 +1,4 @@
-import os
+import os, re
 from datetime import datetime
 
 import PIL
@@ -299,6 +299,13 @@ class ChildUtils:
             return None
         else:
             return rapid_test_obj
+
+    def pf_identifier_check(self, identifier):
+        pattern = r'[B|C]142\-0[0-9A-Z]{8}\-[0-9]{1}P-[0-9]+'
+        if re.fullmatch(pattern, identifier):
+            return True
+        else:
+            return False
 
 
 child_utils = ChildUtils()
