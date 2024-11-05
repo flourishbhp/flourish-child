@@ -111,7 +111,7 @@ class ChildCrfModelAdminMixin(
         """
         appointment_model_cls = django_apps.get_model(self.appointment_model)
         return appointment_model_cls.objects.get(
-            pk=request.GET.get('appointment'))
+            pk=request.GET.get('appointment', None))
         return None
 
     def get_previous_instance(self, request, instance=None, **kwargs):

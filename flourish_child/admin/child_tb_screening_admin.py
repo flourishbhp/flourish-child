@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.core.exceptions import ObjectDoesNotExist
 from edc_constants.constants import PENDING
-from edc_fieldsets import FieldsetsModelAdminMixin, Remove
+from edc_fieldsets import FieldsetsModelAdminMixin
+from edc_fieldsets.fieldlist import Insert
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 
 from .model_admin_mixins import ChildCrfModelAdminMixin
@@ -93,8 +95,10 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
                 'sweats_duration',
                 'weight_loss',
                 'weight_loss_duration',
+                'fatigue_or_reduced_playfulness',
                 'household_diagnosed_with_tb',
                 'evaluated_for_tb',
+                'flourish_referral',
                 'clinic_visit_date',
                 'tb_tests',
                 'other_test',
@@ -116,41 +120,57 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
     )
 
     radio_fields = {
-        "cough": admin.VERTICAL,
-        "cough_duration": admin.VERTICAL,
-        "fever": admin.VERTICAL,
-        "fever_duration": admin.VERTICAL,
-        "sweats": admin.VERTICAL,
-        "sweats_duration": admin.VERTICAL,
-        "weight_loss": admin.VERTICAL,
-        "weight_loss_duration": admin.VERTICAL,
-        "fatigue_or_reduced_playfulness": admin.VERTICAL,
-        "household_diagnosed_with_tb": admin.VERTICAL,
-        "evaluated_for_tb": admin.VERTICAL,
-        "chest_xray_results": admin.VERTICAL,
-        "sputum_sample_results": admin.VERTICAL,
-        "stool_sample_results": admin.VERTICAL,
-        "urine_test_results": admin.VERTICAL,
-        "skin_test_results": admin.VERTICAL,
-        "blood_test_results": admin.VERTICAL,
-        "child_diagnosed_with_tb": admin.VERTICAL,
-        "child_on_tb_treatment": admin.VERTICAL,
-        "child_on_tb_preventive_therapy": admin.VERTICAL,
+        'cough': admin.VERTICAL,
+        'cough_duration': admin.VERTICAL,
+        'fever': admin.VERTICAL,
+        'fever_duration': admin.VERTICAL,
+        'sweats': admin.VERTICAL,
+        'sweats_duration': admin.VERTICAL,
+        'weight_loss': admin.VERTICAL,
+        'weight_loss_duration': admin.VERTICAL,
+        'fatigue_or_reduced_playfulness': admin.VERTICAL,
+        'persistent_symptoms': admin.VERTICAL,
+        'household_diagnosed_with_tb': admin.VERTICAL,
+        'evaluated_for_tb': admin.VERTICAL,
+        'flourish_referral': admin.VERTICAL,
+        'chest_xray_results': admin.VERTICAL,
+        'sputum_sample_results': admin.VERTICAL,
+        'stool_sample_results': admin.VERTICAL,
+        'urine_test_results': admin.VERTICAL,
+        'skin_test_results': admin.VERTICAL,
+        'blood_test_results': admin.VERTICAL,
+        'child_diagnosed_with_tb': admin.VERTICAL,
+        'child_on_tb_treatment': admin.VERTICAL,
+        'child_on_tb_preventive_therapy': admin.VERTICAL,
     }
 
     filter_horizontal = ('tb_tests',)
 
     def get_key(self, request, obj=None):
         try:
-            visit_obj = self.visit_model.objects.get(id=request.GET.get('child_visit'))
-        except self.visit_model.DoesNotExist:
+            model_obj = self.get_instance(request)
+        except ObjectDoesNotExist:
             return None
         else:
-            subject_identifier = visit_obj.subject_identifier
-            child_age = child_utils.child_age(subject_identifier,
-                                              visit_obj.report_datetime)
-            return 'not_adol' if child_age < 12 else None
+            return model_obj.schedule_name
 
-    conditional_fieldlists = {
-        'not_adol': Remove('fatigue_or_reduced_playfulness', ),
-    }
+    @property
+    def quarterly_schedules(self):
+        schedules = self.cohort_schedules_cls.objects.filter(
+            schedule_type__icontains='quarterly',
+            onschedule_model__startswith='flourish_child').values_list(
+                'schedule_name', flat=True)
+        return schedules
+
+    @property
+    def conditional_fieldlists(self):
+        conditional_fieldlists = {}
+        schedules = list(self.quarterly_schedules)
+
+        for schedule in schedules:
+            conditional_fieldlists.update(
+                {schedule: Insert('persistent_symptoms',
+                                  after='fatigue_or_reduced_playfulness')})
+
+        return conditional_fieldlists
+

@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.safestring import mark_safe
 from edc_constants.constants import PENDING
 
 from flourish_child.choices import TEST_RESULTS_CHOICES
@@ -27,8 +28,8 @@ class PreviousFieldsForm(forms.Form):
                         self.fields[f'{visit_code}_{result}'] = forms.ChoiceField(
                             choices=TEST_RESULTS_CHOICES,
                             required=True,
-                            label=f"{self.convert_case(result)} for visit "
-                                  f"{visit_code}",
+                            label=(f'{self.convert_case(result)} for visit '
+                                   f'{visit_code}'),
                             widget=forms.RadioSelect,
                             initial=getattr(previous_instance, result)
                         )
@@ -39,6 +40,12 @@ class PreviousFieldsForm(forms.Form):
 
 class ChildTBScreeningForm(ChildModelFormMixin):
     form_validator_cls = ChildTBScreeningFormValidator
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        _label = self.fields['flourish_referral'].label.replace(
+            'Were you', 'Was your child')
+        self.fields['flourish_referral'].label = mark_safe(_label)
 
     class Meta:
         model = ChildTBScreening
