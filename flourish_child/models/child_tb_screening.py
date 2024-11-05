@@ -1,6 +1,7 @@
 from django.db import models
 
-from edc_constants.constants import YES, NO
+from edc_constants.constants import YES, NO, NOT_APPLICABLE
+from edc_constants.choices import YES_NO_UNKNOWN_NA
 from flourish_caregiver.choices import YES_NO_AR_OTHER, YES_NO_UKN_CHOICES
 from flourish_caregiver.models.model_mixins.flourish_tb_screening_mixin import \
     TBScreeningMixin
@@ -37,7 +38,8 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
     fatigue_or_reduced_playfulness = models.CharField(
         verbose_name='Does your child have fatigue or reduced playfulness that has '
                      'lasted ≥2 weeks?',
-        choices=YES_NO_UKN_CHOICES,
+        choices=YES_NO_UNKNOWN_NA,
+        default=NOT_APPLICABLE,
         max_length=20, )
 
     stool_sample_results = models.CharField(
