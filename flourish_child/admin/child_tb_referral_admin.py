@@ -18,6 +18,7 @@ class ChildTBReferralAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'report_datetime',
                 'referred',
                 'no_referral_reason',
+                'no_referral_reason_other',
                 'date_of_referral',
                 'reason_for_referral',
                 'reason_for_referral_other',

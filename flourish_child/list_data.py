@@ -320,6 +320,7 @@ list_data = {
         ('weight_loss', 'Weight loss'),
         ('fatigue_or_reduced_playfulness', 'Fatigue'),
         ('household_diagnosed_with_tb', 'Household Contact with TB'),
+        ('persistent_symptoms', 'Persistent Symptoms'),
         (OTHER, 'Other, specify'),
     ]
 }

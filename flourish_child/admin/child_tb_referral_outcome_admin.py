@@ -20,6 +20,7 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'clinic_name',
                 'clinic_name_other',
                 'tests_performed',
+                'comments',
                 'other_test_specify',
                 'chest_xray_results',
                 'stool_sample_results',
