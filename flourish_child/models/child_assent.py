@@ -156,7 +156,7 @@ class ChildAssent(SiteModelMixin, NonUniqueSubjectIdentifierFieldMixin,
             version = '1'
         else:
             version = getattr(
-                consent_version_obj, 'child_version', consent_version_obj.version)
+                consent_version_obj, 'child_version') or consent_version_obj.version
         return version
 
     @property

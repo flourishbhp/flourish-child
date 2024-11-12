@@ -30,13 +30,15 @@ class ChildTBReferralForm(ChildModelFormMixin, forms.ModelForm):
         tb_screening_options_other = {
             'household_diagnosed_with_tb': 'fatigue_or_reduced_playfulness'
         }
+
+        instance = kwargs.get('instance', None)
         tb_screening_obj = self.tb_screening_model_cls.objects.filter(
             child_visit_id=child_visit).first()
-        if tb_screening_obj:
-            for symptom, duration in tb_screening_options.items():
+        if not instance and tb_screening_obj:
+            for symptom, _ in tb_screening_options.items():
                 symptom_value = getattr(tb_screening_obj, symptom)
-                duration_value = getattr(tb_screening_obj, duration)
-                if symptom_value == YES and duration_value == '>= 2 weeks':
+
+                if symptom_value == YES:
                     referral_reason = ChildTbReferralReasons.objects.filter(
                         short_name=symptom).first()
                     if referral_reason:
@@ -54,7 +56,7 @@ class ChildTBReferralForm(ChildModelFormMixin, forms.ModelForm):
                     ).first()
                     if fatigue_reason:
                         referral_reasons.append(fatigue_reason.id)
-        self.initial['reason_for_referral'] = referral_reasons
+            self.initial['reason_for_referral'] = referral_reasons
 
     class Meta:
         model = ChildTBReferral

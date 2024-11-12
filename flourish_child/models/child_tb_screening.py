@@ -1,11 +1,11 @@
 from django.db import models
 
+from edc_constants.constants import YES, NO, NOT_APPLICABLE
+from edc_constants.choices import YES_NO_UNKNOWN_NA
 from flourish_caregiver.choices import YES_NO_AR_OTHER, YES_NO_UKN_CHOICES
-from flourish_caregiver.helper_classes.tb_diagnosis import TBDiagnosis
 from flourish_caregiver.models.model_mixins.flourish_tb_screening_mixin import \
     TBScreeningMixin
 from flourish_child.choices import TEST_RESULTS_CHOICES, YES_NO_OTHER, YES_NO_UNKNOWN
-from flourish_child.helper_classes.utils import child_utils
 from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
 from flourish_child.models.list_models import ChildTBTests
 
@@ -38,7 +38,8 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
     fatigue_or_reduced_playfulness = models.CharField(
         verbose_name='Does your child have fatigue or reduced playfulness that has '
                      'lasted ≥2 weeks?',
-        choices=YES_NO_UKN_CHOICES,
+        choices=YES_NO_UNKNOWN_NA,
+        default=NOT_APPLICABLE,
         max_length=20, )
 
     stool_sample_results = models.CharField(
@@ -91,10 +92,9 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         default='', )
 
     def save(self, *args, **kwargs):
-        child_age = child_utils.child_age(self.child_visit.subject_identifier,
-                                          self.report_datetime)
-        tb_diagnoses = TBDiagnosis(child_age=child_age)
-        self.tb_diagnoses = tb_diagnoses.evaluate_for_tb(self)
+        self.tb_diagnoses = (
+            self.evaluated_for_tb == NO and
+            self.household_diagnosed_with_tb == YES)
 
         super().save(*args, **kwargs)
 

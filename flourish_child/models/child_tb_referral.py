@@ -9,7 +9,8 @@ class ChildTBReferral(ChildCrfModelMixin, TBReferralMixin):
     reason_for_referral = models.ManyToManyField(
         ChildTbReferralReasons,
         related_name='reason_referral',
-        verbose_name='Reason for referral:'
+        verbose_name='Reason for referral:',
+        blank=True
     )
 
     class Meta(ChildCrfModelMixin.Meta):
