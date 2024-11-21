@@ -8,6 +8,8 @@ from flourish_caregiver.models.model_mixins.flourish_tb_screening_mixin import \
 from flourish_child.choices import TEST_RESULTS_CHOICES, YES_NO_OTHER, YES_NO_UNKNOWN
 from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
 from flourish_child.models.list_models import ChildTBTests
+from flourish_child.helper_classes.utils import child_utils
+from flourish_caregiver.helper_classes.tb_diagnosis import TBDiagnosis
 
 
 class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
@@ -97,6 +99,15 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
             self.household_diagnosed_with_tb == YES)
 
         super().save(*args, **kwargs)
+
+    @property
+    def symptomatic(self):
+        child_age = child_utils.child_age(self.child_visit.subject_identifier, self.report_datetime)
+
+        # Determine which value to pass based on availability
+        tb_diagnoses = TBDiagnosis(child_age=child_age 
+        )
+        return tb_diagnoses.evaluate_for_tb(self)
 
     class Meta(ChildCrfModelMixin.Meta):
         app_label = 'flourish_child'
