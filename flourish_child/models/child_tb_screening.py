@@ -44,11 +44,6 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         default=NOT_APPLICABLE,
         max_length=20, )
 
-    stool_sample_results = models.CharField(
-        verbose_name='Stool Sample Results',
-        choices=TEST_RESULTS_CHOICES,
-        max_length=15, blank=True, null=True)
-
     child_diagnosed_with_tb = models.CharField(
         verbose_name='Was your child diagnosed with TB?',
         choices=YES_NO_AR_OTHER,
