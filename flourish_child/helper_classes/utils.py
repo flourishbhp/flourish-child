@@ -98,8 +98,9 @@ class ChildUtils:
 
     def child_assent_obj(self, subject_identifier):
         try:
-            child_assent = self.child_assent_model_cls.objects.get(
-                subject_identifier=subject_identifier)
+            child_assent = self.child_assent_model_cls.objects.filter(
+                subject_identifier=subject_identifier).latest(
+                    'consent_datetime')
         except self.child_assent_model_cls.DoesNotExist:
             pass
         else:

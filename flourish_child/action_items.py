@@ -1,9 +1,5 @@
 from edc_action_item import Action, site_action_items, HIGH_PRIORITY
 
-from flourish_prn.action_items import ChildOffStudyAction
-
-CHILDCONTINUEDCONSENT_STUDY_ACTION = 'submit-childcontinuedconsent-study'
-
 CHILDASSENT_ACTION = 'submit-childassent'
 
 YOUNG_ADULT_LOCATOR_ACTION = 'submit-child-locator'
