@@ -8,11 +8,7 @@ from flourish_child.models.list_models import ChildTBTests
 
 
 class ChildTBReferralOutcome(ChildCrfModelMixin, FlourishTbReferralOutcomeMixin):
-    stool_sample_results = models.CharField(
-        verbose_name='Stool Sample Results',
-        choices=TEST_RESULTS_CHOICES,
-        max_length=15, blank=True, null=True)
-
+    
     tests_performed = models.ManyToManyField(
         ChildTBTests,
         verbose_name='What diagnostic tests were performed for TB',
