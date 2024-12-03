@@ -5,7 +5,7 @@ from edc_constants.choices import YES_NO_UNKNOWN_NA
 from flourish_caregiver.choices import YES_NO_AR_OTHER, YES_NO_UKN_CHOICES
 from flourish_caregiver.models.model_mixins.flourish_tb_screening_mixin import \
     TBScreeningMixin
-from flourish_child.choices import TEST_RESULTS_CHOICES, YES_NO_OTHER, YES_NO_UNKNOWN
+from flourish_child.choices import YES_NO_OTHER, YES_NO_UNKNOWN
 from flourish_child.models.child_crf_model_mixin import ChildCrfModelMixin
 from flourish_child.models.list_models import ChildTBTests
 from flourish_child.helper_classes.utils import child_utils
@@ -55,7 +55,8 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         blank=True, null=True)
 
     child_on_tb_treatment = models.CharField(
-        verbose_name='Was your child started on TB treatment?',
+        verbose_name='Was your child started on TB treatment'
+        '(Consists of four or more drugs taken over several months?)',
         choices=YES_NO_OTHER,
         max_length=20,
         blank=True, null=True)
@@ -65,7 +66,8 @@ class ChildTBScreening(TBScreeningMixin, ChildCrfModelMixin):
         blank=True, null=True)
 
     child_on_tb_preventive_therapy = models.CharField(
-        verbose_name='Was your child started on TB preventative therapy?',
+        verbose_name='Was your child started on TB preventative therapy (such as isoniazid or '
+                     'rifapentine/isoniazid for several months)',
         choices=YES_NO_OTHER,
         max_length=20,
         blank=True, null=True)
