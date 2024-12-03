@@ -10,11 +10,7 @@ from flourish_caregiver.choices import NO_EVALUATION_REASONS
 
 
 class ChildTBReferralOutcome(ChildCrfModelMixin, FlourishTbReferralOutcomeMixin):
-    stool_sample_results = models.CharField(
-        verbose_name='Stool Sample Results',
-        choices=TEST_RESULTS_CHOICES,
-        max_length=15, blank=True, null=True)
-
+    
     tests_performed = models.ManyToManyField(
         ChildTBTests,
         verbose_name='What diagnostic tests were performed for TB',
@@ -26,20 +22,16 @@ class ChildTBReferralOutcome(ChildCrfModelMixin, FlourishTbReferralOutcomeMixin)
         max_length=3, blank=True, null=True)
 
     tb_treatment = models.CharField(
-        verbose_name='Was your child started on TB treatment?',
+        verbose_name='Was your child started on TB treatment ('
+                     'consists of'
+                     'four or more drugs taken over several months)',
         choices=TB_TREATMENT_CHOICES,
         max_length=20, blank=True, null=True)
 
     tb_preventative_therapy = models.CharField(
-        verbose_name='Was your child started on TB preventative therapy?treatment ('
-                     'consists of'
-                     'four or more drugs taken over several months)',
-        choices=YES_NO_OTHER,
-        max_length=10, blank=True, null=True)
-    tb_isoniazid_preventative_therapy = models.CharField(
-        verbose_name='Was your child started on TB preventative therapy (such as '
+        verbose_name='Was your child started on TB preventative therapy?such as '
                      'isoniazid or'
-                     'rifapentine/isoniazid for several months)? ',
+                     'rifapentine/isoniazid for several months)?',
         choices=YES_NO_OTHER,
         max_length=10, blank=True, null=True)
     
