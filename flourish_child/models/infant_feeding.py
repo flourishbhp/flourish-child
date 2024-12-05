@@ -45,7 +45,7 @@ class InfantFeeding(ChildCrfModelMixin):
         null=True)
 
     recent_bf_dt = models.DateField(
-        verbose_name='Date of most recent beast feeding',
+        verbose_name='Date of most recent breast feeding',
         blank=True,
         null=True)
 
