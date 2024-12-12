@@ -11,7 +11,7 @@ from edc_reference.model_mixins import ReferenceModelMixin
 from edc_visit_tracking.constants import MISSED_VISIT
 from edc_visit_tracking.managers import VisitModelManager
 from edc_visit_tracking.model_mixins import VisitModelMixin, CaretakerFieldsMixin
-
+from flourish_caregiver.choices import UNSCHEDULED_REASON
 from .child_appointment import Appointment
 from ..choices import ALIVE_DEAD_UNKNOWN, VISIT_INFO_SOURCE
 from ..choices import VISIT_STUDY_STATUS, VISIT_REASON, INFO_PROVIDER
@@ -62,8 +62,15 @@ class ChildVisit(
             'If \'Unscheduled\' above, provide reason for '
             'the unscheduled visit'),
         blank=True,
+        choices =UNSCHEDULED_REASON,
         null=True,
-        max_length=25)
+        max_length=30)
+    
+    reason_unscheduled_other = models.CharField(
+        verbose_name="if unscheduled reason is Other, please specify",
+        max_length=100,
+        blank=True,
+        null=True)
 
     study_status = models.CharField(
         verbose_name="What is the participant's current study status",
