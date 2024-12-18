@@ -77,6 +77,8 @@ class InfantFeedingForm(ChildModelFormMixin, forms.ModelForm):
                 initial.get('child_weaned', None) == YES):
             self.fields['child_weaned'].widget = forms.TextInput(
                 attrs={'readonly': 'readonly'})
+            self.fields['dt_weaned'].widget = forms.DateInput(
+                attrs={'readonly': 'readonly'})
         if initial.get('dt_formula_introduced', None):
             self.fields['dt_formula_introduced'].widget = forms.DateInput(
                 attrs={'readonly': 'readonly'})
