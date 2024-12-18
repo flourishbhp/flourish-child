@@ -23,8 +23,8 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'ever_breastfed',
                 'bf_start_dt',
                 'bf_start_dt_est',
-                'recent_bf_dt',
                 'continuing_to_bf',
+                'recent_bf_dt',
                 'dt_weaned',
                 'freq_milk_rec',
                 'rec_liquids',
@@ -179,7 +179,7 @@ class InfantFeedingAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
             after='report_datetime'),
             Insert(
             'child_weaned',
-            after='continuing_to_bf'),
+            after='recent_bf_dt'),
             Insert(
             'formula_first_report',
             after='took_formula'))
