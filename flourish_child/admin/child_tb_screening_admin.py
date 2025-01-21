@@ -151,7 +151,7 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
         except ObjectDoesNotExist:
             return None
         else:
-            return model_obj.schedule_name
+            return getattr(model_obj, 'schedule_name', None)
 
     @property
     def quarterly_schedules(self):
