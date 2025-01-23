@@ -24,6 +24,7 @@ ALIVE_DEAD_UNKNOWN = (
 ANSWERER = (
     ('caregiver', 'Caregiver'),
     ('child_adolescent', 'Child/Adolescent'),
+    ('both', 'Both'),
 )
 
 BRIEF2_SCALE = (

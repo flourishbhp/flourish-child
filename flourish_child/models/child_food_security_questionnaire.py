@@ -42,6 +42,12 @@ class ChildFoodSecurityQuestionnaire(ChildCrfModelMixin):
                      ' eat because there wasn\'t enough money for food?',
         max_length=20, choices=YES_NO_DONT_KNOW)
 
+    both_respondents_details = models.TextField(
+        verbose_name='Provide details on which questions were responded by who',
+        null=True,
+        blank=True,
+        max_length=250)
+
     class Meta(ChildCrfModelMixin.Meta):
 
         app_label = 'flourish_child'
