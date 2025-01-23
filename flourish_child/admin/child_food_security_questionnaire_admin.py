@@ -35,13 +35,16 @@ class ChildFoodSecurityQuestionnaireAdmin(ChildCrfModelAdminMixin, admin.ModelAd
                 'cut_meals',
                 'how_often',
                 'eat_less',
-                'didnt_eat']}
+                'didnt_eat',
+                'both_respondents_details']}
          ), audit_fieldset_tuple)
 
     list_display = ('child_visit',
                     'answerer',
                     'how_often')
+
     list_filter = ('report_datetime', 'how_often')
+
     search_fields = ('how_often',)
     radio_fields = {"answerer": admin.VERTICAL,
                     "did_food_last": admin.VERTICAL,
