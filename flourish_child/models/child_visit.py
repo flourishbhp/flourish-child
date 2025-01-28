@@ -62,10 +62,10 @@ class ChildVisit(
             'If \'Unscheduled\' above, provide reason for '
             'the unscheduled visit'),
         blank=True,
-        choices =UNSCHEDULED_REASON,
+        choices=UNSCHEDULED_REASON,
         null=True,
         max_length=30)
-    
+
     reason_unscheduled_other = models.CharField(
         verbose_name="if unscheduled reason is Other, please specify",
         max_length=100,
