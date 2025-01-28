@@ -129,7 +129,6 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
         'weight_loss': admin.VERTICAL,
         'weight_loss_duration': admin.VERTICAL,
         'fatigue_or_reduced_playfulness': admin.VERTICAL,
-        'persistent_symptoms': admin.VERTICAL,
         'household_diagnosed_with_tb': admin.VERTICAL,
         'evaluated_for_tb': admin.VERTICAL,
         'flourish_referral': admin.VERTICAL,
@@ -162,15 +161,4 @@ class ChildTBScreeningAdmin(ChildCrfModelAdminMixin, PreviousResultsAdminMixin,
                 'schedule_name', flat=True)
         return schedules
 
-    @property
-    def conditional_fieldlists(self):
-        conditional_fieldlists = {}
-        schedules = list(self.quarterly_schedules)
-
-        for schedule in schedules:
-            conditional_fieldlists.update(
-                {schedule: Insert('persistent_symptoms',
-                                  after='fatigue_or_reduced_playfulness')})
-
-        return conditional_fieldlists
 

@@ -34,8 +34,6 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'other_tb_treatment',
                 'tb_preventative_therapy',
                 'other_tb_preventative_therapy',
-                'tb_isoniazid_preventative_therapy',
-                'other_tb_isoniazid_preventative_therapy',
                 'reasons',
                 'other_reasons',
             ]}
@@ -55,5 +53,4 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'diagnosed_with_tb': admin.VERTICAL,
                     'tb_treatment': admin.VERTICAL,
                     'tb_preventative_therapy': admin.VERTICAL,
-                    'tb_isoniazid_preventative_therapy': admin.VERTICAL,
                     'reasons': admin.VERTICAL}
