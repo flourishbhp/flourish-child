@@ -19,6 +19,9 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'tb_evaluation',
                 'clinic_name',
                 'clinic_name_other',
+                'evaluated',
+                'reason_not_evaluated',
+                'reason_not_evaluated_other',
                 'tests_performed',
                 'comments',
                 'other_test_specify',
@@ -34,8 +37,6 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                 'other_tb_treatment',
                 'tb_preventative_therapy',
                 'other_tb_preventative_therapy',
-                'tb_isoniazid_preventative_therapy',
-                'other_tb_isoniazid_preventative_therapy',
                 'reasons',
                 'other_reasons',
             ]}
@@ -45,6 +46,8 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
 
     radio_fields = {'tb_evaluation': admin.VERTICAL,
                     'clinic_name': admin.VERTICAL,
+                    'evaluated':admin.VERTICAL,
+                    'reason_not_evaluated':admin.VERTICAL,
                     'chest_xray_results': admin.VERTICAL,
                     'stool_sample_results': admin.VERTICAL,
                     'sputum_sample_results': admin.VERTICAL,
@@ -55,5 +58,4 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'diagnosed_with_tb': admin.VERTICAL,
                     'tb_treatment': admin.VERTICAL,
                     'tb_preventative_therapy': admin.VERTICAL,
-                    'tb_isoniazid_preventative_therapy': admin.VERTICAL,
                     'reasons': admin.VERTICAL}
