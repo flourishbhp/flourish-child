@@ -49,6 +49,7 @@ class ChildTBReferralOutcomeAdmin(ChildCrfModelAdminMixin, admin.ModelAdmin):
                     'evaluated': admin.VERTICAL,
                     'reason_not_evaluated': admin.VERTICAL,
                     'chest_xray_results': admin.VERTICAL,
+                    'stool_sample_results': admin.VERTICAL,
                     'sputum_sample_results': admin.VERTICAL,
                     'urine_test_results': admin.VERTICAL,
                     'skin_test_results': admin.VERTICAL,
