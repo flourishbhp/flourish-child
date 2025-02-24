@@ -10,7 +10,7 @@ class PregTestModelMixin(models.Model):
     experienced_pregnancy = models.CharField(
         verbose_name=('Have you experienced pregnancy since the last contact with '
                       'FLOURISH staff?'),
-        max_length=3,
+        max_length=25,
         choices=YES_NO_UNKNOWN_NA,
         default=NOT_APPLICABLE)
 
@@ -21,7 +21,7 @@ class PregTestModelMixin(models.Model):
 
     menarche = models.CharField(
         verbose_name='Has the child reached menarche since the last scheduled visit?',
-        max_length=3,
+        max_length=25,
         choices=YES_NO_UNKNOWN)
 
     menarche_start_dt = models.DateField(
