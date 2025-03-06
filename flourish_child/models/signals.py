@@ -17,7 +17,8 @@ from edc_visit_schedule.subject_schedule import InvalidOffscheduleDate
 from edc_visit_tracking.constants import MISSED_VISIT
 
 from flourish_caregiver.helper_classes.utils import (create_unscheduled_appointment,
-                                                     create_call_reminder)
+                                                     create_call_reminder,
+                                                     get_related_child_count)
 from flourish_child.models.adol_hiv_testing import HivTestingAdol
 from flourish_child.models.adol_tb_lab_results import TbLabResultsAdol
 from flourish_child.models.adol_tb_presence_household_member import \
@@ -592,7 +593,11 @@ def child_continued_consent_post_save(sender, instance, raw, created, **kwargs):
 
             YoungAdultLocator.objects.update_or_create(**locator_dict)
 
-    if instance.along_side_caregiver == NO:
+    siblings_count = get_related_child_count(
+        subject_identifier=caregiver_subject_identifier,
+        child_subject_identifier=child_subject_identifier)
+
+    if instance.along_side_caregiver == NO and siblings_count >= 1:
 
         subject_history_cls = django_apps.get_model(
             'edc_visit_schedule.subjectschedulehistory')

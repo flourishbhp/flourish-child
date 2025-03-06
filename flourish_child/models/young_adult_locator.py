@@ -30,7 +30,7 @@ class YoungAdultLocator(SiteModelMixin, SubjectContactFieldsMixin,
                         SearchSlugModelMixin, BaseUuidModel):
     action_name = YOUNG_ADULT_LOCATOR_ACTION
 
-    tracking_identifier_prefix = 'CL'
+    tracking_identifier_prefix = 'YL'
 
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
