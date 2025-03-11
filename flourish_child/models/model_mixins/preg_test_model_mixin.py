@@ -10,7 +10,7 @@ class PregTestModelMixin(models.Model):
     experienced_pregnancy = models.CharField(
         verbose_name=('Have you experienced pregnancy since the last contact with '
                       'FLOURISH staff?'),
-        max_length=25,
+        max_length=50,
         choices=YES_NO_UNKNOWN_NA,
         default=NOT_APPLICABLE)
 
