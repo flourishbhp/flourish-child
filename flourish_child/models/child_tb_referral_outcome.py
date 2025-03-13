@@ -10,7 +10,7 @@ from flourish_caregiver.choices import NO_EVALUATION_REASONS
 
 
 class ChildTBReferralOutcome(ChildCrfModelMixin, FlourishTbReferralOutcomeMixin):
-    
+
     tests_performed = models.ManyToManyField(
         ChildTBTests,
         verbose_name='What diagnostic tests were performed for TB',
@@ -34,13 +34,13 @@ class ChildTBReferralOutcome(ChildCrfModelMixin, FlourishTbReferralOutcomeMixin)
                      'rifapentine/isoniazid for several months)?',
         choices=YES_NO_OTHER,
         max_length=10, blank=True, null=True)
-    
+
     evaluated = models.CharField(
         verbose_name='Was the child evaluated at the clinic?',
         choices=YES_NO,
         max_length=30,
         blank=True, null=True)
-    
+
     reason_not_evaluated = models.CharField(
         verbose_name='Reasons that child was not evaluated at the clinic',
         choices=NO_EVALUATION_REASONS,
