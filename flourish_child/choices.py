@@ -1476,3 +1476,10 @@ BUSINESSES_RUN = (
     ('painting', 'Painting'),
     (OTHER, 'Other'),
 )
+
+CONSENT_VERSION = (
+    ('1', 'Consent version 1'),
+    ('2', 'Consent version 2'),
+    ('3', 'Consent version 3'),
+    ('4', 'Consent version 4'),
+)

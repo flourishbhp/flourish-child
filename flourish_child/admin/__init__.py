@@ -22,6 +22,7 @@ from .child_cbcl_admin import ChildCBCLSection1Admin, ChildCBCLSection2Admin, \
     ChildCBCLSection3Admin, ChildCBCLSection4Admin
 from .child_clinical_measurements_admin import ChildClinicalMeasurementsAdmin
 from .child_clinician_notes_admin import ClinicianNotesAdmin
+from .child_consent_version_admin import ChildConsentVersionAdmin
 from .child_continued_consent_admin import ChildContinuedConsentAdmin
 from .child_covid_19_admin import Covid19Admin
 from .child_dataset_admin import ChildDatasetAdmin
