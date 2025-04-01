@@ -52,7 +52,13 @@ class ExportActionMixin(AdminExportHelper):
 
             subject_identifier = getattr(obj, 'subject_identifier', None)
 
-            # using subject PID pattern to get related biological caregiver subject_identifier
+            if not subject_identifier:
+                # Attempt to correct error experienced by RQ when running
+                # exports for inlines
+                continue
+
+            # using subject PID pattern to get related biological caregiver
+            # subject_identifier
             subject_identifier_pattern = subject_identifier[1:-3]
             caregiver_sid, biological_caregiver_sid = self.get_caregiver_sid(
                 subject_identifier=subject_identifier_pattern)
