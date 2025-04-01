@@ -18,8 +18,7 @@ class ChildConsentVersion(SiteModelMixin, SearchSlugModelMixin,
 
     subject_identifier = models.CharField(
         verbose_name='Subject Identifier',
-        max_length=50,
-        unique=True)
+        max_length=50)
 
     version = models.CharField(
         verbose_name=('Which version of the child consent would you '
@@ -39,6 +38,7 @@ class ChildConsentVersion(SiteModelMixin, SearchSlugModelMixin,
     history = HistoricalRecords()
 
     class Meta:
+        unique_together = ('subject_identifier', 'version')
         app_label = 'flourish_child'
         verbose_name = 'Child Consent Version'
         verbose_name_plural = 'Child Consent Version'

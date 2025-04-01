@@ -14,7 +14,6 @@ from edc_search.model_mixins import SearchSlugManager
 from .eligibility import ContinuedConsentEligibility
 from .model_mixins import SearchSlugModelMixin
 from ..choices import IDENTITY_TYPE
-from ..helper_classes.utils import child_utils
 
 
 class ChildContinuedConsentManager(SearchSlugManager, models.Manager):
@@ -117,43 +116,29 @@ class ChildContinuedConsent(SiteModelMixin, IdentityFieldsMixin, PersonalFieldsM
         return self.subject_identifier
 
     @property
-    def consent_version_cls(self):
+    def child_consent_version_cls(self):
         return django_apps.get_model(
-            'flourish_caregiver.flourishconsentversion')
+            'flourish_child.childconsentversion')
 
     @property
-    def subject_consent_cls(self):
-        return django_apps.get_model(
-            'flourish_caregiver.subjectconsent')
-
-    @property
-    def latest_consent_version(self):
-        caregiver_subject_identifier = child_utils.caregiver_subject_identifier(
-            subject_identifier=self.subject_identifier)
-
+    def latest_child_consent_version(self):
         version = None
         try:
-            latest_consent = self.subject_consent_cls.objects.filter(
-                subject_identifier=caregiver_subject_identifier).latest(
-                'consent_datetime')
-        except self.subject_consent_cls.ObjectDoesNotExist:
-            return None
+            consent_version_obj = self.child_consent_version_cls.objects.get(
+                subject_identifier=self.subject_identifier)
+        except self.child_consent_version_cls.DoesNotExist:
+            version = None
         else:
-            try:
-                consent_version_obj = self.consent_version_cls.objects.get(
-                    screening_identifier=latest_consent.screening_identifier)
-            except self.consent_version_cls.DoesNotExist:
-                version = '1'
-            else:
-                version = getattr(consent_version_obj, 'version', None)
-            return version
+            version = getattr(consent_version_obj, 'version', None)
+        return version
 
     def save(self, *args, **kwargs):
         eligibility_criteria = ContinuedConsentEligibility(
             self.remain_in_study, self.hiv_testing, self.preg_testing)
         self.is_eligible = eligibility_criteria.is_eligible
         self.ineligibility = eligibility_criteria.error_message
-        self.version = self.latest_consent_version
+        if not self.version:
+            self.version = self.latest_child_consent_version
         super().save(*args, **kwargs)
 
     class Meta:
