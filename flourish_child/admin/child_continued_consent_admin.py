@@ -37,7 +37,8 @@ class ChildContinuedConsentAdmin(ModelAdminMixin, SimpleHistoryAdmin, admin.Mode
                 'hiv_testing',
                 'preg_testing',
                 'along_side_caregiver',
-                'include_contact_details',)}),
+                'include_contact_details',
+                'version')}),
         ('Review Questions', {
             'fields': (
                 'consent_reviewed',
