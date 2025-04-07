@@ -23,6 +23,7 @@ from .child_cbcl_form import ChildCBCLSection1Form, ChildCBCLSection2Form, \
     ChildCBCLSection3Form, ChildCBCLSection4Form
 from .child_clinical_measurements_form import ChildClinicalMeasurementsForm
 from .child_clinician_notes_form import ChildClinicianNotesForm, ClinicianNotesImageForm
+from .child_consent_version_form import ChildConsentVersionForm
 from .child_continued_consent_form import ChildContinuedConsentForm
 from .child_covid_19_form import ChildCovid19Form
 from .child_dataset_form import ChildDatasetForm

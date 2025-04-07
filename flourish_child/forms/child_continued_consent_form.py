@@ -15,6 +15,10 @@ class ChildContinuedConsentForm(SiteModelFormMixin, FormValidatorMixin, forms.Mo
         label='Subject Identifier',
         widget=forms.TextInput(attrs={'readonly': 'readonly'}))
 
+    version = forms.CharField(
+        label='Consent Version',
+        widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+
     def __init__(self, *args, **kwargs):
         initial = kwargs.pop('initial', {})
         subject_identifier = initial.get('subject_identifier', None)
@@ -33,8 +37,10 @@ class ChildContinuedConsentForm(SiteModelFormMixin, FormValidatorMixin, forms.Mo
                     & set(model_to_dict(child_assent).keys())
 
                 for key in fields:
-                    if key not in ['subject_identifier', 'consent_datetime', ]:
+                    if key not in ['subject_identifier', 'consent_datetime',
+                                   'version']:
                         initial[key] = getattr(child_assent, key)
+
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
 
