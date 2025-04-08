@@ -26,30 +26,36 @@ class ChildVisitForm(
         child_age = age(caregiver_child_consent_obj.child_dob, get_utcnow()).years
 
         if child_age > 17:
-            # Validate incomplete continued consent form if child >= 18 years of age..
+            # Validate incomplete continued consent form if child >= 18 years of age.
+            consent_version = child_utils.child_continued_consent_version(
+                subject_identifier=self.subject_identifier)
+
             self.validate_incomplete_required_model(
                 subject_identifier=self.subject_identifier,
                 model='flourish_child.childcontinuedconsent',
+                consent_version=consent_version,
                 msg=('Participant is 18 years of age, cannot edit visit until '
                      'participant has given their continued consent for participation.'))
 
         if child_age >= 7 and child_age < 18:
             # Validate incomplete child assent form if child >= 7 years of age.
+            consent_version = child_utils.consent_version(
+                subject_identifier=self.subject_identifier)
+
             if not any(
                     item in self.cleaned_data.get('appointment').schedule_name for item in [
                         'quart', 'qt']):
                 self.validate_incomplete_required_model(
                     subject_identifier=self.subject_identifier,
                     model='flourish_child.childassent',
+                    consent_version=consent_version,
                     msg=('Participant is older than 7 years, please complete the child'
                          ' assent form before continuing with the visits.'))
 
     def validate_incomplete_required_model(
-            self, subject_identifier=None, model=None, msg=None):
+            self, subject_identifier=None, model=None,
+            consent_version=None, msg=None):
         model_cls = django_apps.get_model(model)
-
-        consent_version = child_utils.child_continued_consent_version(
-            subject_identifier=subject_identifier)
 
         try:
             model_obj = model_cls.objects.get(
