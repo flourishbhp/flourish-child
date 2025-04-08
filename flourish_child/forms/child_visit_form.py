@@ -48,7 +48,7 @@ class ChildVisitForm(
             self, subject_identifier=None, model=None, msg=None):
         model_cls = django_apps.get_model(model)
 
-        consent_version = child_utils.consent_version(
+        consent_version = child_utils.child_continued_consent_version(
             subject_identifier=subject_identifier)
 
         try:

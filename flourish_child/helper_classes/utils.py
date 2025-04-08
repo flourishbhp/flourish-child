@@ -28,6 +28,11 @@ class ChildUtils:
     caregiver_consent_model = 'flourish_caregiver.subjectconsent'
     caregiver_child_consent_model = 'flourish_caregiver.caregiverchildconsent'
     participant_note_model = 'flourish_calendar.participantnote'
+    child_consent_version_model = 'flourish_child.childconsentversion'
+
+    @property
+    def child_consent_version_model_cls(self):
+        return django_apps.get_model(self.child_consent_version_model)
 
     @property
     def child_assent_model_cls(self):
@@ -131,6 +136,15 @@ class ChildUtils:
             return prior_screenings
         else:
             return prior_screening
+
+    def child_continued_consent_version(self, subject_identifier):
+        try:
+            consent_version_obj = self.child_consent_version_model_cls.objects.get(
+                subject_identifier=subject_identifier)
+        except self.child_consent_version_model_cls.DoesNotExist:
+            return None
+        else:
+            return consent_version_obj.version
 
     def consent_version(self, subject_identifier):
         subject_screening_obj = self.preg_screening_model_obj(
