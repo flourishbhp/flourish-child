@@ -92,7 +92,6 @@ class ChildFollowUpBookingHelper(object):
         return self.participant_note_cls.objects.filter(
             subject_identifier=subject_identifier,
             title='Follow Up Schedule').exists()
-            
 
     def create_booking(self, subject_identifier, booking_date):
         self.participant_note_cls.objects.create(

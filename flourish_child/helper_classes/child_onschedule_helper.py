@@ -1,9 +1,6 @@
-from dateutil.relativedelta import relativedelta
 from django.apps import apps as django_apps
 from edc_base.utils import get_utcnow, age
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
-
-from .child_fu_booking_helper import ChildFollowUpBookingHelper
 
 
 class ChildOnScheduleHelper(object):
@@ -82,13 +79,6 @@ class ChildOnScheduleHelper(object):
 
             self.add_onschedule(subject_identifier, onschedule_model, schedule_name)
 
-            if 'enrol' in cohort and 'sec' not in cohort:
-                # book participant for followup
-                booking_helper = ChildFollowUpBookingHelper()
-                if not self.aging_out(subject_identifier):
-                    booking_dt = self.base_appt_datetime + relativedelta(years=1)
-                    booking_helper.schedule_fu_booking(subject_identifier, booking_dt)
-
     def add_onschedule(self, subject_identifier, onschedule_model, schedule_name):
         _, schedule = site_visit_schedules.get_by_onschedule_model_schedule_name(
             onschedule_model=onschedule_model, name=schedule_name)
@@ -112,7 +102,7 @@ class ChildOnScheduleHelper(object):
 
     def put_child_offschedule(self, schedule_name):
         if not (self.subject_identifier or schedule_name):
-            raise Exception("Subject identifier or schedule name cannot be empty")
+            raise Exception('Subject identifier or schedule name cannot be empty')
 
         try:
             offschedule_obj = self.child_offschedule_cls.objects.get(
