@@ -41,7 +41,7 @@ from .child_clinician_notes import ClinicianNotesImage
 from .child_dummy_consent import ChildDummySubjectConsent
 from .child_visit import ChildVisit
 from ..action_items import YOUNG_ADULT_LOCATOR_ACTION
-from ..helper_classes import ChildFollowUpBookingHelper, ChildOnScheduleHelper
+from ..helper_classes import ChildOnScheduleHelper
 from ..helper_classes.utils import (child_utils, handle_notification, notification,
                                     stamp_image,
                                     trigger_action_item)
@@ -382,12 +382,6 @@ def child_birth_on_post_save(sender, instance, raw, created, **kwargs):
             subject_identifier=instance.subject_identifier,
             user_created=instance.user_created,
             subject="'Add name and DOB to the paper informed consent form'")
-
-        # book participant for followup
-        booking_helper = ChildFollowUpBookingHelper()
-        booking_dt = base_appt_datetime + relativedelta(years=1)
-        booking_helper.schedule_fu_booking(
-            instance.subject_identifier, booking_dt)
 
 
 @receiver(post_save, weak=False, sender=ClinicianNotesImage,
