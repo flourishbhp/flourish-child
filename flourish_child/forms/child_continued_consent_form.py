@@ -36,9 +36,14 @@ class ChildContinuedConsentForm(SiteModelFormMixin, FormValidatorMixin, forms.Mo
                 fields = set(self.base_fields.keys()) \
                     & set(model_to_dict(child_assent).keys())
 
+                exclude_fields = ['subject_identifier', 'consent_datetime',
+                                  'version', 'remain_in_study', 'hiv_testing',
+                                  'preg_testing', 'specimen_consent',
+                                  'consent_reviewed', 'study_questions',
+                                  'assessment_score', 'consent_signature',
+                                  'consent_copy']
                 for key in fields:
-                    if key not in ['subject_identifier', 'consent_datetime',
-                                   'version']:
+                    if key not in exclude_fields:
                         initial[key] = getattr(child_assent, key)
 
         kwargs['initial'] = initial
